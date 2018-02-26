@@ -15,19 +15,34 @@
 		<th>North West</th>
 		<th>South East</th>
 	</tr>
-	@foreach (var r in Model.Regions.OrderBy(x => x.Country.Name).ThenBy(x => x.RegionName))
-	{
-		<tr>
-			<td>@r.Country.Name</td>
-			<td>@r.RegionID</td>
-			<td>@r.RegionDiv</td>
-			<td>@r.RegionISO</td>
-			<td>@r.RegionAbbr</td>
-			<td>@r.RegionName</td>
-			<td>@r.RegionNameLocal</td>
-			<td>@r.Center.Latitude.ToString("0.000000") x @r.Center.Longitude.ToString("0.000000")</td>
-			<td>@r.Bounds.NorthWest.Latitude.ToString("0.000000") x @r.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-			<td>@r.Bounds.SouthEast.Latitude.ToString("0.000000") x @r.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
-		</tr>
+	@{
+		var countryID = 0;
+		foreach (var r in Model.Regions.OrderBy(x => x.Country.Name).ThenBy(x => x.RegionName))
+		{
+			if (countryID != r.CountryID)
+			{
+				<tr class="table-secondary">
+					<td colspan="10">
+						<a id="@(r.Country.ISO3)" class="h3">
+							@r.Country.Name
+						</a>
+					</td>
+				</tr>
+				
+			}
+			<tr>
+				<td>@r.Country.Name</td>
+				<td>@r.RegionID</td>
+				<td>@r.RegionDiv</td>
+				<td>@r.RegionISO</td>
+				<td>@r.RegionAbbr</td>
+				<td class="mark">@r.RegionName</td>
+				<td>@r.RegionNameLocal</td>
+				<td class="small">@r.Center.Latitude.ToString("0.000000") x @r.Center.Longitude.ToString("0.000000")</td>
+				<td class="small">@r.Bounds.NorthWest.Latitude.ToString("0.000000") x @r.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
+				<td class="small">@r.Bounds.SouthEast.Latitude.ToString("0.000000") x @r.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
+			</tr>
+			countryID = r.CountryID;
+		}
 	}
 </table>

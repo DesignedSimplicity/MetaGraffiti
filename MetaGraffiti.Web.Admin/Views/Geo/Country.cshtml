@@ -31,18 +31,18 @@
 			<td>@c.ISO2</td>
 			<td>@c.ISO3</td>
 			<td>@c.OC</td>
-			<td>@c.Name</td>
+			<td class="mark">@c.Name</td>
 			<td>@c.NameLong</td>
 			<td>@c.NameLocal</td>
 			<td>@c.NameLocalLong</td>
 			<td>@c.Abbr10</td>
 			<td>@c.Abbr15</td>
 			<td>@c.Abbr30</td>
-			<td>@c.Center.Latitude.ToString("0.000000") x @c.Center.Longitude.ToString("0.000000")</td>
-			<td>@c.Bounds.NorthWest.Latitude.ToString("0.000000") x @c.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-			<td>@c.Bounds.SouthEast.Latitude.ToString("0.000000") x @c.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
+			<td class="small">@c.Center.Latitude.ToString("0.000000") x @c.Center.Longitude.ToString("0.000000")</td>
+			<td class="small">@c.Bounds.NorthWest.Latitude.ToString("0.000000") x @c.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
+			<td class="small">@c.Bounds.SouthEast.Latitude.ToString("0.000000") x @c.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
 			<td>
-				<a href="/geo/region?countryid=@c.CountryID">
+				<a href="/geo/region#@(c.ISO3)">
 					@(c.HasRegions ? c.Regions.Count.ToString() : "")
 				</a>
 			</td>
