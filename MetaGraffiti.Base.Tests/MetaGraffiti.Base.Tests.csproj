@@ -51,6 +51,8 @@
     <Compile Include="Geo\Data\GeoCountryDataTests.cs" />
     <Compile Include="Geo\Data\GeoRegionDataTests.cs" />
     <Compile Include="Geo\Data\GeoTimezoneDataTests.cs" />
+    <Compile Include="Geo\GeoLocationTests.cs" />
+    <Compile Include="Geo\GeoRectangleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -55,9 +55,9 @@ namespace MetaGraffiti.Base.Tests.Geo.Data
 		}
 
 		[TestMethod]
-		public void GeoCountryData_ListByLatLon()
+		public void GeoCountryData_ListByLocation()
 		{
-			var c = GeoCountryData.ListByLatLon(new GeoPoint(39.0, -67.0));
+			var c = GeoCountryData.ListByLocation(new GeoLocation(39.0, -67.0));
 			Assert.AreEqual(1, c.Count);
 			Assert.AreEqual("USA", c[0].ISO3);
 		}

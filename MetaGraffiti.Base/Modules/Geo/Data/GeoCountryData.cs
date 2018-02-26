@@ -8,11 +8,11 @@ namespace MetaGraffiti.Base.Modules.Geo
 	{
 		// ==================================================
 		// Constructors
-		public GeoCountryData(GeoContinent c, int id, int div, string iso2, string iso3, string oc, string name, string nameLong, string local, string localLong, string abbr10, string abbr15, string abbr30, double cLat, double cLon, double nwLat, double nwLon, double seLat, double seLon)
+		public GeoCountryData(GeoContinent continent, int id, int division, string iso2, string iso3, string oc, string name, string nameLong, string local, string localLong, string abbr10, string abbr15, string abbr30, double latCenter, double lonCenter, double latNorthWest, double lonNorthWest, double latSouthEast, double lonSouthEast)
 		{
-			Continent = c;
+			Continent = continent;
 			CountryID = id;
-			Division = div;
+			Division = division;
 
 			ISO2 = iso2.ToUpperInvariant();
 			ISO3 = iso3.ToUpperInvariant();
@@ -27,15 +27,15 @@ namespace MetaGraffiti.Base.Modules.Geo
 			Abbr15 = abbr15;
 			Abbr30 = abbr30;
 
-			Center = new GeoPoint(cLat, cLon);
-			Bounds = new GeoRectangle(nwLat, nwLon, seLat, seLon);
+			Center = new GeoLocation(latCenter, lonCenter);
+			Bounds = new GeoRectangle(latNorthWest, lonNorthWest, latSouthEast, lonSouthEast);
 		}
 
 		// ==================================================
 		// Properties
 		public int CountryID { get; private set; }
 
-		public GeoPoint Center { get; private set; }
+		public IGeoLatLong Center { get; private set; }
 		public GeoRectangle Bounds { get; private set; }
 		public GeoContinent Continent { get; private set; }
 
@@ -91,14 +91,9 @@ namespace MetaGraffiti.Base.Modules.Geo
 			return c;
 		}
 
-		public static List<GeoCountryData> ListByLatLon(IGeoPoint p)
+		public static List<GeoCountryData> ListByLocation(IGeoLatLong point)
 		{
-			return All.Where(x =>
-				x.Bounds.LatitudeMin <= p.Latitude &&
-				x.Bounds.LatitudeMax >= p.Latitude &&
-				x.Bounds.LongitudeMin <= p.Longitude &&
-				x.Bounds.LongitudeMax >= p.Longitude
-			).ToList();
+			return All.Where(x => x.Bounds.Contains(point)).ToList();
 		}
 
 		// ==================================================
