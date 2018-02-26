@@ -1,0 +1,33 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+
+<h2><a href="/">Admin</a> \ <a href="/geo">Geo</a> \ Region</h2>
+
+<table class="table table-striped table-sm">
+	<tr>
+		<th>Country</th>
+		<th>Region ID</th>
+		<th>Division</th>
+		<th>ISO</th>
+		<th>Abbr</th>
+		<th>Name</th>
+		<th>Name Local</th>
+		<th>Center</th>
+		<th>North West</th>
+		<th>South East</th>
+	</tr>
+	@foreach (var r in Model.Regions.OrderBy(x => x.Country.Name).ThenBy(x => x.RegionName))
+	{
+		<tr>
+			<td>@r.Country.Name</td>
+			<td>@r.RegionID</td>
+			<td>@r.RegionDiv</td>
+			<td>@r.RegionISO</td>
+			<td>@r.RegionAbbr</td>
+			<td>@r.RegionName</td>
+			<td>@r.RegionNameLocal</td>
+			<td>@r.Center.Latitude.ToString("0.000000") x @r.Center.Longitude.ToString("0.000000")</td>
+			<td>@r.Bounds.NorthWest.Latitude.ToString("0.000000") x @r.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
+			<td>@r.Bounds.SouthEast.Latitude.ToString("0.000000") x @r.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
+		</tr>
+	}
+</table>

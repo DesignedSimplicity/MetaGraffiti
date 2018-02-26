@@ -1,0 +1,35 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+
+<h2><a href="/">Admin</a> \ <a href="/geo">Geo</a> \ Timezone</h2>
+
+<table id="timezones" class="table table-striped table-sm">
+	<tr>
+		<th>Type</th>
+		<th>GeoTZID</th>
+		<th>Is Default</th>
+		<th>Offset UTC</th>
+		<th>Offset DST</th>
+		<th>Has DST</th>
+		<th>Key</th>
+		<th>Name</th>
+		<th>TZID</th>
+		<th>WinTZ</th>
+		<th>Display As</th>
+	</tr>
+	@foreach (var t in Model.Timezones.OrderBy(x => x.TimezoneType).ThenBy(x => x.OffsetUTC).ThenBy(x => x.OffsetDST))
+	{
+		<tr>
+			<td>@t.TimezoneType</td>
+			<td>@t.GeoTZID</td>
+			<td>@t.IsDefault</td>
+			<td>@t.OffsetUTC</td>
+			<td>@t.OffsetDST</td>
+			<td>@t.HasDST</td>
+			<td>@t.Key</td>
+			<td>@t.Name</td>
+			<td>@t.TZID</td>
+			<td>@t.WinTZ</td>
+			<td>@t.DisplayAs</td>
+		</tr>
+	}
+</table>
