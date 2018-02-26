@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 
@@ -11,14 +12,23 @@ namespace MetaGraffiti.Base.Modules.Gpx
     {
 		private GpxXmlData _data;
 
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public DateTime? Timestamp { get; set; }
-
-
-
+		public string Name => _data.Name;
+		public string Description => _data.Description;
+		public DateTime? Timestamp => _data.Timestamp;
 		public decimal Version => _data.Version;
 		public string Creator => _data.Creator;
+
+		// optional
+		/*
+		public string Author;
+		public string Email;
+		public string Url;
+		public string UrlName;
+		public string Keywords;
+		public DateTime? Created;
+		*/
+
+
 		public List<GpxTrack> Tracks => _data.Tracks;
 		//public List<GpxRoute> Routes => _data.Routes;
 
@@ -33,26 +43,37 @@ namespace MetaGraffiti.Base.Modules.Gpx
 		public List<IGeoLocation> Positions { get { return Tracks.SelectMany(x => x.Points).ToList<IGeoLocation>(); } }
 		//public GeoDistance LinearDistance { get { return CalculateDistance(); } }
 		//public GeoDistance ActualDistance { get { return CalculateDistance(true); } }
-		public TimeSpan RecordedTime { get { return CalculateTimespan(); } }
-		public TimeSpan ElapsedTime { get { return CalculateTimespan(true); } }
 
+		/// <summary>
+		/// Total elapsed time from first to last point recorded
+		/// </summary>
+		public TimeSpan ElapsedTime { get { return TimeSpan.FromSeconds(LastPoint.Timestamp.Value.Subtract(FirstPoint.Timestamp.Value).TotalSeconds); } }
+		
+		/// <summary>
+		/// Total sum of time between recorded points excluding periods with no recording
+		/// </summary>
+		public TimeSpan RecordedTime
+		{
+			get
+			{
+				double s = 0;
+				foreach (var t in Tracks)
+				{
+					var f = t.Points.OrderBy(x => x.Timestamp).First();
+					var l = t.Points.OrderByDescending(x => x.Timestamp).First();
+					s += l.Timestamp.Value.Subtract(f.Timestamp.Value).TotalSeconds;
+				}
+				return TimeSpan.FromSeconds(s);
+			}
+		}
+
+		public GpxStats Satellites { get { return new GpxStats(Points.Select(x => x.Sats).ToArray()); } }
 		public GpxStats HDOP { get { return new GpxStats(Points.Select(x => x.HDOP).ToArray()); } }
 		public GpxStats VDOP { get { return new GpxStats(Points.Select(x => x.VDOP).ToArray()); } }
 		public GpxStats PDOP { get { return new GpxStats(Points.Select(x => x.PDOP).ToArray()); } }
-		public GpxStats Sats { get { return new GpxStats(Points.Select(x => x.Sats).ToArray()); } }
-		public GpxStats Speed { get { return new GpxStats(Points.Select(x => x.Speed).ToArray()); } }
-		//public GpxStats Elevation { get { return new GpxStats(Points.Select(x => x.Elevation).ToArray()); } }
+		public GpxStats Velocity { get { return new GpxStats(Points.Select(x => x.Speed).ToArray()); } }
+		public GpxStats Elevation { get { return new GpxStats(Points.Select(x => SafeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
 
-
-		// optional
-		/*
-		public string Author;
-		public string Email;
-		public string Url;
-		public string UrlName;
-		public string Keywords;
-		public DateTime? Created;
-		*/
 
 		public void Load(string uri)
 		{
@@ -66,14 +87,6 @@ namespace MetaGraffiti.Base.Modules.Gpx
 		}
 
 
-
-		public void AddTrack()
-		{
-		}
-
-		public void AddPoint()
-		{
-		}
 
 
 
@@ -128,38 +141,5 @@ namespace MetaGraffiti.Base.Modules.Gpx
 				}
 			}
 		}
-
-
-		private TimeSpan CalculateTimespan(bool includeUntracked = false)
-		{
-			if (includeUntracked)
-				return TimeSpan.FromSeconds(LastPoint.Timestamp.Value.Subtract(FirstPoint.Timestamp.Value).TotalSeconds);
-			else
-			{
-				double s = 0;
-				foreach (var t in Tracks)
-				{
-					var f = t.Points.OrderBy(x => x.Timestamp).First();
-					var l = t.Points.OrderByDescending(x => x.Timestamp).First();
-					s += l.Timestamp.Value.Subtract(f.Timestamp.Value).TotalSeconds;
-				}
-				return TimeSpan.FromSeconds(s);
-			}
-		}
-
-
-
-		/*
-		private GeoDistance CalculateDistance(bool includeElevation = false)
-		{
-			var d = new GeoDistance();
-			foreach (var t in Tracks)
-			{
-				var dt = GeoDistance.BetweenPoints(t.Points, includeElevation);
-				d.Add(dt);
-			}
-			return d;
-		}
-		*/
 	}
 }
