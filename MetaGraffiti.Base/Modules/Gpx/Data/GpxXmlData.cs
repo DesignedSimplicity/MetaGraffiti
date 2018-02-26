@@ -22,8 +22,8 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		public string Description { get; set; }
 		public DateTime? Timestamp { get; set; }
 
-		public List<GpxRoute> Routes { get; set; }
-		public List<GpxTrack> Tracks { get; set; }
+		public List<GpxRouteData> Routes { get; set; }
+		public List<GpxTrackData> Tracks { get; set; }
 
 		// optional
 		/*
@@ -58,17 +58,17 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 				Timestamp = ReadDateTime(xml.DocumentElement, ns, "time");
 
 				// read all tracks, segments and points
-				Tracks = new List<GpxTrack>();
+				Tracks = new List<GpxTrackData>();
 				foreach (XmlNode xt in xml.DocumentElement.SelectNodes("gpx:trk", ns))
 				{
 					int segment = 0;
-					var t = new GpxTrack();
+					var t = new GpxTrackData();
 					Tracks.Add(t);
 
 					t.Name = ReadString(xt, ns, "name");
 					t.Description = ReadString(xt, ns, "desc");
 
-					t.Points = new List<GpxPoint>();
+					t.Points = new List<GpxPointData>();
 					foreach (XmlNode xts in xt.SelectNodes("gpx:trkseg", ns))
 					{
 						segment++;
@@ -82,11 +82,11 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 				}
 
 				// read all routes and points
-				Routes = new List<GpxRoute>();
+				Routes = new List<GpxRouteData>();
 				foreach (XmlNode xr in xml.DocumentElement.SelectNodes("gpx:rte", ns))
 				{
-					var r = new GpxRoute();
-					r.Points = new List<GpxPoint>();
+					var r = new GpxRouteData();
+					r.Points = new List<GpxPointData>();
 					foreach (XmlNode xrp in xr.SelectNodes("gpx:rtept", ns))
 					{
 						var p = ReadPoint(xrp, ns);
@@ -213,7 +213,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 
 
 
-		private void WritePoint(XmlNode xml, GpxPoint p)
+		private void WritePoint(XmlNode xml, GpxPointData p)
 		{
 			var lat = xml.OwnerDocument.CreateAttribute("lat");
 			xml.Attributes.Append(lat);
@@ -287,9 +287,9 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			}
 		}
 
-		private GpxPoint ReadPoint(XmlNode xml, XmlNamespaceManager ns)
+		private GpxPointData ReadPoint(XmlNode xml, XmlNamespaceManager ns)
 		{
-			var p = new GpxPoint();
+			var p = new GpxPointData();
 			p.Latitude = SafeConvert.ToDouble(xml.Attributes["lat"].Value);
 			p.Longitude = SafeConvert.ToDouble(xml.Attributes["lon"].Value);
 			p.Timestamp = ReadDateTime(xml, ns, "time");

@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace MetaGraffiti.Base.Modules.Gpx.Data
 {
-	public class GpxStats
+	public class GpxStatData
 	{
 		public int Count;
 		public decimal Min;
 		public decimal Max;
 		public decimal Avg;
 
-		public GpxStats(decimal?[] dops)
+		public GpxStatData(decimal?[] dops)
 		{
 			var d = dops.Where(x => x.HasValue).Select(x => x.Value);
 			Count = d.Count();
@@ -22,7 +22,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			}
 		}
 
-		public GpxStats(int?[] satellites)
+		public GpxStatData(int?[] satellites)
 		{
 			var d = satellites.Where(x => x.HasValue).Select(x => x.Value);
 			Count = d.Count();

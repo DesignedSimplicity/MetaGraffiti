@@ -18,36 +18,14 @@ namespace MetaGraffiti.Base.Modules.Gpx
 		public decimal Version => _data.Version;
 		public string Creator => _data.Creator;
 
-		// optional
-		/*
-		public string Author;
-		public string Email;
-		public string Url;
-		public string UrlName;
-		public string Keywords;
-		public DateTime? Created;
-		*/
+		public List<GpxTrackData> Tracks => _data.Tracks;
 
-
-		public List<GpxTrack> Tracks => _data.Tracks;
-		//public List<GpxRoute> Routes => _data.Routes;
-
-		public List<GpxPoint> Points { get { return Tracks.SelectMany(x => x.Points).ToList(); } }
-		
-		public GpxPoint FirstPoint { get { return Points.OrderBy(x => x.Timestamp).FirstOrDefault(); } }
-		public GpxPoint LastPoint { get { return Points.OrderByDescending(x => x.Timestamp).FirstOrDefault(); } }
-
-		
-		// inferrered
-		//public GeoPerimeter Bounds { get { return new GeoPerimeter(Positions); } }
-		public List<IGeoLocation> Positions { get { return Tracks.SelectMany(x => x.Points).ToList<IGeoLocation>(); } }
-		//public GeoDistance LinearDistance { get { return CalculateDistance(); } }
-		//public GeoDistance ActualDistance { get { return CalculateDistance(true); } }
+		public List<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points).ToList(); } }		
 
 		/// <summary>
 		/// Total elapsed time from first to last point recorded
 		/// </summary>
-		public TimeSpan ElapsedTime { get { return TimeSpan.FromSeconds(LastPoint.Timestamp.Value.Subtract(FirstPoint.Timestamp.Value).TotalSeconds); } }
+		public TimeSpan ElapsedTime { get { return TimeSpan.FromSeconds(Points.Max(x => x.Timestamp.Value).Subtract(Points.Min(x => x.Timestamp.Value)).TotalSeconds); } }
 		
 		/// <summary>
 		/// Total sum of time between recorded points excluding periods with no recording
@@ -67,13 +45,12 @@ namespace MetaGraffiti.Base.Modules.Gpx
 			}
 		}
 
-		public GpxStats Satellites { get { return new GpxStats(Points.Select(x => x.Sats).ToArray()); } }
-		public GpxStats HDOP { get { return new GpxStats(Points.Select(x => x.HDOP).ToArray()); } }
-		public GpxStats VDOP { get { return new GpxStats(Points.Select(x => x.VDOP).ToArray()); } }
-		public GpxStats PDOP { get { return new GpxStats(Points.Select(x => x.PDOP).ToArray()); } }
-		public GpxStats Velocity { get { return new GpxStats(Points.Select(x => x.Speed).ToArray()); } }
-		public GpxStats Elevation { get { return new GpxStats(Points.Select(x => SafeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
-
+		public GpxStatData Satellites { get { return new GpxStatData(Points.Select(x => x.Sats).ToArray()); } }
+		public GpxStatData HDOP { get { return new GpxStatData(Points.Select(x => x.HDOP).ToArray()); } }
+		public GpxStatData VDOP { get { return new GpxStatData(Points.Select(x => x.VDOP).ToArray()); } }
+		public GpxStatData PDOP { get { return new GpxStatData(Points.Select(x => x.PDOP).ToArray()); } }
+		public GpxStatData Velocity { get { return new GpxStatData(Points.Select(x => x.Speed).ToArray()); } }
+		public GpxStatData Elevation { get { return new GpxStatData(Points.Select(x => SafeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
 
 		public void Load(string uri)
 		{
@@ -81,31 +58,22 @@ namespace MetaGraffiti.Base.Modules.Gpx
 			_data.ReadXml(uri);
 		}
 
-		public void Save(string uri)
+		/*
+		public List<GpxPointData> ListPointsByMaxDOP(decimal maxDOP = 10)
 		{
-			_data.WriteXml(uri);
+			return ListPoints(maxDOP);
 		}
 
-
-
-
-
-
-		public void PurgePointsByDOP(decimal maxDOP = 10)
+		public List<GpxPointData> ListPointsByMinSatellites(decimal minSatellites = 10)
 		{
-			PurgePoints(maxDOP);
+			return ListPoints(null, minSatellites, true);
 		}
 
-		public void PurgePointsByGPS(decimal minSatellites = 10)
+		public List<GpxPointData> ListPoints(decimal? maxDOP = null, decimal? minSatellites = null, bool requireGPS = false)
 		{
-			PurgePoints(null, minSatellites, true);
-		}
-
-		public void PurgePoints(decimal? maxDOP = null, decimal? minSatellites = null, bool requireGPS = false)
-		{
+			var list = new List<GpxPointData>();
 			foreach (var t in Tracks)
 			{
-				var remove = new List<GpxPoint>();
 				foreach (var p in t.Points)
 				{
 					bool bad = false;
@@ -130,16 +98,11 @@ namespace MetaGraffiti.Base.Modules.Gpx
 						if (p.Source != "gps") bad = true; // not from GPS satellite
 					}
 
-					if (bad) remove.Add(p);
-				}
-				if (remove.Count > 0)
-				{
-					foreach (var b in remove)
-					{
-						t.Points.Remove(b);
-					}
+					if (!bad) list.Add(p);
 				}
 			}
+			return list;
 		}
+		*/
 	}
 }

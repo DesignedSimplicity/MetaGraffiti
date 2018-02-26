@@ -5,7 +5,7 @@ using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Gpx.Data
 {
-	public class GpxPoint : GpxBase, IGeoLocation
+	public class GpxPointData : GpxMetaData, IGeoLocation
 	{
 		public GpxPointTypes GpxPointType;
 		public int Segment;
@@ -61,7 +61,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		<geoidheight>17.0</geoidheight>
 	</trkpt>
 	*/
-	public class GpxTrack : GpxRoute
+	public class GpxTrackData : GpxRouteData
 	{
 	}
 
@@ -71,9 +71,9 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
         <name>Position 1</name>
     </rtept>
 	*/
-	public class GpxRoute : GpxBase
+	public class GpxRouteData : GpxMetaData
 	{
 		public int Number;
-		public IList<GpxPoint> Points;
+		public IList<GpxPointData> Points;
 	}
 }

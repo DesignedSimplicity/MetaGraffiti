@@ -13,7 +13,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 	<urlname>Text to display on the url hyperlink</urlname>
 	<number>GPS track number</number>
 	*/
-	public class GpxBase
+	public class GpxMetaData
 	{
 		public string Name;
 		public string Comment;
