@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MetaGraffiti.Base.Modules.Geo
+namespace MetaGraffiti.Base.Modules.Geo.Data
 {
 	public class GeoTimezoneData
 	{

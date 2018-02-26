@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MetaGraffiti.Base.Modules.Geo
+namespace MetaGraffiti.Base.Modules.Geo.Data
 {
 	public class GeoRegionData
 	{
@@ -36,7 +36,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 		public string RegionName { get; private set; }
 		public string RegionNameLocal { get; private set; }
 
-		public IGeoLatLong Center { get; private set; }
+		public IGeoLatLon Center { get; private set; }
 		public GeoRectangle Bounds { get; private set; }
 
 		public GeoCountryData Country { get { return GeoCountryData.ByID(CountryID); } }
@@ -71,7 +71,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 			return All.Where(x => x.CountryID == countryID).ToList();
 		}
 
-		public static List<GeoRegionData> ListByLocation(IGeoLatLong point)
+		public static List<GeoRegionData> ListByLocation(IGeoLatLon point)
 		{
 			return All.Where(x => x.Bounds.Contains(point)).ToList();
 		}

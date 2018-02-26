@@ -20,14 +20,14 @@ namespace MetaGraffiti.Base.Modules.Geo
 
 		// ==================================================
 		// Properties
-		public IList<IGeoLatLong> Points { get; private set; }
-		public IGeoLatLong Center { get; private set; }
-		public IGeoLatLong NorthWest { get { return Points[0]; } }
-		public IGeoLatLong SouthEast { get { return Points[1]; } }
+		public IList<IGeoLatLon> Points { get; private set; }
+		public IGeoLatLon Center { get; private set; }
+		public IGeoLatLon NorthWest { get { return Points[0]; } }
+		public IGeoLatLon SouthEast { get { return Points[1]; } }
 
 		// ==================================================
 		// Methods
-		public bool Contains(IGeoLatLong point)
+		public bool Contains(IGeoLatLon point)
 		{
 			return point.Latitude >= NorthWest.Latitude 
 					&& point.Latitude <= SouthEast.Latitude
@@ -39,7 +39,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// Internal
 		private void Init(double latNorthWest, double lonNorthWest, double latSouthEast, double lonSouthEast)
 		{
-			Points = new List<IGeoLatLong>();
+			Points = new List<IGeoLatLon>();
 			Points.Insert(0, new GeoLocation(latNorthWest, lonNorthWest));
 			Points.Insert(1, new GeoLocation(latSouthEast, lonSouthEast));
 			Center = new GeoLocation((latNorthWest + latSouthEast) / 2, (lonNorthWest + lonSouthEast) / 2);
