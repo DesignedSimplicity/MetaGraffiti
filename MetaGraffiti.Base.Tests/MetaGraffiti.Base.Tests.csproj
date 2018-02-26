@@ -48,14 +48,19 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Geo\Data\GeoCountryDataTests.cs" />
-    <Compile Include="Geo\Data\GeoRegionDataTests.cs" />
-    <Compile Include="Geo\Data\GeoTimezoneDataTests.cs" />
+    <Compile Include="Geo\GeoCountryDataTests.cs" />
+    <Compile Include="Geo\GeoRegionDataTests.cs" />
+    <Compile Include="Geo\GeoTimezoneDataTests.cs" />
     <Compile Include="Geo\GeoLocationTests.cs" />
     <Compile Include="Geo\GeoRectangleTests.cs" />
+    <Compile Include="Gpx\GpxXmlDataTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestsHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Data\1.gpx" />
+    <None Include="Data\2.gpx" />
+    <None Include="Data\bad.gpx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

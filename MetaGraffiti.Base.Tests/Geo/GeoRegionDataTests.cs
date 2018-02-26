@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Data;
 
-namespace MetaGraffiti.Base.Tests.Geo.Data
+namespace MetaGraffiti.Base.Tests.Geo
 {
 	[TestClass]
 	public class GeoRegionDataTests
