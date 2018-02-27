@@ -12,7 +12,7 @@ namespace MetaGraffiti.Base.Tests.Gpx
 	public class GpxFileReaderTests
 	{
 		[TestMethod]
-		public void GpxFileReader_ReadFileVersion1()
+		public void GpxFileReader_Version1()
 		{
 			var uri = TestsHelper.GetTestDataFileUri(@"Gpx\Version1.gpx");
 
@@ -23,7 +23,7 @@ namespace MetaGraffiti.Base.Tests.Gpx
 		}
 
 		[TestMethod]
-		public void GpxFileReader_ReadFileVersion1_1()
+		public void GpxFileReader_Version1_1()
 		{
 			var uri = TestsHelper.GetTestDataFileUri(@"Gpx\Version1_1.gpx");
 

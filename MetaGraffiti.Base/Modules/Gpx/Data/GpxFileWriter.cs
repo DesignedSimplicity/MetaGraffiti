@@ -8,8 +8,6 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 {
 	public class GpxFileWriter
 	{
-		public bool _header = false;
-
 		public GpxFileWriter(string uri)
 		{
 		}
@@ -34,7 +32,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 
 		public void WriteHeader(GpxFileHeader header)
 		{
-			_header = true;
+			
 
 
 		}
