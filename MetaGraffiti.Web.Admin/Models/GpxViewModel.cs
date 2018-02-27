@@ -39,11 +39,14 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Methods
-		public string GetMonth(int? month)
+		public string GetMonth(int? month, bool abbv = false)
 		{
-			return month.HasValue
-				? CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Value)
-				: "";
+			if (!month.HasValue)
+				return "";
+			else
+				return (abbv)
+					? CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month.Value)
+					: CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Value);
 		}
 
 		public GpxCalendarModel GetCalendarEntry(int year, int month)

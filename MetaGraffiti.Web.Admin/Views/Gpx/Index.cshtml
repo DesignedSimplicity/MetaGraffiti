@@ -7,14 +7,10 @@
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th>Calendar</th>
-					<th colspan="12">Month</th>
-				</tr>
-				<tr>
 					<th>Year</th>
 					@for (var month = 1; month <= 12; month++)
 					{
-						<th class="text-right">@month</th>
+					<th class="text-right">@Model.GetMonth(month, true)</th>
 					}
 
 				</tr>
@@ -24,18 +20,24 @@
 				{
 					<tr>
 						<td>
-							<a href="/gpx/@year">
+							<a class="h4" href="/gpx/@year">
 								@year
 							</a>
 						</td>
 						@for (var month = 1; month <= 12; month++)
 						{
 							<td class="text-right">
-								<a href="/gpx/@year/@month">
-									@Model.GetCalendarEntry(year, month).Files.Count
+								<a class="h5" href="/gpx/@year/@month">
+									@{ 
+										var count = Model.GetCalendarEntry(year, month).Files.Count;
+										if (count > 0)
+										{
+											<span>@count</span>
+										}
+									}
 								</a>
 							</td>
-						}
+										}
 					</tr>
 				}
 			</tbody>
