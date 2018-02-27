@@ -3,11 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Base", "MetaGraffiti.Base\MetaGraffiti.Base.csproj", "{3D18DE52-5844-475C-B842-4DD8E94335D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.Base", "MetaGraffiti.Base\MetaGraffiti.Base.csproj", "{3D18DE52-5844-475C-B842-4DD8E94335D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Base.Tests", "MetaGraffiti.Base.Tests\MetaGraffiti.Base.Tests.csproj", "{FFEECCFB-2FEE-469A-9D96-0A1197AD4A7B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Admin", "MetaGraffiti.Web.Admin\MetaGraffiti.Web.Admin.csproj", "{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{B10C4EC7-8042-479C-AAA1-C989953A80E3}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.App.GpxGraffiti", "MetaGraffiti.App.GpxGraffiti\MetaGraffiti.App.GpxGraffiti.csproj", "{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

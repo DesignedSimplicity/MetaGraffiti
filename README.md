@@ -1,5 +1,13 @@
 # MetaGraffiti
-A .NET Standard Framework implementing many common requirements for modern web development
+A framework for processing geographic and topographic data for map building and visualizations
+
+
+GpxGraffiti - A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth
+	-merge		Combines multiple gpx files into a single file - used for geotagging in Lightroom
+	-fix		Removes bad data points from a gpx file - cleans up a file with a poor gps signal
+	-kml		Converts a gpx file to a kml file - prepares file for visualizing in Google Earth
+
+
 
 
 

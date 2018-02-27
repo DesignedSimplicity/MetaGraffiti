@@ -15,8 +15,8 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		private const string _gpx = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""GeoGraffiti - http://designed.com/"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
 
 		// required
-		public decimal Version { get; private set; }
-		public string Creator { get; private set; }
+		public decimal Version { get; set; }
+		public string Creator { get; set; }
 
 		public string Name { get; set; }
 		public string Description { get; set; }
@@ -174,44 +174,8 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		}
 
 
-
-		//==================================================
-		//Static Factory
-		//==================================================
-
-		/*
-		public static GpxXmlData FromFile(string uri)
-		{
-			var gpx = new GpxXmlData();
-			gpx.ReadXml(uri);
-			return gpx;
-		}
-
-		public static GpxXmlData FromFiles(string[] uris)
-		{
-			GpxXmlData gpx = null;
-			foreach (var uri in uris)
-			{
-				var temp = FromFile(uri);
-				if (gpx == null)
-					gpx = temp;
-				else
-				{
-					gpx.Routes.AddRange(temp.Routes);
-					gpx.Tracks.AddRange(temp.Tracks);
-					gpx.Points.AddRange(temp.Points);
-				}
-			}
-			return gpx;
-		}
-		*/
-
 		//==================================================
 		#region Private Helpers
-
-
-
-
 
 		private void WritePoint(XmlNode xml, GpxPointData p)
 		{
@@ -350,6 +314,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			else
 				return SafeConvert.ToUTCDateTimeNull(n.InnerText);
 		}
+
 		#endregion
 		//==================================================
 	}

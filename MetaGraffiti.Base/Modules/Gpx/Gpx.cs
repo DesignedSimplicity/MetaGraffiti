@@ -8,18 +8,31 @@ namespace MetaGraffiti.Base.Modules.Gpx
 {
 	// http://www.topografix.com/gpx_manual.asp
 
+
+	public class Gpx
+	{
+		public const string XmlNamespaceV1 = "http://www.topografix.com/GPX/1/0";
+		public const string XmlNamespaceV1_1 = "http://www.topografix.com/GPX/1/1";
+	}
+
+	public enum GpxSchemaVersion
+	{
+		Version1 = 1,
+		Version1_1 = 11,
+	}
+
 	public enum GpxPointTypes
 	{
 		/// <summary>
-		/// Point individualy marked 
+		/// Point marking a specific position
 		/// </summary>
 		WayPoint = 1,
 		/// <summary>
-		/// Point determining a route
+		/// Point determining a specific route
 		/// </summary>
 		RoutePoint = 2,
 		/// <summary>
-		/// Point along a track
+		/// Point recorded along a track
 		/// </summary>
 		TrackPoint = 3,
 	}
