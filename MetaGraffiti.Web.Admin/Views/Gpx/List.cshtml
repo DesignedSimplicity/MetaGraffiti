@@ -1,0 +1,34 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+
+@Html.Partial("_Gpx")
+
+<div class="row">
+	<div class="col-md-6">
+		<table class="table table-striped table-sm">
+			<tbody>
+				@foreach (var cal in Model.GetCalendarEntries(Model.SelectedYear, Model.SelectedMonth))
+				{
+					var files = cal.Files;
+					<tr class="table-active">
+						<td colspan="2">
+							<a class="h3" href="/gpx/@(Model.SelectedYear)/@(cal.Month)">@Model.GetMonth(cal.Month)</a>
+							<span class="badge badge-pill badge-info">@files.Count</span>
+						</td>
+					</tr>
+					var count = 0;
+					foreach (var gpx in files)
+					{
+						<tr>
+							<td>
+								@(++count)
+							</td>
+							<td>
+								<a href="/gpx/@(Model.SelectedYear)/@(cal.Month)/@gpx">@gpx</a>
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

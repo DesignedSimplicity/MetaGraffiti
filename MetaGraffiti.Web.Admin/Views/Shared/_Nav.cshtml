@@ -1,0 +1,9 @@
+﻿@model MetaGraffiti.Web.Admin.Models.AdminViewModel
+@if (Model.IsAreaPage)
+{
+	<div class="h1"><a href="/">Graffiti</a> \ <a href="/@(Model.Area)">@Model.Area</a> \ @Model.PageName</div>
+}
+else if (!Model.IsHome)
+{
+	<div class="h1"><a href="/">Graffiti</a> \ @Model.Area</div>
+}

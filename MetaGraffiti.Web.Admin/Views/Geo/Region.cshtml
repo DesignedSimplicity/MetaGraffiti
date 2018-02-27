@@ -1,5 +1,7 @@
 ﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
 
+@Html.Partial("_Nav")
+
 <table class="table table-striped table-sm">
 	<tr>
 		<th>Country</th>
@@ -26,7 +28,7 @@
 						</a>
 					</td>
 				</tr>
-				
+
 			}
 			<tr>
 				<td>@r.Country.Name</td>

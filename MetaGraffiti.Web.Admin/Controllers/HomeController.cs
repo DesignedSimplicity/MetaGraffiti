@@ -10,7 +10,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
         public ActionResult Index()
         {
             return View(new AdminViewModel());

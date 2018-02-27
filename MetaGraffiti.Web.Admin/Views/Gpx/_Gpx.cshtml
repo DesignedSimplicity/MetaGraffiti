@@ -1,0 +1,23 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+
+@Html.Partial("_Nav")
+
+<div class="h2">
+	@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
+	{
+		<a href="/gpx/@(Model.SelectedYear)">@Model.SelectedYear</a>
+		<span> \ </span>
+		<a href="/gpx/@(Model.SelectedYear)/@(Model.SelectedMonth)">@Model.GetMonth(Model.SelectedMonth)</a>
+		<span> \ @Model.SelectedFile</span>
+	}
+	else if (Model.SelectedMonth.HasValue)
+	{
+		<a href="/gpx/@(Model.SelectedYear)">@Model.SelectedYear</a>
+		<span> \ </span>
+		@Model.GetMonth(Model.SelectedMonth)
+	}
+	else
+	{
+		@Model.SelectedYear
+	}
+</div>

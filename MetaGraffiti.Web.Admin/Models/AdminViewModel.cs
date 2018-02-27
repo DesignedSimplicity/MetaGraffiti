@@ -5,30 +5,39 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public enum AdminArea { Home, Geo }
+	public enum AdminArea { Home, Geo, Gpx }
 
 	public class AdminViewModel
 	{
-		public AdminArea Area {
+		public AdminArea Area
+		{
 			get
 			{
 				var path = UrlPath.ToLowerInvariant();
 				if (path.StartsWith("/geo"))
 					return AdminArea.Geo;
+				else if (path.StartsWith("/gpx"))
+					return AdminArea.Gpx;
 				else
 					return AdminArea.Home;
 			}
 		}
+
+		private string _pageName = String.Empty;
 		public string PageName
 		{
 			get
 			{
+				if (_pageName != String.Empty)
+					return _pageName;
+
 				var path = UrlPath.Trim('/');
 				var index = path.IndexOf('/');
 				return index > 0
 					? path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2)
-					: "";				
+					: "";
 			}
+			set { _pageName = value; }
 		}
 
 		public bool IsHome => Area == AdminArea.Home;

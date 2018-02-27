@@ -14,15 +14,6 @@
 </head>
 <body>
 	<div class="container-fluid">
-		@if (Model.IsAreaPage)
-		{
-			<div class="h1"><a href="/">Graffiti</a> \ <a href="/@(Model.Area)">@Model.Area</a> \ @Model.PageName</div>
-		}
-		else if (!Model.IsHome)
-		{
-			<div class="h1"><a href="/">Graffiti</a> \ @Model.Area</div>
-		}
-
 		@RenderBody()
 	</div>
 </body>
