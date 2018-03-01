@@ -14,20 +14,6 @@ namespace MetaGraffiti.Web.Admin
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.MapRoute(
-				name: "GpxView",
-				url: "Gpx/{year}/{month}/{file}",
-				defaults: new { controller = "Gpx", action = "View" }
-			);
-
-			routes.MapRoute(
-				name: "GpxList",
-				url: "Gpx/{year}/{month}",
-				defaults: new { controller = "Gpx", action = "List", month = UrlParameter.Optional }
-			);
-
-
-
-			routes.MapRoute(
 				name: "Default",
 				url: "{controller}/{action}/{id}",
 				defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

@@ -20,14 +20,14 @@
 				{
 					<tr>
 						<td>
-							<a class="h4" href="/gpx/@year">
+							<a class="h4" href="/gpx/report/?year=@(year)">
 								@year
 							</a>
 						</td>
 						@for (var month = 1; month <= 12; month++)
 						{
 							<td class="text-right">
-								<a class="h5" href="/gpx/@year/@month">
+								<a class="h5" href="/gpx/report/?year=@(year)&month=@(month)">
 									@{ 
 										var count = Model.GetCalendarEntry(year, month).Files.Count;
 										if (count > 0)

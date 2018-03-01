@@ -20,8 +20,6 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 		public string Name => _data.Name;
 		public string Description => _data.Description;
 		public DateTime? Timestamp => _data.Timestamp;
-		//public decimal Version => _data.Version;
-		//public string Creator => _data.Creator;
 
 		public List<GpxTrackData> Tracks => _data.Tracks;
 

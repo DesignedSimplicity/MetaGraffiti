@@ -91,9 +91,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return c;
 		}
 
-		public static List<GeoCountryInfo> ListByLocation(IGeoLatLon point)
+		public static IEnumerable<GeoCountryInfo> ListByLocation(IGeoLatLon point)
 		{
-			return All.Where(x => x.Bounds.Contains(point)).ToList();
+			return All.Where(x => x.Bounds.Contains(point));
 		}
 
 		// ==================================================

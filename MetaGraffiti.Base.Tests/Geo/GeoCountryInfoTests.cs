@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
@@ -59,8 +60,8 @@ namespace MetaGraffiti.Base.Tests.Geo
 		public void GeoCountryInfo_ListByLocation()
 		{
 			var c = GeoCountryInfo.ListByLocation(new GeoLocation(39.0, -67.0));
-			Assert.AreEqual(1, c.Count);
-			Assert.AreEqual("USA", c[0].ISO3);
+			Assert.AreEqual(1, c.Count());
+			Assert.AreEqual("USA", c.First().ISO3);
 		}
 	}
 }

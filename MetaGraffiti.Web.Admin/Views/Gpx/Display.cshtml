@@ -1,0 +1,216 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+
+@Html.Partial("_Gpx")
+
+@{
+	var gpx = Model.SelectedGpx;
+	var filtered = gpx.FilteredPoints;
+}
+
+<style>
+	.js-point-row:hover {
+		cursor: pointer;
+		color: #900;
+	}
+
+	#map-container {
+		position: fixed;
+		top: 0;
+		left: 50%;
+		right: 100%;
+		bottom: 100%;
+		height: 100%;
+		width: 50%;
+	}
+
+	#map {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script>
+	var _marker = null;
+
+	$(document).ready(function () {
+		initMap();
+		loadTrack();
+
+		$(".js-point-row").hover(function() {
+			if (_marker != null) _marker.setMap(null);
+
+			var lat = $(this).data("lat");
+			var lng = $(this).data("lng");
+			var id = $(this).data("id").toString();
+			_marker = showMarker(lat, lng, id);
+		});
+	});
+
+	function loadTrack() {
+		var coordinates = [
+		@foreach (var p in filtered)
+			{
+				<text>{ lat: @p.Latitude, lng: @p.Longitude },</text>
+			}
+		];
+
+		showTrack(coordinates);
+
+		showStart(coordinates[0].lat, coordinates[0].lng);
+		showStop(coordinates[coordinates.length - 1].lat, coordinates[coordinates.length - 1].lng);
+
+		//lookupLocation(coordinates[0].lat, coordinates[0].lng, setLocation);
+		function setLocation(location) {
+			$("#location").val(location);
+			$("#location").parent().addClass("has-warning");
+		}
+	}
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<form method="post">
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" class="form-control" id="name" placeholder="Name" value="@gpx.File.Name">
+					</div>
+					<div class="form-group">
+						<label for="details">Details</label>
+						<input type="text" class="form-control" id="details" placeholder="Details">
+					</div>
+					<div class="form-group">
+						<label for="country">Location</label>
+						<input type="text" class="form-control" id="location" placeholder="Location" value="@gpx.LocationText">
+					</div>
+					<div class="form-group">
+						<label for="timezone">Timezone</label>
+						<input type="text" class="form-control" id="timezone" placeholder="Timezone" value="@gpx.Timezone.Name">
+					</div>
+					<button type="submit" class="btn btn-success">Update Preview</button>
+					<a href="#" class="btn btn-primary">Export to GPX</a>
+					<a href="#" class="btn btn-info">Export to KML</a>
+				</div>
+				<div class="col-sm-4">
+					<div class="form-group">
+						<label for="start">Start Time</label>
+						<input type="text" class="form-control" id="start" name="start" placeholder="Start Time" value="@(gpx.FilterStart.HasValue ? gpx.FilterStart.Value : gpx.StartTime)">
+					</div>
+					<div class="form-group">
+						<label for="finish">Finish Time</label>
+						<input type="text" class="form-control" id="finish" name="finish" placeholder="Finish Time" value="@(gpx.FilterFinish.HasValue ? gpx.FilterFinish.Value : gpx.FinishTime)">
+					</div>
+					<div class="form-group">
+						<label for="dop">Max DOP</label>
+						<input type="text" class="form-control" id="dop" name="dop" placeholder="Max DOP" value="@(gpx.FilterDOP.HasValue ? gpx.FilterDOP.Value.ToString() : "")">
+					</div>
+					<div class="form-group">
+						<label for="sat">Satellites</label>
+						<input type="text" class="form-control" id="sat" name="sat" placeholder="Minimum Satellites" value="@(gpx.FilterGPS.HasValue ? gpx.FilterGPS.Value.ToString() : "")">
+					</div>
+				</div>
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label>Elapsed Time</label>
+						<input readonly type="text" class="form-control" value="@gpx.FilteredElapsedTime">
+					</div>
+					<div class="form-group">
+						<label>Linear Distance</label>
+						<input readonly type="text" class="form-control" value="@gpx.FilteredLinearDistance.KM.ToString("0.0") km">
+					</div>
+					<div class="form-group">
+						<label>Actual Distance</label>
+						<input readonly type="text" class="form-control" value="@gpx.FilteredActualDistance.KM.ToString("0.0") km">
+					</div>
+					<div class="form-group">
+						<label>Up/Down</label>
+						<input readonly type="text" class="form-control" value="@gpx.FilteredElevationUp.Meters.ToString("0") / @gpx.FilteredElevationDown.Meters.ToString("0") m">
+					</div>
+				</div>
+			</div>
+		</form>
+		<br />
+		<table class="table table-striped table-bordered table-condensed table-responsive">
+			<tr>
+				<th>@gpx.File.Points.Count()</th>
+				<th>
+					UTC @(gpx.Timezone.OffsetUTC.TotalHours.ToString("0")):00
+					@gpx.Timezone.TZID.Replace("/", " / ")<br />
+					<br />
+				</th>
+				<th>
+					@gpx.StartTime.ToLongDateString()<br />
+					@gpx.StartTime.ToLongTimeString()<br />
+				</th>
+				<th>
+					<div>@gpx.Bounds.NorthWest.Latitude x @gpx.Bounds.NorthWest.Longitude</div>
+					<div>&nbsp;</div>
+					<div class="text-right">@gpx.Bounds.SouthEast.Latitude x @gpx.Bounds.SouthEast.Longitude</div>
+				</th>
+				<th>@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
+				<th>@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
+				<th>@gpx.File.Satellites.Min.ToString("0")<br />@gpx.File.Satellites.Avg.ToString("0")<br />@gpx.File.Satellites.Max.ToString("0")</th>
+				<th class="@gpx.GetDOPCss(gpx.File.HDOP.Max)">
+					@gpx.File.HDOP.Min.ToString("0.0")<br />@gpx.File.HDOP.Avg.ToString("0.0")<br />@gpx.File.HDOP.Max.ToString("0.0")
+				</th>
+				<th class="@gpx.GetDOPCss(gpx.File.VDOP.Max)">
+					@gpx.File.VDOP.Min.ToString("0.0")<br />@gpx.File.VDOP.Avg.ToString("0.0")<br />@gpx.File.VDOP.Max.ToString("0.0")
+				</th>
+				<th class="@gpx.GetDOPCss(gpx.File.PDOP.Max)">
+					@gpx.File.PDOP.Min.ToString("0.0")<br />@gpx.File.PDOP.Avg.ToString("0.0")<br />@gpx.File.PDOP.Max.ToString("0.0")
+				</th>
+				<th colspan="3">
+					<div>Course</div>
+					<div class="text-center">Segment</div>
+					<div class="text-right">Track</div>
+				</th>
+			</tr>
+			<tr>
+				<th>#</th>
+				<th>UTC</th>
+				<th>Timestamp</th>
+				<th>Latitude<br />Longitude</th>
+				<th>Speed</th>
+				<th>Alt</th>
+				<th>Sats</th>
+				<th>H</th>
+				<th>V</th>
+				<th>P</th>
+				<th>C</th>
+				<th>S</th>
+				<th>T</th>
+			</tr>
+			@foreach (var t in gpx.File.Tracks)
+			{
+				var points = 1;
+				foreach (var p in t.Points)
+				{
+					var utc = gpx.Timezone.FromUTC(p.Timestamp.Value);
+			<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "warning")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
+				<td>@points</td>
+				<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+				<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
+				<td>@p.Latitude.ToString("0.0000000")<br />@p.Longitude.ToString("0.0000000")</td>
+				<td>@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+				<td>@((p.Elevation ?? 0).ToString("#,##0"))</td>
+				<td>@p.Sats</td>
+				<td class="bg-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
+				<td class="bg-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
+				<td class="bg-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
+				<td>@((p.Course ?? 0).ToString("##0"))</td>
+				<td>@p.Segment</td>
+				<td>@t.Number @t.Name</td>
+			</tr>
+					points++;
+				}
+			}
+		</table>
+	</div>
+</div>

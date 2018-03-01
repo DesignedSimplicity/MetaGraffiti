@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\Geo\Data\" />
+    <Compile Remove="Modules\Geo\Data\**" />
+    <EmbeddedResource Remove="Modules\Geo\Data\**" />
+    <None Remove="Modules\Geo\Data\**" />
   </ItemGroup>
 
 </Project>

@@ -156,9 +156,11 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\_graffiti\googleMaps.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutoConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -195,8 +197,8 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Gpx\Index.cshtml" />
-    <Content Include="Views\Gpx\List.cshtml" />
-    <Content Include="Views\Gpx\View.cshtml" />
+    <Content Include="Views\Gpx\Report.cshtml" />
+    <Content Include="Views\Gpx\Display.cshtml" />
     <Content Include="Views\Gpx\_Gpx.cshtml" />
     <Content Include="Views\Shared\_Nav.cshtml" />
     <None Include="Web.Debug.config">

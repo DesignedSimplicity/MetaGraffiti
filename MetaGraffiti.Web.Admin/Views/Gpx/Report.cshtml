@@ -11,7 +11,7 @@
 					var files = cal.Files;
 					<tr class="table-active">
 						<td colspan="2">
-							<a class="h3" href="/gpx/@(Model.SelectedYear)/@(cal.Month)">@Model.GetMonth(cal.Month)</a>
+							<a class="h3" href="/gpx/report/?year=@(Model.SelectedYear)&month=@(cal.Month)">@Model.GetMonth(cal.Month)</a>
 							<span class="badge badge-pill badge-info">@files.Count</span>
 						</td>
 					</tr>
@@ -23,7 +23,7 @@
 								@(++count)
 							</td>
 							<td>
-								<a href="/gpx/@(Model.SelectedYear)/@(cal.Month)/@gpx">@gpx</a>
+								<a href="/gpx/display/?id=@(gpx)">@gpx</a>
 							</td>
 						</tr>
 					}

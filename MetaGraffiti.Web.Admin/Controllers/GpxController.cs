@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Web.Admin.Models;
 
 namespace MetaGraffiti.Web.Admin.Controllers
@@ -16,27 +17,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult List(int year, int? month = null)
+		public ActionResult Report(int year, int? month = null)
 		{
 			var model = new GpxViewModel();
 
 			model.SelectedYear = year;
 			model.SelectedMonth = month;
-
-			model.PageName = "List";
 
 			return View(model);
 		}
 
-		public ActionResult View(int year, int month, string file)
+		public ActionResult Display(string id)
 		{
 			var model = new GpxViewModel();
 
-			model.SelectedYear = year;
-			model.SelectedMonth = month;
-			model.SelectedFile = file;
-
-			model.PageName = "View";
+			model.SelectedGpx = new GpxFileModel(new GpxFileInfo(id));
 
 			return View(model);
 		}
