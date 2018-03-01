@@ -48,14 +48,14 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Geo\GeoCountryDataTests.cs" />
-    <Compile Include="Geo\GeoRegionDataTests.cs" />
-    <Compile Include="Geo\GeoTimezoneDataTests.cs" />
+    <Compile Include="Geo\GeoCountryInfoTests.cs" />
+    <Compile Include="Geo\GeoRegionInfoTests.cs" />
+    <Compile Include="Geo\GeoTimezoneInfoTests.cs" />
     <Compile Include="Geo\GeoLocationTests.cs" />
     <Compile Include="Geo\GeoRectangleTests.cs" />
     <Compile Include="Gpx\GpxFileReaderTests.cs" />
-    <Compile Include="Gpx\GpxFileTests.cs" />
-    <Compile Include="Gpx\GpxXmlDataTests.cs" />
+    <Compile Include="Gpx\GpxFileInfoTests.cs" />
+    <Compile Include="Gpx\GpxFileWriterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsHelper.cs" />
   </ItemGroup>
@@ -66,10 +66,10 @@
     <None Include="Data\Gpx\Tracks.gpx" />
     <None Include="Data\Gpx\Version1_1.gpx" />
     <None Include="Data\Gpx\Version1.gpx" />
-    <None Include="Data\1.gpx" />
-    <None Include="Data\4.gpx" />
-    <None Include="Data\3.gpx" />
-    <None Include="Data\2.gpx" />
+    <None Include="Data\Gpx\Example1.gpx" />
+    <None Include="Data\Gpx\Example4.gpx" />
+    <None Include="Data\Gpx\Example3.gpx" />
+    <None Include="Data\Gpx\Example2.gpx" />
     <None Include="Data\Gpx\Waypoints.gpx" />
     <None Include="packages.config" />
   </ItemGroup>

@@ -4,44 +4,45 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using MetaGraffiti.Base.Modules.Gpx;
-using MetaGraffiti.Base.Modules.Gpx.Data;
+using MetaGraffiti.Base.Modules.Gpx.Info;
 
 namespace MetaGraffiti.Base.Tests.Gpx
 {
 	[TestClass]
-	public class GpxFileTests
+	public class GpxFileInfoTests
 	{
 		[TestMethod]
-		public void GpxFile_Load1()
+		public void GpxFileInfo_Example1()
 		{
-			var g = new GpxFile();
-			g.Load(TestsHelper.GetTestDataFileUri("1.gpx"));
+			var g = new GpxFileInfo(TestsHelper.GetTestDataFileUri(@"Gpx\Example1.gpx"));
 
 			Assert.AreEqual(1, g.Tracks.Count);
 			Assert.AreEqual(137, g.Points.Count());
 
 			Assert.AreEqual(9314, Math.Round(g.ElapsedTime.TotalSeconds));
 			Assert.AreEqual(9314, Math.Round(g.RecordedTime.TotalSeconds));
+
+			Assert.AreEqual(DateTime.Parse("2016-01-16T22:47:22Z").ToUniversalTime(), g.Timestamp.Value);
 		}
 
 		[TestMethod]
-		public void GpxFile_Load2()
+		public void GpxFileInfo_Example2()
 		{
-			var g = new GpxFile();
-			g.Load(TestsHelper.GetTestDataFileUri("2.gpx"));
+			var g = new GpxFileInfo(TestsHelper.GetTestDataFileUri(@"Gpx\Example2.gpx"));
 
 			Assert.AreEqual(1, g.Tracks.Count);
 			Assert.AreEqual(204, g.Points.Count());
 
 			Assert.AreEqual(7389, Math.Round(g.ElapsedTime.TotalSeconds));
 			Assert.AreEqual(7389, Math.Round(g.RecordedTime.TotalSeconds));
+
+			Assert.AreEqual(DateTime.Parse("2016-11-04T23:19:42Z").ToUniversalTime(), g.Timestamp.Value);
 		}
 
 		[TestMethod]
-		public void GpxFile_Load3()
+		public void GpxFileInfo_Example3()
 		{
-			var g = new GpxFile();
-			g.Load(TestsHelper.GetTestDataFileUri("3.gpx"));
+			var g = new GpxFileInfo(TestsHelper.GetTestDataFileUri(@"Gpx\Example3.gpx"));
 
 			Assert.AreEqual(1, g.Tracks.Count);
 			Assert.AreEqual(137 + 204, g.Points.Count());
@@ -52,10 +53,9 @@ namespace MetaGraffiti.Base.Tests.Gpx
 		}
 
 		[TestMethod]
-		public void GpxFile_Load4()
+		public void GpxFileInfo_Example4()
 		{
-			var g = new GpxFile();
-			g.Load(TestsHelper.GetTestDataFileUri("4.gpx"));
+			var g = new GpxFileInfo(TestsHelper.GetTestDataFileUri(@"Gpx\Example4.gpx"));
 
 			Assert.AreEqual(2, g.Tracks.Count);
 			Assert.AreEqual(137 + 204, g.Points.Count());

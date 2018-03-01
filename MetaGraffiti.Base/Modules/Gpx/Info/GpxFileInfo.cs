@@ -6,27 +6,32 @@ using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 
-namespace MetaGraffiti.Base.Modules.Gpx
+namespace MetaGraffiti.Base.Modules.Gpx.Info
 {
-	public class GpxFile
-    {
-		private GpxXmlData _data;
+	public class GpxFileInfo
+	{
+		private GpxFileData _data;
+
+		public GpxFileInfo(string uri)
+		{
+			Load(uri);
+		}
 
 		public string Name => _data.Name;
 		public string Description => _data.Description;
 		public DateTime? Timestamp => _data.Timestamp;
-		public decimal Version => _data.Version;
-		public string Creator => _data.Creator;
+		//public decimal Version => _data.Version;
+		//public string Creator => _data.Creator;
 
 		public List<GpxTrackData> Tracks => _data.Tracks;
 
-		public List<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points).ToList(); } }		
+		public IEnumerable<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points); } }
 
 		/// <summary>
 		/// Total elapsed time from first to last point recorded
 		/// </summary>
 		public TimeSpan ElapsedTime { get { return TimeSpan.FromSeconds(Points.Max(x => x.Timestamp.Value).Subtract(Points.Min(x => x.Timestamp.Value)).TotalSeconds); } }
-		
+
 		/// <summary>
 		/// Total sum of time between recorded points excluding periods with no recording
 		/// </summary>
@@ -52,13 +57,13 @@ namespace MetaGraffiti.Base.Modules.Gpx
 		public GpxStatData Velocity { get { return new GpxStatData(Points.Select(x => x.Speed).ToArray()); } }
 		public GpxStatData Elevation { get { return new GpxStatData(Points.Select(x => SafeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
 
-		public void Load(string uri)
+
+		private void Load(string uri)
 		{
-			_data = new GpxXmlData();
-			_data.ReadXml(uri);
+			var reader = new GpxFileReader(uri);
+			_data = reader.ReadFile();
 		}
 
-		/*
 		public List<GpxPointData> ListPointsByMaxDOP(decimal maxDOP = 10)
 		{
 			return ListPoints(maxDOP);
@@ -103,6 +108,5 @@ namespace MetaGraffiti.Base.Modules.Gpx
 			}
 			return list;
 		}
-		*/
 	}
 }

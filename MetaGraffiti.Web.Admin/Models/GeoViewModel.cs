@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using MetaGraffiti.Base.Modules.Geo.Data;
+using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
 	public class GeoViewModel : AdminViewModel
 	{
-		public List<GeoTimezoneData> Timezones { get { return GeoTimezoneData.All; } }
-		public List<GeoCountryData> Countries { get { return GeoCountryData.All; } }
-		public List<GeoRegionData> Regions { get { return GeoRegionData.All; } }
+		public List<GeoTimezoneInfo> Timezones { get { return GeoTimezoneInfo.All; } }
+		public List<GeoCountryInfo> Countries { get { return GeoCountryInfo.All; } }
+		public List<GeoRegionInfo> Regions { get { return GeoRegionInfo.All; } }
 	}
 }

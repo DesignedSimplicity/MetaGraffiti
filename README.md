@@ -2,6 +2,12 @@
 A framework for processing geographic and topographic data for map building and visualizations
 
 
+Data - Simple classes which represent a set of attributes for an entity
+Info - State classes created from a static factory pattern
+
+
+
+
 GpxGraffiti - A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth
 	-merge		Combines multiple gpx files into a single file - used for geotagging in Lightroom
 	-fix		Removes bad data points from a gpx file - cleans up a file with a poor gps signal

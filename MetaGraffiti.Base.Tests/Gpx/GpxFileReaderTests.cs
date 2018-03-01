@@ -89,5 +89,17 @@ namespace MetaGraffiti.Base.Tests.Gpx
 			Assert.AreEqual(1, d.Tracks.Count);
 			Assert.AreEqual(4, d.Tracks.First().Points.Count);
 		}
+
+		[TestMethod]
+		public void GpxFileReader_CreatorAndVersion()
+		{
+			var uri = TestsHelper.GetTestDataFileUri(@"Gpx\Example1.gpx");
+
+			var r = new GpxFileReader(uri);
+			r.ReadFile();
+
+			Assert.AreEqual("GPSLogger - http://gpslogger.mendhak.com/", r.Creator);
+			Assert.AreEqual(Convert.ToDecimal(1.0), r.Version);
+		}
 	}
 }

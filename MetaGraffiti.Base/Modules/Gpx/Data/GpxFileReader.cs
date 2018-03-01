@@ -31,6 +31,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 
 		// ==================================================
 		// Properties
+		public GpxSchemaVersion SchemaVersion { get { return _version; } }
 		public decimal Version { get; private set; }
 		public string Creator { get; private set; }
 
@@ -39,12 +40,11 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		/// </summary>
 		public GpxFileData ReadFile()
 		{
-			var file = new GpxFileData();
-			file.Header = ReadHeader();
-			file.Tracks = ReadTracks();
-			file.Routes = ReadRoutes();
-			file.Waypoints = ReadWaypoints();
-			return file;
+			var data = ReadHeader();
+			data.Tracks = ReadTracks();
+			data.Routes = ReadRoutes();
+			data.Waypoints = ReadWaypoints();
+			return data;
 		}
 
 		// ==================================================
@@ -53,22 +53,22 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		/// <summary>
 		/// Reads the file header data
 		/// </summary>
-		public GpxFileHeader ReadHeader()
+		public GpxFileData ReadHeader()
 		{
-			var header = new GpxFileHeader();
+			var data = new GpxFileData();
 
 			// built in attributes
 			Creator = SafeConvert.ToString(_xml.DocumentElement.Attributes["creator"].InnerText);
 			Version = SafeConvert.ToDecimal(_xml.DocumentElement.Attributes["version"].InnerText);
 
 			// common top elements
-			header.Name = ReadString(_xml.DocumentElement, "name");
-			header.Description = ReadString(_xml.DocumentElement, "desc");
-			header.Timestamp = ReadDateTime(_xml.DocumentElement, "time");
+			data.Name = ReadString(_xml.DocumentElement, "name");
+			data.Description = ReadString(_xml.DocumentElement, "desc");
+			data.Timestamp = ReadDateTime(_xml.DocumentElement, "time");
 
 			// TODO: support other optional elements
 
-			return header;
+			return data;
 		}
 
 		/// <summary>

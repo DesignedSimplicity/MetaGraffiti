@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-using MetaGraffiti.Base.Modules.Gpx;
+using MetaGraffiti.Base.Modules.Gpx.Info;
 
 namespace MetaGraffiti.App.GpxGraffiti
 {
@@ -48,8 +48,7 @@ namespace MetaGraffiti.App.GpxGraffiti
 			try
 			{
 				string uri = Path.Combine(_path, gpx);
-				var g = new GpxFile();
-				g.Load(uri);
+				var g = new GpxFileInfo(uri);
 
 				listInfo.BeginUpdate();
 				listInfo.Items.Clear();
@@ -57,7 +56,7 @@ namespace MetaGraffiti.App.GpxGraffiti
 				listInfo.Items.Add($"Name: {g.Name}");
 				listInfo.Items.Add($"Description: {g.Description}");
 				listInfo.Items.Add($"Tracks: {g.Tracks.Count}");
-				listInfo.Items.Add($"Points: {g.Points.Count}");
+				listInfo.Items.Add($"Points: {g.Points.Count()}");
 
 				listInfo.EndUpdate();
 			}
