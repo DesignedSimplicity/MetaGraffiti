@@ -19,7 +19,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GpxCache> Cache { get; set; }
 
 		private int _firstYear = 2011;
-		private static Dictionary<string, GpxFileModel> _files = new Dictionary<string, GpxFileModel>();
 
 		// ==================================================
 		// Properties
@@ -31,16 +30,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<GpxCalendarModel> Calendar { get; set; }
 
-		public void SelectGpxFile(string uri)
-		{
-			var key = uri.ToLowerInvariant();
-			if (_files.ContainsKey(key))
-			{
-				if (_files[key].Gpx == null)
-					_files[key].Gpx = new GpxDisplayModel(new GpxFileInfo(uri));
-			}
-			SelectedGpx = _files[key].Gpx;
-		}
 
 		// ==================================================
 		// Attributes
@@ -118,54 +107,6 @@ namespace MetaGraffiti.Web.Admin.Models
 				}
 			}
 		}
-
-
-		// ==================================================
-		// Constructors
-		public GpxViewModel()
-		{
-			/*
-			Calendar = new List<GpxCalendarModel>();
-			foreach (var year in Years)
-			{
-				for (var month = 1; month <= 12; month++)
-				{
-					var uri = Path.Combine(_rootUri, year.ToString(), month.ToString("00"));
-					var dir = new DirectoryInfo(uri);
-					var cal = new GpxCalendarModel()
-					{
-						Year = year,
-						Month = month,
-					};
-					if (dir.Exists)
-					{
-						cal.Files = new List<GpxFileModel>();
-						lock (_files)
-						{							
-							foreach (var file in dir.GetFiles("*.gpx"))
-							{
-								var key = file.FullName.ToLowerInvariant();
-								if (_files.ContainsKey(key))
-									cal.Files.Add(_files[key]);
-								else
-								{
-									var gpx = new GpxFileModel()
-									{
-										Uri = file.FullName,
-										Name = Path.GetFileNameWithoutExtension(file.Name),
-										Gpx = new GpxDisplayModel(new GpxFileInfo(file.FullName))
-									};
-									_files.Add(key, gpx);
-									cal.Files.Add(gpx);
-								}
-							}
-						}
-					}
-					Calendar.Add(cal);
-				}
-			}
-			*/
-		}
 	}
 
 	public class GpxCalendarModel
@@ -198,9 +139,18 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class GpxDisplayModel
 	{
+		private GpxCache _cache;
+
 		public GpxDisplayModel(GpxFileInfo file) { File = file; GuessTimezone(); }
+		public GpxDisplayModel(GpxCache cache)
+		{
+			_cache = cache;
+			File = _cache.File;
+			Data = _cache.MetaData;
+		}
 
 		public GpxFileInfo File { get; private set; }
+		public GpxCacheMetaData Data { get; private set; }
 
 		private string _name;
 		public string Name { get { if (String.IsNullOrEmpty(_name)) _name = File.Name; return _name; } set { _name = value; } }

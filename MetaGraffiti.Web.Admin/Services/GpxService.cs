@@ -76,10 +76,19 @@ namespace MetaGraffiti.Web.Admin.Services
 			return list;
 		}
 
-
 		/// <summary>
-		/// Populates the metadata for a GPX file if not already loaded
+		/// Loads and caches the requested file and metadata
 		/// </summary>
+		public GpxCache LoadFile(string uri)
+		{
+			var key = uri.ToLowerInvariant();
+			if (!_gpxCache.ContainsKey(key)) return null;
+			var cache = _gpxCache[key];
+			if (cache.MetaData == null) InitMetaData(cache);
+			return cache;
+		}
+
+		/*
 		public GpxFileMetaData LoadMetaData(string uri)
 		{
 			var key = uri.ToLowerInvariant();
@@ -87,13 +96,14 @@ namespace MetaGraffiti.Web.Admin.Services
 			if (cache.MetaData == null) InitMetaData(cache);
 			return cache.MetaData;
 		}
+		*/
 
 		private void InitMetaData(GpxCache cache)
 		{
 			var file = cache.File;
 
 			// copy simple data from file
-			var data = new GpxFileMetaData();
+			var data = new GpxCacheMetaData();
 			data.Uri = file.Uri;
 			data.Name = String.IsNullOrWhiteSpace(file.Name)
 				? Path.GetFileNameWithoutExtension(file.Uri)
@@ -121,6 +131,7 @@ namespace MetaGraffiti.Web.Admin.Services
 
 			// best guess for timezone
 			data.Timezone = GuessTimezone(countries, regions);
+			data.LocalTime = data.Timezone.FromUTC(first.Timestamp.Value);
 
 			// update cache
 			cache.MetaData = data;
@@ -129,7 +140,7 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// <summary>
 		/// Updates the metadata cache for a loaded GPX file
 		/// </summary>
-		public GpxCache SaveMetaData(string uri, GpxFileMetaData data)
+		public GpxCache SaveMetaData(string uri, GpxCacheMetaData data)
 		{
 			var key = uri.ToLowerInvariant();
 			var cache = _gpxCache[key];
@@ -207,19 +218,20 @@ namespace MetaGraffiti.Web.Admin.Services
 		public bool IsCached { get { return File != null && MetaData != null; } }
 
 		public GpxFileInfo File { get; private set; }
-		public GpxFileMetaData MetaData { get; set; }
+		public GpxCacheMetaData MetaData { get; set; }
 
 		public GpxCache(GpxFileInfo file) { File = file; }
 	}
 
 
-	public class GpxFileMetaData
+	public class GpxCacheMetaData
 	{
 		public string Uri { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 
 		public DateTime Timestamp { get; set; }
+		public DateTime LocalTime { get; set; }
 
 		public string LocationName { get; set; }
 

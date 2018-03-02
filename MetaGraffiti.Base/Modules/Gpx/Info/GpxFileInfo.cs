@@ -19,6 +19,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 			Load(uri);
 		}
 
+
 		public Exception Error { get; private set; }
 		public bool Valid { get { return Error == null; } }
 

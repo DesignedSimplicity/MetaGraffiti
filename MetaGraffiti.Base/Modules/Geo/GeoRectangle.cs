@@ -29,9 +29,9 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// Methods
 		public bool Contains(IGeoLatLon point)
 		{
-			return point.Latitude >= NorthWest.Latitude 
+			return point.Latitude >= NorthWest.Latitude
+					&& point.Longitude >= NorthWest.Longitude
 					&& point.Latitude <= SouthEast.Latitude
-					&& point.Longitude >= NorthWest.Longitude 
 					&& point.Longitude <= SouthEast.Longitude;
 		}
 

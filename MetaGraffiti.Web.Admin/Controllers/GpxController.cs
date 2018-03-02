@@ -51,8 +51,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitView();
 
-			model.SelectGpxFile(id);
-			//model.SelectedGpx = new GpxDisplayModel(gpx);
+			var cache = _gpxService.LoadFile(id);
+			model.SelectedGpx = new GpxDisplayModel(cache);
 
 			model.SelectedGpx.FilterGPS = sat;
 			model.SelectedGpx.FilterDOP = dop;
@@ -68,8 +68,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitView();
 
-			model.SelectGpxFile(update.ID);
+			//model.SelectGpxFile(update.ID);
 			//model.SelectedGpx = new GpxDisplayModel(gpx);
+			var cache = _gpxService.LoadFile(update.ID);
+			model.SelectedGpx = new GpxDisplayModel(cache);
 
 			model.SelectedGpx.Name = update.Name;
 			//model.SelectedGpx.File.Data.Description = update.Description;
