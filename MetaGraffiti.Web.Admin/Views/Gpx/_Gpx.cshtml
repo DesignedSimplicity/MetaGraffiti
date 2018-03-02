@@ -2,23 +2,56 @@
 
 @Html.Partial("_Nav")
 
-<div class="h2">
-	@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
-	{
-		<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
-		<span> \ </span>
-		<a href="/gpx/report/?year=@(Model.SelectedYear)&month=@(Model.SelectedMonth)">@Model.GetMonth(Model.SelectedMonth)</a>
-		<span> \ @Model.SelectedFile</span>
-	}
-	else if (Model.SelectedMonth.HasValue)
-	{
-		<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
-		<span> \ </span>
-		@Model.GetMonth(Model.SelectedMonth)
-	}
-	else
-	{
-		@Model.SelectedYear
-	}
+<div class="row">
+	<div class="col-sm-4">
+		<div class="h3">
+			@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
+			{
+				<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
+				<span> \ </span>
+				<a href="/gpx/report/?year=@(Model.SelectedYear)&month=@(Model.SelectedMonth)">@Model.GetMonth(Model.SelectedMonth)</a>
+				<span> \ @Model.SelectedFile</span>
+			}
+			else if (Model.SelectedMonth.HasValue)
+			{
+				<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
+				<span> \ </span>
+				@Model.GetMonth(Model.SelectedMonth)
+			}
+			else
+			{
+				@Model.SelectedYear
+			}
+		</div>
+	</div>
+	<div class="col-sm-8 text-right">
+
+		@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
+		{
+
+		}
+		else if (Model.SelectedMonth.HasValue)
+		{
+			<div class="h6">
+				@for (int month = 1; month <= 12; month++)
+				{
+					<a class="@(Model.SelectedMonth == month ? "font-italic" : "")" href="/gpx/report/?year=@(Model.SelectedYear)&month=@(month)">@Model.GetMonth(month)</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+		else if (Model.SelectedYear.HasValue)
+		{
+			<div class="h5">
+				@foreach (var year in Model.Years)
+				{
+					<a class="@(Model.SelectedYear == year ? "font-italic" : "")" href="/gpx/report/?year=@(year)">@year</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+
+	</div>
 </div>
+
 <br />

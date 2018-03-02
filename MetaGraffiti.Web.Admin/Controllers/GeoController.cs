@@ -17,7 +17,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Timezone()
+		public ActionResult Timezones()
 		{
 			var model = new GeoViewModel();
 			return View(model);

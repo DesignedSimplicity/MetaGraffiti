@@ -184,7 +184,7 @@
     <Content Include="Views\Geo\Index.cshtml" />
     <Content Include="Views\Geo\Regions.cshtml" />
     <Content Include="Views\Geo\Country.cshtml" />
-    <Content Include="Views\Geo\Timezone.cshtml" />
+    <Content Include="Views\Geo\Timezones.cshtml" />
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.0.0.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
