@@ -8,7 +8,8 @@ function initMap() {
 	_mapGoogle = new google.maps.Map(_mapDiv, {
 		zoom: 5,
 		center: new google.maps.LatLng(0, 0),
-		mapTypeId: google.maps.MapTypeId.TERRAIN
+		mapTypeId: google.maps.MapTypeId.TERRAIN,
+		//gestureHandling: 'greedy'
 	});
 }
 
@@ -32,7 +33,14 @@ function showTrack(coordinates) {
 	return track;
 }
 
-function showMarker(lat, lng, title) {
+function gotoPoint(lat, lng) {
+	var position = new google.maps.LatLng(lat, lng);
+	_mapGoogle.panTo(position);
+	_mapGoogle.setZoom(15);
+}
+
+
+function markPoint(lat, lng, title) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
@@ -42,7 +50,7 @@ function showMarker(lat, lng, title) {
 	return marker;
 }
 
-function showStart(lat, lng) {
+function markStart(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
@@ -52,7 +60,7 @@ function showStart(lat, lng) {
 	return marker;
 }
 
-function showStop(lat, lng) {
+function markStop(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,

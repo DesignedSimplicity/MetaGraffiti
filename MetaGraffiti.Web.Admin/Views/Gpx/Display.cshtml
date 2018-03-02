@@ -9,8 +9,11 @@
 
 <style>
 	.js-point-row:hover {
-		cursor: pointer;
+		cursor: crosshair;
 		color: #900;
+	}
+
+	.point-row-filtered {
 	}
 
 	#map-container {
@@ -32,40 +35,53 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script>
 	var _marker = null;
-
-	$(document).ready(function () {
-		initMap();
-		loadTrack();
-
-		$(".js-point-row").hover(function() {
-			if (_marker != null) _marker.setMap(null);
-
-			var lat = $(this).data("lat");
-			var lng = $(this).data("lng");
-			var id = $(this).data("id").toString();
-			_marker = showMarker(lat, lng, id);
-		});
-	});
-
-	function loadTrack() {
-		var coordinates = [
+	var _track = [
 		@foreach (var p in filtered)
 			{
 				<text>{ lat: @p.Latitude, lng: @p.Longitude },</text>
 			}
 		];
 
-		showTrack(coordinates);
+	$(document).ready(function () {
+		initMap();
+		loadTrack();
 
-		showStart(coordinates[0].lat, coordinates[0].lng);
-		showStop(coordinates[coordinates.length - 1].lat, coordinates[coordinates.length - 1].lng);
+		$(".js-point-row").hover(function () {
+			if (_marker != null) _marker.setMap(null);
 
-		//lookupLocation(coordinates[0].lat, coordinates[0].lng, setLocation);
-		function setLocation(location) {
-			$("#location").val(location);
-			$("#location").parent().addClass("has-warning");
-		}
+			var lat = $(this).data("lat");
+			var lng = $(this).data("lng");
+			var id = $(this).data("id").toString();
+			_marker = markPoint(lat, lng, id);
+		});
+
+		$(".js-point-row").click(function () {
+			var lat = $(this).data("lat");
+			var lng = $(this).data("lng");
+			gotoPoint(lat, lng);
+		});
+
+		$(".js-location-button").click(function () {
+			$("#location").val('...');
+			lookupLocation(_track[0].lat, _track[0].lng, setLocation);
+		});
+	});
+
+
+	function loadTrack() {
+		showTrack(_track);
+
+		markStart(_track[0].lat, _track[0].lng);
+		markStop(_track[_track.length - 1].lat, _track[_track.length - 1].lng);
+
+		//lookupLocation(_track[0].lat, _track[0].lng, setLocation);
 	}
+
+	function setLocation(location) {
+		$("#location").val(location);
+		$("#location").parent().addClass("has-warning");
+	}
+
 </script>
 
 <div id="map-container">
@@ -80,21 +96,25 @@
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label for="name">Name</label>
-						<input type="text" class="form-control" id="name" placeholder="Name" value="@gpx.File.Name">
+						<input type="text" class="form-control" id="name" placeholder="Name" value="@gpx.Name">
 					</div>
 					<div class="form-group">
-						<label for="details">Details</label>
-						<input type="text" class="form-control" id="details" placeholder="Details">
+						<label for="description">Description</label>
+						<input type="text" class="form-control" id="description" placeholder="Description" value="@gpx.File.Description">
 					</div>
 					<div class="form-group">
 						<label for="country">Location</label>
-						<input type="text" class="form-control" id="location" placeholder="Location" value="@gpx.LocationText">
+						<div class="input-group">
+							<input type="text" class="form-control" id="location" placeholder="Location" value="@gpx.LocationText">
+							<div class="input-group-append">
+								<button class="btn btn-outline-secondary js-location-button" type="button">Lookup</button>
+							</div>
+						</div>
 					</div>
 					<div class="form-group">
 						<label for="timezone">Timezone</label>
 						<input type="text" class="form-control" id="timezone" placeholder="Timezone" value="@gpx.Timezone.Name">
 					</div>
-					<button type="submit" class="btn btn-success">Update Preview</button>
 					<a href="#" class="btn btn-primary">Export to GPX</a>
 					<a href="#" class="btn btn-info">Export to KML</a>
 				</div>
@@ -108,13 +128,14 @@
 						<input type="text" class="form-control" id="finish" name="finish" placeholder="Finish Time" value="@(gpx.FilterFinish.HasValue ? gpx.FilterFinish.Value : gpx.FinishTime)">
 					</div>
 					<div class="form-group">
-						<label for="dop">Max DOP</label>
-						<input type="text" class="form-control" id="dop" name="dop" placeholder="Max DOP" value="@(gpx.FilterDOP.HasValue ? gpx.FilterDOP.Value.ToString() : "")">
+						<label for="dop">DOP Filter</label>
+						<input type="text" class="form-control" id="dop" name="dop" placeholder="Maximum DOP" value="@(gpx.FilterDOP.HasValue ? gpx.FilterDOP.Value.ToString() : "")">
 					</div>
 					<div class="form-group">
-						<label for="sat">Satellites</label>
+						<label for="sat">Satellites Filter</label>
 						<input type="text" class="form-control" id="sat" name="sat" placeholder="Minimum Satellites" value="@(gpx.FilterGPS.HasValue ? gpx.FilterGPS.Value.ToString() : "")">
 					</div>
+					<button type="submit" class="btn btn-success">Preview Filter</button>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
@@ -150,9 +171,9 @@
 					@gpx.StartTime.ToLongTimeString()<br />
 				</th>
 				<th>
-					<div>@gpx.Bounds.NorthWest.Latitude x @gpx.Bounds.NorthWest.Longitude</div>
+					<div>@gpx.Bounds.NorthWest.Latitude.ToString("0.0000") x @gpx.Bounds.NorthWest.Longitude.ToString("0.0000")</div>
 					<div>&nbsp;</div>
-					<div class="text-right">@gpx.Bounds.SouthEast.Latitude x @gpx.Bounds.SouthEast.Longitude</div>
+					<div class="text-right">@gpx.Bounds.SouthEast.Latitude.ToString("0.0000") x @gpx.Bounds.SouthEast.Longitude.ToString("0.0000")</div>
 				</th>
 				<th>@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
 				<th>@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
@@ -176,7 +197,7 @@
 				<th>#</th>
 				<th>UTC</th>
 				<th>Timestamp</th>
-				<th>Latitude<br />Longitude</th>
+				<th>Lat / Long</th>
 				<th>Speed</th>
 				<th>Alt</th>
 				<th>Sats</th>
@@ -193,7 +214,7 @@
 				foreach (var p in t.Points)
 				{
 					var utc = gpx.Timezone.FromUTC(p.Timestamp.Value);
-			<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "warning")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
+			<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
 				<td>@points</td>
 				<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
 				<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
@@ -201,9 +222,9 @@
 				<td>@((p.Speed ?? 0).ToString("#,##0.0"))</td>
 				<td>@((p.Elevation ?? 0).ToString("#,##0"))</td>
 				<td>@p.Sats</td>
-				<td class="bg-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
-				<td class="bg-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
-				<td class="bg-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
+				<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
+				<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
+				<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
 				<td>@((p.Course ?? 0).ToString("##0"))</td>
 				<td>@p.Segment</td>
 				<td>@t.Number @t.Name</td>

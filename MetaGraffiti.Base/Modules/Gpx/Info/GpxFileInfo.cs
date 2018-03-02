@@ -14,9 +14,11 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 
 		public GpxFileInfo(string uri)
 		{
+			Uri = uri;
 			Load(uri);
 		}
 
+		public string Uri { get; private set; }
 		public string Name => _data.Name;
 		public string Description => _data.Description;
 		public DateTime? Timestamp => _data.Timestamp;

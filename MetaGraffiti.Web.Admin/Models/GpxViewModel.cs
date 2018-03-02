@@ -106,6 +106,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public GpxFileInfo File { get; private set; }
 
+		public string Name { get { return (String.IsNullOrWhiteSpace(File.Name) ? Path.GetFileNameWithoutExtension(File.Uri) : File.Name); } }
+
 		public IGeoPerimeter Bounds { get { return new GeoPerimeter(FilteredPoints.ToList<IGeoLatLon>()); } }
 
 		private GeoTimezoneInfo _timezone;
@@ -138,8 +140,8 @@ namespace MetaGraffiti.Web.Admin.Models
 					var p = File.Points;
 					if (FilterStart.HasValue)
 					{
-						var s = FilterStart.Value.ToUniversalTime();
-						//var s = Timezone.ToUTC(FilterStart.Value);
+						//var s = FilterStart.Value.ToUniversalTime();
+						var s = Timezone.ToUTC(FilterStart.Value);
 						p = p.Where(x => x.Timestamp >= s);
 					}
 					if (FilterFinish.HasValue)
