@@ -15,6 +15,7 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		private int _firstYear = 2011;
 		private string _rootUri = @"E:\Annuals\_GPS";
+		private static Dictionary<string, GpxFileModel> _files = new Dictionary<string, GpxFileModel>();
 
 		// ==================================================
 		// Properties
@@ -22,12 +23,20 @@ namespace MetaGraffiti.Web.Admin.Models
 		public int? SelectedMonth { get; set; }
 		public string SelectedFile { get; set; }
 
-		public GpxFileModel SelectedGpx { get; set; }
-
-
+		public GpxDisplayModel SelectedGpx { get; set; }
 
 		public List<GpxCalendarModel> Calendar { get; set; } = new List<GpxCalendarModel>();
 
+		public void SelectGpxFile(string uri)
+		{
+			var key = uri.ToLowerInvariant();
+			if (_files.ContainsKey(key))
+			{
+				if (_files[key].Gpx == null)
+					_files[key].Gpx = new GpxDisplayModel(new GpxFileInfo(uri));
+			}
+			SelectedGpx = _files[key].Gpx;
+		}
 
 		// ==================================================
 		// Attributes
@@ -86,7 +95,29 @@ namespace MetaGraffiti.Web.Admin.Models
 						Year = year,
 						Month = month,
 					};
-					if (dir.Exists) cal.Files = dir.GetFiles("*.gpx").Select(x => x.FullName).OrderBy(x => x).ToList();
+					if (dir.Exists)
+					{
+						cal.Files = new List<GpxFileModel>();
+						lock (_files)
+						{							
+							foreach (var file in dir.GetFiles("*.gpx"))
+							{
+								var key = file.FullName.ToLowerInvariant();
+								if (_files.ContainsKey(key))
+									cal.Files.Add(_files[key]);
+								else
+								{
+									var gpx = new GpxFileModel()
+									{
+										Uri = file.FullName,
+										Name = Path.GetFileNameWithoutExtension(file.Name)
+									};
+									_files.Add(key, gpx);
+									cal.Files.Add(gpx);
+								}
+							}
+						}
+					}
 					Calendar.Add(cal);
 				}
 			}
@@ -97,16 +128,38 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public int Year { get; set; }
 		public int Month { get; set; }
-		public List<string> Files { get; set; } = new List<string>();
+		public List<GpxFileModel> Files { get; set; } = new List<GpxFileModel>();
 	}
 
 	public class GpxFileModel
 	{
-		public GpxFileModel(GpxFileInfo file) { File = file; GuessTimezone(); }
+		public string Uri { get; set; }
+		public string Name { get; set; }
+		public GpxDisplayModel Gpx { get; set; }
+		public bool IsLoaded { get { return Gpx != null; } }
+
+	}
+
+	public class GpxUpdateModel
+	{
+		public string ID { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string Location { get; set; }
+		public DateTime? Start { get; set; }
+		public DateTime? Finish { get; set; }
+		public int? SAT { get; set; }
+		public decimal? DOP { get; set; }
+	}
+
+	public class GpxDisplayModel
+	{
+		public GpxDisplayModel(GpxFileInfo file) { File = file; GuessTimezone(); }
 
 		public GpxFileInfo File { get; private set; }
 
-		public string Name { get { return (String.IsNullOrWhiteSpace(File.Name) ? Path.GetFileNameWithoutExtension(File.Uri) : File.Name); } }
+		private string _name;
+		public string Name { get { if (String.IsNullOrEmpty(_name)) _name = File.Name; return _name; } set { _name = value; } }
 
 		public IGeoPerimeter Bounds { get { return new GeoPerimeter(FilteredPoints.ToList<IGeoLatLon>()); } }
 
@@ -128,7 +181,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public GeoDistance FilteredElevationUp { get { return GeoDistance.ElevationBetweenPoints(FilteredPoints, 1); } }
 		public GeoDistance FilteredElevationDown { get { return GeoDistance.ElevationBetweenPoints(FilteredPoints, -1); } }
 		public GeoDistance FilteredElevationTotal { get { return GeoDistance.ElevationBetweenPoints(FilteredPoints, 0); } }
-		public string FilteredElapsedTime { get { return ""; } } // var ts = FilteredPoints.Last().Timestamp.Value.Subtract(FilteredPoints.First().Timestamp.Value); return String.Format("{0:0} hour{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s")); } }
+		public string FilteredElapsedTime { get { var ts = FilteredPoints.Last().Timestamp.Value.Subtract(FilteredPoints.First().Timestamp.Value); return String.Format("{0:0} hour{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s")); } }
 
 		private List<GpxPointData> _filtered = null;
 		public List<GpxPointData> FilteredPoints

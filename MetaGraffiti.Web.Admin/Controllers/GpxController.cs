@@ -27,12 +27,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult Display(string id, DateTime? start, DateTime? finish, int? sat, decimal? dop)
 		{
 			var model = new GpxViewModel();
 
-			var gpx = LoadGpxFile(id);
-			model.SelectedGpx = new GpxFileModel(gpx);
+			model.SelectGpxFile(id);
+			//model.SelectedGpx = new GpxDisplayModel(gpx);
 
 			model.SelectedGpx.FilterGPS = sat;
 			model.SelectedGpx.FilterDOP = dop;
@@ -43,19 +44,24 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-
-		private static Dictionary<string, GpxFileInfo> _gpxCache = new Dictionary<string, GpxFileInfo>();
-		private GpxFileInfo LoadGpxFile(string uri)
+		[HttpPost]
+		public ActionResult Display(GpxUpdateModel update)
 		{
-			var key = uri.ToLowerInvariant();
-			if (_gpxCache.ContainsKey(key))
-				return _gpxCache[key];
-			else
-			{
-				var gpx = new GpxFileInfo(uri);
-				_gpxCache.Add(key, gpx);
-				return gpx;
-			}
+			var model = new GpxViewModel();
+
+			model.SelectGpxFile(update.ID);
+			//model.SelectedGpx = new GpxDisplayModel(gpx);
+
+			model.SelectedGpx.Name = update.Name;
+			//model.SelectedGpx.File.Data.Description = update.Description;
+
+			model.SelectedGpx.FilterGPS = update.SAT;
+			model.SelectedGpx.FilterDOP = update.DOP;
+
+			if (update.Start.HasValue) model.SelectedGpx.FilterStart = update.Start.Value;
+			if (update.Finish.HasValue) model.SelectedGpx.FilterFinish = update.Finish.Value;
+
+			return View(model);
 		}
 	}
 }

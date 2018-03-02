@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using MetaGraffiti.Base.Common;
@@ -19,7 +20,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 		}
 
 		public string Uri { get; private set; }
-		public string Name => _data.Name;
+		public string Name { get { return (String.IsNullOrWhiteSpace(_data.Name) ? Path.GetFileNameWithoutExtension(Uri) : _data.Name); } }
 		public string Description => _data.Description;
 		public DateTime? Timestamp => _data.Timestamp;
 
@@ -64,6 +65,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 			_data = reader.ReadFile();
 		}
 
+		/*
 		public List<GpxPointData> ListPointsByMaxDOP(decimal maxDOP = 10)
 		{
 			return ListPoints(maxDOP);
@@ -108,5 +110,6 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 			}
 			return list;
 		}
+		*/
 	}
 }

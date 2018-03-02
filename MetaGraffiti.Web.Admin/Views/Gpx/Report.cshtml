@@ -3,7 +3,7 @@
 @Html.Partial("_Gpx")
 
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-6">
 		<table class="table table-striped table-sm">
 			<tbody>
 				@foreach (var cal in Model.GetCalendarEntries(Model.SelectedYear, Model.SelectedMonth))
@@ -14,17 +14,35 @@
 							<a class="h3" href="/gpx/report/?year=@(Model.SelectedYear)&month=@(cal.Month)">@Model.GetMonth(cal.Month)</a>
 							<span class="badge badge-pill badge-info">@files.Count</span>
 						</td>
+						<td>Name</td>
+						<td>Location</td>
+						<td>Local Time</td>
+						<td>Elapsed Time</td>
+						<td>Total Distance</td>
 					</tr>
 					var count = 0;
-					foreach (var gpx in files)
+					foreach (var file in files)
 					{
 						<tr>
 							<td>
 								@(++count)
 							</td>
 							<td>
-								<a href="/gpx/display/?id=@(gpx)">@gpx</a>
+								<a href="/gpx/display/?id=@(file.Uri)">@file.Name</a>
 							</td>
+
+							@if (file.IsLoaded)
+							{
+								<td>@file.Gpx.Name</td>
+								<td>@file.Gpx.LocationText</td>
+								<td>@file.Gpx.StartTime</td>
+								<td>@file.Gpx.FilteredElapsedTime</td>
+								<td>@file.Gpx.FilteredActualDistance.KM.ToString("0.0") km</td>
+							}
+							else
+							{
+								<td colspan="5"></td>
+							}
 						</tr>
 					}
 				}

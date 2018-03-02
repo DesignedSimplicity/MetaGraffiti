@@ -9,6 +9,7 @@ function initMap() {
 		zoom: 5,
 		center: new google.maps.LatLng(0, 0),
 		mapTypeId: google.maps.MapTypeId.TERRAIN,
+		keyboardShortcuts: false
 		//gestureHandling: 'greedy'
 	});
 }

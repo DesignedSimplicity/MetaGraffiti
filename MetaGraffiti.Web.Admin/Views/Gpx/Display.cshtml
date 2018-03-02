@@ -96,16 +96,16 @@
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label for="name">Name</label>
-						<input type="text" class="form-control" id="name" placeholder="Name" value="@gpx.Name">
+						<input type="text" class="form-control" id="name" name="name" placeholder="Name" value="@gpx.Name">
 					</div>
 					<div class="form-group">
 						<label for="description">Description</label>
-						<input type="text" class="form-control" id="description" placeholder="Description" value="@gpx.File.Description">
+						<input type="text" class="form-control" id="description" name="description" placeholder="Description" value="@gpx.File.Description">
 					</div>
 					<div class="form-group">
 						<label for="country">Location</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="location" placeholder="Location" value="@gpx.LocationText">
+							<input type="text" class="form-control" id="location" name="location" placeholder="Location" value="@gpx.LocationText">
 							<div class="input-group-append">
 								<button class="btn btn-outline-secondary js-location-button" type="button">Lookup</button>
 							</div>
@@ -113,7 +113,7 @@
 					</div>
 					<div class="form-group">
 						<label for="timezone">Timezone</label>
-						<input type="text" class="form-control" id="timezone" placeholder="Timezone" value="@gpx.Timezone.Name">
+						<input type="text" class="form-control" id="timezone" name="timezone" placeholder="Timezone" value="@gpx.Timezone.Name">
 					</div>
 					<a href="#" class="btn btn-primary">Export to GPX</a>
 					<a href="#" class="btn btn-info">Export to KML</a>
@@ -135,7 +135,8 @@
 						<label for="sat">Satellites Filter</label>
 						<input type="text" class="form-control" id="sat" name="sat" placeholder="Minimum Satellites" value="@(gpx.FilterGPS.HasValue ? gpx.FilterGPS.Value.ToString() : "")">
 					</div>
-					<button type="submit" class="btn btn-success">Preview Filter</button>
+					<button type="submit" class="btn btn-success">Preview Updates</button>
+					<button type="submit" class="btn btn-warning">Reset Changes</button>
 				</div>
 				<div class="col-sm-2">
 					<div class="form-group">
