@@ -58,8 +58,8 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			var data = new GpxFileData();
 
 			// built in attributes
-			Creator = SafeConvert.ToString(_xml.DocumentElement.Attributes["creator"].InnerText);
-			Version = SafeConvert.ToDecimal(_xml.DocumentElement.Attributes["version"].InnerText);
+			Creator = TypeConvert.ToString(_xml.DocumentElement.Attributes["creator"].InnerText);
+			Version = TypeConvert.ToDecimal(_xml.DocumentElement.Attributes["version"].InnerText);
 
 			// common top elements
 			data.Name = ReadString(_xml.DocumentElement, "name");
@@ -171,8 +171,8 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 
 			PopulateMetaData(node, p);
 			
-			p.Latitude = SafeConvert.ToDouble(node.Attributes["lat"].Value);
-			p.Longitude = SafeConvert.ToDouble(node.Attributes["lon"].Value);
+			p.Latitude = TypeConvert.ToDouble(node.Attributes["lat"].Value);
+			p.Longitude = TypeConvert.ToDouble(node.Attributes["lon"].Value);
 			p.Timestamp = ReadDateTime(node, "time");
 			p.Elevation = ReadDouble(node, "ele");
 			p.Course = ReadDecimal(node, "course");
@@ -193,7 +193,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			if (n == null)
 				return null;
 			else
-				return SafeConvert.ToDoubleNull(n.InnerText);
+				return TypeConvert.ToDoubleNull(n.InnerText);
 		}
 
 		private decimal? ReadDecimal(XmlNode node, string name)
@@ -202,7 +202,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			if (n == null)
 				return null;
 			else
-				return SafeConvert.ToDecimalNull(n.InnerText);
+				return TypeConvert.ToDecimalNull(n.InnerText);
 		}
 
 		private int? ReadInteger(XmlNode node, string name)
@@ -211,7 +211,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			if (n == null)
 				return null;
 			else
-				return SafeConvert.ToIntNull(n.InnerText);
+				return TypeConvert.ToIntNull(n.InnerText);
 		}
 
 		private string ReadString(XmlNode node, string name)
@@ -220,7 +220,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			if (n == null)
 				return null;
 			else
-				return SafeConvert.ToString(n.InnerText);
+				return TypeConvert.ToString(n.InnerText);
 		}
 
 		private DateTime? ReadDateTime(XmlNode node, string name)
@@ -229,7 +229,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			if (n == null)
 				return null;
 			else
-				return SafeConvert.ToUTCDateTimeNull(n.InnerText);
+				return TypeConvert.ToUTCDateTimeNull(n.InnerText);
 		}
 
 		private void InitXml()

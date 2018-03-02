@@ -2,7 +2,7 @@
 
 namespace MetaGraffiti.Base.Common
 {
-	public class SafeConvert
+	public class TypeConvert
 	{
 		//================================================================================
 		#region Integer conversions
@@ -68,7 +68,7 @@ namespace MetaGraffiti.Base.Common
 				string time = o.ToString();
 				if (!time.Contains(":"))
 				{
-					int hours = SafeConvert.ToInt(o);
+					int hours = TypeConvert.ToInt(o);
 					if (hours > 23)
 						time = String.Format("{0:0}:{1:0}:{2:0}", Math.Floor(hours / 24.0), hours % 24, 0);
 					else

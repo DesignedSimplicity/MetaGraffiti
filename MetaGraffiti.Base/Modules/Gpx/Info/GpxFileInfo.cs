@@ -56,7 +56,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 		public GpxStatData VDOP { get { return new GpxStatData(Points.Select(x => x.VDOP).ToArray()); } }
 		public GpxStatData PDOP { get { return new GpxStatData(Points.Select(x => x.PDOP).ToArray()); } }
 		public GpxStatData Velocity { get { return new GpxStatData(Points.Select(x => x.Speed).ToArray()); } }
-		public GpxStatData Elevation { get { return new GpxStatData(Points.Select(x => SafeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
+		public GpxStatData Elevation { get { return new GpxStatData(Points.Select(x => TypeConvert.ToDecimalNull(x.Elevation)).ToArray()); } }
 
 
 		private void Load(string uri)
