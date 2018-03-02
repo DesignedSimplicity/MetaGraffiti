@@ -40,6 +40,12 @@ namespace MetaGraffiti.Base.Modules.Geo
 		public static GeoDistance FromMiles(double miles) { return new GeoDistance() { Miles = miles }; }
 		public static GeoDistance FromFeet(double feet, double inches = 0) { return new GeoDistance() { Feet = feet + (inches / 12) }; }
 
+		public static GeoDistance BetweenPoints(IGeoLatLon a, IGeoLatLon b)
+		{
+			var m = GeoDistance.DistanceMeters(a, b);
+			return GeoDistance.FromMeters(m);
+		}
+
 		public static GeoDistance BetweenPoints(IGeoLocation a, IGeoLocation b, bool includeElevation = false)
 		{
 			var m = GeoDistance.DistanceMeters(a, b, includeElevation);

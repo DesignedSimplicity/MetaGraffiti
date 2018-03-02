@@ -28,6 +28,19 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 
 		public IEnumerable<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points); } }
 
+		/* TODO: make this find the earliest timestamp
+		public GpxPointData FirstPoint
+		{
+			get
+			{
+				var point = Tracks.First().Points.First();
+				if (point == null) point = _data.Routes.First().Points.First();
+				if (point == null) point = _data.Waypoints.First();
+				return point;
+			}
+		}
+		*/
+
 		/// <summary>
 		/// Total elapsed time from first to last point recorded
 		/// </summary>

@@ -63,5 +63,36 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View(model);
 		}
+
+
+		public void Index2()
+		{
+			// list all GPX files in known directory
+			// parse into calendar display model
+		}
+
+		public void Report2()
+		{
+			// display all GPX files for a given year/month
+			// ensure each file is loaded with basic details
+		}
+
+		public void Display2()
+		{
+			// load and cache specific GPX file
+			// process additional metadata/information
+			// display all data and map
+		}
+
+		public void Update2()
+		{
+			// saves filter and/or metadata updates in cache
+			// applies updates and displays data and map
+		}
+
+		public void Export2()
+		{
+			// exports filterd data as GPX or KML file
+		}
 	}
 }
