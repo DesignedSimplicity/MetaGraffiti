@@ -18,8 +18,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<FileInfo> Files { get; set; }
 		public List<GpxCache> Cache { get; set; }
 
-		private int _firstYear = 2014;
-		private string _rootUri = @"E:\Annuals\_GPS";
+		private int _firstYear = 2011;
 		private static Dictionary<string, GpxFileModel> _files = new Dictionary<string, GpxFileModel>();
 
 		// ==================================================
@@ -77,7 +76,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			return Calendar.FirstOrDefault(x => x.Year == year && x.Month == month);
 		}
 
-		public List<GpxCalendarModel> GetCalendarEntries(int? year, int? month)
+		public List<GpxCalendarModel> ListCalendarEntries(int? year, int? month)
 		{
 			InitCalendar();
 			var list = Calendar.AsEnumerable();
@@ -86,7 +85,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			return list.OrderByDescending(x => x.Year).ThenBy(x => x.Month).ToList();
 		}
 
-		public List<GpxCache> ListFiles(int year, int? month)
+		public List<GpxCache> ListGpxFiles(int year, int? month)
 		{
 			var list = Cache.Where(x => x.IsCached && x.MetaData.Timestamp.Year == year);
 			if (month.HasValue) list = list.Where(x => x.MetaData.Timestamp.Month == month.Value);

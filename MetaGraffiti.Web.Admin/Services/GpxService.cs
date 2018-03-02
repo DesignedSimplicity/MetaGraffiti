@@ -63,18 +63,10 @@ namespace MetaGraffiti.Web.Admin.Services
 					var key = file.FullName.ToLowerInvariant();
 					if (!_gpxCache.ContainsKey(key))
 					{
-						try
-						{
-							var gpx = new GpxFileInfo(file.FullName);
-							var cache = new GpxCache(gpx);
-							InitMetaData(cache);
-							_gpxCache.Add(key, cache);
-						}
-						catch (Exception ex)
-						{
-							// load with exception information
-							_gpxCache.Add(key, new GpxCache(ex));
-						}
+						var gpx = new GpxFileInfo(file.FullName);
+						var cache = new GpxCache(gpx);
+						if (gpx.Valid) InitMetaData(cache);
+						_gpxCache.Add(key, cache);
 					}
 					
 					// add new or exsting item to list
@@ -113,8 +105,8 @@ namespace MetaGraffiti.Web.Admin.Services
 
 			// determine country and region info
 			var first = file.Points.First();
-			var regions = GeoRegionInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
-			var countries = GeoCountryInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
+			var regions = GeoRegionInfo.ListByLocation(first); //TODO: order by distance 
+			var countries = GeoCountryInfo.ListByLocation(first); //TODO: order by distance .OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
 			data.Region = regions.FirstOrDefault();
 			if (data.Region != null)
 			{
@@ -124,7 +116,7 @@ namespace MetaGraffiti.Web.Admin.Services
 			else
 			{
 				data.Country = countries.FirstOrDefault();
-				data.LocationName = data.Country.Name;
+				if (data.Country != null) data.LocationName = data.Country.Name;
 			}
 
 			// best guess for timezone
@@ -144,6 +136,7 @@ namespace MetaGraffiti.Web.Admin.Services
 			cache.MetaData = data;
 			return cache;
 		}
+
 
 
 
@@ -211,14 +204,12 @@ namespace MetaGraffiti.Web.Admin.Services
 
 	public class GpxCache
 	{
-		public bool IsCached { get { return File != null && Error == null && MetaData != null; } }
-		public GpxFileInfo File { get; private set; }
+		public bool IsCached { get { return File != null && MetaData != null; } }
 
-		public Exception Error { get; private set; }
+		public GpxFileInfo File { get; private set; }
 		public GpxFileMetaData MetaData { get; set; }
 
 		public GpxCache(GpxFileInfo file) { File = file; }
-		public GpxCache(Exception error) { Error = error; }
 	}
 
 

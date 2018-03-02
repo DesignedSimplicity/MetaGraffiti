@@ -19,6 +19,9 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 			Load(uri);
 		}
 
+		public Exception Error { get; private set; }
+		public bool Valid { get { return Error == null; } }
+
 		public string Uri { get; private set; }
 		public string Name { get { return (String.IsNullOrWhiteSpace(_data.Name) ? Path.GetFileNameWithoutExtension(Uri) : _data.Name); } }
 		public string Description => _data.Description;
@@ -74,8 +77,15 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 
 		private void Load(string uri)
 		{
-			var reader = new GpxFileReader(uri);
-			_data = reader.ReadFile();
+			try
+			{
+				var reader = new GpxFileReader(uri);
+				_data = reader.ReadFile();
+			}
+			catch (Exception ex)
+			{
+				Error = ex;
+			}
 		}
 
 		/*

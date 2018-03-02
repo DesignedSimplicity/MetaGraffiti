@@ -4,6 +4,14 @@
 
 <div class="row">
 	<div class="col-md-6">
+		@if(Model.Cache.Any(x => x.File == null || !x.File.Valid))
+		{
+			<div class="alert alert-danger">
+				<span class="h4">There are one or more files with errors.</span>
+				<a class="btn btn-danger btn-sm float-right" href="/gpx/debug">Debug</a>
+			</div>
+			<br />
+		}
 		<table class="table table-bordered">
 			<thead>
 				<tr>

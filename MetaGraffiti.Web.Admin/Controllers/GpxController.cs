@@ -20,6 +20,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new GpxViewModel();
 			model.Files = _gpxService.Init(_rootUri);
+			model.Cache = _gpxService.LoadDirectory(_rootUri, true);
 			return model;
 		}
 
@@ -29,11 +30,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		public ActionResult Debug()
+		{
+			var model = InitView();
+			return View(model);
+		}
+
 		public ActionResult Report(int year, int? month = null)
 		{
 			var model = InitView();
-
-			model.Cache = _gpxService.LoadDirectory(Path.Combine(_rootUri, year.ToString()), true);
 
 			model.SelectedYear = year;
 			model.SelectedMonth = month;
