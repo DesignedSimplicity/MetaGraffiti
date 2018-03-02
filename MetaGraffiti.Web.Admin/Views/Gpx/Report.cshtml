@@ -8,40 +8,35 @@
 			<tbody>
 				@foreach (var cal in Model.GetCalendarEntries(Model.SelectedYear, Model.SelectedMonth))
 				{
-					var files = cal.Files;
 					<tr class="table-active">
 						<td colspan="2">
 							<a class="h3" href="/gpx/report/?year=@(Model.SelectedYear)&month=@(cal.Month)">@Model.GetMonth(cal.Month)</a>
-							<span class="badge badge-pill badge-info">@files.Count</span>
+							<span class="badge badge-pill badge-info">@cal.Files</span>
 						</td>
 						<td>Name</td>
 						<td>Location</td>
-						<td>Local Time</td>
-						<td>Elapsed Time</td>
-						<td>Total Distance</td>
+						<td>Timestamp</td>
 					</tr>
 					var count = 0;
-					foreach (var file in files)
+					foreach (var file in Model.ListFiles(cal.Year, cal.Month))
 					{
 						<tr>
 							<td>
 								@(++count)
 							</td>
 							<td>
-								<a href="/gpx/display/?id=@(file.Uri)">@file.Name</a>
+								<a href="/gpx/display/?id=@(file.MetaData.Uri)">@file.MetaData.Name</a>
 							</td>
 
-							@if (file.IsLoaded)
+							@if (file.MetaData != null)
 							{
-								<td>@file.Gpx.Name</td>
-								<td>@file.Gpx.LocationText</td>
-								<td>@file.Gpx.StartTime</td>
-								<td>@file.Gpx.FilteredElapsedTime</td>
-								<td>@file.Gpx.FilteredActualDistance.KM.ToString("0.0") km</td>
+								<td>@file.MetaData.Name</td>
+								<td>@file.MetaData.LocationName</td>
+								<td>@file.MetaData.Timestamp</td>
 							}
 							else
 							{
-								<td colspan="5"></td>
+								<td colspan="3"></td>
 							}
 						</tr>
 					}

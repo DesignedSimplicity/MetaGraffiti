@@ -1,25 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Web.Admin.Models;
+using MetaGraffiti.Web.Admin.Services;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GpxController : Controller
     {
-		public ActionResult Index()
+		private string _rootUri = @"E:\Annuals\_GPS";
+		private GpxService _gpxService = new GpxService();
+
+		public GpxViewModel InitView()
 		{
 			var model = new GpxViewModel();
+			model.Files = _gpxService.Init(_rootUri);
+			return model;
+		}
+
+		public ActionResult Index()
+		{
+			var model = InitView();
 			return View(model);
 		}
 
 		public ActionResult Report(int year, int? month = null)
 		{
-			var model = new GpxViewModel();
+			var model = InitView();
+
+			model.Cache = _gpxService.LoadDirectory(Path.Combine(_rootUri, year.ToString()), true);
 
 			model.SelectedYear = year;
 			model.SelectedMonth = month;
@@ -30,7 +44,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Display(string id, DateTime? start, DateTime? finish, int? sat, decimal? dop)
 		{
-			var model = new GpxViewModel();
+			var model = InitView();
 
 			model.SelectGpxFile(id);
 			//model.SelectedGpx = new GpxDisplayModel(gpx);
@@ -47,7 +61,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Display(GpxUpdateModel update)
 		{
-			var model = new GpxViewModel();
+			var model = InitView();
 
 			model.SelectGpxFile(update.ID);
 			//model.SelectedGpx = new GpxDisplayModel(gpx);

@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
+
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
+using MetaGraffiti.Web.Admin.Services;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
 	public class GpxViewModel : AdminViewModel
 	{
+		public List<FileInfo> Files { get; set; }
+		public List<GpxCache> Cache { get; set; }
+
 		private int _firstYear = 2014;
 		private string _rootUri = @"E:\Annuals\_GPS";
 		private static Dictionary<string, GpxFileModel> _files = new Dictionary<string, GpxFileModel>();
@@ -25,7 +30,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public GpxDisplayModel SelectedGpx { get; set; }
 
-		public List<GpxCalendarModel> Calendar { get; set; } = new List<GpxCalendarModel>();
+		public List<GpxCalendarModel> Calendar { get; set; }
 
 		public void SelectGpxFile(string uri)
 		{
@@ -68,15 +73,51 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public GpxCalendarModel GetCalendarEntry(int year, int month)
 		{
+			InitCalendar();
 			return Calendar.FirstOrDefault(x => x.Year == year && x.Month == month);
 		}
 
 		public List<GpxCalendarModel> GetCalendarEntries(int? year, int? month)
 		{
+			InitCalendar();
 			var list = Calendar.AsEnumerable();
 			if (year.HasValue) list = list.Where(x => x.Year == year.Value);
 			if (month.HasValue) list = list.Where(x => x.Month == month.Value);
 			return list.OrderByDescending(x => x.Year).ThenBy(x => x.Month).ToList();
+		}
+
+		public List<GpxCache> ListFiles(int year, int? month)
+		{
+			var list = Cache.Where(x => x.IsCached && x.MetaData.Timestamp.Year == year);
+			if (month.HasValue) list = list.Where(x => x.MetaData.Timestamp.Month == month.Value);
+			return list.OrderByDescending(x => x.MetaData.Timestamp).ToList();
+		}
+
+		private void InitCalendar()
+		{
+			if (Calendar == null)
+			{
+				Calendar = new List<GpxCalendarModel>();
+				lock (Calendar)
+				{
+					foreach (var file in Files)
+					{
+						// assume it is in \YEAR\MONTH folder
+						if (file.Directory.Name.Length == 2 && file.Directory.Parent.Name.Length == 4)
+						{
+							var month = TypeConvert.ToInt(file.Directory.Name);
+							var year = TypeConvert.ToInt(file.Directory.Parent.Name);
+							var entry = Calendar.FirstOrDefault(x => x.Year == year && x.Month == month);
+							if (entry == null)
+							{
+								entry = new GpxCalendarModel() { Month = month, Year = year };
+								Calendar.Add(entry);
+							}
+							entry.Files++;
+						}
+					}
+				}
+			}
 		}
 
 
@@ -84,7 +125,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Constructors
 		public GpxViewModel()
 		{
-			foreach(var year in Years)
+			/*
+			Calendar = new List<GpxCalendarModel>();
+			foreach (var year in Years)
 			{
 				for (var month = 1; month <= 12; month++)
 				{
@@ -122,6 +165,7 @@ namespace MetaGraffiti.Web.Admin.Models
 					Calendar.Add(cal);
 				}
 			}
+			*/
 		}
 	}
 
@@ -129,7 +173,7 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public int Year { get; set; }
 		public int Month { get; set; }
-		public List<GpxFileModel> Files { get; set; } = new List<GpxFileModel>();
+		public int Files { get; set; }
 	}
 
 	public class GpxFileModel

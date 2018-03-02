@@ -9,17 +9,6 @@ using MetaGraffiti.Base.Modules.Gpx.Info;
 
 namespace MetaGraffiti.Web.Admin.Services
 {
-	public class GpxCache
-	{
-		public GpxFileInfo File { get; private set; }
-		public Exception Error { get; private set; }
-
-		public GpxFileMetaData MetaData { get; set; }
-
-		public GpxCache(GpxFileInfo file) { File = file; }
-		public GpxCache(Exception error) { Error = error; }
-	}
-
 	public class GpxService
 	{
 		private static List<FileInfo> _gpxFiles = null;
@@ -28,7 +17,7 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// <summary>
 		/// Recursively discovers all GPX files located in URI specified
 		/// </summary>
-		public void Init(string uri)
+		public List<FileInfo> Init(string uri)
 		{
 			if (_gpxFiles == null)
 			{
@@ -46,6 +35,7 @@ namespace MetaGraffiti.Web.Admin.Services
 					}
 				}
 			}
+			return _gpxFiles;
 		}
 
 		/// <summary>
@@ -77,6 +67,7 @@ namespace MetaGraffiti.Web.Admin.Services
 						{
 							var gpx = new GpxFileInfo(file.FullName);
 							var cache = new GpxCache(gpx);
+							InitMetaData(cache);
 							_gpxCache.Add(key, cache);
 						}
 						catch (Exception ex)
@@ -93,49 +84,59 @@ namespace MetaGraffiti.Web.Admin.Services
 			return list;
 		}
 
+
+		/// <summary>
+		/// Populates the metadata for a GPX file if not already loaded
+		/// </summary>
 		public GpxFileMetaData LoadMetaData(string uri)
 		{
 			var key = uri.ToLowerInvariant();
 			var cache = _gpxCache[key];
-			var data = cache.MetaData;
-			if (data == null)
-			{
-				var file = cache.File;
-
-				// copy simple data from file
-				data = new GpxFileMetaData();
-				data.Name = String.IsNullOrWhiteSpace(file.Name)
-					? Path.GetFileNameWithoutExtension(file.Uri)
-					: file.Name;
-				data.Description = file.Description;
-
-				// calcuate data bounds
-
-				// determine country and region info
-				var first = file.Points.First();
-				var regions = GeoRegionInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
-				var countries = GeoCountryInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
-				data.Region = regions.FirstOrDefault();
-				if (data.Region != null)
-				{
-					data.Country = data.Region.Country;
-					data.LocationName = $"{data.Region.RegionName}, {data.Country.Name}";
-				}
-				else
-				{
-					data.Country = countries.FirstOrDefault();
-					data.LocationName = data.Country.Name;
-				}
-
-				// best guess for timezone
-				data.Timezone = GuessTimezone(countries, regions);
-
-				// update cache
-				cache.MetaData = data;
-			}
-			return data;
+			if (cache.MetaData == null) InitMetaData(cache);
+			return cache.MetaData;
 		}
 
+		private void InitMetaData(GpxCache cache)
+		{
+			var file = cache.File;
+
+			// copy simple data from file
+			var data = new GpxFileMetaData();
+			data.Uri = file.Uri;
+			data.Name = String.IsNullOrWhiteSpace(file.Name)
+				? Path.GetFileNameWithoutExtension(file.Uri)
+				: file.Name;
+			data.Description = file.Description;
+			data.Timestamp = file.Points.First().Timestamp.Value;
+
+			// calcuate geo perimiter
+
+			// determine country and region info
+			var first = file.Points.First();
+			var regions = GeoRegionInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
+			var countries = GeoCountryInfo.ListByLocation(first).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
+			data.Region = regions.FirstOrDefault();
+			if (data.Region != null)
+			{
+				data.Country = data.Region.Country;
+				data.LocationName = $"{data.Region.RegionName}, {data.Country.Name}";
+			}
+			else
+			{
+				data.Country = countries.FirstOrDefault();
+				data.LocationName = data.Country.Name;
+			}
+
+			// best guess for timezone
+			data.Timezone = GuessTimezone(countries, regions);
+
+			// update cache
+			cache.MetaData = data;
+		}
+
+		/// <summary>
+		/// Updates the metadata cache for a loaded GPX file
+		/// </summary>
 		public GpxCache SaveMetaData(string uri, GpxFileMetaData data)
 		{
 			var key = uri.ToLowerInvariant();
@@ -208,10 +209,26 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 	}
 
+	public class GpxCache
+	{
+		public bool IsCached { get { return File != null && Error == null && MetaData != null; } }
+		public GpxFileInfo File { get; private set; }
+
+		public Exception Error { get; private set; }
+		public GpxFileMetaData MetaData { get; set; }
+
+		public GpxCache(GpxFileInfo file) { File = file; }
+		public GpxCache(Exception error) { Error = error; }
+	}
+
+
 	public class GpxFileMetaData
 	{
+		public string Uri { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
+
+		public DateTime Timestamp { get; set; }
 
 		public string LocationName { get; set; }
 

@@ -10,7 +10,7 @@
 					<th>Year</th>
 					@for (var month = 1; month <= 12; month++)
 					{
-					<th class="text-right">@Model.GetMonth(month, true)</th>
+						<th class="text-right">@Model.GetMonth(month, true)</th>
 					}
 
 				</tr>
@@ -28,11 +28,11 @@
 						{
 							<td class="text-right">
 								<a class="h5" href="/gpx/report/?year=@(year)&month=@(month)">
-									@{ 
-										var count = Model.GetCalendarEntry(year, month).Files.Count;
-										if (count > 0)
+									@{
+										var cal = Model.GetCalendarEntry(year, month);
+										if (cal != null)
 										{
-											<span>@count</span>
+											<span>@(cal.Files > 0 ? cal.Files.ToString() : "")</span>
 										}
 									}
 								</a>
