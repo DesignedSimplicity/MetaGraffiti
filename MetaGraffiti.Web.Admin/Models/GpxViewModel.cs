@@ -13,7 +13,7 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class GpxViewModel : AdminViewModel
 	{
-		private int _firstYear = 2011;
+		private int _firstYear = 2014;
 		private string _rootUri = @"E:\Annuals\_GPS";
 		private static Dictionary<string, GpxFileModel> _files = new Dictionary<string, GpxFileModel>();
 
@@ -110,7 +110,8 @@ namespace MetaGraffiti.Web.Admin.Models
 									var gpx = new GpxFileModel()
 									{
 										Uri = file.FullName,
-										Name = Path.GetFileNameWithoutExtension(file.Name)
+										Name = Path.GetFileNameWithoutExtension(file.Name),
+										Gpx = new GpxDisplayModel(new GpxFileInfo(file.FullName))
 									};
 									_files.Add(key, gpx);
 									cal.Files.Add(gpx);
@@ -250,33 +251,35 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		private GeoTimezoneInfo GuessTimezone()
 		{
-			if (Countries.Any(x => x.ISO2 == "NZ"))
+			var countries = Countries;
+			var regions = Regions;
+			if (countries.Any(x => x.ISO2 == "NZ"))
 				return GeoTimezoneInfo.ByKey("New Zealand");
-			else if (Countries.Any(x => x.ISO2 == "JP"))
+			else if (countries.Any(x => x.ISO2 == "JP"))
 				return GeoTimezoneInfo.ByKey("Tokyo");
-			else if (Countries.Any(x => x.ISO2 == "SG"))
+			else if (countries.Any(x => x.ISO2 == "SG"))
 				return GeoTimezoneInfo.ByKey("Singapore");
-			else if (Countries.Any(x => x.Continent == GeoContinents.Europe))
+			else if (countries.Any(x => x.Continent == GeoContinents.Europe))
 				return GeoTimezoneInfo.ByKey("W. Europe");
-			else if (Regions.Any(x => x.RegionName == "Tasmania"))
+			else if (regions.Any(x => x.RegionName == "Tasmania"))
 				return GeoTimezoneInfo.ByKey("Tasmania");
-			else if (Regions.Any(x => x.RegionName == "Western Australia"))
+			else if (regions.Any(x => x.RegionName == "Western Australia"))
 				return GeoTimezoneInfo.ByKey("W. Australia");
-			else if (Regions.Any(x => x.RegionName == "New South Wales"))
+			else if (regions.Any(x => x.RegionName == "New South Wales"))
 				return GeoTimezoneInfo.ByKey("AUS Eastern");
-			else if (Regions.Any(x => x.RegionName == "Queensland"))
+			else if (regions.Any(x => x.RegionName == "Queensland"))
 				return GeoTimezoneInfo.ByKey("AUS Eastern");
-			else if (Countries.Count() == 1)
+			else if (countries.Count() == 1)
 			{
-				var c = Countries.First();
+				var c = countries.First();
 				if (c.ISO2 == "AR")
 					return GeoTimezoneInfo.ByKey("Argentina");
 				else if (c.ISO2 == "CL")
 					return GeoTimezoneInfo.ByKey("Pacific SA");
 			}
-			else if (Regions.Select(x => x.Country).Distinct().Count() == 1)
+			else if (regions.Select(x => x.Country).Distinct().Count() == 1)
 			{
-				var c = Regions.First().Country;
+				var c = regions.First().Country;
 				if (c.ISO2 == "AR")
 					return GeoTimezoneInfo.ByKey("Argentina");
 				else if (c.ISO2 == "CL")

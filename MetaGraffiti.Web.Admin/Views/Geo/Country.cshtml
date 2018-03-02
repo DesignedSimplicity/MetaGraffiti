@@ -1,51 +1,76 @@
 ﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
 
 @Html.Partial("_Nav")
+@{
+	var c = Model.SelectedCountry;
+}
 
-<table class="table table-striped table-sm">
-	<tr>
-		<th>Continent</th>
-		<th>ID</th>
-		<th>Division</th>
-		<th>ISO2</th>
-		<th>ISO3</th>
-		<th>OC</th>
-		<th>Name</th>
-		<th>Name Long</th>
-		<th>Name Local</th>
-		<th>Name Local Long</th>
-		<th>Abbr 10</th>
-		<th>Abbr 15</th>
-		<th>Abbr 30</th>
-		<th>Center</th>
-		<th>North West</th>
-		<th>South East</th>
-		<th>Regions</th>
-	</tr>
-	@foreach (var c in Model.Countries.OrderBy(x => x.Continent).ThenBy(x => x.Name))
-	{
-		<tr>
-			<td>@c.Continent</td>
-			<td>@c.CountryID</td>
-			<td>@c.Division</td>
-			<td>@c.ISO2</td>
-			<td>@c.ISO3</td>
-			<td>@c.OC</td>
-			<td class="mark">@c.Name</td>
-			<td>@c.NameLong</td>
-			<td>@c.NameLocal</td>
-			<td>@c.NameLocalLong</td>
-			<td>@c.Abbr10</td>
-			<td>@c.Abbr15</td>
-			<td>@c.Abbr30</td>
-			<td class="small">@c.Center.Latitude.ToString("0.000000") x @c.Center.Longitude.ToString("0.000000")</td>
-			<td class="small">@c.Bounds.NorthWest.Latitude.ToString("0.000000") x @c.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-			<td class="small">@c.Bounds.SouthEast.Latitude.ToString("0.000000") x @c.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
-			<td>
-				<a href="/geo/region#@(c.ISO3)">
-					@(c.HasRegions ? c.Regions.Count.ToString() : "")
-				</a>
-			</td>
-		</tr>
+<style>
+	#map-container {
+		position: fixed;
+		top: 0;
+		left: 50%;
+		right: 100%;
+		bottom: 100%;
+		height: 100%;
+		width: 50%;
 	}
-</table>
+
+	#map {
+		width: 100%;
+		height: 100%;
+	}
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _marker = null;
+	var _country = [
+			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[0].Longitude },
+			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[1].Longitude },
+			{ lat: @c.Bounds.Points[1].Latitude, lng: @c.Bounds.Points[1].Longitude },
+			{ lat: @c.Bounds.Points[1].Latitude, lng: @c.Bounds.Points[0].Longitude },
+			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[0].Longitude },
+	];
+
+	var _regions = [
+		@foreach (var r in c.Regions)
+		{
+			<text>
+			{
+				region: "@r.RegionName",
+				bounds: [
+					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[0].Longitude },
+					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[1].Longitude },
+					{ lat: @r.Bounds.Points[1].Latitude, lng: @r.Bounds.Points[1].Longitude },
+					{ lat: @r.Bounds.Points[1].Latitude, lng: @r.Bounds.Points[0].Longitude },
+					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[0].Longitude },
+				]
+			},</text>
+		}
+	]
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < @c.Regions.Count(); i++) {
+			showTrack(_regions[i].bounds);
+			markPoint(_regions[i].bounds[0].lat, _regions[i].bounds[0].lng, _regions[i].region);
+		} 
+
+
+		showTrack(_country);
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<h2>@c.Name</h2>
+	</div>
+</div>

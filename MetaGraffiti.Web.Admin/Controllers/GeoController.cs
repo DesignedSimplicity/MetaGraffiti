@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Web.Admin.Models;
 
 namespace MetaGraffiti.Web.Admin.Controllers
@@ -22,13 +23,20 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Country()
+		public ActionResult Countries(string id)
 		{
 			var model = new GeoViewModel();
 			return View(model);
 		}
 
-		public ActionResult Region(string country = null)
+		public ActionResult Country(int id)
+		{
+			var model = new GeoViewModel();
+			model.SelectedCountry = GeoCountryInfo.ByID(id);
+			return View(model);
+		}
+
+		public ActionResult Regions(string country = null)
 		{
 			var model = new GeoViewModel();
 			return View(model);

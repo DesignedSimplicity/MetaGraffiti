@@ -181,7 +181,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Geo\Index.cshtml" />
-    <Content Include="Views\Geo\Region.cshtml" />
+    <Content Include="Views\Geo\Regions.cshtml" />
     <Content Include="Views\Geo\Country.cshtml" />
     <Content Include="Views\Geo\Timezone.cshtml" />
     <Content Include="Scripts\jquery-3.0.0.slim.min.map" />
@@ -201,6 +201,7 @@
     <Content Include="Views\Gpx\Display.cshtml" />
     <Content Include="Views\Gpx\_Gpx.cshtml" />
     <Content Include="Views\Shared\_Nav.cshtml" />
+    <Content Include="Views\Geo\Countries.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

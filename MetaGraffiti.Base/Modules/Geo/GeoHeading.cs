@@ -28,7 +28,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// ==================================================
 		// Attributes
 
-		public GeoDirection Direction { get { return GeoDirection.FromPoints(From, To); } }
+		//public GeoDirection Direction { get { return GeoDirection.FromPoints(From, To); } }
 
 		public GeoDistance Distance { get { return GeoDistance.BetweenPoints(From, To, true); } }
 
