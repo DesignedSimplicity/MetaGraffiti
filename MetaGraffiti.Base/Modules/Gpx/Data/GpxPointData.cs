@@ -61,6 +61,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		<geoidheight>17.0</geoidheight>
 	</trkpt>
 	*/
+
 	public class GpxTrackData : GpxRouteData
 	{
 	}
