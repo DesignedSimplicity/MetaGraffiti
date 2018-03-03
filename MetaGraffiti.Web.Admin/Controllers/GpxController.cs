@@ -13,14 +13,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GpxController : Controller
     {
-		private string _rootUri = @"E:\Annuals\_GPS";
 		private GpxService _gpxService = new GpxService();
 
 		public GpxViewModel InitView()
 		{
+			string rootUri = Path.Combine(AutoConfig.RootConfigUri, "GPS");
+
 			var model = new GpxViewModel();
-			model.Files = _gpxService.Init(_rootUri);
-			model.Cache = _gpxService.LoadDirectory(_rootUri, true);
+			model.Files = _gpxService.Init(rootUri);
+			model.Cache = _gpxService.LoadDirectory(rootUri, true);
+
 			return model;
 		}
 
@@ -72,8 +74,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Update(GpxCacheMetaData update)
 		{
-			var model = InitView();
-
 			var cache = _gpxService.LoadFile(update.Uri);
 			var data = cache.MetaData;
 
@@ -92,8 +92,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Filter(GpxCacheMetaData update)
 		{
-			var model = InitView();
-
 			var cache = _gpxService.LoadFile(update.Uri);
 			var data = cache.MetaData;
 
@@ -103,6 +101,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			data.FilterFinish = update.FilterFinish;
 
 			return Redirect("/gpx/display/?uri=" + update.Uri);
+		}
+
+		public ActionResult Export(string uri, string format = "gpx")
+		{
+			var cache = _gpxService.LoadFile(uri);
+			var data = cache.MetaData;
+
+			return null;// Redirect("/gpx/display/?uri=" + update.Uri);
 		}
 	}
 }

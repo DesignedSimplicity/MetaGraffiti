@@ -13,7 +13,7 @@
 			<br />
 		}
 		<table class="table table-bordered">
-			<thead>
+			<thead class="thead-dark">
 				<tr>
 					<th>Year</th>
 					@for (var month = 1; month <= 12; month++)
@@ -27,7 +27,7 @@
 				@foreach (var year in Model.Years)
 				{
 					<tr>
-						<td>
+						<td class="table-secondary">
 							<a class="h4" href="/gpx/report/?year=@(year)">
 								@year
 							</a>

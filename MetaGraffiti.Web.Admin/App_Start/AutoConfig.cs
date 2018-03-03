@@ -8,6 +8,8 @@ namespace MetaGraffiti.Web.Admin
 		private const string _configRoot = @"C:\Code\";
 		private static string _googleMapsApiKey = "";
 
+		public static string RootConfigUri { get { return _configRoot; } }
+
 		public static string GoogleMapsApiKey
 		{
 			get

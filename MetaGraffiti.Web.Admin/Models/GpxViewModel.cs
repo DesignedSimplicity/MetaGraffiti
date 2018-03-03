@@ -71,14 +71,14 @@ namespace MetaGraffiti.Web.Admin.Models
 			var list = Calendar.AsEnumerable();
 			if (year.HasValue) list = list.Where(x => x.Year == year.Value);
 			if (month.HasValue) list = list.Where(x => x.Month == month.Value);
-			return list.OrderByDescending(x => x.Year).ThenBy(x => x.Month).ToList();
+			return list.OrderBy(x => x.Year).ThenBy(x => x.Month).ToList();
 		}
 
 		public List<GpxCache> ListGpxFiles(int year, int? month)
 		{
 			var list = Cache.Where(x => x.IsCached && x.MetaData.Timestamp.Year == year);
 			if (month.HasValue) list = list.Where(x => x.MetaData.Timestamp.Month == month.Value);
-			return list.OrderByDescending(x => x.MetaData.Timestamp).ToList();
+			return list.OrderBy(x => x.MetaData.Timestamp).ToList();
 		}
 
 		private void InitCalendar()

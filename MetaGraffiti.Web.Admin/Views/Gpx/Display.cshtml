@@ -162,8 +162,23 @@
 			</div>
 		</div>
 		<br />
-		<table class="table table-striped table-bordered table-condensed table-responsive">
-			<tr>
+		<table class="table table-striped table-bordered table-condensed">
+			<tr class="thead-dark">
+				<th>#</th>
+				<th>UTC Timestamp</th>
+				<th>Local Time</th>
+				<th>Lat / Long</th>
+				<th>Speed</th>
+				<th>Alt</th>
+				<th>Sats</th>
+				<th>H</th>
+				<th>V</th>
+				<th>P</th>
+				<th>T</th>
+				<th>S</th>
+				<th>C</th>
+			</tr>
+			<tr class="mark">
 				<th>@gpx.File.Points.Count()</th>
 				<th>
 					UTC @(gpx.Timezone.OffsetUTC.TotalHours.ToString("0")):00
@@ -174,14 +189,14 @@
 					@gpx.StartTime.ToLongDateString()<br />
 					@gpx.StartTime.ToLongTimeString()<br />
 				</th>
-				<th>
-					<div>@gpx.Bounds.NorthWest.Latitude.ToString("0.0000") x @gpx.Bounds.NorthWest.Longitude.ToString("0.0000")</div>
+				<th class="small font-weight-bold">
+					<div>@gpx.Bounds.NorthWest.Latitude.ToString("0.000000"), @gpx.Bounds.NorthWest.Longitude.ToString("0.000000")</div>
 					<div>&nbsp;</div>
-					<div class="text-right">@gpx.Bounds.SouthEast.Latitude.ToString("0.0000") x @gpx.Bounds.SouthEast.Longitude.ToString("0.0000")</div>
+					<div class="text-right">@gpx.Bounds.SouthEast.Latitude.ToString("0.000000"), @gpx.Bounds.SouthEast.Longitude.ToString("0.000000")</div>
 				</th>
-				<th>@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
-				<th>@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
-				<th>@gpx.File.Satellites.Min.ToString("0")<br />@gpx.File.Satellites.Avg.ToString("0")<br />@gpx.File.Satellites.Max.ToString("0")</th>
+				<th class="text-right">@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
+				<th class="text-right">@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
+				<th class="text-right">@gpx.File.Satellites.Min.ToString("0")<br />@gpx.File.Satellites.Avg.ToString("0")<br />@gpx.File.Satellites.Max.ToString("0")</th>
 				<th class="@gpx.GetDOPCss(gpx.File.HDOP.Max)">
 					@gpx.File.HDOP.Min.ToString("0.0")<br />@gpx.File.HDOP.Avg.ToString("0.0")<br />@gpx.File.HDOP.Max.ToString("0.0")
 				</th>
@@ -192,50 +207,35 @@
 					@gpx.File.PDOP.Min.ToString("0.0")<br />@gpx.File.PDOP.Avg.ToString("0.0")<br />@gpx.File.PDOP.Max.ToString("0.0")
 				</th>
 				<th colspan="3">
-					<div>Course</div>
+					<div>Track</div>
 					<div class="text-center">Segment</div>
-					<div class="text-right">Track</div>
+					<div class="text-right">Course</div>
 				</th>
 			</tr>
-			<tr>
-				<th>#</th>
-				<th>UTC</th>
-				<th>Timestamp</th>
-				<th>Lat / Long</th>
-				<th>Speed</th>
-				<th>Alt</th>
-				<th>Sats</th>
-				<th>H</th>
-				<th>V</th>
-				<th>P</th>
-				<th>C</th>
-				<th>S</th>
-				<th>T</th>
-			</tr>
 			@foreach (var t in gpx.File.Tracks)
+	{
+		var points = 1;
+		foreach (var p in t.Points)
 		{
-			var points = 1;
-			foreach (var p in t.Points)
-			{
-				var utc = gpx.Timezone.FromUTC(p.Timestamp.Value);
-				<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
-					<td>@points</td>
-					<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-					<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
-					<td>@p.Latitude.ToString("0.0000000")<br />@p.Longitude.ToString("0.0000000")</td>
-					<td>@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-					<td>@((p.Elevation ?? 0).ToString("#,##0"))</td>
-					<td>@p.Sats</td>
-					<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
-					<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
-					<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
-					<td>@((p.Course ?? 0).ToString("##0"))</td>
-					<td>@p.Segment</td>
-					<td>@t.Number @t.Name</td>
-				</tr>
-			points++;
-		}
-	}
+			var utc = gpx.Timezone.FromUTC(p.Timestamp.Value);
+			<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
+				<td>@points</td>
+				<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+				<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
+				<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
+				<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+				<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+				<td class="text-right">@p.Sats</td>
+				<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
+				<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
+				<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
+				<td>@t.Number @t.Name</td>
+				<td>@p.Segment</td>
+				<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
+			</tr>
+	points++;
+}
+}
 		</table>
 	</div>
 </div>
