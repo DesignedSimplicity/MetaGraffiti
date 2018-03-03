@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using MetaGraffiti.Base.Modules.Geo;
-using System;
 
 namespace MetaGraffiti.Base.Tests.Geo
 {
