@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
 
 namespace MetaGraffiti.Web.Admin.Services
@@ -97,6 +98,56 @@ namespace MetaGraffiti.Web.Admin.Services
 			return cache.MetaData;
 		}
 		*/
+
+		public GpxCache UpdateMetaData(string uri, GpxUpdateData update)
+		{
+			var key = uri.ToLowerInvariant();
+			var cache = _gpxCache[key];
+			var data = cache.MetaData;
+
+			data.Name = update.Name;
+			data.Description = update.Description;
+			data.LocationName = update.LocationName;
+
+			//TODO: deal with changes to country/region
+			//TODO: deal with timezone/recalcuating local time
+
+			return cache;
+		}
+
+		public GpxCache UpdateFilters(string uri, GpxFilterData filter)
+		{
+			var key = uri.ToLowerInvariant();
+			var cache = _gpxCache[key];
+
+			cache.Filter = filter;
+
+			return cache;
+		}
+
+		public List<GpxPointData> ListFilterPoints(GpxCache cache)
+		{
+			var file = cache.File;
+			var data = cache.MetaData;
+			var filter = cache.Filter;
+			var p = file.Points;
+			if (filter.FilterStart.HasValue)
+			{
+				var s = data.Timezone.ToUTC(filter.FilterStart.Value);
+				p = p.Where(x => x.Timestamp >= s);
+			}
+			if (filter.FilterFinish.HasValue)
+			{
+				var f = data.Timezone.ToUTC(filter.FilterFinish.Value);
+				p = p.Where(x => x.Timestamp <= f);
+			}
+			if ((filter.FilterDOP ?? 0) > 0) p = p.Where(x => x.MaxDOP <= filter.FilterDOP.Value);
+			if ((filter.FilterGPS ?? 0) > 0) p = p.Where(x => x.Sats <= filter.FilterGPS.Value);
+			return p.ToList();
+		}
+
+
+
 
 		private void InitMetaData(GpxCache cache)
 		{
@@ -210,9 +261,26 @@ namespace MetaGraffiti.Web.Admin.Services
 		public GpxFileInfo File { get; private set; }
 		public GpxCacheMetaData MetaData { get; set; }
 
+		public GpxFilterData Filter { get; set; } = new GpxFilterData();
+
+
 		public GpxCache(GpxFileInfo file) { File = file; }
 	}
 
+	public class GpxUpdateData
+	{
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string LocationName { get; set; }
+	}
+
+	public class GpxFilterData
+	{
+		public int? FilterGPS { get; set; }
+		public decimal? FilterDOP { get; set; }
+		public DateTime? FilterStart { get; set; }
+		public DateTime? FilterFinish { get; set; }
+	}
 
 	public class GpxCacheMetaData
 	{
@@ -225,16 +293,9 @@ namespace MetaGraffiti.Web.Admin.Services
 
 		public string LocationName { get; set; }
 
-		public IGeoPerimeter Bounds { get; set; }
 
 		public GeoTimezoneInfo Timezone { get; set; }
 		public GeoCountryInfo Country { get; set; }
 		public GeoRegionInfo Region { get; set; }
-
-
-		public int? FilterGPS { get; set; }
-		public decimal? FilterDOP { get; set; }
-		public DateTime? FilterStart { get; set; }
-		public DateTime? FilterFinish { get; set; }
 	}
 }

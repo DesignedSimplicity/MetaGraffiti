@@ -55,15 +55,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			// TODO: refactor away from complex GpxDisplayModel
 			var cache = _gpxService.LoadFile(uri);
-			model.SelectedGpx = new GpxDisplayModel(cache);
+			var gpx = new GpxDisplayModel(cache);
 
-			var filter = cache.MetaData;
+			gpx.Points = _gpxService.ListFilterPoints(cache);
 
-			model.SelectedGpx.FilterGPS = filter.FilterGPS;
-			model.SelectedGpx.FilterDOP = filter.FilterDOP;
-
-			model.SelectedGpx.FilterStart = filter.FilterStart;
-			model.SelectedGpx.FilterFinish = filter.FilterFinish;
+			model.SelectedGpx = gpx;
 
 			return View(model);
 		}
@@ -72,41 +68,27 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Updates cached metadata from form values
 		/// </summary>
 		[HttpPost]
-		public ActionResult Update(GpxCacheMetaData update)
+		public ActionResult Update(string uri, GpxUpdateData update)
 		{
-			var cache = _gpxService.LoadFile(update.Uri);
-			var data = cache.MetaData;
+			_gpxService.UpdateMetaData(uri, update);
 
-			data.Name = update.Name;
-			data.Description = update.Description;
-			data.LocationName = update.LocationName;
-
-			//TODO: deal with changes to country/region
-			//TODO: deal with timezone/recalcuating local time
-
-			return Redirect("/gpx/display/?uri=" + update.Uri);
+			return Redirect("/gpx/display/?uri=" + uri);
 		}
 
 		/// <summary>
 		/// Applies filter on POST, clears filter on GET
 		/// </summary>
-		public ActionResult Filter(GpxCacheMetaData update)
+		public ActionResult Filter(string uri, GpxFilterData filter)
 		{
-			var cache = _gpxService.LoadFile(update.Uri);
-			var data = cache.MetaData;
+			_gpxService.UpdateFilters(uri, filter);
 
-			data.FilterDOP = update.FilterDOP;
-			data.FilterGPS = update.FilterGPS;
-			data.FilterStart = update.FilterStart;
-			data.FilterFinish = update.FilterFinish;
-
-			return Redirect("/gpx/display/?uri=" + update.Uri);
+			return Redirect("/gpx/display/?uri=" + uri);
 		}
 
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);
-			var data = cache.MetaData;
+			var points = _gpxService.ListFilterPoints(cache);
 
 			return null;// Redirect("/gpx/display/?uri=" + update.Uri);
 		}

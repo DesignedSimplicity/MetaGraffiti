@@ -5,14 +5,7 @@
 <div class="row">
 	<div class="col-sm-4">
 		<div class="h3">
-			@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
-			{
-				<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
-				<span> \ </span>
-				<a href="/gpx/report/?year=@(Model.SelectedYear)&month=@(Model.SelectedMonth)">@Model.GetMonth(Model.SelectedMonth)</a>
-				<span> \ @Model.SelectedFile</span>
-			}
-			else if (Model.SelectedMonth.HasValue)
+			@if (Model.SelectedMonth.HasValue)
 			{
 				<a href="/gpx/report/?year=@(Model.SelectedYear)">@Model.SelectedYear</a>
 				<span> \ </span>
@@ -26,11 +19,7 @@
 	</div>
 	<div class="col-sm-8 text-right">
 
-		@if (!String.IsNullOrWhiteSpace(Model.SelectedFile))
-		{
-
-		}
-		else if (Model.SelectedMonth.HasValue)
+		@if (Model.SelectedMonth.HasValue)
 		{
 			<div class="h6">
 				@for (int month = 1; month <= 12; month++)

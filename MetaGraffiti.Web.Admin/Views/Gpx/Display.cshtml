@@ -4,8 +4,8 @@
 
 @{
 	var gpx = Model.SelectedGpx;
-	var data = Model.SelectedGpx.Data;
-	var filtered = gpx.FilteredPoints;
+	var data = gpx.Data;
+	var filter = gpx.Filter;
 }
 
 <style>
@@ -35,10 +35,10 @@
 <script>
 	var _marker = null;
 	var _track = [
-		@foreach (var p in filtered)
-			{
-				<text>{ lat: @p.Latitude, lng: @p.Longitude },</text>
-			}
+	@foreach (var p in gpx.Points)
+	{
+		<text>{ lat: @p.Latitude, lng: @p.Longitude },</text>
+	}
 		];
 
 	$(document).ready(function () {
@@ -124,19 +124,19 @@
 					<input type="hidden" name="Uri" value="@data.Uri" />
 					<div class="form-group">
 						<label for="start">Start Time</label>
-						<input type="text" class="form-control" name="FilterStart" placeholder="Start Time" value="@(gpx.FilterStart.HasValue ? gpx.FilterStart.Value : gpx.StartTime)">
+						<input type="text" class="form-control" name="FilterStart" placeholder="Start Time" value="@(filter.FilterStart.HasValue ? filter.FilterStart.Value : gpx.StartTime)">
 					</div>
 					<div class="form-group">
 						<label for="finish">Finish Time</label>
-						<input type="text" class="form-control" name="FilterFinish" placeholder="Finish Time" value="@(gpx.FilterFinish.HasValue ? gpx.FilterFinish.Value : gpx.FinishTime)">
+						<input type="text" class="form-control" name="FilterFinish" placeholder="Finish Time" value="@(filter.FilterFinish.HasValue ? filter.FilterFinish.Value : gpx.FinishTime)">
 					</div>
 					<div class="form-group">
 						<label for="dop">DOP Filter</label>
-						<input type="text" class="form-control" name="FilterDOP" placeholder="Maximum DOP" value="@(gpx.FilterDOP.HasValue ? gpx.FilterDOP.Value.ToString() : "")">
+						<input type="text" class="form-control" name="FilterDOP" placeholder="Maximum DOP" value="@(filter.FilterDOP.HasValue ? filter.FilterDOP.Value.ToString() : "")">
 					</div>
 					<div class="form-group">
 						<label for="sat">Satellites Filter</label>
-						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@(gpx.FilterGPS.HasValue ? gpx.FilterGPS.Value.ToString() : "")">
+						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@(filter.FilterGPS.HasValue ? filter.FilterGPS.Value.ToString() : "")">
 					</div>
 					<button type="submit" class="btn btn-warning">Apply Filter</button>
 					<a href="/gpx/filter/?uri=@data.Uri" class="btn btn-outline-danger">Reset Filter</a>
@@ -145,19 +145,19 @@
 			<div class="col-sm-2">
 				<div class="form-group">
 					<label>Elapsed Time</label>
-					<input readonly type="text" class="form-control" value="@gpx.FilteredElapsedTime">
+					<input readonly type="text" class="form-control" value="@gpx.ElapsedTimeText">
 				</div>
 				<div class="form-group">
 					<label>Linear Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.FilteredLinearDistance.KM.ToString("0.0") km">
+					<input readonly type="text" class="form-control" value="@gpx.LinearDistance.KM.ToString("0.0") km">
 				</div>
 				<div class="form-group">
 					<label>Actual Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.FilteredActualDistance.KM.ToString("0.0") km">
+					<input readonly type="text" class="form-control" value="@gpx.ActualDistance.KM.ToString("0.0") km">
 				</div>
 				<div class="form-group">
 					<label>Up/Down</label>
-					<input readonly type="text" class="form-control" value="@gpx.FilteredElevationUp.Meters.ToString("0") / @gpx.FilteredElevationDown.Meters.ToString("0") m">
+					<input readonly type="text" class="form-control" value="@gpx.ElevationUp.Meters.ToString("0") / @gpx.ElevationDown.Meters.ToString("0") m">
 				</div>
 			</div>
 		</div>
@@ -179,10 +179,14 @@
 				<th>C</th>
 			</tr>
 			<tr class="mark">
-				<th>@gpx.File.Points.Count()</th>
+				<th class="text-center">
+					@gpx.Points.Count()
+					<div>of</div>
+					@gpx.File.Points.Count()
+				</th>
 				<th>
-					UTC @(gpx.Timezone.OffsetUTC.TotalHours.ToString("0")):00
-					@gpx.Timezone.TZID.Replace("/", " / ")<br />
+					UTC @(data.Timezone.OffsetUTC.TotalHours.ToString("0")):00
+					@data.Timezone.TZID.Replace("/", " / ")<br />
 					<br />
 				</th>
 				<th>
@@ -213,29 +217,29 @@
 				</th>
 			</tr>
 			@foreach (var t in gpx.File.Tracks)
-	{
-		var points = 1;
-		foreach (var p in t.Points)
-		{
-			var utc = gpx.Timezone.FromUTC(p.Timestamp.Value);
-			<tr class="js-point-row @(filtered.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@points">
-				<td>@points</td>
-				<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-				<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
-				<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
-				<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-				<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
-				<td class="text-right">@p.Sats</td>
-				<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
-				<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
-				<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
-				<td>@t.Number @t.Name</td>
-				<td>@p.Segment</td>
-				<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
-			</tr>
-	points++;
-}
-}
+			{
+				var count = 1;
+				foreach (var p in t.Points)
+				{
+					var utc = data.Timezone.FromUTC(p.Timestamp.Value);
+					<tr class="js-point-row @(gpx.Points.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@count">
+						<td>@count</td>
+						<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+						<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
+						<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
+						<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+						<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+						<td class="text-right">@p.Sats</td>
+						<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
+						<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
+						<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
+						<td>@t.Number @t.Name</td>
+						<td>@p.Segment</td>
+						<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
+					</tr>
+					count++;
+				}
+			}
 		</table>
 	</div>
 </div>
