@@ -47,73 +47,62 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		[HttpGet]
-		public ActionResult Display(string id, DateTime? start, DateTime? finish, int? sat, decimal? dop)
+		public ActionResult Display(string uri)
 		{
 			var model = InitView();
 
-			var cache = _gpxService.LoadFile(id);
+			// TODO: refactor away from complex GpxDisplayModel
+			var cache = _gpxService.LoadFile(uri);
 			model.SelectedGpx = new GpxDisplayModel(cache);
 
-			model.SelectedGpx.FilterGPS = sat;
-			model.SelectedGpx.FilterDOP = dop;
+			var filter = cache.MetaData;
 
-			if (start.HasValue) model.SelectedGpx.FilterStart = start.Value;
-			if (finish.HasValue) model.SelectedGpx.FilterFinish = finish.Value;
+			model.SelectedGpx.FilterGPS = filter.FilterGPS;
+			model.SelectedGpx.FilterDOP = filter.FilterDOP;
+
+			model.SelectedGpx.FilterStart = filter.FilterStart;
+			model.SelectedGpx.FilterFinish = filter.FilterFinish;
 
 			return View(model);
 		}
 
+		/// <summary>
+		/// Updates cached metadata from form values
+		/// </summary>
 		[HttpPost]
-		public ActionResult Display(GpxUpdateModel update)
+		public ActionResult Update(GpxCacheMetaData update)
 		{
 			var model = InitView();
 
-			//model.SelectGpxFile(update.ID);
-			//model.SelectedGpx = new GpxDisplayModel(gpx);
-			var cache = _gpxService.LoadFile(update.ID);
-			model.SelectedGpx = new GpxDisplayModel(cache);
+			var cache = _gpxService.LoadFile(update.Uri);
+			var data = cache.MetaData;
 
-			model.SelectedGpx.Name = update.Name;
-			//model.SelectedGpx.File.Data.Description = update.Description;
+			data.Name = update.Name;
+			data.Description = update.Description;
+			data.LocationName = update.LocationName;
 
-			model.SelectedGpx.FilterGPS = update.SAT;
-			model.SelectedGpx.FilterDOP = update.DOP;
+			//TODO: deal with changes to country/region
+			//TODO: deal with timezone/recalcuating local time
 
-			if (update.Start.HasValue) model.SelectedGpx.FilterStart = update.Start.Value;
-			if (update.Finish.HasValue) model.SelectedGpx.FilterFinish = update.Finish.Value;
-
-			return View(model);
+			return Redirect("/gpx/display/?uri=" + update.Uri);
 		}
 
-
-		public void Index2()
+		/// <summary>
+		/// Applies filter on POST, clears filter on GET
+		/// </summary>
+		public ActionResult Filter(GpxCacheMetaData update)
 		{
-			// list all GPX files in known directory
-			// parse into calendar display model
-		}
+			var model = InitView();
 
-		public void Report2()
-		{
-			// display all GPX files for a given year/month
-			// ensure each file is loaded with basic details
-		}
+			var cache = _gpxService.LoadFile(update.Uri);
+			var data = cache.MetaData;
 
-		public void Display2()
-		{
-			// load and cache specific GPX file
-			// process additional metadata/information
-			// display all data and map
-		}
+			data.FilterDOP = update.FilterDOP;
+			data.FilterGPS = update.FilterGPS;
+			data.FilterStart = update.FilterStart;
+			data.FilterFinish = update.FilterFinish;
 
-		public void Update2()
-		{
-			// saves filter and/or metadata updates in cache
-			// applies updates and displays data and map
-		}
-
-		public void Export2()
-		{
-			// exports filterd data as GPX or KML file
+			return Redirect("/gpx/display/?uri=" + update.Uri);
 		}
 	}
 }

@@ -137,16 +137,6 @@ namespace MetaGraffiti.Web.Admin.Services
 			cache.MetaData = data;
 		}
 
-		/// <summary>
-		/// Updates the metadata cache for a loaded GPX file
-		/// </summary>
-		public GpxCache SaveMetaData(string uri, GpxCacheMetaData data)
-		{
-			var key = uri.ToLowerInvariant();
-			var cache = _gpxCache[key];
-			cache.MetaData = data;
-			return cache;
-		}
 
 
 
@@ -242,8 +232,8 @@ namespace MetaGraffiti.Web.Admin.Services
 		public GeoRegionInfo Region { get; set; }
 
 
-		public int? FilterMinSAT { get; set; }
-		public double? FilterMaxDOP { get; set; }
+		public int? FilterGPS { get; set; }
+		public decimal? FilterDOP { get; set; }
 		public DateTime? FilterStart { get; set; }
 		public DateTime? FilterFinish { get; set; }
 	}

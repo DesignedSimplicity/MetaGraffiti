@@ -27,7 +27,7 @@
 		{
 		<tr>
 			<td>@(++count)</td>
-			<td><a href="/gpx/display/?id=@(file.MetaData.Uri)">@file.MetaData.Name</a></td>
+			<td><a href="/gpx/display/?uri=@(file.MetaData.Uri)">@file.MetaData.Name</a></td>
 			<td>@file.MetaData.Description</td>
 			<td>@(file.MetaData.Country?.Name??"")</td>
 			<td>@file.MetaData.LocationName</td>
