@@ -18,9 +18,9 @@
 			<td>Description</td>
 			<td>Country</td>
 			<td>Location</td>
-			<td>UTC Timestamp</td>
-			<td>Timezone</td>
 			<td>Local Time</td>
+			<td>Timezone</td>
+			<td>UTC Timestamp</td>
 		</tr>
 		var count = 0;
 		foreach (var file in files)
@@ -28,12 +28,12 @@
 		<tr>
 			<td>@(++count)</td>
 			<td><a href="/gpx/display/?uri=@(file.MetaData.Uri)">@file.MetaData.Name</a></td>
-			<td>@file.MetaData.Description</td>
-			<td>@(file.MetaData.Country?.Name??"")</td>
+			<td class="small">@file.MetaData.Description</td>
+			<td>@(file.MetaData.Country?.Name ?? "")</td>
 			<td>@file.MetaData.LocationName</td>
-			<td>@file.MetaData.Timestamp</td>
-			<td>@file.MetaData.Timezone.TZID</td>
 			<td>@file.MetaData.LocalTime</td>
+			<td>@file.MetaData.Timezone.TZID</td>
+			<td>@file.MetaData.Timestamp</td>
 		</tr>
 		}
 	}

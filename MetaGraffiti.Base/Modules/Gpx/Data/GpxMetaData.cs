@@ -23,5 +23,18 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		public string Source;
 		public string Url;
 		public string UrlText;
+
+		public GpxMetaData CopyMetaData()
+		{
+			return new GpxMetaData()
+			{
+				Name = Name,
+				Comment = Comment,
+				Description = Description,
+				Source = Source,
+				Url = Url,
+				UrlText = UrlText,
+			};
+		}
 	}
 }

@@ -27,7 +27,7 @@ namespace MetaGraffiti.Web.Admin.Services
 				lock (_gpxFiles)
 				{
 					var root = new DirectoryInfo(uri);
-					foreach(var file in root.EnumerateFiles("*.*", SearchOption.AllDirectories))
+					foreach (var file in root.EnumerateFiles("*.*", SearchOption.AllDirectories))
 					{
 						if (file.Extension.ToLowerInvariant() == ".gpx")
 						{
@@ -69,7 +69,7 @@ namespace MetaGraffiti.Web.Admin.Services
 						if (gpx.Valid) InitMetaData(cache);
 						_gpxCache.Add(key, cache);
 					}
-					
+
 					// add new or exsting item to list
 					list.Add(_gpxCache[key]);
 				}
@@ -90,12 +90,6 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-
-		public void SaveFile(Stream stream)
-		{
-			var writer = new GpxFileWriter(stream);
-
-		}
 
 		/*
 		public GpxFileMetaData LoadMetaData(string uri)
@@ -145,7 +139,17 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-
+		public byte[] ExportFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
+		{
+			var writer = new GpxFileWriter();
+			writer.WriteHeader(metadata.Name, metadata.Description);
+			foreach (var track in tracks)
+			{
+				var points = (filter == null ? track.Points : FilterPoints(track.Points, filter));
+				writer.WriteTrack(track.Name, track.Description, points);
+			}
+			return writer.GetBytes();
+		}
 
 
 		private void InitMetaData(GpxCache cache)

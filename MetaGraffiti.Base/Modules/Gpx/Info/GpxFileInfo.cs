@@ -32,18 +32,6 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 
 		public IEnumerable<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points); } }
 
-		/* TODO: make this find the earliest timestamp
-		public GpxPointData FirstPoint
-		{
-			get
-			{
-				var point = Tracks.First().Points.First();
-				if (point == null) point = _data.Routes.First().Points.First();
-				if (point == null) point = _data.Waypoints.First();
-				return point;
-			}
-		}
-		*/
 
 		/// <summary>
 		/// Total elapsed time from first to last point recorded
@@ -88,52 +76,5 @@ namespace MetaGraffiti.Base.Modules.Gpx.Info
 				Error = ex;
 			}
 		}
-
-		/*
-		public List<GpxPointData> ListPointsByMaxDOP(decimal maxDOP = 10)
-		{
-			return ListPoints(maxDOP);
-		}
-
-		public List<GpxPointData> ListPointsByMinSatellites(decimal minSatellites = 10)
-		{
-			return ListPoints(null, minSatellites, true);
-		}
-
-		public List<GpxPointData> ListPoints(decimal? maxDOP = null, decimal? minSatellites = null, bool requireGPS = false)
-		{
-			var list = new List<GpxPointData>();
-			foreach (var t in Tracks)
-			{
-				foreach (var p in t.Points)
-				{
-					bool bad = false;
-					if (maxDOP.HasValue)
-					{
-						if (!p.HDOP.HasValue && !p.VDOP.HasValue && !p.PDOP.HasValue)
-							bad = true; // no dilution of precision values
-						else if (p.MaxDOP > maxDOP.Value)
-							bad = true; // DOP exceeds max value
-					}
-
-					if (minSatellites.HasValue)
-					{
-						if (!p.Sats.HasValue)
-							bad = true; // no satellite value
-						else if (p.Sats.Value < minSatellites.Value)
-							bad = true; // insufficient number of satellite
-					}
-
-					if (requireGPS)
-					{
-						if (p.Source != "gps") bad = true; // not from GPS satellite
-					}
-
-					if (!bad) list.Add(p);
-				}
-			}
-			return list;
-		}
-		*/
 	}
 }

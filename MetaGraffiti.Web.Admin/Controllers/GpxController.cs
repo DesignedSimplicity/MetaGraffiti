@@ -88,11 +88,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);
-			//var points = _gpxService.FilterPoints(cache);
 
-			
+			var data = _gpxService.ExportFile(cache.MetaData, cache.File.Tracks, cache.Filter);
 
-			return null;// Redirect("/gpx/display/?uri=" + update.Uri);
+			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.gpx");
 		}
 	}
 }

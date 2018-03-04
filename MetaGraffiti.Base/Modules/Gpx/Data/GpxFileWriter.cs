@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 
 using MetaGraffiti.Base.Modules.Geo;
@@ -10,39 +11,102 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 {
 	public class GpxFileWriter
 	{
-		private GpxSchemaVersion _version;
-		private string _ns;
-		private XmlDocument _xml;
-		private const string _gpx = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""GeoGraffiti - http://designed.com/"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
+		private const string _gpxTemplateV1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
 
-		public GpxFileWriter(string uri)
-		{
-		}
+		private XmlDocument _xml = null;
+		//public Stream _stream = null;
+		//public string _uri = null;
 
-		public GpxFileWriter(Stream uri)
-		{
-		}
+		//public GpxFileWriter(string uri) { _uri = uri; }
+		//public GpxFileWriter(Stream stream) { _stream = stream; }
 
-		public decimal Version { get; private set; }
-		public string Creator { get; private set; }
+		public GpxSchemaVersion Version { get; private set; } = GpxSchemaVersion.Version1;
+		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
+		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? Gpx.XmlNamespaceV1 : Gpx.XmlNamespaceV1_1; } }
 
 		public void WriteHeader(string name, string description = null, DateTime? timestamp = null)
 		{
-			/*
-			var header = new GpxFileHeader()
+			_xml = new XmlDocument();
+			_xml.LoadXml(_gpxTemplateV1);
+
+			XmlNamespaceManager ns = new XmlNamespaceManager(_xml.NameTable);
+			ns.AddNamespace("gpx", Namespace);
+
+			_xml.DocumentElement.Attributes["creator"].InnerText = Creator;
+			_xml.DocumentElement.Attributes["version"].InnerText = Version == GpxSchemaVersion.Version1 ? "1.0" : "1.1";
+			if (timestamp.HasValue)
 			{
-				Name = name,
-				Description = description,
-				Timestamp = timestamp
-			};
-			WriteHeader(header);
-			*/
+				var timestampNode = _xml.CreateElement("time", Namespace);
+				_xml.DocumentElement.AppendChild(timestampNode);
+				timestampNode.InnerText = timestamp.Value.ToString("s") + "Z";
+			}
+			if (!String.IsNullOrWhiteSpace(name))
+			{
+				var nameNode = _xml.CreateElement("name", Namespace);
+				_xml.DocumentElement.AppendChild(nameNode);
+				nameNode.InnerText = name;
+			}
+			if (!String.IsNullOrWhiteSpace(description))
+			{
+				var descriptionNode = _xml.CreateElement("desc", Namespace);
+				_xml.DocumentElement.AppendChild(descriptionNode);
+				descriptionNode.InnerText = description;
+			}
 		}
 
-		public void WriteTrack(string name, string description = null)
+		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)
 		{
+			// create header if needed
+			if (_xml == null) WriteHeader(name, description, points.First().Timestamp.Value);
+			
+			// create track
+			var track = _xml.CreateElement("trk", Namespace);
+			_xml.DocumentElement.AppendChild(track);
+
+				if (!String.IsNullOrWhiteSpace(name))
+				{
+					var nameNode = _xml.CreateElement("name", Namespace);
+					track.AppendChild(nameNode);
+					nameNode.InnerText = name;
+				}
+				if (!String.IsNullOrWhiteSpace(description))
+				{
+					var descriptionNode = _xml.CreateElement("desc", Namespace);
+					track.AppendChild(descriptionNode);
+					descriptionNode.InnerText = description;
+				}
+
+				XmlElement tracksegmentNode = null;
+				var segment = -1;
+				foreach (var p in points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+				{
+					if (segment != p.Segment)
+					{
+						// create new segments as needed
+						tracksegmentNode = _xml.CreateElement("trkseg", Namespace);
+						track.AppendChild(tracksegmentNode);
+						segment = p.Segment;
+					}
+
+					// add points to segments
+					var pointNode = _xml.CreateElement("trkpt", Namespace);
+					tracksegmentNode.AppendChild(pointNode);
+					SetPoint(pointNode, p);
+				}
 		}
 
+		public string GetXml()
+		{
+			return _xml.OuterXml;
+		}
+
+		public byte[] GetBytes()
+		{
+			return Encoding.ASCII.GetBytes(GetXml());
+		}
+		
+
+		/*
 		public void WriteTrack(GpxTrackData track)
 		{
 		}
@@ -78,153 +142,81 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 		public void WriteWaypoints(IEnumerable<GpxPointData> waypoints)
 		{
 		}
+		*/
 
 
-
-		private void WriteXml(string uri)
+		private void SetPoint(XmlNode node, GpxPointData p)
 		{
-			var data = new GpxFileData();
-			XmlDocument xml = new XmlDocument();
-			xml.LoadXml(_gpx);
-
-			XmlNamespaceManager ns = new XmlNamespaceManager(xml.NameTable);
-			ns.AddNamespace("gpx", _ns);
-
-			//xml.DocumentElement.Attributes["creator"].InnerText = Creator;
-			//xml.DocumentElement.Attributes["version"].InnerText = Version.ToString();
-			if (data.Timestamp.HasValue)
-			{
-				var timestamp = xml.CreateElement("time", _ns);
-				xml.DocumentElement.AppendChild(timestamp);
-				timestamp.InnerText = data.Timestamp.Value.ToUniversalTime().ToString("s") + "Z";
-			}
-			if (!String.IsNullOrWhiteSpace(data.Name))
-			{
-				var name = xml.CreateElement("name", _ns);
-				xml.DocumentElement.AppendChild(name);
-				name.InnerText = data.Name;
-			}
-			if (!String.IsNullOrWhiteSpace(data.Description))
-			{
-				var desc = xml.CreateElement("desc", _ns);
-				xml.DocumentElement.AppendChild(desc);
-				desc.InnerText = data.Description;
-			}
-
-			foreach (var t in data.Tracks)
-			{
-				// create track
-				var track = xml.CreateElement("trk", _ns);
-				xml.DocumentElement.AppendChild(track);
-
-				if (!String.IsNullOrWhiteSpace(t.Name))
-				{
-					var name = xml.CreateElement("name", _ns);
-					track.AppendChild(name);
-					name.InnerText = t.Name;
-				}
-				if (!String.IsNullOrWhiteSpace(t.Description))
-				{
-					var desc = xml.CreateElement("desc", _ns);
-					track.AppendChild(desc);
-					desc.InnerText = t.Description;
-				}
-
-				XmlElement tracksegment = null;
-				var segment = -1;
-				foreach (var p in t.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
-				{
-					if (segment != p.Segment)
-					{
-						// create new segments as needed
-						tracksegment = xml.CreateElement("trkseg", _ns);
-						track.AppendChild(tracksegment);
-						segment = p.Segment;
-					}
-
-					// add points to segments
-					var point = xml.CreateElement("trkpt", _ns);
-					tracksegment.AppendChild(point);
-					WritePoint(point, p);
-				}
-			}
-
-			//todo- deal with routes
-			xml.Save(uri);
-		}
-
-		private void WritePoint(XmlNode xml, GpxPointData p)
-		{
-			var lat = xml.OwnerDocument.CreateAttribute("lat");
-			xml.Attributes.Append(lat);
+			var lat = node.OwnerDocument.CreateAttribute("lat");
+			node.Attributes.Append(lat);
 			lat.Value = p.Latitude.ToString();
 
-			var lon = xml.OwnerDocument.CreateAttribute("lon");
-			xml.Attributes.Append(lon);
+			var lon = node.OwnerDocument.CreateAttribute("lon");
+			node.Attributes.Append(lon);
 			lon.Value = p.Longitude.ToString();
 
 			if (p.Timestamp.HasValue)
 			{
-				var time = xml.OwnerDocument.CreateElement("time", _ns);
-				xml.AppendChild(time);
+				var time = node.OwnerDocument.CreateElement("time", Namespace);
+				node.AppendChild(time);
 				time.InnerText = p.Timestamp.Value.ToUniversalTime().ToString("s") + "Z";
 			}
 
 			if (p.Elevation.HasValue)
 			{
-				var ele = xml.OwnerDocument.CreateElement("ele", _ns);
-				xml.AppendChild(ele);
+				var ele = node.OwnerDocument.CreateElement("ele", Namespace);
+				node.AppendChild(ele);
 				ele.InnerText = p.Elevation.Value.ToString();
 			}
 
 			if (p.Course.HasValue)
 			{
-				var course = xml.OwnerDocument.CreateElement("course", _ns);
-				xml.AppendChild(course);
+				var course = node.OwnerDocument.CreateElement("course", Namespace);
+				node.AppendChild(course);
 				course.InnerText = p.Course.Value.ToString();
 			}
 
 			if (p.Speed.HasValue)
 			{
-				var speed = xml.OwnerDocument.CreateElement("speed", _ns);
-				xml.AppendChild(speed);
+				var speed = node.OwnerDocument.CreateElement("speed", Namespace);
+				node.AppendChild(speed);
 				speed.InnerText = p.Speed.Value.ToString();
 			}
 
 			if (!String.IsNullOrWhiteSpace(p.Source))
 			{
-				var src = xml.OwnerDocument.CreateElement("src", _ns);
-				xml.AppendChild(src);
+				var src = node.OwnerDocument.CreateElement("src", Namespace);
+				node.AppendChild(src);
 				src.InnerText = p.Source;
 			}
 
 			if (p.Sats.HasValue)
 			{
-				var sat = xml.OwnerDocument.CreateElement("sat", _ns);
-				xml.AppendChild(sat);
+				var sat = node.OwnerDocument.CreateElement("sat", Namespace);
+				node.AppendChild(sat);
 				sat.InnerText = p.Sats.Value.ToString();
 			}
 
 			if (p.HDOP.HasValue)
 			{
-				var hdop = xml.OwnerDocument.CreateElement("hdop", _ns);
-				xml.AppendChild(hdop);
+				var hdop = node.OwnerDocument.CreateElement("hdop", Namespace);
+				node.AppendChild(hdop);
 				hdop.InnerText = p.HDOP.Value.ToString();
 			}
 
 			if (p.VDOP.HasValue)
 			{
-				var vdop = xml.OwnerDocument.CreateElement("vdop", _ns);
-				xml.AppendChild(vdop);
+				var vdop = node.OwnerDocument.CreateElement("vdop", Namespace);
+				node.AppendChild(vdop);
 				vdop.InnerText = p.VDOP.Value.ToString();
 			}
 
 			if (p.PDOP.HasValue)
 			{
-				var pdop = xml.OwnerDocument.CreateElement("pdop", _ns);
-				xml.AppendChild(pdop);
+				var pdop = node.OwnerDocument.CreateElement("pdop", Namespace);
+				node.AppendChild(pdop);
 				pdop.InnerText = p.PDOP.Value.ToString();
 			}
-		}
+		}		
 	}
 }
