@@ -57,7 +57,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var cache = _gpxService.LoadFile(uri);
 			var gpx = new GpxDisplayModel(cache);
 
-			gpx.Points = _gpxService.FilterPoints(cache);
+			gpx.Points = _gpxService.FilterPoints(cache.File.Points, cache.Filter);
 
 			model.SelectedGpx = gpx;
 
@@ -88,7 +88,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);
-			var points = _gpxService.FilterPoints(cache);
+			//var points = _gpxService.FilterPoints(cache);
 
 			
 

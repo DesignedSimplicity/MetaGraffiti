@@ -134,27 +134,16 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-		public List<GpxPointData> FilterPoints(GpxCache cache)
-		{
-			return FilterPoints(cache.File.Points, cache.Filter, cache.MetaData.Timezone);
-		}
 
-		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterData filter, GeoTimezoneInfo timezone)
+		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterData filter)
 		{
-			if (filter.FilterStart.HasValue)
-			{
-				var s = timezone.ToUTC(filter.FilterStart.Value);
-				points = points.Where(x => x.Timestamp >= s);
-			}
-			if (filter.FilterFinish.HasValue)
-			{
-				var f = timezone.ToUTC(filter.FilterFinish.Value);
-				points = points.Where(x => x.Timestamp <= f);
-			}
+			if (filter.FilterStart.HasValue) points = points.Where(x => x.Timestamp >= filter.FilterStart.Value);
+			if (filter.FilterFinish.HasValue) points = points.Where(x => x.Timestamp <= filter.FilterFinish.Value);
 			if ((filter.FilterDOP ?? 0) > 0) points = points.Where(x => x.MaxDOP <= filter.FilterDOP.Value);
 			if ((filter.FilterGPS ?? 0) > 0) points = points.Where(x => x.Sats <= filter.FilterGPS.Value);
 			return points.ToList();
 		}
+
 
 
 

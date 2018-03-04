@@ -136,9 +136,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		public GpxCacheMetaData Data { get { return _cache.MetaData; } }
 
 
-		public DateTime StartTime { get { return Data.Timezone.FromUTC(Points.First().Timestamp.Value); } }
-		public DateTime FinishTime { get { return Data.Timezone.FromUTC(Points.Last().Timestamp.Value); } }
+		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
+		public DateTime StartTimeLocal { get { return Data.Timezone.FromUTC(StartTime); } }
+
+		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
+		public DateTime FinishTimeLocal { get { return Data.Timezone.FromUTC(FinishTime); } }
 		
+
 		public IGeoPerimeter Bounds { get { return new GeoPerimeter(Points.ToList<IGeoLatLon>()); } }
 
 
