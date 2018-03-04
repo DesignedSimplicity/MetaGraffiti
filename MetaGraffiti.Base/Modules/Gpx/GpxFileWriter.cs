@@ -6,19 +6,15 @@ using System.Text;
 using System.Xml;
 
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Gpx.Data;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Data
+namespace MetaGraffiti.Base.Modules.Gpx
 {
 	public class GpxFileWriter
 	{
 		private const string _gpxTemplateV1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
 
 		private XmlDocument _xml = null;
-		//public Stream _stream = null;
-		//public string _uri = null;
-
-		//public GpxFileWriter(string uri) { _uri = uri; }
-		//public GpxFileWriter(Stream stream) { _stream = stream; }
 
 		public GpxSchemaVersion Version { get; private set; } = GpxSchemaVersion.Version1;
 		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
@@ -100,11 +96,7 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 			return _xml.OuterXml;
 		}
 
-		public byte[] GetBytes()
-		{
-			return Encoding.ASCII.GetBytes(GetXml());
-		}
-		
+
 
 		/*
 		public void WriteTrack(GpxTrackData track)

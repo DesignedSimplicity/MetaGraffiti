@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
+using System.Text;
+
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Gpx;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
+using MetaGraffiti.Base.Modules.Kml;
 
 namespace MetaGraffiti.Web.Admin.Services
 {
@@ -139,7 +142,7 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-		public byte[] ExportFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
+		public byte[] ExportGpxFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
 		{
 			var writer = new GpxFileWriter();
 			writer.WriteHeader(metadata.Name, metadata.Description);
@@ -148,8 +151,21 @@ namespace MetaGraffiti.Web.Admin.Services
 				var points = (filter == null ? track.Points : FilterPoints(track.Points, filter));
 				writer.WriteTrack(track.Name, track.Description, points);
 			}
-			return writer.GetBytes();
+			return Encoding.ASCII.GetBytes(writer.GetXml());
 		}
+
+		public byte[] ExportKmlFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
+		{
+			var writer = new KmlFileWriter();
+			writer.WriteHeader(metadata.Name, metadata.Description);
+			foreach (var track in tracks)
+			{
+				var points = (filter == null ? track.Points : FilterPoints(track.Points, filter));
+				writer.WriteTrack(track.Name, track.Description, points);
+			}
+			return Encoding.ASCII.GetBytes(writer.GetXml());
+		}
+
 
 
 		private void InitMetaData(GpxCache cache)

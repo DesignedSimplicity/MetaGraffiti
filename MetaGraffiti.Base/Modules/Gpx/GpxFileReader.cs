@@ -4,8 +4,9 @@ using System.IO;
 using System.Xml;
 
 using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Gpx.Data;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Data
+namespace MetaGraffiti.Base.Modules.Gpx
 {
 	public class GpxFileReader
 	{

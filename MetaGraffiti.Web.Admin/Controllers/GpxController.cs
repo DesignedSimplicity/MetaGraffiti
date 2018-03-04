@@ -85,13 +85,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return Redirect("/gpx/display/?uri=" + uri);
 		}
 
+
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);
 
-			var data = _gpxService.ExportFile(cache.MetaData, cache.File.Tracks, cache.Filter);
-
-			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.gpx");
+			if (format == "kml")
+			{
+				var kml = _gpxService.ExportKmlFile(cache.MetaData, cache.File.Tracks, cache.Filter);
+				return File(kml, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.kml");
+			}
+			else
+			{
+				var gpx = _gpxService.ExportGpxFile(cache.MetaData, cache.File.Tracks, cache.Filter);
+				return File(gpx, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.gpx");
+			}
 		}
 	}
 }
