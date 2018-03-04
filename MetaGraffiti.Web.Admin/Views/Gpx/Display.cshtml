@@ -138,11 +138,11 @@
 					</div>
 					<div class="form-group">
 						<label for="dop">DOP Filter</label>
-						<input type="text" class="form-control" name="FilterDOP" placeholder="Maximum DOP" value="@(filter.FilterDOP.HasValue ? filter.FilterDOP.Value.ToString() : "")">
+						<input type="text" class="form-control" name="FilterDOP" placeholder="Maximum DOP" value="@filter.FilterDOP">
 					</div>
 					<div class="form-group">
 						<label for="sat">Satellites Filter</label>
-						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@(filter.FilterGPS.HasValue ? filter.FilterGPS.Value.ToString() : "")">
+						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@filter.FilterGPS">
 					</div>
 					<button type="submit" class="btn btn-warning">Apply Filter</button>
 					<a href="/gpx/filter/?uri=@data.Uri" class="btn btn-outline-danger">Reset Filter</a>
@@ -155,15 +155,15 @@
 				</div>
 				<div class="form-group">
 					<label>Linear Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.LinearDistance.KM.ToString("0.0") km">
+					<input readonly type="text" class="form-control" value="@gpx.LinearDistance.KM.ToString("#,##0.0") km">
 				</div>
 				<div class="form-group">
 					<label>Actual Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.ActualDistance.KM.ToString("0.0") km">
+					<input readonly type="text" class="form-control" value="@gpx.ActualDistance.KM.ToString("#,##0.0") km">
 				</div>
 				<div class="form-group">
 					<label>Up / Down</label>
-					<input readonly type="text" class="form-control" value="@gpx.ElevationUp.Meters.ToString("0") / @gpx.ElevationDown.Meters.ToString("0") m">
+					<input readonly type="text" class="form-control" value="@gpx.ElevationUp.Meters.ToString("#,##0") / @gpx.ElevationDown.Meters.ToString("#,##0") m">
 				</div>
 			</div>
 		</div>
@@ -207,14 +207,14 @@
 				<th class="text-right">@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
 				<th class="text-right">@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
 				<th class="text-right">@gpx.File.Satellites.Min.ToString("0")<br />@gpx.File.Satellites.Avg.ToString("0")<br />@gpx.File.Satellites.Max.ToString("0")</th>
-				<th class="@gpx.ElevationDown.Meters.ToString("0")">
-					@gpx.Points.Count()<br />@gpx.File.Points.Count()<br />@data.Timezone.OffsetUTC.TotalHours.ToString("0")
+				<th class="@gpx.GetDOPCss(gpx.File.HDOP.Max)">
+					@gpx.File.HDOP.Min.ToString("0.0")<br />@gpx.File.HDOP.Avg.ToString("0.0")<br />@gpx.File.HDOP.Max.ToString("0.0")
 				</th>
-				<th class="@data.Timezone.TZID.Replace("/", " / ")">
-					@gpx.StartTimeLocal.ToLongDateString()<br />@gpx.StartTimeLocal.ToLongTimeString()<br />@gpx.Bounds.NorthWest.Latitude.ToString("0.000000")
+				<th class="@gpx.GetDOPCss(gpx.File.VDOP.Max)">
+					@gpx.File.VDOP.Min.ToString("0.0")<br />@gpx.File.VDOP.Avg.ToString("0.0")<br />@gpx.File.VDOP.Max.ToString("0.0")
 				</th>
-				<th class="@gpx.Bounds.NorthWest.Longitude.ToString("0.000000")">
-					@gpx.Bounds.SouthEast.Latitude.ToString("0.000000")<br />@gpx.Bounds.SouthEast.Longitude.ToString("0.000000")<br />@gpx.File.Velocity.Min.ToString("0.0")
+				<th class="@gpx.GetDOPCss(gpx.File.PDOP.Max)">
+					@gpx.File.PDOP.Min.ToString("0.0")<br />@gpx.File.PDOP.Avg.ToString("0.0")<br />@gpx.File.PDOP.Max.ToString("0.0")
 				</th>
 				<th colspan="3">
 					<div>Track</div>
