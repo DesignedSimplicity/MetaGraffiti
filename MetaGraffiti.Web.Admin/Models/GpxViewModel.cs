@@ -148,7 +148,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public GeoDistance ElevationDown { get { return GeoDistance.ElevationBetweenPoints(Points, -1); } }
 		public GeoDistance ElevationTotal { get { return GeoDistance.ElevationBetweenPoints(Points, 0); } }
 		public TimeSpan ElapsedTime { get { return Points.Last().Timestamp.Value.Subtract(Points.First().Timestamp.Value); } }
-		public string ElapsedTimeText { get { var ts = ElapsedTime; return String.Format("{0:0} hour{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s")); } }
+		public string ElapsedTimeText { get { var ts = ElapsedTime; return String.Format("{0:0} hr{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s")); } }
 
 		/*
 		public string Activites { get { return (IsWalking ? "Walk" : ""); } }

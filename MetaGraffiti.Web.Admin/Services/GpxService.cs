@@ -89,6 +89,14 @@ namespace MetaGraffiti.Web.Admin.Services
 			return cache;
 		}
 
+
+
+		public void SaveFile(Stream stream)
+		{
+			var writer = new GpxFileWriter(stream);
+
+		}
+
 		/*
 		public GpxFileMetaData LoadMetaData(string uri)
 		{
@@ -125,25 +133,27 @@ namespace MetaGraffiti.Web.Admin.Services
 			return cache;
 		}
 
-		public List<GpxPointData> ListFilterPoints(GpxCache cache)
+
+		public List<GpxPointData> FilterPoints(GpxCache cache)
 		{
-			var file = cache.File;
-			var data = cache.MetaData;
-			var filter = cache.Filter;
-			var p = file.Points;
+			return FilterPoints(cache.File.Points, cache.Filter, cache.MetaData.Timezone);
+		}
+
+		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterData filter, GeoTimezoneInfo timezone)
+		{
 			if (filter.FilterStart.HasValue)
 			{
-				var s = data.Timezone.ToUTC(filter.FilterStart.Value);
-				p = p.Where(x => x.Timestamp >= s);
+				var s = timezone.ToUTC(filter.FilterStart.Value);
+				points = points.Where(x => x.Timestamp >= s);
 			}
 			if (filter.FilterFinish.HasValue)
 			{
-				var f = data.Timezone.ToUTC(filter.FilterFinish.Value);
-				p = p.Where(x => x.Timestamp <= f);
+				var f = timezone.ToUTC(filter.FilterFinish.Value);
+				points = points.Where(x => x.Timestamp <= f);
 			}
-			if ((filter.FilterDOP ?? 0) > 0) p = p.Where(x => x.MaxDOP <= filter.FilterDOP.Value);
-			if ((filter.FilterGPS ?? 0) > 0) p = p.Where(x => x.Sats <= filter.FilterGPS.Value);
-			return p.ToList();
+			if ((filter.FilterDOP ?? 0) > 0) points = points.Where(x => x.MaxDOP <= filter.FilterDOP.Value);
+			if ((filter.FilterGPS ?? 0) > 0) points = points.Where(x => x.Sats <= filter.FilterGPS.Value);
+			return points.ToList();
 		}
 
 
