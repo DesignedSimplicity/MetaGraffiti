@@ -77,7 +77,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 				{
 					if (a.Elevation.HasValue && b.Elevation.HasValue)
 					{
-						var d = a.Elevation.Value - b.Elevation.Value;
+						var d = b.Elevation.Value - a.Elevation.Value;
 						if (direction == 0)
 							m += Math.Abs(d);
 						else if (direction < 0 && d < 0)
