@@ -204,12 +204,13 @@ namespace MetaGraffiti.Web.Admin.Services
 			data.Description = file.Description;
 			data.Timestamp = file.Points.First().Timestamp.Value;
 
-			// calcuate geo perimiter
+			// TODO: calcuate geo perimiter
+
 
 			// determine country and region info
-			var first = file.Points.First();
-			var regions = GeoRegionInfo.ListByLocation(first); //TODO: order by distance 
-			var countries = GeoCountryInfo.ListByLocation(first); //TODO: order by distance .OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, first));
+			var point = file.Points.First();
+			var regions = GeoRegionInfo.ListByLocation(point).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
+			var countries = GeoCountryInfo.ListByLocation(point).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
 			data.Region = regions.FirstOrDefault();
 			if (data.Region != null)
 			{
@@ -224,7 +225,7 @@ namespace MetaGraffiti.Web.Admin.Services
 
 			// best guess for timezone
 			data.Timezone = GuessTimezone(countries, regions);
-			data.LocalTime = data.Timezone.FromUTC(first.Timestamp.Value);
+			data.LocalTime = data.Timezone.FromUTC(point.Timestamp.Value);
 
 			// update cache
 			cache.MetaData = data;

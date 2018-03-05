@@ -63,5 +63,21 @@ namespace MetaGraffiti.Base.Tests.Geo
 			Assert.AreEqual(1, c.Count());
 			Assert.AreEqual("USA", c.First().ISO3);
 		}
+
+		[TestMethod]
+		public void GeoCountryInfo_VerifyBounds()
+		{
+			string[] _swapLon = { "" };
+
+			foreach (var c in GeoCountryInfo.All)
+			{
+				var lat = c.Bounds.NorthWest.Latitude > c.Bounds.SouthEast.Latitude;
+				Assert.IsTrue(lat, $"Latitude Error for {c.Name} = {c.Bounds.NorthWest.Latitude}");
+
+				var lon = c.Bounds.NorthWest.Longitude < c.Bounds.SouthEast.Longitude;
+				if (_swapLon.Contains(c.ISO2)) lon = !lon;
+				Assert.IsTrue(lon, $"Longitude Error for {c.Name} = {c.Bounds.NorthWest.Longitude}");
+			}
+		}
 	}
 }

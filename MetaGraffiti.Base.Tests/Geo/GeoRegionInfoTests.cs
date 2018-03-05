@@ -13,7 +13,8 @@ namespace MetaGraffiti.Base.Tests.Geo
 		public void GeoRegionInfo_All()
 		{
 			var r = GeoRegionInfo.All;
-			Assert.AreEqual(899, r.Count);
+			Assert.AreEqual(862, r.Count);
+			//Assert.AreEqual(899, r.Count);
 		}
 
 		[TestMethod]
@@ -63,6 +64,25 @@ namespace MetaGraffiti.Base.Tests.Geo
 			Assert.IsTrue(r.Any(x => x.RegionAbbr == "DC"));
 			Assert.IsTrue(r.Any(x => x.RegionAbbr == "MD"));
 			Assert.IsTrue(r.Any(x => x.RegionAbbr == "VA"));
+		}
+
+		[TestMethod]
+		public void GeoRegionInfo_VerifyBounds()
+		{
+			string[] _swapLon = { "RU-CHU" };
+
+			foreach (var c in GeoCountryInfo.All)
+			{
+				foreach (var r in GeoRegionInfo.ListByCountry(c.CountryID))
+				{
+					var lat = r.Bounds.NorthWest.Latitude > r.Bounds.SouthEast.Latitude;
+					Assert.IsTrue(lat, $"Latitude Error for {c.Name} {r.RegionName} = {r.Bounds.NorthWest.Latitude}");
+
+					var lon = r.Bounds.NorthWest.Longitude < r.Bounds.SouthEast.Longitude;
+					if (_swapLon.Contains(r.RegionISO)) lon = !lon;
+					Assert.IsTrue(lon, $"Longitude Error for {c.Name} {r.RegionName} = {r.Bounds.NorthWest.Longitude}");
+				}
+			}
 		}
 	}
 }
