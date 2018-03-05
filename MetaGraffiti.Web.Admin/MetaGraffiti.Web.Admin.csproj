@@ -204,6 +204,7 @@
     <Content Include="Views\Shared\_Nav.cshtml" />
     <Content Include="Views\Geo\Countries.cshtml" />
     <Content Include="Views\Gpx\Debug.cshtml" />
+    <Content Include="Views\Gpx\Manage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

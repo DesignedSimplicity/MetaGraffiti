@@ -1,5 +1,7 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model GpxViewModel
 
+@Html.Partial("_Nav")
 @Html.Partial("_Gpx")
 
 <table class="table table-striped table-sm">
@@ -8,7 +10,7 @@
 		var files = Model.ListGpxFiles(cal.Year, cal.Month);
 		<tr class="thead-dark align-top">
 			<th colspan="10">
-				<a class="h4" href="/gpx/report/?year=@(Model.SelectedYear)&month=@(cal.Month)">@Model.GetMonth(cal.Month)</a>
+				<a class="h4" href="@GpxViewModel.GetReportUrl(Model.SelectedYear, cal.Month)">@Model.GetMonth(cal.Month)</a>
 				<span class="badge badge-pill badge-@(files.Count == cal.Files ? "info" : "danger")">@cal.Files</span>
 			</th>
 		</tr>
@@ -25,16 +27,16 @@
 		var count = 0;
 		foreach (var file in files)
 		{
-		<tr>
-			<td>@(++count)</td>
-			<td><a href="/gpx/display/?uri=@(file.MetaData.Uri)">@file.MetaData.Name</a></td>
-			<td class="small">@file.MetaData.Description</td>
-			<td>@(file.MetaData.Country?.Name ?? "")</td>
-			<td>@file.MetaData.LocationName</td>
-			<td>@file.MetaData.LocalTime</td>
-			<td>@file.MetaData.Timezone.TZID</td>
-			<td>@file.MetaData.Timestamp</td>
-		</tr>
+			<tr>
+				<td>@(++count)</td>
+				<td><a href="@GpxViewModel.GetDisplayUrl(file.MetaData.Uri)">@file.MetaData.Name</a></td>
+				<td class="small">@file.MetaData.Description</td>
+				<td>@(file.MetaData.Country?.Name ?? "")</td>
+				<td>@file.MetaData.LocationName</td>
+				<td>@file.MetaData.LocalTime</td>
+				<td>@file.MetaData.Timezone.TZID</td>
+				<td>@file.MetaData.Timestamp</td>
+			</tr>
 		}
 	}
 </table>

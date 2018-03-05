@@ -26,15 +26,19 @@ namespace MetaGraffiti.Base.Modules.Gpx.Data
 
 		public GpxMetaData CopyMetaData()
 		{
-			return new GpxMetaData()
-			{
-				Name = Name,
-				Comment = Comment,
-				Description = Description,
-				Source = Source,
-				Url = Url,
-				UrlText = UrlText,
-			};
+			var data = new GpxMetaData();
+			CopyMetaDataTo(data);
+			return data;
+		}
+
+		public void CopyMetaDataTo(GpxMetaData dest)
+		{
+			dest.Name = Name;
+			dest.Comment = Comment;
+			dest.Description = Description;
+			dest.Source = Source;
+			dest.Url = Url;
+			dest.UrlText = UrlText;
 		}
 	}
 }

@@ -1,10 +1,11 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model GpxViewModel
 
-@Html.Partial("_Gpx")
+@Html.Partial("_Nav")
 
 <div class="row">
 	<div class="col-md-6">
-		@if(Model.Cache.Any(x => x.File == null || !x.File.Valid))
+		@if (Model.Cache.Any(x => x.File == null || !x.File.Valid))
 		{
 			<div class="alert alert-danger">
 				<span class="h4">There are one or more files with errors.</span>
@@ -12,6 +13,7 @@
 			</div>
 			<br />
 		}
+		<h2>Gpx Calendar</h2>
 		<table class="table table-bordered">
 			<thead class="thead-dark">
 				<tr>
@@ -20,7 +22,6 @@
 					{
 						<th class="text-right">@Model.GetMonth(month, true)</th>
 					}
-
 				</tr>
 			</thead>
 			<tbody>
@@ -28,14 +29,14 @@
 				{
 					<tr>
 						<td class="table-secondary">
-							<a class="h4" href="/gpx/report/?year=@(year)">
+							<a class="h4" href="@GpxViewModel.GetReportUrl(year)">
 								@year
 							</a>
 						</td>
 						@for (var month = 1; month <= 12; month++)
 						{
 							<td class="text-right">
-								<a class="h5" href="/gpx/report/?year=@(year)&month=@(month)">
+								<a class="h5" href="@GpxViewModel.GetReportUrl(year, month)">
 									@{
 										var cal = Model.GetCalendarEntry(year, month);
 										if (cal != null)
@@ -46,6 +47,38 @@
 								</a>
 							</td>
 						}
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+	<div class="col-sm-6">
+		@{
+			var count = 0;
+		}
+		<div class="row">
+			<div class="col-sm-8">
+				<h2>Extracted Tracks</h2>
+			</div>
+			<div class="col-sm-4">
+				<a href="@GpxViewModel.GetManageUrl()" class="btn btn-info float-right">Manage</a>
+			</div>
+		</div>
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var track in Model.Tracks)
+				{
+					<tr>
+						<td>@(++count)</td>
+						<td>@track.Name</td>
+						<td>@track.Description</td>
 					</tr>
 				}
 			</tbody>

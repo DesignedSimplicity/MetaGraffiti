@@ -18,6 +18,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<FileInfo> Files { get; set; }
 		public List<GpxCache> Cache { get; set; }
 
+		public List<GpxTrackData> Tracks { get; set; }
+
 		private int _firstYear = 2011;
 
 		// ==================================================
@@ -107,6 +109,47 @@ namespace MetaGraffiti.Web.Admin.Models
 					}
 				}
 			}
+		}
+
+
+		private static string GetGpxFileActionUrl(string action, string file)
+		{
+			return $"/gpx/{action}/?uri={file}";
+		}
+
+		public static string GetDisplayUrl(string file)
+		{
+			return GetGpxFileActionUrl("display", file);
+		}
+
+		public static string GetFilterUrl(string file)
+		{
+			return GetGpxFileActionUrl("filter", file);
+		}
+
+		public static string GetExtractUrl(string file)
+		{
+			return GetGpxFileActionUrl("extract", file);
+		}
+
+		public static string GetExportUrl(string file, string format = "gpx")
+		{
+			return GetGpxFileActionUrl("export", file) + $"&format={format}";
+		}
+
+		public static string GetReportUrl(int? year, int? month = null)
+		{
+			if (!year.HasValue) return "/gpx/";
+
+			var url = $"/gpx/report/?year={year}";
+			if (month.HasValue) url += $"&month={month}";
+
+			return url;
+		}
+
+		public static string GetManageUrl()
+		{
+			return $"/gpx/manage/";
 		}
 	}
 

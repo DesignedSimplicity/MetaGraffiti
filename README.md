@@ -1,5 +1,12 @@
 # MetaGraffiti
-A framework for processing geographic and topographic data for map building and visualizations
+A framework to process geographic and topographic data for map building and visualizations
+
+
+
+
+
+
+
 
 
 Data - Simple classes which represent a set of attributes for an entity
@@ -25,33 +32,6 @@ Gpx
 5. Convert to KML file
 6. Save as CSV file
 7. Save to database
-
-GpxService
-
-.Load(Uri)
-.Load(Stream)
-.Save(Info, Uri)
-.Save(Info, Stream)
-
-.TrimEnd(Timespan)
-.TrimEnd(Timestamp)
-.TrimStart(Timespan)
-.TrimStart(Timestamp)
-.Trim(Timestamp, Timespan)
-.Trim(Timestamp1, Timestamp2)
-
-.Clean()
-.Clean(DOP)
-.Clean(Speed)
-.Clean(HDOP, VDOP, PDOP)
-
-.Merge(Gpx1)
-.Merge(Gpx1, Gpx2)
-
-.Segment(Timestamp)
-.Mark(Timestamp, Metadata)
-
-
 
 
 

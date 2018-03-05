@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Web.Admin.Models;
 using MetaGraffiti.Web.Admin.Services;
@@ -15,6 +15,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
 		private GpxService _gpxService = new GpxService();
 
+		private List<GpxTrackData> ExtractedTracks
+		{
+			get
+			{
+				var tracks = (List<GpxTrackData>)Session["ExtractedTracks"];
+				if (tracks == null) tracks = new List<GpxTrackData>();
+				Session["ExtractedTracks"] = tracks;
+				return tracks;
+			}
+		}
+
 		public GpxViewModel InitView()
 		{
 			string rootUri = Path.Combine(AutoConfig.RootConfigUri, "GPS");
@@ -22,6 +33,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = new GpxViewModel();
 			model.Files = _gpxService.Init(rootUri);
 			model.Cache = _gpxService.LoadDirectory(rootUri, true);
+			model.Tracks = ExtractedTracks;
 
 			return model;
 		}
@@ -61,6 +73,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			model.SelectedGpx = gpx;
 
+			model.SelectedYear = gpx.StartTime.Year;
+			model.SelectedMonth = gpx.StartTime.Month;
+
 			return View(model);
 		}
 
@@ -72,7 +87,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_gpxService.UpdateMetaData(uri, update);
 
-			return Redirect("/gpx/display/?uri=" + uri);
+			return Redirect(GpxViewModel.GetDisplayUrl(uri));
 		}
 
 		/// <summary>
@@ -82,10 +97,35 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_gpxService.UpdateFilters(uri, filter);
 
-			return Redirect("/gpx/display/?uri=" + uri);
+			return Redirect(GpxViewModel.GetDisplayUrl(uri));
 		}
 
+		/// <summary>
+		/// Extracts the updated and filtered file data as a new track in memory
+		/// </summary>
+		public ActionResult Extract(string uri)
+		{
+			var cache = _gpxService.LoadFile(uri);
 
+			var track = _gpxService.ExtractTrack(cache.MetaData, cache.File.Points, cache.Filter);
+			ExtractedTracks.Add(track);
+
+			return Redirect(GpxViewModel.GetManageUrl());
+		}
+
+		/// <summary>
+		/// Combines multiple extract tracks into a single GPX or KML file
+		/// </summary>
+		public ActionResult Manage()
+		{
+			var model = InitView();
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Exports the updated and filtered file data as a new GPX or KML file
+		/// </summary>
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);

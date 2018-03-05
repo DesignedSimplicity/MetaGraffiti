@@ -92,18 +92,6 @@ namespace MetaGraffiti.Web.Admin.Services
 			return cache;
 		}
 
-
-
-		/*
-		public GpxFileMetaData LoadMetaData(string uri)
-		{
-			var key = uri.ToLowerInvariant();
-			var cache = _gpxCache[key];
-			if (cache.MetaData == null) InitMetaData(cache);
-			return cache.MetaData;
-		}
-		*/
-
 		public GpxCache UpdateMetaData(string uri, GpxUpdateData update)
 		{
 			var key = uri.ToLowerInvariant();
@@ -131,6 +119,14 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
+		public GpxTrackData ExtractTrack(GpxCacheMetaData metadata, IEnumerable<GpxPointData> points, GpxFilterData filter)
+		{
+			var track = new GpxTrackData();
+			track.Name = metadata.Name;
+			track.Description = metadata.Description;
+			track.Points = FilterPoints(points, filter);
+			return track;
+		}
 
 		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterData filter)
 		{

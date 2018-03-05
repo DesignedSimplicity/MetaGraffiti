@@ -1,5 +1,7 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GpxViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model GpxViewModel
 
+@Html.Partial("_Nav")
 @Html.Partial("_Gpx")
 
 @{
@@ -115,8 +117,7 @@
 						<input type="text" class="form-control" name="Timezone" placeholder="Timezone" value="@(data.Timezone?.Name??"")">
 					</div>
 					<button type="submit" class="btn btn-success">Update Metadata</button>
-					<a href="/gpx/export/?uri=@data.Uri" class="btn btn-outline-primary">Export to GPX</a>
-					<a href="/gpx/export/?format=kml&uri=@data.Uri" class="btn btn-outline-info">Export to KML</a>
+					<a href="@GpxViewModel.GetExtractUrl(data.Uri)" class="btn btn-outline-primary">Extract Track</a>
 				</form>
 			</div>
 			<div class="col-sm-4">
@@ -145,7 +146,7 @@
 						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@filter.FilterGPS">
 					</div>
 					<button type="submit" class="btn btn-warning">Apply Filter</button>
-					<a href="/gpx/filter/?uri=@data.Uri" class="btn btn-outline-danger">Reset Filter</a>
+					<a href="@GpxViewModel.GetFilterUrl(data.Uri)" class="btn btn-outline-danger">Reset Filter</a>
 				</form>
 			</div>
 			<div class="col-sm-2">
@@ -164,6 +165,10 @@
 				<div class="form-group">
 					<label>Up / Down</label>
 					<input readonly type="text" class="form-control" value="@gpx.ElevationUp.Meters.ToString("#,##0") / @gpx.ElevationDown.Meters.ToString("#,##0") m">
+				</div>
+				<div class="btn-group d-flex" role="group" aria-label="Export">
+					<a href="@GpxViewModel.GetExportUrl(data.Uri)" class="btn btn-outline-info w-100">GPX</a>
+					<a href="@GpxViewModel.GetExportUrl(data.Uri, "kml")" class="btn btn-outline-info w-100">KML</a>
 				</div>
 			</div>
 		</div>
