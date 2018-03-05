@@ -7,15 +7,15 @@
 <table class="table table-striped table-sm">
 	@foreach (var cal in Model.ListCalendarEntries(Model.SelectedYear, Model.SelectedMonth))
 	{
-		var files = Model.ListGpxFiles(cal.Year, cal.Month);
+		var list = Model.ListGpxFiles(cal.Year, cal.Month);
 		<tr class="thead-dark align-top">
 			<th colspan="10">
 				<a class="h4" href="@GpxViewModel.GetReportUrl(Model.SelectedYear, cal.Month)">@Model.GetMonth(cal.Month)</a>
-				<span class="badge badge-pill badge-@(files.Count == cal.Files ? "info" : "danger")">@cal.Files</span>
+				<span class="badge badge-pill badge-@(list.Count == cal.Files ? "info" : "danger")">@cal.Files</span>
 			</th>
 		</tr>
 		<tr class="table-active">
-			<th>#</th>
+			<th class="text-center">#</th>
 			<td>Name</td>
 			<td>Description</td>
 			<td>Country</td>
@@ -25,17 +25,17 @@
 			<td>UTC Timestamp</td>
 		</tr>
 		var count = 0;
-		foreach (var file in files)
+		foreach (var item in list)
 		{
 			<tr>
-				<td>@(++count)</td>
-				<td><a href="@GpxViewModel.GetDisplayUrl(file.MetaData.Uri)">@file.MetaData.Name</a></td>
-				<td class="small">@file.MetaData.Description</td>
-				<td>@(file.MetaData.Country?.Name ?? "")</td>
-				<td>@file.MetaData.LocationName</td>
-				<td>@file.MetaData.LocalTime</td>
-				<td>@file.MetaData.Timezone.TZID</td>
-				<td>@file.MetaData.Timestamp</td>
+				<td class="text-center @(item.IsDirty ? "table-success" : "")">@(++count)</td>
+				<td><a href="@GpxViewModel.GetDisplayUrl(item.MetaData.Uri)">@item.MetaData.Name</a></td>
+				<td class="small">@item.MetaData.Description</td>
+				<td>@(item.MetaData.Country?.Name ?? "")</td>
+				<td>@item.MetaData.LocationName</td>
+				<td>@item.MetaData.LocalTime</td>
+				<td>@item.MetaData.Timezone.TZID</td>
+				<td>@item.MetaData.Timestamp</td>
 			</tr>
 		}
 	}

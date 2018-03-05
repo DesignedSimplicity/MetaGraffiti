@@ -83,7 +83,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Updates cached metadata from form values
 		/// </summary>
 		[HttpPost]
-		public ActionResult Update(string uri, GpxUpdateData update)
+		public ActionResult Update(string uri, GpxUpdateRequest update)
 		{
 			_gpxService.UpdateMetaData(uri, update);
 
@@ -93,7 +93,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Applies filter on POST, clears filter on GET
 		/// </summary>
-		public ActionResult Filter(string uri, GpxFilterData filter)
+		public ActionResult Filter(string uri, GpxFilterRequest filter)
 		{
 			_gpxService.UpdateFilters(uri, filter);
 

@@ -92,26 +92,32 @@ namespace MetaGraffiti.Web.Admin.Services
 			return cache;
 		}
 
-		public GpxCache UpdateMetaData(string uri, GpxUpdateData update)
+		/// <summary>
+		/// Updates the cached metadata for the file and marks the record is dirty
+		/// </summary>
+		public GpxCache UpdateMetaData(string uri, GpxUpdateRequest update)
 		{
 			var key = uri.ToLowerInvariant();
 			var cache = _gpxCache[key];
+			cache.IsDirty = true;
+
 			var data = cache.MetaData;
 
 			data.Name = update.Name;
 			data.Description = update.Description;
 			data.LocationName = update.LocationName;
 
-			//TODO: deal with changes to country/region
-			//TODO: deal with timezone/recalcuating local time
-
 			return cache;
 		}
 
-		public GpxCache UpdateFilters(string uri, GpxFilterData filter)
+		/// <summary>
+		/// Updates the cached filter for the file and marks the record as dirty
+		/// </summary>
+		public GpxCache UpdateFilters(string uri, GpxFilterRequest filter)
 		{
 			var key = uri.ToLowerInvariant();
 			var cache = _gpxCache[key];
+			cache.IsDirty = true;
 
 			cache.Filter = filter;
 
@@ -119,7 +125,10 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-		public GpxTrackData ExtractTrack(GpxCacheMetaData metadata, IEnumerable<GpxPointData> points, GpxFilterData filter)
+		/// <summary>
+		/// Extracts a new track from a list of points while applying a filter if specified
+		/// </summary>
+		public GpxTrackData ExtractTrack(GpxCacheMetaData metadata, IEnumerable<GpxPointData> points, GpxFilterRequest filter = null)
 		{
 			var track = new GpxTrackData();
 			track.Name = metadata.Name;
@@ -128,8 +137,12 @@ namespace MetaGraffiti.Web.Admin.Services
 			return track;
 		}
 
-		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterData filter)
+		/// <summary>
+		/// Filters a list of points with the specified filter
+		/// </summary>
+		public List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, GpxFilterRequest filter)
 		{
+			if (filter == null) return points.ToList();
 			if (filter.FilterStart.HasValue) points = points.Where(x => x.Timestamp >= filter.FilterStart.Value);
 			if (filter.FilterFinish.HasValue) points = points.Where(x => x.Timestamp <= filter.FilterFinish.Value);
 			if ((filter.FilterDOP ?? 0) > 0) points = points.Where(x => x.MaxDOP <= filter.FilterDOP.Value);
@@ -137,8 +150,10 @@ namespace MetaGraffiti.Web.Admin.Services
 			return points.ToList();
 		}
 
-
-		public byte[] ExportGpxFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
+		/// <summary>
+		/// Creates a GPX file in memory using the metadata, tracks and an optional filter
+		/// </summary>
+		public byte[] ExportGpxFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
 		{
 			var writer = new GpxFileWriter();
 			writer.WriteHeader(metadata.Name, metadata.Description);
@@ -150,7 +165,10 @@ namespace MetaGraffiti.Web.Admin.Services
 			return Encoding.ASCII.GetBytes(writer.GetXml());
 		}
 
-		public byte[] ExportKmlFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterData filter = null)
+		/// <summary>
+		/// Creates a KML file in memory using the metadata, tracks and an optional filter
+		/// </summary>
+		public byte[] ExportKmlFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
 		{
 			var writer = new KmlFileWriter();
 			writer.WriteHeader(metadata.Name, metadata.Description);
@@ -163,7 +181,10 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 
 
-
+		
+		/// <summary>
+		/// Initalizes the cached metadata from a loaded GPX file
+		/// </summary>
 		private void InitMetaData(GpxCache cache)
 		{
 			var file = cache.File;
@@ -203,13 +224,9 @@ namespace MetaGraffiti.Web.Admin.Services
 			cache.MetaData = data;
 		}
 
-
-
-
-
-
-
-
+		/// <summary>
+		/// Makes best guess for timezone using a list of countries and regions
+		/// </summary>
 		private GeoTimezoneInfo GuessTimezone(IEnumerable<GeoCountryInfo> countries, IEnumerable<GeoRegionInfo> regions)
 		{
 			string[] countryOrder = { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
@@ -269,32 +286,19 @@ namespace MetaGraffiti.Web.Admin.Services
 		}
 	}
 
+
 	public class GpxCache
 	{
 		public bool IsCached { get { return File != null && MetaData != null; } }
+		public bool IsDirty { get; set; } = false;
 
 		public GpxFileInfo File { get; private set; }
 		public GpxCacheMetaData MetaData { get; set; }
 
-		public GpxFilterData Filter { get; set; } = new GpxFilterData();
+		public GpxFilterRequest Filter { get; set; } = new GpxFilterRequest();
 
 
 		public GpxCache(GpxFileInfo file) { File = file; }
-	}
-
-	public class GpxUpdateData
-	{
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public string LocationName { get; set; }
-	}
-
-	public class GpxFilterData
-	{
-		public int? FilterGPS { get; set; }
-		public decimal? FilterDOP { get; set; }
-		public DateTime? FilterStart { get; set; }
-		public DateTime? FilterFinish { get; set; }
 	}
 
 	public class GpxCacheMetaData
@@ -312,5 +316,20 @@ namespace MetaGraffiti.Web.Admin.Services
 		public GeoTimezoneInfo Timezone { get; set; }
 		public GeoCountryInfo Country { get; set; }
 		public GeoRegionInfo Region { get; set; }
+	}
+
+	public class GpxUpdateRequest
+	{
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string LocationName { get; set; }
+	}
+
+	public class GpxFilterRequest
+	{
+		public int? FilterGPS { get; set; }
+		public decimal? FilterDOP { get; set; }
+		public DateTime? FilterStart { get; set; }
+		public DateTime? FilterFinish { get; set; }
 	}
 }

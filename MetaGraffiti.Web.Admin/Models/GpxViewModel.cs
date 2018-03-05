@@ -175,7 +175,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GpxPointData> Points { get; set; }
 
 		public GpxFileInfo File { get { return _cache.File; } }
-		public GpxFilterData Filter { get { return _cache.Filter; } }
+		public GpxFilterRequest Filter { get { return _cache.Filter; } }
 		public GpxCacheMetaData Data { get { return _cache.MetaData; } }
 
 
