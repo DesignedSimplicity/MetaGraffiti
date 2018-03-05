@@ -18,7 +18,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<FileInfo> Files { get; set; }
 		public List<GpxCache> Cache { get; set; }
 
-		public List<GpxTrackExtract> Tracks { get; set; }
+		public GpxManagerModel Manager { get; set; }
 
 		private int _firstYear = 2011;
 
@@ -221,6 +221,31 @@ namespace MetaGraffiti.Web.Admin.Models
 				return "warning";
 			else
 				return "danger";
+		}
+	}
+
+	public class GpxManagerModel
+	{
+		public string Name { get; set; }
+		public string Description { get; set; }
+
+		public GeoTimezoneInfo Timezone { get; set; } = GeoTimezoneInfo.UTC;
+
+		public List<GpxTrackExtract> Tracks { get; set; } = new List<GpxTrackExtract>();
+
+		public DateTime AsLocalTime(DateTime timestamp)
+		{
+			return Timezone.FromUTC(timestamp);
+		}
+
+		public IEnumerable<GpxTrackExtract> OrderdTracks
+		{
+			get { return Tracks.OrderBy(x => x.Points.First().Timestamp); }
+		}
+
+		public IGeoLatLon FirstPoint
+		{
+			get { return Tracks.SelectMany(x => x.Points).OrderBy(x => x.Timestamp.Value).FirstOrDefault(); }
 		}
 	}
 }

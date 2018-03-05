@@ -106,8 +106,16 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return t;
 		}
 
+		public static GeoTimezoneInfo ByName(string name)
+		{
+			var t = Windows.FirstOrDefault(x => String.Compare(x.Name, name, true) == 0);
+			if (t == null) t = Olson.FirstOrDefault(x => String.Compare(x.Name, name, true) == 0);
+			return t;
+		}
+
 		// ==================================================
 		// Static Globals
+		public static GeoTimezoneInfo UTC { get { return GeoTimezoneInfo.ByKey("UTC"); } }
 		public static List<GeoTimezoneInfo> All { get { if (_all == null) { Init(); } return _all.Values.ToList(); } }
 
 		private static Dictionary<int, GeoTimezoneInfo> _all;

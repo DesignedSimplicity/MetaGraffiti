@@ -134,7 +134,7 @@ namespace MetaGraffiti.Web.Admin.Services
 			var metadata = cache.MetaData;
 
 			var track = new GpxTrackExtract();
-			track.Source = file;
+			track.SourceFile = file;
 
 			track.Name = metadata.Name;
 			track.Description = metadata.Description;
@@ -159,10 +159,10 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// <summary>
 		/// Creates a GPX file in memory using the metadata, tracks and an optional filter
 		/// </summary>
-		public byte[] ExportGpxFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
+		public byte[] ExportGpxFile(string name, string description, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
 		{
 			var writer = new GpxFileWriter();
-			writer.WriteHeader(metadata.Name, metadata.Description);
+			writer.WriteHeader(name, description);
 			foreach (var track in tracks)
 			{
 				var points = (filter == null ? track.Points : FilterPoints(track.Points, filter));
@@ -174,10 +174,10 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// <summary>
 		/// Creates a KML file in memory using the metadata, tracks and an optional filter
 		/// </summary>
-		public byte[] ExportKmlFile(GpxCacheMetaData metadata, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
+		public byte[] ExportKmlFile(string name, string description, IEnumerable<GpxTrackData> tracks, GpxFilterRequest filter = null)
 		{
 			var writer = new KmlFileWriter();
-			writer.WriteHeader(metadata.Name, metadata.Description);
+			writer.WriteHeader(name, description);
 			foreach (var track in tracks)
 			{
 				var points = (filter == null ? track.Points : FilterPoints(track.Points, filter));
@@ -339,17 +339,13 @@ namespace MetaGraffiti.Web.Admin.Services
 		public DateTime? FilterFinish { get; set; }
 	}
 
-	public class GpxTrackExtract
+	public class GpxTrackExtract : GpxTrackData
 	{
 		public string ID { get; private set; } = Guid.NewGuid().ToString("N").ToUpper();
-
-		public string Name { get; set; }
-		public string Description { get; set; }
 
 		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
 		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
 
-		public GpxFileInfo Source { get; set; }
-		public List<GpxPointData> Points { get; set; }
+		public GpxFileInfo SourceFile { get; set; }
 	}
 }

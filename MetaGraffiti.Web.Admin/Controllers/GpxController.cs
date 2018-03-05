@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Web.Admin.Models;
@@ -14,6 +15,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
     public class GpxController : Controller
     {
 		private GpxService _gpxService = new GpxService();
+
+		private GpxManagerModel TrackManager
+		{
+			get
+			{
+				var manager = (GpxManagerModel)Session["TrackManager"];
+				if (manager == null) manager = new GpxManagerModel();
+				Session["TrackManager"] = manager;
+				return manager;
+			}
+		}
 
 		private List<GpxTrackExtract> ExtractedTracks
 		{
@@ -33,23 +45,27 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = new GpxViewModel();
 			model.Files = _gpxService.Init(rootUri);
 			model.Cache = _gpxService.LoadDirectory(rootUri, true);
-			model.Tracks = ExtractedTracks;
+			model.Manager = this.TrackManager;
+			//model.Tracks = ExtractedTracks;
 
 			return model;
 		}
 
+		[HttpGet]
 		public ActionResult Index()
 		{
 			var model = InitView();
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult Debug()
 		{
 			var model = InitView();
 			return View(model);
 		}
 
+		[HttpGet]
 		public ActionResult Report(int year, int? month = null)
 		{
 			var model = InitView();
@@ -103,12 +119,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Extracts the updated and filtered file data as a new track in memory
 		/// </summary>
+		[HttpGet]
 		public ActionResult Extract(string uri)
 		{
+			var model = InitView();
 			var cache = _gpxService.LoadFile(uri);
 
 			var track = _gpxService.ExtractTrack(cache);
-			ExtractedTracks.Add(track);
+			model.Manager.Tracks.Add(track);
 
 			return Redirect(GpxViewModel.GetManageUrl());
 		}
@@ -116,6 +134,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Manages the combiation of multiple extract tracks into a single GPX or KML file
 		/// </summary>
+		[HttpGet]
 		public ActionResult Manage()
 		{
 			var model = InitView();
@@ -124,16 +143,50 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
+		/// Updates the metadata and/or exports it to a combined file
+		/// </summary>
+		[HttpPost]
+		public ActionResult Manage(string action = "", string name = "", string description = "", string timezone = "")
+		{
+			var model = InitView();
+
+			var manager = model.Manager;
+
+			switch(action.ToUpperInvariant())
+			{
+				case "UPDATE":
+					manager.Name = name;
+					manager.Description = description;
+					manager.Timezone = GeoTimezoneInfo.ByName(timezone);
+					break;
+
+				case "TIMEZONE":
+					var google = new GoogleTimezoneService();
+					manager.Timezone = google.LookupGeoTimezone(manager.FirstPoint);
+					break;
+
+				case "GPX":
+					var gpx = _gpxService.ExportGpxFile(manager.Name, manager.Description, manager.Tracks);
+					return File(gpx, System.Net.Mime.MediaTypeNames.Application.Octet, $"{manager.Name}.gpx");
+
+				case "KML":
+					var kml = _gpxService.ExportKmlFile(manager.Name, manager.Description, manager.Tracks);
+					return File(kml, System.Net.Mime.MediaTypeNames.Application.Octet, $"{manager.Name}.kml");
+			}
+
+			return View(model);
+		}
+
+		/// <summary>
 		/// Removes an extract track from the cache
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
+		[HttpGet]
 		public ActionResult Remove(string id)
 		{
 			var model = InitView();
 
-			var track = ExtractedTracks.FirstOrDefault(x => String.Compare(x.ID, id, true) == 0);
-			if (track != null) ExtractedTracks.Remove(track);
+			var track = model.Manager.Tracks.FirstOrDefault(x => String.Compare(x.ID, id, true) == 0);
+			if (track != null) model.Manager.Tracks.Remove(track);
 
 			return Redirect(GpxViewModel.GetManageUrl());
 		}
@@ -141,19 +194,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Exports the updated and filtered file data as a new GPX or KML file
 		/// </summary>
+		[HttpGet]
 		public ActionResult Export(string uri, string format = "gpx")
 		{
 			var cache = _gpxService.LoadFile(uri);
+			var metadata = cache.MetaData;
 
 			if (format == "kml")
 			{
-				var kml = _gpxService.ExportKmlFile(cache.MetaData, cache.File.Tracks, cache.Filter);
-				return File(kml, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.kml");
+				var kml = _gpxService.ExportKmlFile(metadata.Name, metadata.Description, cache.File.Tracks, cache.Filter);
+				return File(kml, System.Net.Mime.MediaTypeNames.Application.Octet, $"{metadata.Name}.kml");
 			}
 			else
 			{
-				var gpx = _gpxService.ExportGpxFile(cache.MetaData, cache.File.Tracks, cache.Filter);
-				return File(gpx, System.Net.Mime.MediaTypeNames.Application.Octet, $"{cache.MetaData.Name}.gpx");
+				var gpx = _gpxService.ExportGpxFile(metadata.Name, metadata.Description, cache.File.Tracks, cache.Filter);
+				return File(gpx, System.Net.Mime.MediaTypeNames.Application.Octet, $"{metadata.Name}.gpx");
 			}
 		}
 	}

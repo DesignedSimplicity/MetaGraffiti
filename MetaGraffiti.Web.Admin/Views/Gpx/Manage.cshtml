@@ -3,6 +3,10 @@
 
 @Html.Partial("_Nav")
 
+@{ 
+	var manager = Model.Manager;
+}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
@@ -22,7 +26,7 @@
 
 	var _marker = null;
 	var _tracks = [
-	@foreach (var t in Model.Tracks)
+	@foreach (var t in manager.OrderdTracks)
 	{
 <text>
 		{
@@ -48,7 +52,7 @@
 	});
 
 	function loadTrack() {
-		@for (var i = 0; i < Model.Tracks.Count; i++)
+		@for (var i = 0; i < manager.OrderdTracks.Count(); i++)
 		{
 <text>
 		var color = _colors[@(i % 10)];
@@ -81,20 +85,44 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var track in Model.Tracks.OrderBy(x => x.Points.First().Timestamp))
+					foreach (var track in manager.OrderdTracks)
 					{
 						<tr>
 							<td class="text-center">@(++count)</td>
-							<td>@track.StartTime.ToString("yyyy-MM-dd")<br />@track.StartTime.ToString("hh:mm:ss tt")</td>
-							<td>@track.FinishTime.ToString("yyyy-MM-dd")<br />@track.FinishTime.ToString("hh:mm:ss tt")</td>
+							<td>@manager.AsLocalTime(track.StartTime).ToString("yyyy-MM-dd")<br />@manager.AsLocalTime(track.StartTime).ToString("hh:mm:ss tt")</td>
+							<td>@manager.AsLocalTime(track.FinishTime).ToString("yyyy-MM-dd")<br />@manager.AsLocalTime(track.FinishTime).ToString("hh:mm:ss tt")</td>
 							<td class="font-weight-bold">@track.Name</td>
 							<td class="small">@track.Description</td>
-							<td><a href="@GpxViewModel.GetDisplayUrl(track.Source.Uri)">@track.Source.Name</a></td>
+							<td><a href="@GpxViewModel.GetDisplayUrl(track.SourceFile.Uri)">@track.SourceFile.Name</a></td>
 							<td><a class="btn btn-sm btn-outline-danger" href="@GpxViewModel.GetRemoveTrackUrl(track.ID)">Remove</a></td>
 						</tr>
 					}
 				}
 			</tbody>
 		</table>
+		<br />
+		<hr />
+		<form method="post" action="/gpx/manage/">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" class="form-control" name="Name" placeholder="Name" value="@manager.Name">
+			</div>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<input type="text" class="form-control" name="Description" placeholder="Description" value="@manager.Description">
+			</div>
+			<div class="form-group">
+				<label for="timezone">Timezone</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Timezone" placeholder="Timezone" value="@manager.Timezone.Name">
+					<div class="input-group-append">
+						<button name="action" class="btn btn-outline-secondary" value="timezone">Lookup</button>
+					</div>
+				</div>
+			</div>
+			<button type="submit" name="action" class="btn btn-success" value="update">Update</button>
+			<button name="action" class="btn btn-outline-info" value="gpx">Save as GPX</button>
+			<button name="action" class="btn btn-outline-info" value="kml">Save as KML</button>
+		</form>
 	</div>
 </div>

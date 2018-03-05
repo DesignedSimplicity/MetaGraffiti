@@ -68,7 +68,6 @@
 
 <div class="row">
 	<div class="col-sm-6">
-
 		<div class="row">
 			<div class="col-sm-6">
 				<form method="post" action="/gpx/update">
@@ -92,7 +91,7 @@
 					</div>
 					<div class="form-group">
 						<label for="timezone">Timezone</label>
-						<input type="text" class="form-control" name="Timezone" placeholder="Timezone" value="@(data.Timezone?.Name??"")">
+						<input type="text" class="form-control" id="TimezoneName" name="TimezoneName" placeholder="Timezone" value="@(data.Timezone?.Name??"")">
 					</div>
 					<button type="submit" class="btn btn-success">Update Metadata</button>
 					<a href="@GpxViewModel.GetExtractUrl(data.Uri)" class="btn btn-outline-primary">Extract Track</a>
