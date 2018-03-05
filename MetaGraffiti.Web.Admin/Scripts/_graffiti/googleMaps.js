@@ -14,13 +14,14 @@ function initMap() {
 	});
 }
 
-function showTrack(coordinates) {
+function showTrack(coordinates, color) {
+	if (color === undefined) color = '#ff0000';
 	var track = new google.maps.Polyline({
 		path: coordinates,
 		geodesic: true,
-		strokeColor: '#ff0000',
+		strokeColor: color,
 		strokeOpacity: 0.8,
-		strokeWeight: 3
+		strokeWeight: 4
 	});
 
 	track.setMap(_mapGoogle);
@@ -50,6 +51,17 @@ function markPoint(lat, lng, title) {
 
 	return marker;
 }
+
+function markTrack(lat, lng, number) {
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(lat, lng),
+		map: _mapGoogle,
+		icon: 'http://maps.google.com/mapfiles/kml/paddle/' + number + '.png'
+	});
+
+	return marker;
+}
+
 
 function markStart(lat, lng) {
 	var marker = new google.maps.Marker({

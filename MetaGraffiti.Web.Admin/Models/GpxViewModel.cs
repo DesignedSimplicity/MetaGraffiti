@@ -18,7 +18,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<FileInfo> Files { get; set; }
 		public List<GpxCache> Cache { get; set; }
 
-		public List<GpxTrackData> Tracks { get; set; }
+		public List<GpxTrackExtract> Tracks { get; set; }
 
 		private int _firstYear = 2011;
 
@@ -145,6 +145,11 @@ namespace MetaGraffiti.Web.Admin.Models
 			if (month.HasValue) url += $"&month={month}";
 
 			return url;
+		}
+
+		public static string GetRemoveTrackUrl(string id)
+		{
+			return $"/gpx/remove/{id}";
 		}
 
 		public static string GetManageUrl()

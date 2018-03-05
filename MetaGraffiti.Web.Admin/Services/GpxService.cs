@@ -128,12 +128,18 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// <summary>
 		/// Extracts a new track from a list of points while applying a filter if specified
 		/// </summary>
-		public GpxTrackData ExtractTrack(GpxCacheMetaData metadata, IEnumerable<GpxPointData> points, GpxFilterRequest filter = null)
+		public GpxTrackExtract ExtractTrack(GpxCache cache)
 		{
-			var track = new GpxTrackData();
+			var file = cache.File;
+			var metadata = cache.MetaData;
+
+			var track = new GpxTrackExtract();
+			track.Source = file;
+
 			track.Name = metadata.Name;
 			track.Description = metadata.Description;
-			track.Points = FilterPoints(points, filter);
+			track.Points = FilterPoints(file.Points, cache.Filter);
+
 			return track;
 		}
 
@@ -331,5 +337,19 @@ namespace MetaGraffiti.Web.Admin.Services
 		public decimal? FilterDOP { get; set; }
 		public DateTime? FilterStart { get; set; }
 		public DateTime? FilterFinish { get; set; }
+	}
+
+	public class GpxTrackExtract
+	{
+		public string ID { get; private set; } = Guid.NewGuid().ToString("N").ToUpper();
+
+		public string Name { get; set; }
+		public string Description { get; set; }
+
+		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
+		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
+
+		public GpxFileInfo Source { get; set; }
+		public List<GpxPointData> Points { get; set; }
 	}
 }

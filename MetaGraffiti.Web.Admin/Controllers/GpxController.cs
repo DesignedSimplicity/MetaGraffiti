@@ -15,12 +15,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
 		private GpxService _gpxService = new GpxService();
 
-		private List<GpxTrackData> ExtractedTracks
+		private List<GpxTrackExtract> ExtractedTracks
 		{
 			get
 			{
-				var tracks = (List<GpxTrackData>)Session["ExtractedTracks"];
-				if (tracks == null) tracks = new List<GpxTrackData>();
+				var tracks = (List<GpxTrackExtract>)Session["ExtractedTracks"];
+				if (tracks == null) tracks = new List<GpxTrackExtract>();
 				Session["ExtractedTracks"] = tracks;
 				return tracks;
 			}
@@ -107,20 +107,35 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var cache = _gpxService.LoadFile(uri);
 
-			var track = _gpxService.ExtractTrack(cache.MetaData, cache.File.Points, cache.Filter);
+			var track = _gpxService.ExtractTrack(cache);
 			ExtractedTracks.Add(track);
 
 			return Redirect(GpxViewModel.GetManageUrl());
 		}
 
 		/// <summary>
-		/// Combines multiple extract tracks into a single GPX or KML file
+		/// Manages the combiation of multiple extract tracks into a single GPX or KML file
 		/// </summary>
 		public ActionResult Manage()
 		{
 			var model = InitView();
 
 			return View(model);
+		}
+
+		/// <summary>
+		/// Removes an extract track from the cache
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public ActionResult Remove(string id)
+		{
+			var model = InitView();
+
+			var track = ExtractedTracks.FirstOrDefault(x => String.Compare(x.ID, id, true) == 0);
+			if (track != null) ExtractedTracks.Remove(track);
+
+			return Redirect(GpxViewModel.GetManageUrl());
 		}
 
 		/// <summary>

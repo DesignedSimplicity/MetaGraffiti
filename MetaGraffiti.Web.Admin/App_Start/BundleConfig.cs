@@ -14,6 +14,7 @@ namespace MetaGraffiti.Web.Admin
 			bundles.Add(new StyleBundle("~/bundle/css")
 						.Include("~/Content/bootstrap.css")
 						.Include("~/Content/bootstrap-responsive.css")
+						.Include("~/Content/_graffiti/common.css")
 						);
 		}
 	}
