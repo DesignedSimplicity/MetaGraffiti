@@ -9,11 +9,12 @@
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _editor = null;
+	var _popup = null;
 	var _country = {
-			north: @c.Bounds.Points[0].Latitude,
-			south: @c.Bounds.Points[1].Latitude,
-			west: @c.Bounds.Points[0].Longitude,
-			east: @c.Bounds.Points[1].Longitude,
+			north: @c.Bounds.NorthWest.Latitude,
+			south: @c.Bounds.SouthEast.Latitude,
+			west: @c.Bounds.NorthWest.Longitude,
+			east: @c.Bounds.SouthEast.Longitude,
 	};
 
 	var _regions = [
@@ -23,10 +24,10 @@
 			{
 				region: "@r.RegionName",
 				bounds: {
-					north: @r.Bounds.Points[0].Latitude,
-					south: @r.Bounds.Points[1].Latitude,
-					west: @r.Bounds.Points[0].Longitude,
-					east: @r.Bounds.Points[1].Longitude,
+					north: @r.Bounds.NorthWest.Latitude,
+					south: @r.Bounds.SouthEast.Latitude,
+					west: @r.Bounds.NorthWest.Longitude,
+					east: @r.Bounds.SouthEast.Longitude,
 				},
 			},</text>
 		}
@@ -48,13 +49,30 @@
 
 		$(".js-region-row").click(function () {
 			if (_editor) _editor.setMap(null);
+			if (_popup) _popup.close();
 
 			var i = $(this).data("index");
 			var region = _regions[i];
 
 			_editor = editBounds(region.bounds);
+			_editor.addListener('bounds_changed', showWindow);
 
 		});
+
+		function showWindow() {
+			if (!_popup) _popup = new google.maps.InfoWindow();
+
+			var ne = _editor.getBounds().getNorthEast();
+			var sw = _editor.getBounds().getSouthWest();
+
+			var content = 'North West: ' + ne.lat().toFixed(6) + ' x ' + sw.lng().toFixed(6) + '<br />' + 'South East: ' + sw.lat().toFixed(6) + ' x ' + ne.lng().toFixed(6);
+			_popup.setContent(content);
+
+			var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+			_popup.setPosition(nw);
+
+			_popup.open(_mapGoogle);
+		}
 	});
 </script>
 
