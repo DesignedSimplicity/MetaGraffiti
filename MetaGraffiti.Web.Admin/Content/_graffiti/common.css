@@ -1,7 +1,9 @@
-﻿.js-point-row:hover {
+﻿.js-point-row:hover,
+.js-region-row:hover {
 	cursor: crosshair;
 	color: #900;
 }
+
 
 #map-container {
 	position: fixed;

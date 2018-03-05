@@ -8,7 +8,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
-	var _marker = null;
+	var _editor = null;
 	var _country = {
 			north: @c.Bounds.Points[0].Latitude,
 			south: @c.Bounds.Points[1].Latitude,
@@ -37,11 +37,24 @@
 
 		for (i = 0; i < _regions.length; i++) {
 			var color = _trackColors[i % 10];
-			showBounds(_regions[i].bounds, color);
+
+			var region = _regions[i];
+			region.rectangle = showBounds(region.bounds, color);
+			
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
 		showBounds(_country, null, 0);
+
+		$(".js-region-row").click(function () {
+			if (_editor) _editor.setMap(null);
+
+			var i = $(this).data("index");
+			var region = _regions[i];
+
+			_editor = editBounds(region.bounds);
+
+		});
 	});
 </script>
 
@@ -69,7 +82,7 @@
 					var count = 0;
 					foreach (var r in c.Regions.OrderBy(x => x.RegionName))
 					{
-						<tr>
+						<tr class="js-region-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
 							<td>@r.RegionAbbr</td>
 							<td>@r.RegionName</td>

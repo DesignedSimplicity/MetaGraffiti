@@ -47,6 +47,24 @@ function showBounds(bounds, color, fill) {
 	return rectangle;
 }
 
+function editBounds(bounds) {
+	var rectangle = new google.maps.Rectangle({
+		bounds: bounds,
+		editable: true,
+		geodesic: false,
+		strokeColor: '#ff0000',
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: '#ff0000',
+		fillOpacity: 0.4,
+		map: _mapGoogle
+	});
+
+	_mapGoogle.fitBounds(bounds);
+
+	return rectangle;
+}
+
 function showTrack(path, color) {
 	if (color == null) color = '#ff0000';
 	var track = new google.maps.Polyline({
