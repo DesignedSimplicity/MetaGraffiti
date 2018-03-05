@@ -10,19 +10,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
-	var _colors = [
-		'#007bff',
-		'#28a745',
-		'#17a2b8',
-		'#ffc107',
-		'#dc3545',
 
-		'#b8daff',
-		'#c3e6cb',
-		'#bee5eb',
-		'#ffeeba',
-		'#f5c6cb',
-	];
 
 	var _marker = null;
 	var _tracks = [
@@ -52,13 +40,10 @@
 	});
 
 	function loadTrack() {
-		@for (var i = 0; i < manager.OrderdTracks.Count(); i++)
-		{
-<text>
-		var color = _colors[@(i % 10)];
-		showTrack(_tracks[@(i)].points, color);
-		$("table > tbody > tr").eq(@(i)).children().eq(0).css('background-color', color);
-</text>
+		for (i = 0; i < _tracks.length; i++) {
+			var color = _trackColors[i % 10];
+			showTrack(_tracks[i].points, color);
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 	}
 </script>
