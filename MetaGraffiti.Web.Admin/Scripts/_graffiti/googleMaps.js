@@ -28,21 +28,39 @@ function initMap() {
 	});
 }
 
-function showTrack(coordinates, color) {
-	if (color === undefined) color = '#ff0000';
+function showBounds(bounds, color, fill) {
+	if (color == null) color = '#ff0000';
+	if (fill == null) fill = 0.2;
+	var rectangle = new google.maps.Rectangle({
+		bounds: bounds,
+		geodesic: false,
+		strokeColor: color,
+		strokeOpacity: 0.8,
+		strokeWeight: 2,
+		fillColor: color,
+		fillOpacity: fill,
+		map: _mapGoogle
+	});
+
+	_mapGoogle.fitBounds(bounds);
+
+	return rectangle;
+}
+
+function showTrack(path, color) {
+	if (color == null) color = '#ff0000';
 	var track = new google.maps.Polyline({
-		path: coordinates,
+		path: path,
 		geodesic: true,
 		strokeColor: color,
 		strokeOpacity: 0.8,
-		strokeWeight: 4
+		strokeWeight: 4,
+		map: _mapGoogle
 	});
 
-	track.setMap(_mapGoogle);
-
 	var bounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < coordinates.length; i++) {
-		bounds.extend(new google.maps.LatLng(coordinates[i].lat, coordinates[i].lng));
+	for (var i = 0; i < path.length; i++) {
+		bounds.extend(new google.maps.LatLng(path[i].lat, path[i].lng));
 	}
 	_mapGoogle.fitBounds(bounds);
 

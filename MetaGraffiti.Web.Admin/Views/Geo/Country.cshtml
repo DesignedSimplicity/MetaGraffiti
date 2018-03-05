@@ -9,13 +9,12 @@
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _marker = null;
-	var _country = [
-			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[0].Longitude },
-			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[1].Longitude },
-			{ lat: @c.Bounds.Points[1].Latitude, lng: @c.Bounds.Points[1].Longitude },
-			{ lat: @c.Bounds.Points[1].Latitude, lng: @c.Bounds.Points[0].Longitude },
-			{ lat: @c.Bounds.Points[0].Latitude, lng: @c.Bounds.Points[0].Longitude },
-	];
+	var _country = {
+			north: @c.Bounds.Points[0].Latitude,
+			south: @c.Bounds.Points[1].Latitude,
+			west: @c.Bounds.Points[0].Longitude,
+			east: @c.Bounds.Points[1].Longitude,
+	};
 
 	var _regions = [
 		@foreach (var r in c.Regions.OrderBy(x => x.RegionName))
@@ -23,13 +22,12 @@
 			<text>
 			{
 				region: "@r.RegionName",
-				bounds: [
-					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[0].Longitude },
-					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[1].Longitude },
-					{ lat: @r.Bounds.Points[1].Latitude, lng: @r.Bounds.Points[1].Longitude },
-					{ lat: @r.Bounds.Points[1].Latitude, lng: @r.Bounds.Points[0].Longitude },
-					{ lat: @r.Bounds.Points[0].Latitude, lng: @r.Bounds.Points[0].Longitude },
-				]
+				bounds: {
+					north: @r.Bounds.Points[0].Latitude,
+					south: @r.Bounds.Points[1].Latitude,
+					west: @r.Bounds.Points[0].Longitude,
+					east: @r.Bounds.Points[1].Longitude,
+				},
 			},</text>
 		}
 	]
@@ -39,13 +37,11 @@
 
 		for (i = 0; i < _regions.length; i++) {
 			var color = _trackColors[i % 10];
-			showTrack(_regions[i].bounds, color);
-			markPoint(_regions[i].bounds[0].lat, _regions[i].bounds[0].lng, _regions[i].region);
+			showBounds(_regions[i].bounds, color);
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
-
-		showTrack(_country);
+		showBounds(_country, null, 0);
 	});
 </script>
 
