@@ -7,11 +7,12 @@ A framework to process geographic and topographic data for map building and visu
 * Timezone, Country and Region metadata
 * Geospacial calculations and operations
 * Read GPX and save GPX/KML file formats
-
-### Beta
+* Auto identifiy location and timezone
 * Display GPX tracks on Google Maps
 * Edit, trim and combine GPX tracks
-* Auto identifiy location and timezone
+
+### Beta
+
 
 ## TODO
 * Fix regions that are not contained in country bounds (ex: Argentina, Santa Cruz)
@@ -55,28 +56,47 @@ A framework to process geographic and topographic data for map building and visu
 Simple classes which represent a set of attributes for an entity
 
 ### Info 
-State classes created from a static factory pattern
+Objects with state created from a static factory pattern
 
 
 ## Modules
 
 ### Geo
 
-GeoCountryInfo
+* GeoDirection - a direction in degrees or radians
+* GeoDistance - distance between two or more points
+* GeoHeading - a point and a direction
+* GeoLocation - lat/lon with optional elevation and timestamp
+* GeoRectangle - a set of points defining a physical region
 
-GeoRegionInfo
+* GeoTimezoneInfo - a windows or olson set of time conversion rules (ex: Eastern Standard Time)
+* GeoCountryInfo - static metadata about a world recognized country (ex: United States)
+* GeoRegionInfo - the first level political region within a country (ex: Maryland)
 
-GeoTimezoneInfo
 
-GeoDirection - a direction in degrees or radians
+### Topo
 
-GeoDistance - distance between two or more points
+* TopoGpx
+* TopoKml
+* TopoJson
 
-GeoHeading - a point and a direction
 
-GeoLocation - lat/lon with optional elevation and timestamp
+### Carto
 
-GeoRectangle - a set of points defining a physical region
+* Layer - A group of points related by a type or topic
+* Point - A single geospacial point used by cart objects
+
+* Mark - A single point with additional metadata not bound to a paticular area
+
+* Area - An area defined by a perimeter made of points with additional metadata (ex: Yosemite National Park)
+* Place - A single point/radius/bounding box with additional metadata tied directly to an area (ex: Yosemite Valley Visitor Center)
+
+* Tour - A consolidation of multiple trips (ex: South Island 2018)
+* Trip - A single component of a tour with multiple segments (ex: Gillespeie's Pass)
+* Path - A set of data describing the departure and arrival from a Place or Area (ex: Young Hut to Siberia Hut)
+* Stop - A set of data describing a visit to a Place or Area (ex: Gillespeie Peak)
+
+__Range, Space, District, Zone, Transit, Trek, Journey, Odessey, Excursion, Expedition, Voyage, Passage, Travel__
 
 
 
