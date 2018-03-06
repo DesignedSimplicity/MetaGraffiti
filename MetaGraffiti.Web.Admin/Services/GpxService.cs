@@ -209,8 +209,8 @@ namespace MetaGraffiti.Web.Admin.Services
 
 			// determine country and region info
 			var point = file.Points.First();
-			var regions = GeoRegionInfo.ListByLocation(point).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
-			var countries = GeoCountryInfo.ListByLocation(point).OrderByDescending(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
+			var regions = GeoRegionInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
+			var countries = GeoCountryInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
 			data.Region = regions.FirstOrDefault();
 			if (data.Region != null)
 			{
@@ -236,7 +236,7 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// </summary>
 		private GeoTimezoneInfo GuessTimezone(IEnumerable<GeoCountryInfo> countries, IEnumerable<GeoRegionInfo> regions)
 		{
-			string[] countryOrder = { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
+			string[] countryOrder = AutoConfig.VisitedCountries;// { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
 			GeoCountryInfo country = null;
 
 			var regionCountries = regions.Select(x => x.Country).Distinct().Count();

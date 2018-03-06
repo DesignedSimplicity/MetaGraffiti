@@ -11,10 +11,17 @@
 	var _editor = null;
 	var _popup = null;
 	var _country = {
+		name: "@c.Name",
+		center: {
+			lat: @c.Center.Latitude,
+			lng: @c.Center.Longitude
+		},
+		bounds: {
 			north: @c.Bounds.NorthWest.Latitude,
 			south: @c.Bounds.SouthEast.Latitude,
 			west: @c.Bounds.NorthWest.Longitude,
 			east: @c.Bounds.SouthEast.Longitude,
+		}
 	};
 
 	var _regions = [
@@ -45,7 +52,8 @@
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
-		showBounds(_country, null, 0);
+		showBounds(_country.bounds, null, 0);
+		markPoint(_country.center.lat, _country.center.lng, _country.name)
 
 		$(".js-region-row").click(function () {
 			if (_editor) _editor.setMap(null);

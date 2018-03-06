@@ -28,7 +28,7 @@ function initMap() {
 	});
 }
 
-function showBounds(bounds, color, fill) {
+function drawBounds(bounds, color, fill) {
 	if (color == null) color = '#ff0000';
 	if (fill == null) fill = 0.2;
 	var rectangle = new google.maps.Rectangle({
@@ -42,9 +42,13 @@ function showBounds(bounds, color, fill) {
 		map: _mapGoogle
 	});
 
+	return rectangle;
+}
+
+function showBounds(bounds, color, fill) {
 	_mapGoogle.fitBounds(bounds);
 
-	return rectangle;
+	return drawBounds(bounds, color, fill);
 }
 
 function editBounds(bounds) {

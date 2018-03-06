@@ -14,5 +14,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GeoTimezoneInfo> Timezones { get { return GeoTimezoneInfo.All; } }
 		public List<GeoCountryInfo> Countries { get { return GeoCountryInfo.All; } }
 		public List<GeoRegionInfo> Regions { get { return GeoRegionInfo.All; } }
+
+
+		public List<GeoCountryInfo> VisitedCountries { get { return GeoCountryInfo.All.Where(x => AutoConfig.VisitedCountries.Contains(x.ISO2)).OrderBy(x => x.Name).ToList(); } }
 	}
 }

@@ -2,6 +2,65 @@
 
 @Html.Partial("_Nav")
 
-<div class="h2"><a href="/geo/timezones">Timezones</a></div>
-<div class="h2"><a href="/geo/countries">Countries</a></div>
-<div class="h2"><a href="/geo/regions">Regions</a></div>
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+
+<script>
+	var _editor = null;
+	var _popup = null;
+
+	var _countries = [
+		@foreach (var c in Model.Countries)
+		{
+			<text>
+			{
+				name: "@c.Name",
+				bounds: {
+					north: @c.Bounds.NorthWest.Latitude,
+					south: @c.Bounds.SouthEast.Latitude,
+					west: @c.Bounds.NorthWest.Longitude,
+					east: @c.Bounds.SouthEast.Longitude,
+				},
+			},</text>
+		}
+	]
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < _countries.length; i++) {
+			var color = _trackColors[i % 10];
+
+			var country = _countries[i];
+			country.rectangle = drawBounds(country.bounds, color);
+
+			//$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		}
+
+		_mapGoogle.panTo(new google.maps.LatLng(0, 0));
+
+		var zoom = Math.ceil(Math.log2($(_mapDiv).width())) - 8;
+		_mapGoogle.setZoom(2);		
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="h2"><a href="/geo/timezones">Timezones</a></div>
+		<div class="h2"><a href="/geo/countries">Countries</a></div>
+		<div class="h2"><a href="/geo/regions">Regions</a></div>
+		<br />
+		<h3>Visited Countries</h3>
+		@foreach(var c in Model.VisitedCountries)
+		{
+			<div class="h4">
+				<a href="/geo/country/@(c.CountryID)">@c.Name</a>
+			</div>
+		}
+	</div>
+</div>
