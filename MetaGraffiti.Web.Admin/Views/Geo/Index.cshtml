@@ -29,18 +29,14 @@
 		initMap();
 
 		for (i = 0; i < _countries.length; i++) {
-			var color = _trackColors[i % 10];
+			var color = _mapColors[i % 10];
 
 			var country = _countries[i];
-			country.rectangle = drawBounds(country.bounds, color);
-
-			//$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+			drawBounds(country.bounds, color);
 		}
 
 		_mapGoogle.panTo(new google.maps.LatLng(0, 0));
-
-		var zoom = Math.ceil(Math.log2($(_mapDiv).width())) - 8;
-		_mapGoogle.setZoom(2);		
+		_mapGoogle.setZoom(Math.ceil(Math.log2($(_mapDiv).width())) - 8);
 	});
 </script>
 
@@ -51,9 +47,9 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2"><a href="/geo/timezones">Timezones</a></div>
-		<div class="h2"><a href="/geo/countries">Countries</a></div>
-		<div class="h2"><a href="/geo/regions">Regions</a></div>
+		<div class="h2"><a href="/geo/timezones/">Timezones</a></div>
+		<div class="h2"><a href="/geo/countries/">Countries</a></div>
+		<div class="h2"><a href="/geo/regions/">Regions</a></div>
 		<br />
 		<h3>Visited Countries</h3>
 		@foreach(var c in Model.VisitedCountries)

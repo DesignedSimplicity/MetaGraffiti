@@ -41,7 +41,7 @@
 
 	function loadTrack() {
 		for (i = 0; i < _tracks.length; i++) {
-			var color = _trackColors[i % 10];
+			var color = _mapColors[i % 10];
 			showTrack(_tracks[i].points, color);
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}

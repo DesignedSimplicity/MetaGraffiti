@@ -2,7 +2,7 @@
 var _mapCoder = null;
 var _mapGoogle = null;
 
-var _trackColors = [
+var _mapColors = [
 	'#007bff',
 	'#28a745',
 	'#17a2b8',

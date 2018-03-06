@@ -23,6 +23,18 @@ namespace MetaGraffiti.Web.Admin.Models
 			}
 		}
 
+		private string _pageTitle = String.Empty;
+		public string PageTitle
+		{
+			get
+			{
+				return String.IsNullOrWhiteSpace(_pageTitle)
+					? UrlPath.Trim('/').Replace(@"/", " : ")
+					: _pageTitle;
+			}
+			set { _pageTitle = value; }
+		}
+
 		private string _pageName = String.Empty;
 		public string PageName
 		{
