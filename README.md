@@ -84,7 +84,7 @@ Objects with state created from a static factory pattern
 ### Carto
 
 * Layer - A group of points related by a type or topic
-* Point - A single geospacial point used by cart objects
+* Point - A single geospacial point used by Carto entites
 
 * Mark - A single point with additional metadata not bound to a paticular area
 
