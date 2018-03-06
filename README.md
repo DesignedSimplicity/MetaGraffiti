@@ -88,13 +88,13 @@ Objects with state created from a static factory pattern
 
 * Mark - A single point with additional metadata not bound to a paticular area
 
-* Area - An area defined by a perimeter made of points with additional metadata (ex: Yosemite National Park)
-* Place - A single point/radius/bounding box with additional metadata tied directly to an area (ex: Yosemite Valley Visitor Center)
+* Area - An area defined by a perimeter made of points (ex: Yosemite National Park)
+* Place - A single point/radius/bounding box tied directly to an area (ex: Yosemite Valley Visitor Center)
 
 * Tour - A consolidation of multiple trips (ex: South Island 2018)
 * Trip - A single component of a tour with multiple segments (ex: Gillespeie's Pass)
-* Path - A set of data describing the departure and arrival from a Place or Area (ex: Young Hut to Siberia Hut)
-* Stop - A set of data describing a visit to a Place or Area (ex: Gillespeie Peak)
+* Path - A set of data describing the departure and arrival from an Area or Place (ex: Young Hut to Siberia Hut)
+* Stop - A set of data describing a visit to an Area or Place (ex: Gillespeie Peak)
 
 __Range, Space, District, Zone, Transit, Trek, Journey, Odessey, Excursion, Expedition, Voyage, Passage, Travel__
 
