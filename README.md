@@ -1,23 +1,20 @@
 # MetaGraffiti
 A framework to process geographic and topographic data for map building and visualizations
 
-Alpha - 
-Beta - 
+## Alpha
+
+## Beta
 
 
 
-
-TODO
-Fix regions that are not contained in country bounds (ex: Argentina, Santa Cruz)
-Refactor Gpx and Kml namespaces into Geo/Carto/Topo namespace?
-Move AutoConfig and Services from Web to Base project
-Unit tests for Gpx and Kml writer classes
-Unit tests for additional Geo classes
-Unit tests for service methods
-
-
-
-Finish windows utility to merge/convert gpx files
+### TODO
+* Fix regions that are not contained in country bounds (ex: Argentina, Santa Cruz)
+* Refactor Gpx and Kml namespaces into Geo/Carto/Topo namespace?
+* Move AutoConfig and Services from Web to Base project
+* Unit tests for Gpx and Kml writer classes
+* Unit tests for additional Geo classes
+* Unit tests for service methods
+* Finish windows utility to merge/convert gpx files
 
 
 
@@ -25,13 +22,13 @@ Finish windows utility to merge/convert gpx files
 
 
 
+#### GpxGraffiti
+**A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth**
+`GpxGraffiti	-merge		Combines multiple gpx files into a single file - used for geotagging in Lightroom`
+`GpxGraffiti	-fix		Removes bad data points from a gpx file - cleans up a file with a poor gps signal`
+`GpxGraffiti	-kml		Converts a gpx file to a kml file - prepares file for visualizing in Google Earth`
 
-GpxGraffiti - A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth
-	-merge		Combines multiple gpx files into a single file - used for geotagging in Lightroom
-	-fix		Removes bad data points from a gpx file - cleans up a file with a poor gps signal
-	-kml		Converts a gpx file to a kml file - prepares file for visualizing in Google Earth
-
-Process
+__Process__
 1. Read and parse GPX file to perform distance calculations
 2. Remove points with low signial quality or errors
 3. Resegment tracks and add metadata/notes
