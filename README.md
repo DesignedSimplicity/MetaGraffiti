@@ -51,31 +51,32 @@ A framework to process geographic and topographic data for map building and visu
 
 ## Architecture
 
-## Data
+### Data
 Simple classes which represent a set of attributes for an entity
 
-## Info 
+### Info 
 State classes created from a static factory pattern
 
 
 ## Modules
 
-## Geo
+### Geo
+
+GeoCountryInfo
+
+GeoRegionInfo
+
+GeoTimezoneInfo
+
+GeoDirection - a direction in degrees or radians
 
 GeoDistance - distance between two or more points
-GeoDirection - a direction in degrees or radians
-GeoPerimeter - a set of points defining a physical region
-
-GeoLocation - lat/lon with optional elevation
-GeoPosition - lat/lon with elevation and optional timestamp
 
 GeoHeading - a point and a direction
-GeoVector - a heading established by two points
 
+GeoLocation - lat/lon with optional elevation and timestamp
 
-GeoTimezone - a representation of a standard timezone
-GeoTimestamp - a date/time 
-
+GeoRectangle - a set of points defining a physical region
 
 
 
@@ -83,11 +84,12 @@ GeoTimestamp - a date/time
 
 ### GpxGraffiti
 **A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth**
-`GpxGraffiti	-merge		Combines multiple gpx files into a single file - used for geotagging in Lightroom`
 
-`GpxGraffiti	-fix		Removes bad data points from a gpx file - cleans up a file with a poor gps signal`
+`GpxGraffiti	-merge		// Combines multiple gpx files into a single file - used for geotagging in Lightroom`
 
-`GpxGraffiti	-kml		Converts a gpx file to a kml file - prepares file for visualizing in Google Earth`
+`GpxGraffiti	-fix		// Removes bad data points from a gpx file - cleans up a file with a poor gps signal`
+
+`GpxGraffiti	-kml		// Converts a gpx file to a kml file - prepares file for visualizing in Google Earth`
 
 __Process__
 1. Read and parse GPX file to perform distance calculations
