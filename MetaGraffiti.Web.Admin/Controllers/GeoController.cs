@@ -34,7 +34,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = new GeoViewModel();
 			model.SelectedCountry = GeoCountryInfo.ByID(id);
 
-			model.PageName = "Country";
+			//model.PageName = "Country";
 			return View(model);
 		}
 

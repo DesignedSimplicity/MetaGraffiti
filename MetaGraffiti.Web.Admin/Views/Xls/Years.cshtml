@@ -1,0 +1,41 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model XlsViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-md-6">
+		@if (Model.RawCount != Model.Places.Count)
+		{
+			<div class="alert alert-danger">
+				@(Model.RawCount - Model.Places.Count) places were not able to be parsed.
+			</div>
+		}
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Area</th>
+					<th>Region</th>
+					<th>Country</th>
+				</tr>
+			</thead>
+			@{
+				var count = 0;
+				foreach (var place in Model.Places.OrderBy(x => x.Country).ThenBy(x => x.Region).ThenBy(x => x.Area).ThenBy(x => x.Name))
+				{
+					<tr class="@(String.IsNullOrWhiteSpace(place.Country) ? "table-danger" : "")">
+						<td>@(++count)</td>
+						<td>@place.Name</td>
+						<td>@place.Area</td>
+						<td>@place.Region</td>
+						<td>@place.Country</td>
+					</tr>
+				}
+			}
+		</table>
+	</div>
+	<div class="col-md-6">
+	</div>
+</div>

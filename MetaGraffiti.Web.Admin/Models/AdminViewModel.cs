@@ -5,21 +5,20 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public enum AdminArea { Home, Geo, Gpx }
+	public enum AdminAreas { Home, Geo, Gpx, Xls }
 
 	public class AdminViewModel
 	{
-		public AdminArea Area
+		public AdminAreas Area
 		{
 			get
 			{
 				var path = UrlPath.ToLowerInvariant();
-				if (path.StartsWith("/geo"))
-					return AdminArea.Geo;
-				else if (path.StartsWith("/gpx"))
-					return AdminArea.Gpx;
-				else
-					return AdminArea.Home;
+				foreach(AdminAreas area in Enum.GetValues(typeof(AdminAreas)))
+				{
+					if (path.StartsWith("/" + area.ToString().ToLowerInvariant())) return area;
+				}
+				return AdminAreas.Home;
 			}
 		}
 
@@ -45,14 +44,16 @@ namespace MetaGraffiti.Web.Admin.Models
 
 				var path = UrlPath.Trim('/');
 				var index = path.IndexOf('/');
-				return index > 0
-					? path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2)
-					: "";
+
+				if (index <= 1) return "";
+				
+				var name = path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2);
+				return name.Replace("/", @" \ ");
 			}
 			set { _pageName = value; }
 		}
 
-		public bool IsHome => Area == AdminArea.Home;
+		public bool IsHome => Area == AdminAreas.Home;
 
 		public bool IsAreaPage => !IsHome && !String.IsNullOrWhiteSpace(PageName);
 		

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Xls;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
@@ -15,28 +16,44 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		private CartoDataService _service = new CartoDataService();
 		private const string CartoDataUri = @"C:\Code\KnE\ConsolidatedTrips.xlsx";
 
-		public ActionResult Index(int? year = 2010)
-        {
+		public XlsController()
+		{
+			_service.Init(CartoDataUri);
+		}
+
+		public ActionResult Index()
+		{
 			var model = new XlsViewModel();
 
-			var reader = new XlsFileReader(CartoDataUri);
-			model.Sheets = reader.ReadFile().Sheets;
+			return View(model);
+		}
 
-			_service.Init(CartoDataUri);
+		public ActionResult Years(string id = "")
+		{
+			var model = new XlsViewModel();
 
-			
-
-			model.RawPlaceCount = _service.ListRawPlaces(year.Value).Count;
-			model.Places = _service.ListPlaces(year.Value);
-
+			int year = TypeConvert.ToInt(id);
+			model.RawCount = _service.ListRawPlaces(year).Count;
+			model.Places = _service.ListPlaces(year);
 
 			return View(model);
-        }
+		}
+
+		public ActionResult Sheets(string id = "")
+		{
+			var model = new XlsViewModel();
+
+			model.Sheets = _service.ListSheets();
+			model.SelectedSheet = id;
+
+			return View(model);
+		}
+
 
 		public ActionResult Reset()
 		{
 			_service.Reset();
 			return new RedirectResult("/xls/");
 		}
-    }
+	}
 }

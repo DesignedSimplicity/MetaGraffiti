@@ -302,6 +302,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Xls\Index.cshtml" />
+    <Content Include="Views\Xls\Sheets.cshtml" />
+    <Content Include="Views\Xls\Years.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

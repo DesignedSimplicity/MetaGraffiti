@@ -12,9 +12,21 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class XlsViewModel : AdminViewModel
 	{
-		public List<XlsSheetData> Sheets { get; set; }
+		public int[] Years = { 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017 };
 
-		public int RawPlaceCount { get; set; }
+		public List<XlsSheetData> Sheets { get; set; }
+		public string SelectedSheet { get; set; }
+
+		
+
+		public int RawCount { get; set; }
 		public List<CartoPlaceData> Places { get; set; }
+
+
+
+		public bool IsSelected(XlsSheetData sheet)
+		{
+			return (String.Compare(sheet.SheetName, SelectedSheet, true) == 0);
+		}
 	}
 }

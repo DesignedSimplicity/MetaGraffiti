@@ -14,6 +14,7 @@ namespace MetaGraffiti.Base.Services
 {
 	public class CartoDataService
 	{
+		private static object _lock = true;
 		private static XlsFileData _source;
 
 		public void Reset()
@@ -23,11 +24,19 @@ namespace MetaGraffiti.Base.Services
 
 		public void Init(string uri)
 		{
-			if (_source == null)
+			lock (_lock)
 			{
-				var reader = new XlsFileReader(uri);
-				_source = reader.ReadFile();
+				if (_source == null)
+				{
+					var reader = new XlsFileReader(uri);
+					_source = reader.ReadFile();
+				}
 			}
+		}
+
+		public List<XlsSheetData> ListSheets()
+		{
+			return _source.Sheets;
 		}
 
 		public List<string> ListRawPlaces(int year)
