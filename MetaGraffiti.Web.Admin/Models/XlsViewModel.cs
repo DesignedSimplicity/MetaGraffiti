@@ -5,6 +5,7 @@ using System.Web;
 
 using MetaGraffiti.Base.Modules.Carto;
 using MetaGraffiti.Base.Modules.Carto.Data;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Xls;
 using MetaGraffiti.Base.Modules.Xls.Data;
 
@@ -17,11 +18,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<XlsSheetData> Sheets { get; set; }
 		public string SelectedSheet { get; set; }
 
-		
 
 		public int RawCount { get; set; }
 		public List<CartoPlaceData> Places { get; set; }
 
+		public IEnumerable<CartoPlaceData> ListPlacesOrdered() { return Places.OrderBy(x => x.Country).ThenBy(x => x.Region).ThenBy(x => x.Area).ThenBy(x => x.Name); }
+
+		public List<GeoCountryInfo> Countries { get; set; }
 
 
 		public bool IsSelected(XlsSheetData sheet)

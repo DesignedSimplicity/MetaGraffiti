@@ -5,7 +5,8 @@
 
 <div>
 	<span class="h1">Sheets</span>
-	<span class="h2">:
+	<span class="h2">
+		:
 		<a href="/xls/sheets/">All</a>
 		@foreach (var sheet in Model.Sheets.OrderBy(x => x.SheetName))
 		{
@@ -15,24 +16,27 @@
 	</span>
 </div>
 @{
-	
+
 	<hr />
 	var selectedSheets = (String.IsNullOrWhiteSpace(Model.SelectedSheet) ? Model.Sheets : Model.Sheets.Where(x => Model.IsSelected(x)));
 	foreach (var sheet in selectedSheets)
 	{
 		<h2>@sheet.SheetName</h2>
-		<table class="table table-striped">
+		<table class="table table-striped table-sm">
 			@{
 				var count = 0;
 				foreach (var row in sheet.Rows)
 				{
-					<tr class="@(count == 0 ? "table-secondary" : "")">
-						<td>@(count++ == 0 ? "#" : count.ToString())</td>
-						@foreach (var cell in row.Cells)
-						{
-							<td>
-								@cell
-							</td>
+					<tr class="@(count == 0 ? "table-secondary font-weight-bold" : "")">
+						<td>@(count == 0 ? "#" : count.ToString())</td>
+						@{
+							count++;
+							foreach (var cell in row.Cells)
+							{
+								<td>
+									@cell
+								</td>
+							}
 						}
 					</tr>
 				}

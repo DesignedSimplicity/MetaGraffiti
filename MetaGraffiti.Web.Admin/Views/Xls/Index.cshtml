@@ -4,15 +4,25 @@
 @Html.Partial("_Nav")
 
 <div class="row">
-	<div class="col-md-6">
-		<h1>Years</h1>
-		@foreach (var year in Model.Years)
+	<div class="col-md-3">
+		<h2>By Country</h2>
+		@foreach (var country in Model.Countries.OrderBy(x => x.Name))
 		{
-			<div class="h2">
-				<a href="/xls/years/@(year)">@year</a>
+			<div class="h3">
+				<a href="/xls/country/@(country.Name)">@country.Name</a>
 			</div>
 		}
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-2">
+		<h2>By Year</h2>
+		@foreach (var year in Model.Years.OrderByDescending(x => x))
+		{
+			<div class="h3">
+				<a href="/xls/year/@(year)">@year</a>
+			</div>
+		}
+	</div>
+	<div class="col-md-2">
+		<h2><a href="/xls/sheet/">Raw Data</a></h2>
 	</div>
 </div>

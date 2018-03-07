@@ -39,6 +39,11 @@ namespace MetaGraffiti.Base.Services
 			return _source.Sheets;
 		}
 
+		public XlsSheetData GetSheet(string name)
+		{
+			return _source.Sheets.FirstOrDefault(x => String.Compare(x.SheetName, name, true) == 0);
+		}
+
 		public List<string> ListRawPlaces(int year)
 		{
 			var places = new List<string>();
@@ -56,6 +61,24 @@ namespace MetaGraffiti.Base.Services
 					}
 				}
 			}
+			return places;
+		}
+
+		public List<CartoPlaceData> ListPlaces()
+		{
+			var places = new List<CartoPlaceData>();
+			foreach(var sheet in _source.Sheets)
+			{
+				var year = TypeConvert.ToInt(sheet.SheetName);
+				if (year > 0)
+				{
+					foreach (var p in ListRawPlaces(year))
+					{
+						var place = ParsePlace(p);
+						if (place != null) places.Add(place);
+					}
+				}
+			}			
 			return places;
 		}
 
