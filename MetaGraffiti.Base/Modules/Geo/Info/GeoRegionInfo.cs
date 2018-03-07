@@ -55,6 +55,12 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return All.FirstOrDefault(x => x.RegionISO == iso.ToUpperInvariant());
 		}
 
+		public static GeoRegionInfo ByISO(string isoCountry, string isoRegion)
+		{
+			if (String.IsNullOrWhiteSpace(isoCountry) || String.IsNullOrWhiteSpace(isoRegion)) return null;
+			return All.FirstOrDefault(x => x.RegionISO == $"{isoCountry}-{isoRegion}".ToUpperInvariant());
+		}
+
 		public static GeoRegionInfo ByAbbr(string abbr)
 		{
 			if (String.IsNullOrWhiteSpace(abbr)) return null;

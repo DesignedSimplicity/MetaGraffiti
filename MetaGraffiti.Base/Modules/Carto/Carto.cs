@@ -37,19 +37,19 @@ namespace MetaGraffiti.Base.Modules.Carto
 		public CartoLayer Layer { get; set; }
 	}
 
-	public class CartoArea : CartoPlace
+	public class CartoArea
 	{		
 	}
 
 	public class CartoPlace
 	{
-		/// <summary>
-		/// A place might belong to a specific area
-		/// </summary>
-		public CartoArea Area { get; set; }
-
 		public string Name { get; set; }
 
+		public GeoCountryInfo Country { get; set; }
+		public GeoRegionInfo Region { get; set; }
+
+
+		/*
 		public string Details { get; set; }
 
 		public string Address { get; set; }
@@ -59,11 +59,6 @@ namespace MetaGraffiti.Base.Modules.Carto
 		public string PostCode { get; set; }
 
 		public string Keywords { get; set; }
-
-
-
-		// Move these to Info layer
-		//public GeoCountryInfo Country { get; set; }
-		//public GeoRegionInfo Region { get; set; }
+		*/
 	}
 }

@@ -5,6 +5,38 @@
 
 <div class="row">
 	<div class="col-md-6">
+		@if (Model.RawPlaceCount != Model.Places.Count)
+		{
+			<div class="alert alert-danger">
+				@(Model.RawPlaceCount - Model.Places.Count) places were not able to be parsed.
+			</div>
+		}
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Area</th>
+					<th>Region</th>
+					<th>Country</th>
+				</tr>
+			</thead>
+			@{
+				var count = 0;
+				foreach (var place in Model.Places.OrderBy(x => x.Name))
+				{
+					<tr class="@(String.IsNullOrWhiteSpace(place.Country) ? "table-danger" : "")">
+						<td>@(++count)</td>
+						<td>@place.Name</td>
+						<td>@place.Area</td>
+						<td>@place.Region</td>
+						<td>@place.Country</td>
+					</tr>
+				}
+			}
+		</table>
+	</div>
+	<div class="col-md-6">
 		<table class="table table-striped">
 			<thead class="thead-dark">
 				<tr>
