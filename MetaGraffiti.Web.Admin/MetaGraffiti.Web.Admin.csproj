@@ -262,12 +262,14 @@
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\GpxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\XlsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\GpxViewModel.cs" />
+    <Compile Include="Models\XlsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -299,6 +301,7 @@
     <Content Include="Views\Gpx\Manage.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
+    <Content Include="Views\Xls\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

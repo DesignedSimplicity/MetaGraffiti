@@ -27,7 +27,7 @@ namespace MetaGraffiti.Base.Modules.Gpx
 		{
 			_xml = new XmlDocument();
 			_xml.Load(stream);
-			InitXml();			
+			InitXml();
 		}
 
 		// ==================================================

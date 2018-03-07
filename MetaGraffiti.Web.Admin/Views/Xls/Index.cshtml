@@ -1,0 +1,51 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model XlsViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-md-6">
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Data</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var sheetCount = 0;
+					foreach (var sheet in Model.Sheets)
+					{
+						<tr>
+							<td>@(++sheetCount)</td>
+							<td>@sheet.SheetName</td>
+							<td>
+								<table class="table table-striped">
+									<tbody>
+										@{
+											var rowCount = 0;
+											foreach (var row in sheet.Rows)
+											{
+												<tr>
+													<td>@(++rowCount)</td>
+													@foreach (var cell in row.Cells)
+													{
+														<td>
+															@cell
+														</td>
+													}
+												</tr>
+											}
+										}
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
