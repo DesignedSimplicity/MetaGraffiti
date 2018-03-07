@@ -48,7 +48,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				if (index <= 1) return "";
 				
 				var name = path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2);
-				return name.Replace("/", @" \ ");
+				return HttpUtility.UrlDecode(name.Replace("/", @" \ "));
 			}
 			set { _pageName = value; }
 		}

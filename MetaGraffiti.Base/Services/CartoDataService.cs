@@ -75,7 +75,7 @@ namespace MetaGraffiti.Base.Services
 					foreach (var p in ListRawPlaces(year))
 					{
 						var place = ParsePlace(p);
-						if (place != null) places.Add(place);
+						if (place != null && !places.Any(x => x.IsSamePlace(place))) places.Add(place);
 					}
 				}
 			}			
@@ -88,7 +88,7 @@ namespace MetaGraffiti.Base.Services
 			foreach (var p in ListRawPlaces(year))
 			{
 				var place = ParsePlace(p);
-				if (place != null) places.Add(place);
+				if (place != null && !places.Any(x => x.IsSamePlace(place))) places.Add(place);
 			}
 			return places;
 		}
