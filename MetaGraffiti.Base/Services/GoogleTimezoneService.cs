@@ -8,7 +8,7 @@ using RestSharp;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
-namespace MetaGraffiti.Web.Admin.Services
+namespace MetaGraffiti.Base.Services
 {
 	public class GoogleTimezoneResponse
 	{
@@ -17,9 +17,9 @@ namespace MetaGraffiti.Web.Admin.Services
 		public string TimeZoneName { get; set; }
 	}
 
-	public class GoogleTimezoneService
+	public class GoogleTimezoneService : GoogleApiServiceBase
 	{
-		//private string _url = "https://maps.googleapis.com/maps/api/timezone/json?location={location}";
+		public GoogleTimezoneService(string apiKey) : base(apiKey) { }
 
 		public GeoTimezoneInfo LookupGeoTimezone(IGeoLatLon point)
 		{
@@ -34,7 +34,7 @@ namespace MetaGraffiti.Web.Admin.Services
 			var client = new RestClient("https://maps.googleapis.com");
 			var request = new RestRequest("maps/api/timezone/json", Method.GET);
 
-			request.AddParameter("key", AutoConfig.GoogleMapsApiKey);
+			request.AddParameter("key", _apiKey);
 			request.AddParameter("location", point.Latitude.ToString("0.00000000") + "," + point.Longitude.ToString("0.00000000"));
 			request.AddParameter("timestamp", GetUnixTimeStampFromDateTime(timestamp.Value));
 			request.AddParameter("sensor", "false");

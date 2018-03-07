@@ -11,7 +11,7 @@ using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Base.Modules.Kml;
 
-namespace MetaGraffiti.Web.Admin.Services
+namespace MetaGraffiti.Base.Services
 {
 	public class GpxService
 	{
@@ -236,12 +236,13 @@ namespace MetaGraffiti.Web.Admin.Services
 		/// </summary>
 		private GeoTimezoneInfo GuessTimezone(IEnumerable<GeoCountryInfo> countries, IEnumerable<GeoRegionInfo> regions)
 		{
-			string[] countryOrder = AutoConfig.VisitedCountries;// { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
-			GeoCountryInfo country = null;
+			//string[] countryOrder = AutoConfig.VisitedCountries;// { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
+			GeoCountryInfo country = countries.FirstOrDefault();
 
 			var regionCountries = regions.Select(x => x.Country).Distinct().Count();
 			if (regionCountries == 1) // 1 country with multiple regions
 				country = regions.First().Country;
+			/*
 			else if (countries.Count() == 1) // 1 country without regions
 				country = countries.First();
 			else // multiple countries
@@ -256,6 +257,7 @@ namespace MetaGraffiti.Web.Admin.Services
 					}
 				}
 			}
+			*/
 
 			// now pick timezone
 			if (country == null)

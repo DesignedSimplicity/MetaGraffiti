@@ -8,7 +8,7 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
 using MetaGraffiti.Web.Admin.Models;
-using MetaGraffiti.Web.Admin.Services;
+using MetaGraffiti.Base.Services;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -161,7 +161,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					break;
 
 				case "TIMEZONE":
-					var google = new GoogleTimezoneService();
+					var google = new GoogleTimezoneService(AutoConfig.GoogleMapsApiKey);
 					manager.Timezone = google.LookupGeoTimezone(manager.FirstPoint);
 					break;
 

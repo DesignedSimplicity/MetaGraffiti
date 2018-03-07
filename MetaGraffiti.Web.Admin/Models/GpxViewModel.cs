@@ -9,7 +9,7 @@ using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Gpx.Data;
 using MetaGraffiti.Base.Modules.Gpx.Info;
-using MetaGraffiti.Web.Admin.Services;
+using MetaGraffiti.Base.Services;
 
 namespace MetaGraffiti.Web.Admin.Models
 {

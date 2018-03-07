@@ -261,9 +261,6 @@
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\GpxViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\GoogleMapsService.cs" />
-    <Compile Include="Services\GoogleTimezoneService.cs" />
-    <Compile Include="Services\GpxService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
