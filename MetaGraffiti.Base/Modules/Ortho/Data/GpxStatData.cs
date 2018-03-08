@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Data
+namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
 	public class GpxStatData
 	{

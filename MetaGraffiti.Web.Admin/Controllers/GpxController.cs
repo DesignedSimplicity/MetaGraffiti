@@ -5,8 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Gpx.Data;
-using MetaGraffiti.Base.Modules.Gpx.Info;
+using MetaGraffiti.Base.Modules.Ortho.Data;
+using MetaGraffiti.Base.Modules.Ortho.Info;
 using MetaGraffiti.Web.Admin.Models;
 using MetaGraffiti.Base.Services;
 

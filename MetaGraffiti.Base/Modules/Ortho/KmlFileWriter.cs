@@ -4,9 +4,9 @@ using System.Text;
 using System.Linq;
 using System.Xml;
 
-using MetaGraffiti.Base.Modules.Gpx.Data;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 
-namespace MetaGraffiti.Base.Modules.Kml
+namespace MetaGraffiti.Base.Modules.Ortho
 {
     public class KmlFileWriter
     {

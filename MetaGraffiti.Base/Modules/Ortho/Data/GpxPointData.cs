@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using MetaGraffiti.Base.Modules.Geo;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Data
+namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
 	public class GpxPointData : GpxMetaData, IGeoLocation
 	{

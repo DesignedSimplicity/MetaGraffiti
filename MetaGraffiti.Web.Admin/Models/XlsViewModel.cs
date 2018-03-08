@@ -6,8 +6,8 @@ using System.Web;
 using MetaGraffiti.Base.Modules.Carto;
 using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Xls;
-using MetaGraffiti.Base.Modules.Xls.Data;
+using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Web.Admin.Models
 {

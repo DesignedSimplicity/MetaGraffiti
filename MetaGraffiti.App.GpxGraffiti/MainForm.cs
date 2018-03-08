@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 
-using MetaGraffiti.Base.Modules.Gpx.Info;
+using MetaGraffiti.Base.Modules.Ortho.Info;
 
 namespace MetaGraffiti.App.GpxGraffiti
 {

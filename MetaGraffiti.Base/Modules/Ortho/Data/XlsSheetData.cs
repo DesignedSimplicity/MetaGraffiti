@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetaGraffiti.Base.Modules.Xls.Data
+namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
 	public class XlsSheetData
     {

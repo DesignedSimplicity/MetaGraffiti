@@ -5,9 +5,9 @@ using System.Linq;
 
 using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Gpx.Data;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Info
+namespace MetaGraffiti.Base.Modules.Ortho.Info
 {
 	public class GpxFileInfo
 	{

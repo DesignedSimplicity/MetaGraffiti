@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using MetaGraffiti.Base.Modules.Gpx;
-using MetaGraffiti.Base.Modules.Gpx.Info;
+using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Info;
 
-namespace MetaGraffiti.Base.Tests.Gpx
+namespace MetaGraffiti.Base.Tests.Ortho
 {
 	[TestClass]
 	public class GpxFileInfoTests

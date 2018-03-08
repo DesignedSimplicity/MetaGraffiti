@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetaGraffiti.Base.Modules.Gpx.Data
+namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
 	/*
 	<name>GPS track name</name>

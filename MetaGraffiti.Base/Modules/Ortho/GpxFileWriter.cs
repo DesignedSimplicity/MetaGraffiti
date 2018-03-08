@@ -6,9 +6,9 @@ using System.Text;
 using System.Xml;
 
 using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Gpx.Data;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 
-namespace MetaGraffiti.Base.Modules.Gpx
+namespace MetaGraffiti.Base.Modules.Ortho
 {
 	public class GpxFileWriter
 	{

@@ -4,12 +4,11 @@ using System.Linq;
 
 using MetaGraffiti.Base.Modules.Geo;
 
-namespace MetaGraffiti.Base.Modules.Gpx
+namespace MetaGraffiti.Base.Modules.Ortho
 {
 	// http://www.topografix.com/gpx_manual.asp
 
-
-	public class Gpx
+	public static class Gpx
 	{
 		public const string XmlNamespaceV1 = "http://www.topografix.com/GPX/1/0";
 		public const string XmlNamespaceV1_1 = "http://www.topografix.com/GPX/1/1";
