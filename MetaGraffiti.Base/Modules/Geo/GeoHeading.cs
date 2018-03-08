@@ -12,7 +12,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// ==================================================
 		// Constructors
 
-		public GeoHeading(IGeoLocation from, IGeoLocation to)
+		public GeoHeading(IGeoPosition from, IGeoPosition to)
 		{
 			From = from;
 			To = to;
@@ -21,9 +21,9 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// ==================================================
 		// Properties
 
-		public IGeoLocation To { get; protected set; }
+		public IGeoPosition To { get; protected set; }
 
-		public IGeoLocation From { get; protected set; }
+		public IGeoPosition From { get; protected set; }
 
 		// ==================================================
 		// Attributes
@@ -47,12 +47,12 @@ namespace MetaGraffiti.Base.Modules.Geo
 		// ==================================================
 		// Static Factory
 
-		public static GeoHeading FromPositions(IGeoLocation a, IGeoLocation b)
+		public static GeoHeading FromPositions(IGeoPosition a, IGeoPosition b)
 		{
 			return new GeoHeading(a, b);
 		}
 
-		public static List<GeoHeading> FromPositions(IList<IGeoLocation> points)
+		public static List<GeoHeading> FromPositions(IList<IGeoPosition> points)
 		{
 			var l = new List<GeoHeading>();
 			var p0 = points.FirstOrDefault();

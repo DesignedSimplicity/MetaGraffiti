@@ -40,9 +40,9 @@ namespace MetaGraffiti.Base.Modules.Carto
 		public CartoPoint Point { get; set; }
 	}
 
-	public class CartoPoint : GeoLocation
+	public class CartoPoint : GeoPosition
 	{
-		public CartoPoint(GeoLocation location) : base(location.Latitude, location.Longitude, location.Elevation, location.Timestamp) { }
+		public CartoPoint(GeoPosition location) : base(location.Latitude, location.Longitude, location.Elevation, location.Timestamp) { }
 
 		public CartoLayer Layer { get; set; }
 	}

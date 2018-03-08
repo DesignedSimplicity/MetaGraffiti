@@ -5,7 +5,7 @@ using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
-	public class GpxPointData : GpxMetaData, IGeoLocation
+	public class GpxPointData : GpxMetaData, IGeoPoint
 	{
 		public GpxPointTypes GpxPointType;
 		public int Segment;

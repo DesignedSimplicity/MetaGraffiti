@@ -31,7 +31,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 
 
 
-		public IGeoLocation Center { get; set; }
+		public IGeoPosition Center { get; set; }
 
 		public IGeoPerimeter Bounds { get; set; }
 

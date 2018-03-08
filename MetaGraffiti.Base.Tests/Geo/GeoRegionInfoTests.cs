@@ -59,7 +59,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoRegionInfo_ListByLocation()
 		{
-			var r = GeoRegionInfo.ListByLocation(new GeoLocation(38.90723, -77.036464));
+			var r = GeoRegionInfo.ListByLocation(new GeoPosition(38.90723, -77.036464));
 			Assert.AreEqual(3, r.Count());
 			Assert.IsTrue(r.Any(x => x.RegionAbbr == "DC"));
 			Assert.IsTrue(r.Any(x => x.RegionAbbr == "MD"));

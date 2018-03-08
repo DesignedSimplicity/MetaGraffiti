@@ -35,8 +35,8 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoDistance_DistanceMeters()
 		{
-			GeoLocation a = new GeoLocation(0.0, 0.0);
-			GeoLocation b = new GeoLocation(12.34, 56.78);
+			GeoPosition a = new GeoPosition(0.0, 0.0);
+			GeoPosition b = new GeoPosition(12.34, 56.78);
 
 			var m = GeoDistance.DistanceMeters(a, b);
 			Assert.AreEqual(6409572, Math.Round(m, 0));
@@ -45,8 +45,8 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoDistance_BetweenPoints()
 		{
-			GeoLocation a = new GeoLocation(12.34, 56.78);
-			GeoLocation b = new GeoLocation(43.21, 87.65);
+			GeoPosition a = new GeoPosition(12.34, 56.78);
+			GeoPosition b = new GeoPosition(43.21, 87.65);
 
 			GeoDistance g = GeoDistance.BetweenPoints(a, b);
 
@@ -56,10 +56,10 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoDistance_BetweenMultiplePoints()
 		{
-			List<GeoLocation> p = new List<GeoLocation>();
-			p.Add(new GeoLocation(0.0, 0.0));
-			p.Add(new GeoLocation(12.34, 56.78));
-			p.Add(new GeoLocation(43.21, 87.65));
+			List<GeoPosition> p = new List<GeoPosition>();
+			p.Add(new GeoPosition(0.0, 0.0));
+			p.Add(new GeoPosition(12.34, 56.78));
+			p.Add(new GeoPosition(43.21, 87.65));
 
 			GeoDistance g = GeoDistance.BetweenPoints(p);
 

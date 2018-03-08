@@ -16,9 +16,9 @@ namespace MetaGraffiti.Base.Modules.Geo
 			var maxLon = points.Max(x => x.Longitude);
 
 			Points = points;
-			NorthWest = new GeoLocation(minLat, minLon);
-			SouthEast = new GeoLocation(maxLat, maxLon);
-			Center = new GeoLocation((minLat + maxLat) / 2, (minLon + maxLon) / 2);
+			NorthWest = new GeoPosition(minLat, minLon);
+			SouthEast = new GeoPosition(maxLat, maxLon);
+			Center = new GeoPosition((minLat + maxLat) / 2, (minLon + maxLon) / 2);
 		}
 
 		// ==================================================

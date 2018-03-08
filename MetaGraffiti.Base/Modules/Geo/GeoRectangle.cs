@@ -40,9 +40,9 @@ namespace MetaGraffiti.Base.Modules.Geo
 		private void Init(double latNorthWest, double lonNorthWest, double latSouthEast, double lonSouthEast)
 		{
 			Points = new List<IGeoLatLon>();
-			Points.Insert(0, new GeoLocation(latNorthWest, lonNorthWest));
-			Points.Insert(1, new GeoLocation(latSouthEast, lonSouthEast));
-			Center = new GeoLocation((latNorthWest + latSouthEast) / 2, (lonNorthWest + lonSouthEast) / 2);
+			Points.Insert(0, new GeoPosition(latNorthWest, lonNorthWest));
+			Points.Insert(1, new GeoPosition(latSouthEast, lonSouthEast));
+			Center = new GeoPosition((latNorthWest + latSouthEast) / 2, (lonNorthWest + lonSouthEast) / 2);
 		}
 	}
 }

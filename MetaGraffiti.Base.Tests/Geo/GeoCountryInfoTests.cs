@@ -59,7 +59,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoCountryInfo_ListByLocation()
 		{
-			var c = GeoCountryInfo.ListByLocation(new GeoLocation(39.0, -67.0));
+			var c = GeoCountryInfo.ListByLocation(new GeoPosition(39.0, -67.0));
 			Assert.AreEqual(1, c.Count());
 			Assert.AreEqual("USA", c.First().ISO3);
 		}

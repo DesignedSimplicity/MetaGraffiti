@@ -61,7 +61,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 	/// <summary>
 	/// 3 dimensional point including elevation
 	/// </summary>
-	public interface IGeoPoint : IGeoLatLon
+	public interface IGeoCoordinate : IGeoLatLon
 	{
 		double? Elevation { get; }
 	}
@@ -69,9 +69,17 @@ namespace MetaGraffiti.Base.Modules.Geo
 	/// <summary>
 	/// 4 dimensional point including a timestamp
 	/// </summary>
-	public interface IGeoLocation : IGeoPoint
+	public interface IGeoPoint : IGeoCoordinate
 	{
 		DateTime? Timestamp { get; }
+	}
+
+	/// <summary>
+	/// 4 dimensional point with an orientation
+	/// </summary>
+	public interface IGeoPosition : IGeoPoint
+	{
+		GeoDirection Direction { get; }
 	}
 
 	// --------------------------------------------------

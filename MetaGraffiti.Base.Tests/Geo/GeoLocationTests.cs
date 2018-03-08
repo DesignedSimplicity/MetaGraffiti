@@ -12,7 +12,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoLocation_IsValid()
 		{
-			var l = new GeoLocation(0.0, 0.0);
+			var l = new GeoPosition(0.0, 0.0);
 			Assert.IsTrue(l.IsValidLocation);
 
 			l.Latitude = -91;
@@ -35,10 +35,10 @@ namespace MetaGraffiti.Base.Tests.Geo
 		[TestMethod]
 		public void GeoLocation_Elevation()
 		{
-			var l = new GeoLocation(0.0, 0.0);
+			var l = new GeoPosition(0.0, 0.0);
 			Assert.IsFalse(l.HasElevation);
 
-			var le = new GeoLocation(0.0, 0.0, 123.4);
+			var le = new GeoPosition(0.0, 0.0, 123.4);
 			Assert.IsTrue(le.HasElevation);
 			Assert.AreEqual(123.4, le.Elevation);
 		}
@@ -47,7 +47,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 		public void GeoLocation_Timestamp()
 		{
 			var now = DateTime.Now;
-			var l = new GeoLocation(0.0, 0.0, 0.0, now);
+			var l = new GeoPosition(0.0, 0.0, 0.0, now);
 			Assert.IsTrue(l.HasTimestamp);
 			Assert.IsFalse(l.IsTimestampUTC);
 			Assert.AreEqual(now, l.Timestamp);
@@ -57,7 +57,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 		public void GeoLocation_TimestampUTC()
 		{
 			var now = DateTime.UtcNow;
-			var l = new GeoLocation(0.0, 0.0, 0.0, now);
+			var l = new GeoPosition(0.0, 0.0, 0.0, now);
 			Assert.IsTrue(l.HasTimestamp);
 			Assert.IsTrue(l.IsTimestampUTC);
 			Assert.AreEqual(now, l.Timestamp);

@@ -20,7 +20,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 			RegionAbbr = (String.IsNullOrWhiteSpace(abbr) ? "" : abbr); ;
 			RegionNameLocal = (String.IsNullOrWhiteSpace(nameLocal) ? "" : nameLocal);
 
-			Center = new GeoLocation(latCenter, lonCenter);
+			Center = new GeoPosition(latCenter, lonCenter);
 			Bounds = new GeoRectangle(latNorthWest, lonNorthWest, latSouthEast, lonSouthEast);
 		}
 

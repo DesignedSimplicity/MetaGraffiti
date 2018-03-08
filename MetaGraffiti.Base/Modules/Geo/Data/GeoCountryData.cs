@@ -27,7 +27,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 			Abbr15 = abbr15;
 			Abbr30 = abbr30;
 
-			Center = new GeoLocation(latCenter, lonCenter);
+			Center = new GeoPosition(latCenter, lonCenter);
 			Bounds = new GeoRectangle(latNorthWest, lonNorthWest, latSouthEast, lonSouthEast);
 		}
 

@@ -46,13 +46,13 @@ namespace MetaGraffiti.Base.Modules.Geo
 			return GeoDistance.FromMeters(m);
 		}
 
-		public static GeoDistance BetweenPoints(IGeoLocation a, IGeoLocation b, bool includeElevation = false)
+		public static GeoDistance BetweenPoints(IGeoPoint a, IGeoPoint b, bool includeElevation = false)
 		{
 			var m = GeoDistance.DistanceMeters(a, b, includeElevation);
 			return GeoDistance.FromMeters(m);
 		}
 
-		public static GeoDistance BetweenPoints(IEnumerable<IGeoLocation> points, bool includeElevation = false)
+		public static GeoDistance BetweenPoints(IEnumerable<IGeoPoint> points, bool includeElevation = false)
 		{
 			double m = 0;
 			var a = points.First();
@@ -67,7 +67,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 			return GeoDistance.FromMeters(m);
 		}
 
-		public static GeoDistance ElevationBetweenPoints(IEnumerable<IGeoLocation> points, int direction = 0)
+		public static GeoDistance ElevationBetweenPoints(IEnumerable<IGeoPoint> points, int direction = 0)
 		{
 			double m = 0;
 			var a = points.First();
@@ -109,7 +109,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 			var c1 = Math.Sin(rLat / 2) * Math.Sin(rLat / 2) + Math.Cos(r1) * Math.Cos(r2) * Math.Sin(rLon / 2) * Math.Sin(rLon / 2);
 			return Math.Atan2(Math.Sqrt(c1), Math.Sqrt(1 - c1)) * 2.0 * _earthRadiusMeter;
 		}
-		public static double DistanceMeters(IGeoLocation a, IGeoLocation b, bool includeElevation)
+		public static double DistanceMeters(IGeoPoint a, IGeoPoint b, bool includeElevation)
 		{
 			var m = DistanceMeters(a, b);
 			if (includeElevation && a.Elevation.HasValue && b.Elevation.HasValue)
