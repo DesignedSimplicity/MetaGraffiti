@@ -36,15 +36,17 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public IGeoLatLon Center => _data.Center;
 		public IGeoPerimeter Bounds => _data.Bounds;
 
-
 		// --------------------------------------------------
 		// Derived
 		public GeoCountryInfo Country { get { return GeoCountryInfo.ByID(CountryID); } }
 
 
-
 		// ==================================================
 		// Static
+
+		// --------------------------------------------------
+		// Properties
+		public static List<GeoRegionInfo> All { get { return Cache.ToInfo().ToList(); } }
 
 		// --------------------------------------------------
 		// Methods
@@ -90,8 +92,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// Globals
 		private static bool _initialized = false;
 		private static List<GeoRegionData> _cache = new List<GeoRegionData>();
-		private static List<GeoRegionData> Cache { get { if (!_initialized) Initialize(); return _cache; } }
-		public static List<GeoRegionInfo> All { get { return Cache.ToInfo().ToList(); } }
+		private static IEnumerable<GeoRegionData> Cache { get { if (!_initialized) Initialize(); return _cache; } }
 
 		private static void Initialize()
 		{
