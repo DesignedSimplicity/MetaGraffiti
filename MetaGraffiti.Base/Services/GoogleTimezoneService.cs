@@ -19,42 +19,38 @@ namespace MetaGraffiti.Base.Services
 
 	public class GoogleTimezoneService : GoogleApiServiceBase
 	{
+		private Dictionary<string, GoogleTimezoneResponse> _cache = new Dictionary<string, GoogleTimezoneResponse>();
+
 		public GoogleTimezoneService(string apiKey) : base(apiKey) { }
 
 		public GeoTimezoneInfo LookupGeoTimezone(IGeoLatLon point)
 		{
-			var response = LookupTimezone(point);
+			var response = RequestTimezone(point);
 			return GeoTimezoneInfo.ByTZID(response.TimeZoneId);
 		}
 
-		public GoogleTimezoneResponse LookupTimezone(IGeoLatLon point, DateTime? timestamp = null)
+		public GoogleTimezoneResponse RequestTimezone(IGeoLatLon point, DateTime? timestamp = null)
 		{
-			if (!timestamp.HasValue) timestamp = DateTime.Now;
-			
+			var location = GetLocationString(point);
+
+			if (!timestamp.HasValue) timestamp = DateTime.Today;
+			var unixTimestamp = GetUnixTimeStampFromDateTime(timestamp.Value);
+
+			var key = $"{location}_{unixTimestamp}";
+			if (_cache.ContainsKey(key)) return _cache[key];
+
 			var client = new RestClient("https://maps.googleapis.com");
 			var request = new RestRequest("maps/api/timezone/json", Method.GET);
 
 			request.AddParameter("key", _apiKey);
-			request.AddParameter("location", point.Latitude.ToString("0.00000000") + "," + point.Longitude.ToString("0.00000000"));
-			request.AddParameter("timestamp", GetUnixTimeStampFromDateTime(timestamp.Value));
+			request.AddParameter("location", location);
+			request.AddParameter("timestamp", unixTimestamp);
 			request.AddParameter("sensor", "false");
 
-			var response = client.Execute<GoogleTimezoneResponse>(request);			
+			var response = client.Execute<GoogleTimezoneResponse>(request);
+
+			if (!_cache.ContainsKey(key)) _cache.Add(key, response.Data);
 			return response.Data;
-		}
-
-		private long GetUnixTimeStampFromDateTime(DateTime dt)
-		{
-			DateTime epochDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			TimeSpan ts = dt - epochDate;
-			return (long)ts.TotalSeconds;
-		}
-
-		private DateTime GetDateTimeFromUnixTimeStamp(double ts)
-		{
-			DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			dt = dt.AddSeconds(ts);
-			return dt;
 		}
 	}
 }

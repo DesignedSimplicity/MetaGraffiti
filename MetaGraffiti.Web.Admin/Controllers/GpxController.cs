@@ -14,7 +14,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GpxController : Controller
     {
-		private GpxService _gpxService = new GpxService();
+		private OrthoGpxService _gpxService = new OrthoGpxService();
 
 		private GpxManagerModel TrackManager
 		{

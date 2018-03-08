@@ -6,7 +6,7 @@ using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
 {
-    public class GeoLocationInfo
+    public class GeoLocationInfo : IGeoCoordinate
     {
 		// ==================================================
 		// Internals
@@ -29,6 +29,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// --------------------------------------------------
 		// Inferred
 		public string Name => _data.Name;
+		public double Latitude => (_data.Center == null ? 0 : _data.Center.Latitude);
+		public double Longitude => (_data.Center == null ? 0 : _data.Center.Longitude);
+		public double? Elevation => (_data.Center == null ? 0 : _data.Center.Elevation);
 
 		// --------------------------------------------------
 		// Derived

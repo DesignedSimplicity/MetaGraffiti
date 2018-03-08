@@ -10,11 +10,10 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Ortho.Info;
-using MetaGraffiti.Base.Modules.Ortho;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class GpxService
+	public class OrthoGpxService
 	{
 		private static List<FileInfo> _gpxFiles = null;
 		private static Dictionary<string, GpxCache> _gpxCache = null;
