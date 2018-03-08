@@ -7,13 +7,23 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Base.Modules.Carto
 {
-    public enum CartoLayerTypes
+	public enum CartoPlaceTypes
+	{
+		Country = 1,
+		Region = 2,
+	}
+
+
+
+
+	public enum CartoLayerTypes
 	{
 		/// <summary>
 		/// Reserved for Geo module
 		/// </summary>
 		Base = 1,
 	}
+
 
 
 	public class CartoLayer

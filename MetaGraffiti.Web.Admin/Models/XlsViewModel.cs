@@ -22,7 +22,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public int RawCount { get; set; }
 		public List<CartoPlaceData> Places { get; set; }
 
-		public IEnumerable<CartoPlaceData> ListPlacesOrdered() { return Places.OrderBy(x => x.Country).ThenBy(x => x.Region).ThenBy(x => x.Area).ThenBy(x => x.Name); }
+		public IEnumerable<CartoPlaceData> ListPlacesOrdered() { return Places.OrderBy(x => x.Country).ThenBy(x => x.Region).ThenBy(x => x.District).ThenBy(x => x.Name); }
 
 		public List<GeoCountryInfo> Countries { get; set; }
 

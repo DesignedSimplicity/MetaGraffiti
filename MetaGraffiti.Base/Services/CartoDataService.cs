@@ -126,13 +126,13 @@ namespace MetaGraffiti.Base.Services
 							}
 							else
 							{
-								p.Area = area;
+								p.District = area;
 								p.Name = name;
 							}
 						}
 						else
 						{
-							p.Area = area;
+							p.District = area;
 							p.Name = name;
 						}
 					}

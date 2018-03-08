@@ -5,9 +5,9 @@ using System.Text;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
-namespace MetaGraffiti.Base.Modules.Carto.Data
+namespace MetaGraffiti.Base.Modules.Geo.Data
 {
-	public class CartoPlaceData
+	public class GeoPlaceData : IGeoLatLon
 	{
 		public string PlaceKey { get; set; } // place_id
 
@@ -35,10 +35,12 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 
 
 
+
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }
 
 		public IGeoPerimeter Bounds { get; set; }
+
 
 		/*
 		public double LatitudeNorth { get; set; }
@@ -48,14 +50,6 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 		public double LongitudeWest { get; set; }
 		*/
 
-
-		public bool IsSamePlace(CartoPlaceData place)
-		{
-			return String.Compare(Country, place.Country, true) == 0
-				&& String.Compare(Region, place.Region, true) == 0
-				&& String.Compare(Locality, place.Locality, true) == 0
-				&& String.Compare(Name, place.Name, true) == 0;
-		}
 
 		/*
 		https://developers.google.com/maps/documentation/geocoding/intro#RegionCodes

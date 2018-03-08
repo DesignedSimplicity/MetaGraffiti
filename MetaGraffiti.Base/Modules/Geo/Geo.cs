@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetaGraffiti.Base.Modules.Geo.Data;
+using MetaGraffiti.Base.Modules.Geo.Info;
+
 namespace MetaGraffiti.Base.Modules.Geo
 {
 	// ==================================================
@@ -80,4 +83,15 @@ namespace MetaGraffiti.Base.Modules.Geo
 		IList<IGeoLatLon> Points { get; }
 		bool Contains(IGeoLatLon point);
 	}
+
+
+	// ==================================================
+	// Extensions
+
+	public static class GeoInfoDataExtensions
+	{
+		public static GeoRegionInfo ToInfo(this GeoRegionData data) { return (data == null ? null : new GeoRegionInfo(data)); }
+		public static IEnumerable<GeoRegionInfo> ToInfo(this IEnumerable<GeoRegionData> data) { return data.Select(x => new GeoRegionInfo(x)); }
+	}
+
 }

@@ -119,3 +119,42 @@ __Process__
 5. Convert to KML file
 6. Save as CSV file
 7. Save to database
+
+
+
+
+
+
+
+
+## Ideas
+
+Map Info
+~~~~~~~~
+Geography
+Topography
+Cartography
+
+
+File Formats (Gpx, Kml, Xsl)
+~~~~~~~~~~~~
+Orthography: An orthography is a set of conventions for writing a language. It includes norms of spelling, hyphenation, capitalization, word breaks, emphasis, and punctuation.
+
+
+Sql Databases
+~~~~~~~~~~~~~
+Lexicography: The art or craft of compiling, writing and editing dictionaries.
+Glossography: The writing of glossaries or glosses; The study of ancient words or languages.
+
+
+
+Biography
+Chronography
+
+Iconography
+Ideography
+
+
+Chorography: The study of provinces, regions, cities, etc., as opposed to larger-scale geography.
+Diplography: double writing; the writing of something twice or in two forms.
+
