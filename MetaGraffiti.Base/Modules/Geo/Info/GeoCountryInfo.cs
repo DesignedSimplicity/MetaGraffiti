@@ -49,6 +49,18 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public IEnumerable<GeoRegionInfo> Regions { get { return GeoRegionInfo.ListByCountry(CountryID); } }
 		public bool HasRegions { get { return Regions != null && Regions.Any(); } }
 
+		// --------------------------------------------------
+		// Instance
+		public GeoTimezoneInfo Timezone { get; set; }
+
+
+		// ==================================================
+		// Methods
+		public bool IsSame(GeoCountryInfo country)
+		{
+			if (country == null) return false;
+			return (CountryID == country.CountryID);
+		}
 
 		// ==================================================
 		// Properties

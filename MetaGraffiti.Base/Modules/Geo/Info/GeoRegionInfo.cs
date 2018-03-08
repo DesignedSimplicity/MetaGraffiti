@@ -40,6 +40,19 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// Derived
 		public GeoCountryInfo Country { get { return GeoCountryInfo.ByID(CountryID); } }
 
+		// --------------------------------------------------
+		// Instance
+		public GeoTimezoneInfo Timezone { get; set; }
+
+
+		// ==================================================
+		// Methods
+		public bool IsSame(GeoRegionInfo region)
+		{
+			if (region == null) return false;
+			return (RegionID == region.RegionID);
+		}
+
 
 		// ==================================================
 		// Static

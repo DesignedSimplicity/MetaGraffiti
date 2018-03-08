@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using MetaGraffiti.Base.Modules.Crypto;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Gpx;
@@ -344,7 +345,7 @@ namespace MetaGraffiti.Base.Services
 
 	public class GpxTrackExtract : GpxTrackData
 	{
-		public string ID { get; private set; } = Guid.NewGuid().ToString("N").ToUpper();
+		public string ID { get; private set; } = CryptoGraffiti.GetHashID();
 
 		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
 		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
