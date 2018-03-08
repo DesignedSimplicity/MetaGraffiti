@@ -8,9 +8,9 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Base.Modules.Geo.Data
 {
-	public class GeoPlaceData
+	public class GeoLocationData
 	{
-		public GeoPlaceData() { PlaceKey = CryptoGraffiti.GetHashID(); }
+		public GeoLocationData() { PlaceKey = CryptoGraffiti.GetHashID(); }
 
 
 		public string PlaceKey { get; set; } // place_id

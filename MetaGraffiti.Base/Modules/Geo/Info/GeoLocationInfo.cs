@@ -6,11 +6,11 @@ using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
 {
-    public class GeoPlaceInfo
+    public class GeoLocationInfo
     {
 		// ==================================================
 		// Internals
-		private GeoPlaceData _data;
+		private GeoLocationData _data;
 
 		private GeoTimezoneInfo _timezone;
 		private GeoCountryInfo _country;
@@ -19,8 +19,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		// ==================================================
 		// Constructors
-		public GeoPlaceInfo() { _data = new GeoPlaceData(); }
-		public GeoPlaceInfo(GeoPlaceData data) { _data = data; }
+		public GeoLocationInfo() { _data = new GeoLocationData(); }
+		public GeoLocationInfo(GeoLocationData data) { _data = data; }
 
 
 		// ==================================================
