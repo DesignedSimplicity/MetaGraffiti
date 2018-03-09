@@ -71,7 +71,7 @@ namespace MetaGraffiti.Base.Services
 
 			var response = client.Execute(request);
 			dynamic data = JsonConvert.DeserializeObject(response.Content);
-
+			
 			if (!_cache.ContainsKey(key)) _cache.Add(key, data);
 			return data;
 		}
@@ -83,7 +83,18 @@ namespace MetaGraffiti.Base.Services
 			data.PlaceKey = result.place_id;
 			data.FullAddress = result.formatted_address;
 
-			foreach(var component in result.address_components)
+			var isCountry = false;
+			var firstComponent = result.address_components[0];
+			if (firstComponent != null)
+			{
+				data.Name = firstComponent.short_name;
+				data.DisplayName = firstComponent.short_name;
+				data.DisplayNameType = "Political";
+				isCountry = firstComponent.types[0].Value == "country" && result.address_components.Count == 1;
+			}
+
+			#region Address Components
+			foreach (var component in result.address_components)
 			{
 				foreach (var item in component.types)
 				{
@@ -93,11 +104,13 @@ namespace MetaGraffiti.Base.Services
 					if (item.Value == "administrative_area_level_1")
 						data.Region = component.short_name;
 					if (item.Value == "administrative_area_level_2")
-						data.District = component.short_name;
+						data.Region2 = component.short_name;
 					if (item.Value == "administrative_area_level_3")
-						data.Sector = component.short_name;
+						data.Region3 = component.short_name;
 					if (item.Value == "administrative_area_level_4")
-						data.Zone = component.short_name;
+						data.Region4 = component.short_name;
+					if (item.Value == "administrative_area_level_5")
+						data.Region5 = component.short_name;
 
 					if (item.Value == "premise")
 						data.Premise = component.short_name;
@@ -129,17 +142,95 @@ namespace MetaGraffiti.Base.Services
 						data.NaturalFeature = component.short_name;
 				}
 			}
+			#endregion
 
-			data.Name = data.Country;
-			if (!String.IsNullOrWhiteSpace(data.Region)) data.Name = data.Region;
-			if (!String.IsNullOrWhiteSpace(data.Sector)) data.Name = data.Sector;
-			if (!String.IsNullOrWhiteSpace(data.Zone)) data.Name = data.Zone;
-			if (!String.IsNullOrWhiteSpace(data.Locality)) data.Name = data.Locality;
-			if (!String.IsNullOrWhiteSpace(data.PointOfInterest)) data.Name = data.PointOfInterest;
-			if (!String.IsNullOrWhiteSpace(data.Park)) data.Name = data.Park;
-			if (!String.IsNullOrWhiteSpace(data.Airport)) data.Name = data.Airport;
-			if (!String.IsNullOrWhiteSpace(data.NaturalFeature)) data.Name = data.NaturalFeature;
+			#region Default Name
+			if (isCountry && !String.IsNullOrWhiteSpace(data.Country))
+			{
+				data.DisplayName = data.Country;
+				data.DisplayNameType = "Country";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Region))
+			{
+				data.DisplayName = data.Region;
+				data.DisplayNameType = "Region";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Region2))
+			{
+				data.DisplayName = data.Region2 + ", " + data.DisplayName;
+				data.DisplayNameType = "Region2";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Region3))
+			{
+				data.DisplayName = data.Region3 + ", " + data.DisplayName;
+				data.DisplayNameType = "Region3";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Region4))
+			{
+				data.DisplayName = data.Region4 + ", " + data.DisplayName;
+				data.DisplayNameType = "Region4";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Region5))
+			{
+				data.DisplayName = data.Region5 + ", " + data.DisplayName;
+				data.DisplayNameType = "Region5";
+			}
 
+			if (!String.IsNullOrWhiteSpace(data.Locality))
+			{
+				data.DisplayName = data.Locality;
+				data.DisplayNameType = "Locality";
+			}
+			if (!String.IsNullOrWhiteSpace(data.SubLocality))
+			{
+				data.DisplayName = data.SubLocality + ", " + data.DisplayName;
+				data.DisplayNameType = "SubLocality";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Neighborhood))
+			{
+				data.DisplayName = data.Neighborhood;
+				data.DisplayNameType = "Neighborhood";
+			}
+			if (!String.IsNullOrWhiteSpace(data.AreaName))
+			{
+				data.DisplayName = data.AreaName;
+				data.DisplayNameType = "AreaName";
+			}
+
+			if (!String.IsNullOrWhiteSpace(data.PostalCode))
+			{
+				data.DisplayName = data.FullAddress;
+				data.DisplayNameType = "PostalCode";
+			}
+			if (!String.IsNullOrWhiteSpace(data.StreeNumber))
+			{
+				data.DisplayName = data.FullAddress;
+				data.DisplayNameType = "Address";
+			}
+
+			if (!String.IsNullOrWhiteSpace(data.PointOfInterest))
+			{
+				data.DisplayName = data.PointOfInterest;
+				data.DisplayNameType = "POI";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Park))
+			{
+				data.DisplayName = data.Park;
+				data.DisplayNameType = "Park";
+			}
+			if (!String.IsNullOrWhiteSpace(data.Airport))
+			{
+				data.DisplayName = data.Airport;
+				data.DisplayNameType = "Airport";
+			}
+			if (!String.IsNullOrWhiteSpace(data.NaturalFeature))
+			{
+				data.DisplayName = data.NaturalFeature;
+				data.DisplayNameType = "NaturalFeature";
+			}
+			#endregion
+
+			#region Perimeter
 			var location = new GeoLocationInfo(data);
 
 			var center = result.geometry.location;
@@ -155,6 +246,10 @@ namespace MetaGraffiti.Base.Services
 				TypeConvert.ToDouble(bounds.southwest.lat.Value),
 				TypeConvert.ToDouble(bounds.northeast.lng.Value)
 				);
+			#endregion
+
+
+			data.RawData = JsonConvert.SerializeObject(result);
 
 			return location;
 		}

@@ -12,13 +12,17 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 	{
 		public GeoLocationData() { PlaceKey = CryptoGraffiti.GetHashID(); }
 
+		public string RawData { get; set; }
 
 		public string PlaceKey { get; set; } // place_id
 
 		public string FullAddress { get; set; } // formatted_address
 
 		public string Name { get; set; } // defaults to locality, district, region, country if not specified
-										 //public string NameLong { get; set; }
+
+
+		public string DisplayName { get; set; }
+		public string DisplayNameType { get; set; } // describes the source of the name value
 
 
 
@@ -26,9 +30,10 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 
 		public string Country { get; set; } // country indicates the national political entity, and is typically the highest order type returned by the Geocoder
 		public string Region { get; set; } // administrative_area_level_1 (State)
-		public string District { get; set; } // administrative_area_level_2 (County)
-		public string Sector { get; set; } // administrative_area_level_3 (Sector)
-		public string Zone { get; set; } // administrative_area_level_4 (Zone)
+		public string Region2 { get; set; } // administrative_area_level_2 (Province)
+		public string Region3 { get; set; } // administrative_area_level_3 (District)
+		public string Region4 { get; set; } // administrative_area_level_4 (Zone)
+		public string Region5 { get; set; } // administrative_area_level_5 (Zone)
 
 
 

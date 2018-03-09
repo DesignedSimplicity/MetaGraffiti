@@ -31,6 +31,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// ==================================================
 		// Properties
 
+		public GeoLocationData Data => _data;
+
 		public string Name { get { return _data.Name; } set { _data.Name = value; } }
 
 		// --------------------------------------------------
@@ -56,9 +58,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// Methods
 
 
-
-
-		// ==================================================
+			
+			// ==================================================
 		// Privates
 		private void SetCountry(GeoCountryInfo country)
 		{

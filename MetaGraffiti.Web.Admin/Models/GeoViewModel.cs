@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
@@ -32,6 +33,11 @@ namespace MetaGraffiti.Web.Admin.Models
 			if (location == null) return new HtmlString("{}");
 
 			return new HtmlString(location.ToJson());
+		}
+
+		public HtmlString GetData(GeoLocationInfo location)
+		{
+			return new HtmlString(Json.Encode(location.Data));
 		}
 	}
 

@@ -103,13 +103,19 @@
 				<label for="name">Name</label>
 				<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.Search.Name">
 			</div>
-			<div class="form-group">
-				<label for="description">Region</label>
-				<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
-			</div>
-			<div class="form-group">
-				<label for="description">Country</label>
-				<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+			<div class="row">
+				<div class="col">
+					<div class="form-group">
+						<label for="description">Region</label>
+						<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+					</div>
+				</div>
+				<div class="col">
+					<div class="form-group">
+						<label for="description">Country</label>
+						<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+					</div>
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="timezone">Position</label>
@@ -128,9 +134,11 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
+					<th>Display</th>
+					<th>Type</th>
 					<th>Region</th>
-					<th>Country</th>
-					<th>Position</th>
+					<th>Full Address</th>
+					<th>Raw Data</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -141,9 +149,16 @@
 						<tr class="js-location-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
 							<td>@lr.Name</td>
-							<td>@(lr.Region == null ? "" : lr.Region.RegionName)</td>
-							<td>@(lr.Country == null ? "" : lr.Country.Name)</td>
-							<td>@lr.Latitude.ToString("0.000000") x @lr.Longitude.ToString("0.000000")</td>
+							<td>@lr.Data.DisplayName</td>
+							<td>@lr.Data.DisplayNameType</td>
+							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+							<!--
+							<td class="small">@lr.Latitude.ToString("0.000000") x @lr.Longitude.ToString("0.000000")</td>
+							-->
+							<td>@lr.Data.FullAddress</td>
+							<td>
+								<textarea>@Html.Raw(lr.Data.RawData)</textarea>
+							</td>
 						</tr>
 					}
 				}
