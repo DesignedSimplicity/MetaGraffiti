@@ -51,6 +51,10 @@ function showBounds(bounds, color, fill) {
 	return drawBounds(bounds, color, fill);
 }
 
+function fitBounds(bounds) {
+	_mapGoogle.fitBounds(bounds);
+}
+
 function editBounds(bounds) {
 	var rectangle = new google.maps.Rectangle({
 		bounds: bounds,
@@ -96,13 +100,17 @@ function gotoPoint(lat, lng) {
 }
 
 
-function markPoint(lat, lng, title) {
+function markPoint(lat, lng, title, number) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
-		map: _mapGoogle,
-		title: title
+		title: title,
 	});
 
+	console.log(number);
+	if (number) marker.setIcon('http://maps.google.com/mapfiles/kml/paddle/' + number + '.png');
+
+	marker.setMap(_mapGoogle);
+	
 	return marker;
 }
 

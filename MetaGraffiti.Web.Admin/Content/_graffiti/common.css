@@ -1,5 +1,6 @@
 ﻿.js-point-row:hover,
-.js-region-row:hover {
+.js-region-row:hover,
+.js-location-row:hover {
 	cursor: crosshair;
 	color: #900;
 }

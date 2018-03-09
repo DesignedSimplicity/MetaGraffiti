@@ -27,11 +27,11 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 
-		public string GetJson(GeoLocationInfo location)
+		public HtmlString GetJson(GeoLocationInfo location)
 		{
-			if (location == null) return "{}";
+			if (location == null) return new HtmlString("{}");
 
-			return location.ToJson();
+			return new HtmlString(location.ToJson());
 		}
 	}
 

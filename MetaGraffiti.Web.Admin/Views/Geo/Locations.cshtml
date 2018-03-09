@@ -9,14 +9,13 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
-	var _editor = null;
+	var _bounds = null;
 	var _popup = null;
-	var _location = @Model.GetJson(Model.SelectedLocation);;
 
 	var _locations = [
 		@foreach (var lr in Model.Locations)
 		{
-			<text>@Html.Raw(Model.GetJson(lr)),</text>
+			<text>@Model.GetJson(lr),</text>
 		}
 	]
 
@@ -26,30 +25,51 @@
 		for (i = 0; i < _locations.length; i++) {
 			var color = _mapColors[i % 10];
 
-			var location = _locations[i];
-			markPoint(location.center.lat, location.center.lng, location.name);
-			//location.rectangle = drawBounds(location.bounds, color, '');
+			var number = i + 1;
+			if (number > 10) number = null;
 
+			var location = _locations[i];
+			location.marker = markPoint(location.center.lat, location.center.lng, location.name, number);
+			//location.rectangle = drawBounds(location.bounds, color, '');
 			//_mapGoogle.fitBounds(location.bounds);
 
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
-		//showBounds(_country.bounds, null, 0);
-		//markPoint(_country.center.lat, _country.center.lng, _country.name)
+		if (_locations.length > 0) fitBounds(_locations[0].bounds);
 
-		/*
-		$(".js-region-row").click(function () {
-			if (_editor) _editor.setMap(null);
+
+		$(".js-location-row").hover(function () {
+			var i = $(this).data("index");
+			var location = _locations[i];
+
+			for (i = 0; i < _locations.length; i++) {
+				location.marker.setAnimation(null);
+			}
+
+			location.marker.setAnimation(google.maps.Animation.BOUNCE);
+
+			//_editor = editBounds(region.bounds);
+			//_editor.addListener('bounds_changed', showWindow);
+
+		});
+
+		$(".js-location-row").click(function () {
+			if (_bounds) _bounds.setMap(null);
 			if (_popup) _popup.close();
 
-			$(".js-region-row").css("font-weight", "");
+			$(".js-location-row").css("font-weight", "");
 			$(this).css("font-weight", "bold");
-			var i = $(this).data("index");
-			var region = _regions[i];
 
-			_editor = editBounds(region.bounds);
-			_editor.addListener('bounds_changed', showWindow);
+			var i = $(this).data("index");
+			var location = _locations[i];
+
+			var color = _mapColors[i % 10];
+			_bounds = showBounds(location.bounds, color);
+			//fitBounds(location.bounds);
+
+			//_editor = editBounds(region.bounds);
+			//_editor.addListener('bounds_changed', showWindow);
 
 		});
 
@@ -67,7 +87,6 @@
 
 			_popup.open(_mapGoogle);
 		}
-		*/
 	});
 </script>
 
@@ -111,9 +130,7 @@
 					<th>Name</th>
 					<th>Region</th>
 					<th>Country</th>
-					<th>Center</th>
-					<th>North West</th>
-					<th>South East</th>
+					<th>Position</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -121,14 +138,12 @@
 					var count = 0;
 					foreach (var lr in Model.Locations)
 					{
-						<tr class="js-region-row" data-index="@(count)">
+						<tr class="js-location-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
 							<td>@lr.Name</td>
 							<td>@(lr.Region == null ? "" : lr.Region.RegionName)</td>
 							<td>@(lr.Country == null ? "" : lr.Country.Name)</td>
 							<td>@lr.Latitude.ToString("0.000000") x @lr.Longitude.ToString("0.000000")</td>
-							<td>@lr.Bounds.NorthWest.Latitude.ToString("0.000000") x @lr.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-							<td>@lr.Bounds.SouthEast.Latitude.ToString("0.000000") x @lr.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
 						</tr>
 					}
 				}
