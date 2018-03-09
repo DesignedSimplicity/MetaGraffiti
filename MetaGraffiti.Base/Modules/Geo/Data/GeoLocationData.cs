@@ -18,6 +18,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public string FullAddress { get; set; } // formatted_address
 
 		public string Name { get; set; } // defaults to locality, district, region, country if not specified
+		public string NameLong { get; set; }
 
 
 

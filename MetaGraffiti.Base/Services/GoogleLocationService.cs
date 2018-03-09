@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using RestSharp;
+using Newtonsoft.Json.Linq;
 
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using Newtonsoft.Json;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -21,16 +24,27 @@ namespace MetaGraffiti.Base.Services
 	// TODO: https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
 	public class GoogleLocationService : GoogleApiServiceBase
 	{
-		private Dictionary<string, object> _cache = new Dictionary<string, object>();
+		private Dictionary<string, dynamic> _cache = new Dictionary<string, dynamic>();
 
 		public GoogleLocationService(string apiKey) : base(apiKey) { }
 
 		public GeoLocationInfo LookupGeoLocation(IGeoLatLon point)
 		{
-			return null;// response.Data;
+			var response = RequestLocations(point);
+			var results = response.results;
+			var first = results[0];
+			var address = first.address_components[0];
+
+			var location = new GeoLocationInfo()
+			{
+				Name = address.short_name,
+				NameLong = address.long_name,
+			};
+
+			return location;
 		}
 
-		public object RequestLocation(IGeoLatLon point)
+		public dynamic RequestLocations(IGeoLatLon point)
 		{
 			var location = GetLocationString(point);
 
@@ -43,10 +57,11 @@ namespace MetaGraffiti.Base.Services
 			request.AddParameter("key", _apiKey);
 			request.AddParameter("latlng", location);
 
-			var response = client.Execute<object>(request);
+			var response = client.Execute(request);
+			dynamic data = JsonConvert.DeserializeObject(response.Content);
 
-			if (!_cache.ContainsKey(key)) _cache.Add(key, response.Data);
-			return response.Data;
+			if (!_cache.ContainsKey(key)) _cache.Add(key, data);
+			return data;
 		}
 
 		/*

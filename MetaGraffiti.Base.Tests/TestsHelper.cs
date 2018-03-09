@@ -2,10 +2,19 @@
 using System.IO;
 using System.Reflection;
 
+using MetaGraffiti.Base.Modules.Geo;
+
 namespace MetaGraffiti.Base.Tests
 {
 	public class TestsHelper
 	{
+		public static IGeoLatLon GetNYC()
+		{
+			return new GeoPosition(40.7128, -74.0060);
+		}
+
+
+
 		public static string GetAssemblyDirectory()
 		{
 			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
@@ -39,6 +48,3 @@ namespace MetaGraffiti.Base.Tests
 		}
 	}
 }
-
-//'D:\Development\Sources\MetaGraffiti\.vs\MetaGraffiti.Base\lut\0\t\MetaGraffiti.Base.Tests\Data\1.gpx'.
-

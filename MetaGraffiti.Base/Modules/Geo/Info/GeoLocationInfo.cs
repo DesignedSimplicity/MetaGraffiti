@@ -26,9 +26,12 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// ==================================================
 		// Properties
 
+		public string Name { get { return _data.Name; } set { _data.Name = value; } }
+
+		public string NameLong { get { return _data.NameLong; } set { _data.NameLong = value; } }
+
 		// --------------------------------------------------
 		// Inferred
-		public string Name => _data.Name;
 		public double Latitude => (_data.Center == null ? 0 : _data.Center.Latitude);
 		public double Longitude => (_data.Center == null ? 0 : _data.Center.Longitude);
 		public double? Elevation => (_data.Center == null ? 0 : _data.Center.Elevation);
