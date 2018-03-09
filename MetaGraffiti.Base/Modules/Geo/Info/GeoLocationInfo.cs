@@ -20,7 +20,12 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// ==================================================
 		// Constructors
 		public GeoLocationInfo() { _data = new GeoLocationData(); }
-		public GeoLocationInfo(GeoLocationData data) { _data = data; }
+		public GeoLocationInfo(GeoLocationData data)
+		{
+			_data = data;
+			Region = GeoRegionInfo.Find(data.Region);
+			Country = GeoCountryInfo.Find(data.Country);
+		}
 
 
 		// ==================================================
@@ -28,13 +33,13 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		public string Name { get { return _data.Name; } set { _data.Name = value; } }
 
-		public string NameLong { get { return _data.NameLong; } set { _data.NameLong = value; } }
-
 		// --------------------------------------------------
 		// Inferred
 		public double Latitude => (_data.Center == null ? 0 : _data.Center.Latitude);
 		public double Longitude => (_data.Center == null ? 0 : _data.Center.Longitude);
 		public double? Elevation => (_data.Center == null ? 0 : _data.Center.Elevation);
+
+		public IGeoPerimeter Bounds => _data.Bounds;
 
 		// --------------------------------------------------
 		// Derived

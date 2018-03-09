@@ -91,6 +91,20 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return Cache.FirstOrDefault(x => String.Compare(x.RegionName, name, true) == 0).ToInfo();
 		}
 
+		public static GeoRegionInfo Find(string text)
+		{
+			if (String.IsNullOrWhiteSpace(text)) return null;
+
+			var r = ByISO(text);
+			if (r != null) return r;
+
+			r = ByAbbr(text);
+			if (r != null) return r;
+
+			r = ByName(text);
+			return r;
+		}
+
 		public static IEnumerable<GeoRegionInfo> ListByCountry(int countryID)
 		{
 			return Cache.Where(x => x.CountryID == countryID).ToInfo();

@@ -103,6 +103,23 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return c.ToInfo();
 		}
 
+		public static GeoCountryInfo Find(string text)
+		{
+			if (String.IsNullOrWhiteSpace(text)) return null;
+
+			if (text.Length == 2 || text.Length == 3) return ByISO(text);
+
+			var c = Cache.FirstOrDefault(x => String.Compare(x.Name, text, true) == 0);
+			if (c == null)
+			{
+				c = Cache.FirstOrDefault(x => String.Compare(x.NameLocal, text, true) == 0);
+				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLong, text, true) == 0);
+				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLocalLong, text, true) == 0);
+			}
+
+			return c.ToInfo();
+		}
+
 		public static IEnumerable<GeoCountryInfo> ListByLocation(IGeoLatLon point)
 		{
 			return Cache.Where(x => x.Bounds.Contains(point)).ToInfo();

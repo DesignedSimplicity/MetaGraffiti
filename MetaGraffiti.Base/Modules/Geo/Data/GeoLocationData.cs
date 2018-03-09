@@ -18,7 +18,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public string FullAddress { get; set; } // formatted_address
 
 		public string Name { get; set; } // defaults to locality, district, region, country if not specified
-		public string NameLong { get; set; }
+										 //public string NameLong { get; set; }
 
 
 
@@ -37,16 +37,18 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public IGeoPerimeter Bounds { get; set; }
 
 
-		public string AlternativeName { get; set; } // colloquial_area indicates a commonly-used alternative name for the entity.
-		public string StreetAddress { get; set; } // street_address indicates a precise street address.
+		public string AreaName { get; set; } // colloquial_area indicates a commonly-used alternative name for the entity.
+
+		public string StreeNumber { get; set; } // street_address indicates a precise street address.
 		public string Route { get; set; } // route indicates a named route (such as "US 101").
-		public string Intersection { get; set; } // intersection indicates a major intersection, usually of two major roads.
+										  //public string Intersection { get; set; } // intersection indicates a major intersection, usually of two major roads.
 		public string PostalCode { get; set; } // postal_code indicates a postal code as used to address postal mail within the country.
 
 		public string Neighborhood { get; set; } // neighborhood indicates a named neighborhood
-		public string Ward { get; set; } // ward indicates a specific type of Japanese locality, to facilitate distinction between multiple locality components within a Japanese address.
+												 //public string Ward { get; set; } // ward indicates a specific type of Japanese locality, to facilitate distinction between multiple locality components within a Japanese address.
 		public string Locality { get; set; } // locality indicates an incorporated city or town political entity.
-		public string[] SubLocalities { get; set; } // sublocality_level_1-5
+		public string SubLocality { get; set; } // sublocality indicates a first-order civil entity below a locality. For some locations may receive one of the additional types: sublocality_level_1 to sublocality_level_5. Each sublocality level is a civil entity. Larger numbers indicate a smaller geographic area.
+		//public string[] SubLocalities { get; set; }
 
 		public string Premise { get; set; } // premise indicates a named location, usually a building or collection of buildings with a common name
 		public string SubPremise { get; set; } // subpremise indicates a first-order entity below a named location, usually a singular building within a collection of buildings with a common name
