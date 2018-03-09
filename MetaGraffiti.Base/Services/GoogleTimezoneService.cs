@@ -17,6 +17,7 @@ namespace MetaGraffiti.Base.Services
 		public string TimeZoneName { get; set; }
 	}
 
+	// https://developers.google.com/maps/documentation/timezone/start
 	public class GoogleTimezoneService : GoogleApiServiceBase
 	{
 		private Dictionary<string, GoogleTimezoneResponse> _cache = new Dictionary<string, GoogleTimezoneResponse>();

@@ -15,6 +15,8 @@ namespace MetaGraffiti.Base.Services
 		public double Resolution { get; set; }
 	}
 
+	// https://developers.google.com/maps/documentation/elevation/start
+	// TOOD: https://developers.google.com/maps/documentation/javascript/examples/elevation-paths
 	public class GoogleElevationService : GoogleApiServiceBase
 	{
 		private Dictionary<string, GoogleElevationResponse> _cache = new Dictionary<string, GoogleElevationResponse>();
