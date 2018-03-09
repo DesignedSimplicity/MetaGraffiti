@@ -21,7 +21,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_service.Init(CartoDataUri);
 		}
 
-		public XlsViewModel InitView()
+		public XlsViewModel InitModel()
 		{
 			var model = new XlsViewModel();
 
@@ -37,14 +37,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Index()
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			return View(model);
 		}
 
 		public ActionResult Year(string id = "")
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			int year = TypeConvert.ToInt(id);
 			model.RawCount = _service.ListRawPlaces(year).Count;
@@ -55,7 +55,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Country(string id = "")
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			var country = GeoCountryInfo.ByName(id, true);
 			model.Places = _service.ListPlaces().Where(x => x.Country == country.Name).ToList();
@@ -65,7 +65,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Sheet(string id = "")
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			model.Sheets = _service.ListSheets();
 			model.SelectedSheet = id;

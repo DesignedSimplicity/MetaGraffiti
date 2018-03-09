@@ -38,7 +38,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			}
 		}
 
-		public GpxViewModel InitView()
+		public GpxViewModel InitModel()
 		{
 			string rootUri = Path.Combine(AutoConfig.RootConfigUri, "GPS");
 
@@ -54,21 +54,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Index()
 		{
-			var model = InitView();
+			var model = InitModel();
 			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult Debug()
 		{
-			var model = InitView();
+			var model = InitModel();
 			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult Report(int year, int? month = null)
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			model.SelectedYear = year;
 			model.SelectedMonth = month;
@@ -79,7 +79,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Display(string uri)
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			// TODO: refactor away from complex GpxDisplayModel
 			var cache = _gpxService.LoadFile(uri);
@@ -122,7 +122,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Extract(string uri)
 		{
-			var model = InitView();
+			var model = InitModel();
 			var cache = _gpxService.LoadFile(uri);
 
 			var track = _gpxService.ExtractTrack(cache);
@@ -137,7 +137,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Manage()
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			return View(model);
 		}
@@ -148,7 +148,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Manage(string action = "", string name = "", string description = "", string timezone = "")
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			var manager = model.Manager;
 
@@ -183,7 +183,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Remove(string id)
 		{
-			var model = InitView();
+			var model = InitModel();
 
 			var track = model.Manager.Tracks.FirstOrDefault(x => String.Compare(x.ID, id, true) == 0);
 			if (track != null) model.Manager.Tracks.Remove(track);

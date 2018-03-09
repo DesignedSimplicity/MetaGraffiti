@@ -3,19 +3,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
 	public class GeoViewModel : AdminViewModel
 	{
+		public List<GeoTimezoneInfo> Timezones { get; set; }
+		public List<GeoCountryInfo> Countries { get; set; }
+		public List<GeoRegionInfo> Regions { get; set; }
+
+		public List<GeoLocationInfo> Locations { get; set; }
+
+		public GeoLocationInfo SelectedLocation { get; set; }
+
 		public GeoCountryInfo SelectedCountry { get; set; }
 
-		public List<GeoTimezoneInfo> Timezones { get { return GeoTimezoneInfo.All; } }
-		public List<GeoCountryInfo> Countries { get { return GeoCountryInfo.All; } }
-		public List<GeoRegionInfo> Regions { get { return GeoRegionInfo.All; } }
+		public List<GeoCountryInfo> VisitedCountries { get; set; }
 
 
-		public List<GeoCountryInfo> VisitedCountries { get { return GeoCountryInfo.All.Where(x => AutoConfig.VisitedCountries.Contains(x.ISO2)).OrderBy(x => x.Name).ToList(); } }
+		public GeoSearchModel Search { get; set; } = new GeoSearchModel();
+
+
+
+		public string GetJson(GeoLocationInfo location)
+		{
+			if (location == null) return "{}";
+
+			return location.ToJson();
+		}
+	}
+
+	public class GeoSearchModel
+	{
+		public string Name { get; set; }
+		
+		public string Region { get; set; }
+
+		public string Country { get; set; }
+
+		public double? Latitude { get; set; }
+		public double? Longitude { get; set; }
 	}
 }

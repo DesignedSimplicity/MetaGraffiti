@@ -305,6 +305,7 @@
     <Content Include="Views\Xls\Sheet.cshtml" />
     <Content Include="Views\Xls\Year.cshtml" />
     <Content Include="Views\Xls\Country.cshtml" />
+    <Content Include="Views\Geo\Locations.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

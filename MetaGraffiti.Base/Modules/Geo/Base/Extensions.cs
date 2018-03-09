@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Newtonsoft.Json.Linq;
+
 using MetaGraffiti.Base.Modules.Geo.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
@@ -20,5 +22,27 @@ namespace MetaGraffiti.Base.Modules.Geo
 
 		public static GeoTimezoneInfo ToInfo(this GeoTimezoneData data) { return (data == null ? null : new GeoTimezoneInfo(data)); }
 		public static IEnumerable<GeoTimezoneInfo> ToInfo(this IEnumerable<GeoTimezoneData> data) { return data.Select(x => new GeoTimezoneInfo(x)); }
+
+
+
+		public static string ToJson(this GeoLocationInfo location)
+		{
+			if (location == null) return "{}";
+
+			dynamic json = new JObject();
+			json.name = location.Name;
+
+			json.center = new JObject();
+			json.center.lat = location.Latitude;
+			json.center.lng = location.Longitude;
+
+			json.bounds = new JObject();
+			json.bounds.north = (location.Bounds?.NorthWest?.Latitude ?? 0);
+			json.bounds.south = (location.Bounds?.SouthEast?.Latitude ?? 0);
+			json.bounds.east = (location.Bounds?.SouthEast?.Longitude ?? 0);
+			json.bounds.west = (location.Bounds?.NorthWest?.Longitude ?? 0);
+
+			return json.ToString();
+		}
 	}
 }

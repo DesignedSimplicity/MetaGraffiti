@@ -25,6 +25,11 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// Inferred
 		public int CountryID => _data.CountryID;
 
+		/*
+		public double Latitude => _data.Center.Latitude;
+		public double Longitude => _data.Center.Longitude;
+		*/
+
 		public IGeoLatLon Center => _data.Center;
 		public IGeoPerimeter Bounds => _data.Bounds;
 		public GeoContinents Continent => _data.Continent;

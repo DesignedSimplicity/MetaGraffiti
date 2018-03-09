@@ -1,0 +1,138 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+
+@Html.Partial("_Nav")
+
+@{
+	var l = Model.SelectedLocation;
+}
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _editor = null;
+	var _popup = null;
+	var _location = @Model.GetJson(Model.SelectedLocation);;
+
+	var _locations = [
+		@foreach (var lr in Model.Locations)
+		{
+			<text>@Html.Raw(Model.GetJson(lr)),</text>
+		}
+	]
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < _locations.length; i++) {
+			var color = _mapColors[i % 10];
+
+			var location = _locations[i];
+			markPoint(location.center.lat, location.center.lng, location.name);
+			//location.rectangle = drawBounds(location.bounds, color, '');
+
+			//_mapGoogle.fitBounds(location.bounds);
+
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		}
+
+		//showBounds(_country.bounds, null, 0);
+		//markPoint(_country.center.lat, _country.center.lng, _country.name)
+
+		/*
+		$(".js-region-row").click(function () {
+			if (_editor) _editor.setMap(null);
+			if (_popup) _popup.close();
+
+			$(".js-region-row").css("font-weight", "");
+			$(this).css("font-weight", "bold");
+			var i = $(this).data("index");
+			var region = _regions[i];
+
+			_editor = editBounds(region.bounds);
+			_editor.addListener('bounds_changed', showWindow);
+
+		});
+
+		function showWindow() {
+			if (!_popup) _popup = new google.maps.InfoWindow();
+
+			var ne = _editor.getBounds().getNorthEast();
+			var sw = _editor.getBounds().getSouthWest();
+
+			var content = 'North West: ' + ne.lat().toFixed(6) + ' x ' + sw.lng().toFixed(6) + '<br />' + 'South East: ' + sw.lat().toFixed(6) + ' x ' + ne.lng().toFixed(6);
+			_popup.setContent(content);
+
+			var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+			_popup.setPosition(nw);
+
+			_popup.open(_mapGoogle);
+		}
+		*/
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Search</h2>
+		<form method="post" action="/geo/locations/">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.Search.Name">
+			</div>
+			<div class="form-group">
+				<label for="description">Region</label>
+				<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+			</div>
+			<div class="form-group">
+				<label for="description">Country</label>
+				<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+			</div>
+			<div class="form-group">
+				<label for="timezone">Position</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Latitude" placeholder="Latitude" value="@Model.Search.Latitude">
+					<input type="text" class="form-control" name="Longitude" placeholder="Longitude" value="@Model.Search.Longitude">
+				</div>
+			</div>
+			<button type="submit" class="btn btn-success">Find Locations</button>
+		</form>
+
+		<hr />
+		<h2>Locations</h2>
+		<table class="table table-striped table-sm">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Name</th>
+					<th>Region</th>
+					<th>Country</th>
+					<th>Center</th>
+					<th>North West</th>
+					<th>South East</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					foreach (var lr in Model.Locations)
+					{
+						<tr class="js-region-row" data-index="@(count)">
+							<td class="text-center">@(++count)</td>
+							<td>@lr.Name</td>
+							<td>@(lr.Region == null ? "" : lr.Region.RegionName)</td>
+							<td>@(lr.Country == null ? "" : lr.Country.Name)</td>
+							<td>@lr.Latitude.ToString("0.000000") x @lr.Longitude.ToString("0.000000")</td>
+							<td>@lr.Bounds.NorthWest.Latitude.ToString("0.000000") x @lr.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
+							<td>@lr.Bounds.SouthEast.Latitude.ToString("0.000000") x @lr.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
