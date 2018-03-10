@@ -20,10 +20,15 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		// ==================================================
 		// Constructors
-		public GeoLocationInfo() { _data = new GeoLocationData(); }
+		public GeoLocationInfo()
+		{
+			_data = new GeoLocationData();
+			ID = CryptoGraffiti.NewHashID();
+		}
 		public GeoLocationInfo(GeoLocationData data)
 		{
 			_data = data;
+			ID = CryptoGraffiti.NewHashID();
 			Region = GeoRegionInfo.Find(data.Region);
 			Country = GeoCountryInfo.Find(data.Country);
 		}
@@ -32,7 +37,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// ==================================================
 		// Properties
 
-		public string ID => CryptoGraffiti.NewHashID();
+		public string ID { get; private set; }
 
 		public GeoLocationData Data => _data;
 

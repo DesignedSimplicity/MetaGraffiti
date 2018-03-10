@@ -14,6 +14,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
     public class GeoController : Controller
     {
 		private GoogleLocationService _service = new GoogleLocationService(AutoConfig.GoogleMapsApiKey);
+		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();
 
 		public GeoViewModel InitModel()
 		{
@@ -66,48 +67,56 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-		// if search is lat/lng show reverse geocode
-		// if search is text show 
-
-		[HttpGet]
-		public ActionResult Locations()
+		public ActionResult Locations(GeoLocationSearchModel search)
 		{
 			var model = InitModel();
 
-			model.Search = new GeoSearchModel();
+			model.Search = (search == null ? new GeoLocationSearchModel() : search);
 			model.Locations = new List<GeoLocationInfo>();
 
-			return View(model);
-		}
-
-		[HttpPost]
-		public ActionResult Locations(GeoSearchModel search)
-		{
-			var model = InitModel();
-
-			model.Search = search;
-			model.Locations = new List<GeoLocationInfo>();
-
-			if (search.Latitude.HasValue && search.Longitude.HasValue)
+			if (!String.IsNullOrWhiteSpace(search.Name))
+			{
+				model.Locations = _service.LookupLocations(search.Name);
+			}
+			else if (search.Latitude.HasValue && search.Longitude.HasValue)
 			{
 				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
-				model.Locations = _service.LookupGeoLocations(position);
+				model.Locations = _service.LookupLocations(position);
 			}
 
 			return View(model);
 		}
 
-		public ActionResult Location(string id)
+		[HttpGet]
+		public ActionResult Location(string id = "", string key = "")
 		{
 			var model = InitModel();
 
-			// if id is guid load from local cache
-			// if id contains _ load by google place id
-			// if id is null show map with coordinate picker
+			if (!String.IsNullOrWhiteSpace(key))
+			{
+				var location = _service.LoadLocation(key);
+				id = location.ID.ToUpperInvariant();
+				_cache.Add(id, location);
+				return new RedirectResult($"/geo/location/{id}");
+			}
 
-			model.SelectedLocation = new GeoLocationInfo();
+			if (!String.IsNullOrWhiteSpace(id))
+				model.SelectedLocation = _cache[id];
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Location(GeoLocationUpdateModel update)
+		{
+			var model = InitModel();
+
+			var id = update.ID.ToUpperInvariant();
+
+			var location = _cache[id];
+			location.Name = update.Name;
+
+			return new RedirectResult($"/geo/location/{id}");
 		}
 	}
 }

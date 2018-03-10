@@ -61,21 +61,6 @@
 
 			fitBounds(location.bounds);
 		});
-
-		function showWindow() {
-			if (!_popup) _popup = new google.maps.InfoWindow();
-
-			var ne = _editor.getBounds().getNorthEast();
-			var sw = _editor.getBounds().getSouthWest();
-
-			var content = 'North West: ' + ne.lat().toFixed(6) + ' x ' + sw.lng().toFixed(6) + '<br />' + 'South East: ' + sw.lat().toFixed(6) + ' x ' + ne.lng().toFixed(6);
-			_popup.setContent(content);
-
-			var nw = new google.maps.LatLng(ne.lat(), sw.lng());
-			_popup.setPosition(nw);
-
-			_popup.open(_mapGoogle);
-		}
 	});
 </script>
 
@@ -154,7 +139,7 @@
 					<tr class="js-location-row" data-index="@(count)">
 						<td class="text-center">@(++count)</td>
 						<td>
-							<a href="/geo/location/@(lr.Data.PlaceKey)">@lr.Name</a>
+							<a href="/geo/location/?key=@(lr.Data.PlaceKey)">@lr.Name</a>
 							@if (lr.Name != lr.Data.DisplayName)
 						{
 							<div class="small font-italic">@lr.Data.DisplayName</div>

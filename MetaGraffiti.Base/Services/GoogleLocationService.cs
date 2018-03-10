@@ -13,35 +13,39 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class GoogleLocationSearchRequest
-	{
-		public string Name { get; set; }
-		public string LocationType { get; set; }
-		public GeoCountryInfo Country { get; set; }
-		public GeoRegionInfo Region { get; set; }
-	}
-
 	// https://developers.google.com/maps/documentation/geocoding/start
-	// TODO: https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
-	// TODO: https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
+	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
 	public class GoogleLocationService : GoogleApiServiceBase
 	{
 		private Dictionary<string, dynamic> _cache = new Dictionary<string, dynamic>();
 
 		public GoogleLocationService(string apiKey) : base(apiKey) { }
 
-		public GeoLocationInfo LookupGeoLocation(IGeoLatLon point)
+		public GeoLocationInfo LoadLocation(string googlePlaceId)
 		{
-			var response = RequestLocations(point);
+			var response = RequestLocation(googlePlaceId);
 			var results = response.results;
-			var first = results[0];
 
-			var location = ParseLocationResult(first);
-
-			return location;
+			return ParseLocationResult(results[0]);
 		}
 
-		public List<GeoLocationInfo> LookupGeoLocations(IGeoLatLon point)
+		public List<GeoLocationInfo> LookupLocations(string text)
+		{
+			var response = RequestLocations(text);
+			var results = response.results;
+
+			var list = new List<GeoLocationInfo>();
+			foreach (var result in results)
+			{
+				var location = ParseLocationResult(result);
+				list.Add(location);
+			}
+
+			return list;
+		}
+
+		public List<GeoLocationInfo> LookupLocations(IGeoLatLon point)
 		{
 			var response = RequestLocations(point);
 			var results = response.results;
@@ -54,6 +58,42 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			return list;
+		}
+
+		public dynamic RequestLocation(string place_id)
+		{
+			var key = place_id;
+			if (_cache.ContainsKey(key)) return _cache[key];
+
+			var client = new RestClient("https://maps.googleapis.com");
+			var request = new RestRequest("maps/api/geocode/json", Method.GET);
+
+			request.AddParameter("key", _apiKey);
+			request.AddParameter("place_id", place_id);
+
+			var response = client.Execute(request);
+			dynamic data = JsonConvert.DeserializeObject(response.Content);
+
+			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
+			return data;
+		}
+
+		public dynamic RequestLocations(string text)
+		{
+			var key = text.Trim().ToLowerInvariant();
+			if (_cache.ContainsKey(key)) return _cache[key];
+
+			var client = new RestClient("https://maps.googleapis.com");
+			var request = new RestRequest("maps/api/geocode/json", Method.GET);
+
+			request.AddParameter("key", _apiKey);
+			request.AddParameter("address", text);
+
+			var response = client.Execute(request);
+			dynamic data = JsonConvert.DeserializeObject(response.Content);
+
+			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
+			return data;
 		}
 
 		public dynamic RequestLocations(IGeoLatLon point)
@@ -71,10 +111,11 @@ namespace MetaGraffiti.Base.Services
 
 			var response = client.Execute(request);
 			dynamic data = JsonConvert.DeserializeObject(response.Content);
-			
-			if (!_cache.ContainsKey(key)) _cache.Add(key, data);
+
+			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
 			return data;
 		}
+
 
 		private GeoLocationInfo ParseLocationResult(dynamic result)
 		{
@@ -253,26 +294,5 @@ namespace MetaGraffiti.Base.Services
 
 			return location;
 		}
-
-		/*
-		public List<GeoLocationInfo> FindLocations(IGeoLatLon point)
-		{
-			return null;
-		}
-
-		public List<GeoLocationInfo> FindLocations(string search)
-		{
-			return null;
-		}
-
-		public List<GeoLocationInfo> FindLocations(string search, GeoCountryInfo country)
-		{
-			return null;
-		}
-
-		public List<GeoLocationInfo> FindLocations(GoogleLocationSearchRequest search)
-		{
-			return null;
-		}*/
 	}
 }

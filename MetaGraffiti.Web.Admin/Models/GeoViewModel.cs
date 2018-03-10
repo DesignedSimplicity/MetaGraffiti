@@ -24,7 +24,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GeoCountryInfo> VisitedCountries { get; set; }
 
 
-		public GeoSearchModel Search { get; set; } = new GeoSearchModel();
+		public GeoLocationSearchModel Search { get; set; } = new GeoLocationSearchModel();
 
 
 
@@ -41,15 +41,25 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 	}
 
-	public class GeoSearchModel
+	public class GeoLocationSearchModel
 	{
 		public string Name { get; set; }
-		
+
 		public string Region { get; set; }
 
 		public string Country { get; set; }
 
 		public double? Latitude { get; set; }
 		public double? Longitude { get; set; }
+	}
+
+	public class GeoLocationUpdateModel
+	{
+		public string ID { get; set; }
+
+		public string Key { get; set; }
+
+		public string Name { get; set; }
+
 	}
 }

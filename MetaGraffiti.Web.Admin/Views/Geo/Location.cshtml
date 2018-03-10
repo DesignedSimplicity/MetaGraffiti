@@ -1,0 +1,71 @@
+﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+
+@Html.Partial("_Nav")
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _location = @Model.GetJson(Model.SelectedLocation);;
+
+	$(document).ready(function () {
+		initMap();
+
+		_location.marker = markPoint(_location.center.lat, _location.center.lng, _location.name);
+
+		fitBounds(_location.bounds);
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<h2>Location</h2>
+		<form method="post" action="/geo/location/">
+			@{
+				var l = Model.SelectedLocation;
+				<input type="hidden" name="ID" value="@l.ID" />
+				<div class="form-group">
+					<label for="name">Name</label>
+					<input type="text" class="form-control" name="Name" placeholder="Name" value="@l.Name">
+				</div>
+				<button class="btn btn-primary" type="submit">Update</button>
+			}
+		</form>
+		<br />
+		<hr />
+		<table class="table table-striped table-sm">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Name <span class="small font-italic">Display</span></th>
+					<th>Type</th>
+					<th>Region</th>
+					<th>Full Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					var lr = Model.SelectedLocation;
+					<tr class="js-location-row" data-index="@(count)">
+						<td class="text-center">@(++count)</td>
+						<td>
+							<a href="/geo/location/?key=@(lr.Data.PlaceKey)">@lr.Name</a>
+							@if (lr.Name != lr.Data.DisplayName)
+							{
+								<div class="small font-italic">@lr.Data.DisplayName</div>
+							}
+						</td>
+						<td>@lr.Data.DisplayNameType</td>
+						<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+						<td class="small">@lr.Data.FullAddress</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -31,7 +31,8 @@ namespace MetaGraffiti.Base.Tests.Google
 		{
 			var service = GetService();
 
-			var location = service.LookupGeoLocation(TestsHelper.GetNYC());
+			var locations = service.LookupLocations(TestsHelper.GetNYC());
+			var location = locations.First();
 
 			Assert.AreEqual("New York City Hall", location.Name);
 
@@ -46,17 +47,6 @@ namespace MetaGraffiti.Base.Tests.Google
 			Assert.IsTrue(location.Bounds.NorthWest.Longitude != 0);
 			Assert.IsTrue(location.Bounds.SouthEast.Latitude != 0);
 			Assert.IsTrue(location.Bounds.SouthEast.Longitude != 0);
-		}
-
-		[TestMethod]
-		public void GoogleLocationService_TestLookupList()
-		{
-			var service = GetService();
-
-			var locations = service.LookupGeoLocations(TestsHelper.GetNYC());
-			var location = locations.First();
-
-			Assert.AreEqual("New York City Hall", location.Name);
 		}
 	}
 }

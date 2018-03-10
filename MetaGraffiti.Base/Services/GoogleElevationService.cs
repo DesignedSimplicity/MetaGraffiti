@@ -45,7 +45,7 @@ namespace MetaGraffiti.Base.Services
 
 			var response = client.Execute<GoogleElevationResponse>(request);
 
-			if (!_cache.ContainsKey(key)) _cache.Add(key, response.Data);
+			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, response.Data); }
 			return response.Data;
 		}
 	}
