@@ -307,6 +307,7 @@
     <Content Include="Views\Xls\Country.cshtml" />
     <Content Include="Views\Geo\Locations.cshtml" />
     <Content Include="Views\Geo\Location.cshtml" />
+    <Content Include="Views\Geo\Search.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

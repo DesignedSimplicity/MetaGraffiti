@@ -47,16 +47,19 @@
 
 <div class="row">
 	<div class="col-sm-6">
+		<div class="h2"><a href="/geo/search/">Search</a></div>
+		<br />
+		<div class="h2"><a href="/geo/locations/">Locations</a></div>
 		<div class="h2"><a href="/geo/timezones/">Timezones</a></div>
 		<div class="h2"><a href="/geo/countries/">Countries</a></div>
 		<div class="h2"><a href="/geo/regions/">Regions</a></div>
 		<br />
 		<h3>Visited Countries</h3>
-		@foreach(var c in Model.VisitedCountries)
-		{
-			<div class="h4">
-				<a href="/geo/country/@(c.CountryID)">@c.Name</a>
-			</div>
-		}
+		@foreach (var c in Model.VisitedCountries)
+	{
+		<div class="h4">
+			<a href="/geo/country/@(c.CountryID)">@c.Name</a>
+		</div>
+}
 	</div>
 </div>

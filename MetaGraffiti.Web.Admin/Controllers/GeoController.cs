@@ -67,7 +67,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-		public ActionResult Locations(GeoLocationSearchModel search)
+		public ActionResult Search(GeoLocationSearchModel search)
 		{
 			var model = InitModel();
 
@@ -83,6 +83,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
 				model.Locations = _service.LookupLocations(position);
 			}
+
+			return View(model);
+		}
+
+		public ActionResult Locations()
+		{
+			var model = InitModel();
+
+			model.Locations = _cache.Values.ToList();
 
 			return View(model);
 		}
