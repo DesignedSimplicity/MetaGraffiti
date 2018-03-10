@@ -10,7 +10,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 {
 	public class GeoLocationData
 	{
-		public GeoLocationData() { PlaceKey = CryptoGraffiti.GetHashID(); }
+		public GeoLocationData() { PlaceKey = CryptoGraffiti.NewHashID(); }
 
 		public string RawData { get; set; }
 

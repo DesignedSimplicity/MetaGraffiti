@@ -6,6 +6,6 @@ namespace MetaGraffiti.Base.Modules.Crypto
 {
     public class CryptoGraffiti
     {
-		public static string GetHashID() { return Guid.NewGuid().ToString("N").ToUpper(); }
+		public static string NewHashID() { return Guid.NewGuid().ToString("N").ToUpper(); }
     }
 }

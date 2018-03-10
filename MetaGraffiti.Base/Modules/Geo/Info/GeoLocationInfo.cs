@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
+using MetaGraffiti.Base.Modules.Crypto;
 using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
@@ -30,6 +31,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		// ==================================================
 		// Properties
+
+		public string ID => CryptoGraffiti.NewHashID();
 
 		public GeoLocationData Data => _data;
 

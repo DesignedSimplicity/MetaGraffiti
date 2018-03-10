@@ -10,7 +10,6 @@
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _bounds = null;
-	var _popup = null;
 
 	var _locations = [
 		@foreach (var lr in Model.Locations)
@@ -30,47 +29,37 @@
 
 			var location = _locations[i];
 			location.marker = markPoint(location.center.lat, location.center.lng, location.name, number);
-			//location.rectangle = drawBounds(location.bounds, color, '');
-			//_mapGoogle.fitBounds(location.bounds);
-
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
 		if (_locations.length > 0) fitBounds(_locations[0].bounds);
 
 
 		$(".js-location-row").hover(function () {
-			var i = $(this).data("index");
-			var location = _locations[i];
+			if (_bounds) _bounds.setMap(null);
+
+			var index = $(this).data("index");
+			var location = _locations[index];
+
+			_bounds = drawBounds(location.bounds);
 
 			for (i = 0; i < _locations.length; i++) {
-				location.marker.setAnimation(null);
+				if (i == index) {
+					_locations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+				} else {
+					_locations[i].marker.setAnimation(null);
+				}
 			}
-
-			location.marker.setAnimation(google.maps.Animation.BOUNCE);
-
-			//_editor = editBounds(region.bounds);
-			//_editor.addListener('bounds_changed', showWindow);
-
 		});
 
 		$(".js-location-row").click(function () {
-			if (_bounds) _bounds.setMap(null);
-			if (_popup) _popup.close();
-
 			$(".js-location-row").css("font-weight", "");
 			$(this).css("font-weight", "bold");
 
-			var i = $(this).data("index");
-			var location = _locations[i];
+			var index = $(this).data("index");
+			var location = _locations[index];
+			location.marker.setAnimation(null);
 
-			var color = _mapColors[i % 10];
-			_bounds = showBounds(location.bounds, color);
-			//fitBounds(location.bounds);
-
-			//_editor = editBounds(region.bounds);
-			//_editor.addListener('bounds_changed', showWindow);
-
+			fitBounds(location.bounds);
 		});
 
 		function showWindow() {
@@ -98,34 +87,52 @@
 <div class="row">
 	<div class="col-sm-6">
 		<h2>Search</h2>
-		<form method="post" action="/geo/locations/">
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.Search.Name">
-			</div>
-			<div class="row">
-				<div class="col">
+		<div class="row">
+			<div class="col">
+				<form method="post" action="/geo/locations/">
 					<div class="form-group">
-						<label for="description">Region</label>
-						<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+						<label for="name">Name</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.Search.Name">
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="submit">Search</button>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="col">
+				</form>
+			</div>
+			<div class="col">
+				<form method="post" action="/geo/locations/">
 					<div class="form-group">
-						<label for="description">Country</label>
-						<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+						<label for="timezone">Position</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="Latitude" placeholder="Latitude" value="@Model.Search.Latitude">
+							<input type="text" class="form-control" name="Longitude" placeholder="Longitude" value="@Model.Search.Longitude">
+							<div class="input-group-append">
+								<button class="btn btn-info" type="submit">Geocode</button>
+							</div>
+						</div>
 					</div>
-				</div>
+				</form>
 			</div>
+		</div>
+		<!--
+	<div class="row">
+		<div class="col">
 			<div class="form-group">
-				<label for="timezone">Position</label>
-				<div class="input-group">
-					<input type="text" class="form-control" name="Latitude" placeholder="Latitude" value="@Model.Search.Latitude">
-					<input type="text" class="form-control" name="Longitude" placeholder="Longitude" value="@Model.Search.Longitude">
-				</div>
+				<label for="description">Region</label>
+				<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
 			</div>
-			<button type="submit" class="btn btn-success">Find Locations</button>
-		</form>
+		</div>
+		<div class="col">
+			<div class="form-group">
+				<label for="description">Country</label>
+				<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+			</div>
+		</div>
+	</div>
+	-->
+		
 
 		<hr />
 		<h2>Locations</h2>
@@ -133,34 +140,31 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
-					<th>Name</th>
-					<th>Display</th>
+					<th>Name <span class="small font-italic">Display</span></th>
 					<th>Type</th>
 					<th>Region</th>
 					<th>Full Address</th>
-					<th>Raw Data</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
-					var count = 0;
-					foreach (var lr in Model.Locations)
-					{
-						<tr class="js-location-row" data-index="@(count)">
-							<td class="text-center">@(++count)</td>
-							<td>@lr.Name</td>
-							<td>@lr.Data.DisplayName</td>
-							<td>@lr.Data.DisplayNameType</td>
-							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-							<!--
-							<td class="small">@lr.Latitude.ToString("0.000000") x @lr.Longitude.ToString("0.000000")</td>
-							-->
-							<td>@lr.Data.FullAddress</td>
-							<td>
-								<textarea>@Html.Raw(lr.Data.RawData)</textarea>
-							</td>
-						</tr>
+				var count = 0;
+				foreach (var lr in Model.Locations)
+				{
+					<tr class="js-location-row" data-index="@(count)">
+						<td class="text-center">@(++count)</td>
+						<td>
+							<a href="/geo/location/@(lr.Data.PlaceKey)">@lr.Name</a>
+							@if (lr.Name != lr.Data.DisplayName)
+						{
+							<div class="small font-italic">@lr.Data.DisplayName</div>
 					}
+						</td>
+						<td>@lr.Data.DisplayNameType</td>
+						<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+						<td class="small">@lr.Data.FullAddress</td>
+					</tr>
+			}
 				}
 			</tbody>
 		</table>

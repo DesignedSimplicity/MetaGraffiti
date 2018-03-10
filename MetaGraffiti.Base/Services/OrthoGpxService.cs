@@ -344,7 +344,7 @@ namespace MetaGraffiti.Base.Services
 
 	public class GpxTrackExtract : GpxTrackData
 	{
-		public string ID { get; private set; } = CryptoGraffiti.GetHashID();
+		public string ID { get; private set; } = CryptoGraffiti.NewHashID();
 
 		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
 		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
