@@ -22,13 +22,12 @@
 		initMap();
 
 		for (i = 0; i < _locations.length; i++) {
-			var color = _mapColors[i % 10];
-
-			var number = i + 1;
-			if (number > 10) number = null;
-
 			var location = _locations[i];
-			location.marker = markPoint(location.center.lat, location.center.lng, location.name, number);
+			location.marker = markPoint(location.center.lat, location.center.lng, location.name);
+
+			var color = _mapColors[i % 10];
+			console.log(color);
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
 		if (_locations.length > 0) fitBounds(_locations[0].bounds);
@@ -39,8 +38,9 @@
 
 			var index = $(this).data("index");
 			var location = _locations[index];
+			var color = _mapColors[index % 10];
 
-			_bounds = drawBounds(location.bounds);
+			_bounds = drawBounds(location.bounds, color);
 
 			for (i = 0; i < _locations.length; i++) {
 				if (i == index) {
@@ -57,6 +57,7 @@
 
 			var index = $(this).data("index");
 			var location = _locations[index];
+			
 			location.marker.setAnimation(null);
 
 			fitBounds(location.bounds);
