@@ -208,12 +208,13 @@ namespace MetaGraffiti.Base.Services.External
 				this.TypedNameSource = "AreaName";
 			}
 
+			/*
 			if (!String.IsNullOrWhiteSpace(this.PostalCode))
 			{
 				this.TypedName = this.FormattedAddress;
 				this.TypedNameSource = "PostalCode";
 			}
-			if (!String.IsNullOrWhiteSpace(this.StreeNumber))
+			if (!String.IsNullOrWhiteSpace(this.StreeNumber) && !String.IsNullOrWhiteSpace(this.Ro))
 			{
 				this.TypedName = this.FormattedAddress;
 				this.TypedNameSource = "Address";
@@ -223,6 +224,7 @@ namespace MetaGraffiti.Base.Services.External
 				this.TypedName = this.Premise;
 				this.TypedNameSource = "Premise";
 			}
+			*/
 
 			if (!String.IsNullOrWhiteSpace(this.PointOfInterest))
 			{

@@ -106,7 +106,6 @@ function markPoint(lat, lng, title, number) {
 		title: title,
 	});
 
-	console.log(number);
 	if (number) marker.setIcon('http://maps.google.com/mapfiles/kml/paddle/' + number + '.png');
 
 	marker.setMap(_mapGoogle);

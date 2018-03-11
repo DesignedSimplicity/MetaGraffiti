@@ -85,11 +85,18 @@ namespace MetaGraffiti.Base.Services
 		{
 			var data = new GeoLocationData();
 
+			data.RawData = JsonConvert.SerializeObject(result.Data);
+
 			//data.PlaceKey = Cr
 			data.PlaceType = result.TypedNameSource;
 			//data.IconKey
 
 			data.GoogleKey = result.PlaceID;
+
+			data.Name = TextTranslate.StripAccents(result.ShortName);
+			data.LocalName = (data.Name == result.LongName ? "" : result.LongName);
+			data.DisplayAs = (data.Name == result.TypedName ? "" : result.TypedName);
+			data.Description = result.ColloquialArea;
 
 			//data.Timezone =
 			data.Country = result.Country;
@@ -105,16 +112,9 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(result.Region5))
 				data.Subregions += @" \ " + result.Region5;
 
-			data.Name = TextTranslate.StripAccents(result.ShortName);
-			data.LocalName = (data.Name == result.LongName ? "" : result.LongName);
-			data.DisplayAs = result.ColloquialArea;
-			data.Description = String.IsNullOrWhiteSpace(result.FormattedAddress) 
-				? result.TypedName
-				: result.FormattedAddress;
-
 			var address = $"{result.StreeNumber} {result.Route}";
 			data.StreetAddress = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
-			//City
+			//data.City = result.City;
 			data.PostCode = result.PostalCode;
 
 			data.Premise = result.Premise;

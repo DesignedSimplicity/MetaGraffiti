@@ -7,7 +7,18 @@ using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
 {
-	public class GeoRegionInfo
+	public interface IGeoRegion
+	{
+		int RegionID { get; }
+		int CountryID { get; }
+		int RegionDiv { get; }
+
+		string RegionISO { get; }
+		string RegionAbbr { get; }
+		string RegionName { get; }
+	}
+
+	public class GeoRegionInfo : IGeoRegion
 	{
 		// ==================================================
 		// Internals

@@ -100,22 +100,22 @@
 			</div>
 		</div>
 		<!--
-	<div class="row">
-		<div class="col">
-			<div class="form-group">
-				<label for="description">Region</label>
-				<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<label for="description">Region</label>
+					<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<label for="description">Country</label>
+					<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+				</div>
 			</div>
 		</div>
-		<div class="col">
-			<div class="form-group">
-				<label for="description">Country</label>
-				<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
-			</div>
-		</div>
-	</div>
-	-->
-		
+		-->
+
 
 		<hr />
 		<h2>Locations</h2>
@@ -123,31 +123,29 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
-					<th>Name <span class="small font-italic">Display</span></th>
-					<th>Type</th>
+					<th>Name</th>
+					<th>Local Name</th>
+					<th>Display Name</th>
+					<th>Source Type</th>
 					<th>Region</th>
-					<th>Full Address</th>
+					<th>Data</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var lr in Model.Locations)
-				{
-					<tr class="js-location-row" data-index="@(count)">
-						<td class="text-center">@(++count)</td>
-						<td>
-							<a href="/geo/location/?key=@(lr.GoogleKey)">@lr.Name</a>
-							@if (lr.Name != lr.DisplayAs)
-						{
-							<div class="small font-italic">@lr.DisplayAs</div>
+					var count = 0;
+					foreach (var lr in Model.Locations)
+					{
+						<tr class="js-location-row" data-index="@(count)">
+							<td class="text-center">@(++count)</td>
+							<td><a href="/geo/location/?key=@(lr.GoogleKey)">@lr.Name</a></td>
+							<td>@lr.LocalName</td>
+							<td>@lr.DisplayAs</td>
+							<td>@lr.PlaceType</td>
+							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+							<td><input value="@lr.Data.RawData" /></td>
+						</tr>
 					}
-						</td>
-						<td>@lr.PlaceKey</td>
-						<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-						<td class="small">@lr.Description</td>
-					</tr>
-			}
 				}
 			</tbody>
 		</table>

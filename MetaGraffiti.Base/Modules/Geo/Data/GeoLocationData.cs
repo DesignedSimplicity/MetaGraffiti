@@ -10,6 +10,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 {
 	public class GeoLocationData
 	{
+		public string RawData { get; set; }
+
 		public string PlaceKey { get; set; }
 		public string PlaceType { get; set; }
 

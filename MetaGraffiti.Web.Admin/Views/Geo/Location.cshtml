@@ -17,7 +17,27 @@
 
 		_location.marker = markPoint(_location.center.lat, _location.center.lng, _location.name);
 
+		drawBounds(_location.bounds, null, '');
+
 		fitBounds(_location.bounds);
+
+		$('#Region').change(function () {
+			$('#Region').addClass("is-invalid");
+		});
+		$(".js-region-lookup").click(function () {
+			var id = $('#Region').val();
+			console.log(id);
+
+			$.getJSON('/api/regions/' + id)
+				.done(function (data) {
+					$('#Region').text(data.RegionName);
+					$('#Region').removeClass("is-invalid");
+					$('#Region').addClass("is-valid");
+				})
+				.fail(function (jqXHR, textStatus, err) {
+					$('#Region').addClass("is-invalid");
+				});
+		});
 	});
 </script>
 
@@ -122,9 +142,9 @@
 					<div class="form-group">
 						<label for="Region">Region</label>
 						<div class="input-group">
-							<input type="text" class="form-control" name="Region" placeholder="Region" value="@(l.Region?.RegionName??"")">
+							<input type="text" class="form-control" id="Region" name="Region" placeholder="Region" value="@(l.Region?.RegionName??"")">
 							<div class="input-group-append">
-								<button class="btn btn-outline-secondary" type="button">Lookup</button>
+								<button class="btn btn-outline-secondary js-region-lookup" type="button">Lookup</button>
 							</div>
 						</div>
 					</div>
@@ -136,8 +156,8 @@
 					<div class="form-group">
 						<label for="CenterLatitude">Center</label>
 						<div class="input-group">
-							<input type="text" class="form-control" name="CenterLatitude" placeholder="Latitude" value="@l.Latitude">
-							<input type="text" class="form-control" name="CenterLongitude" placeholder="Longitude" value="@l.Longitude">
+							<input type="text" class="form-control" readonly name="CenterLatitude" placeholder="Latitude" value="@l.Latitude">
+							<input type="text" class="form-control" readonly name="CenterLongitude" placeholder="Longitude" value="@l.Longitude">
 						</div>
 					</div>
 				</div>
@@ -145,8 +165,8 @@
 					<div class="form-group">
 						<label for="NorthLatitude">North West</label>
 						<div class="input-group">
-							<input type="text" class="form-control" name="NorthLatitude" placeholder="Latitude" value="@(l.Bounds?.NorthWest.Latitude??null)">
-							<input type="text" class="form-control" name="WestLongitude" placeholder="Longitude" value="@(l.Bounds?.NorthWest.Longitude??null)">
+							<input type="text" class="form-control" readonly name="NorthLatitude" placeholder="Latitude" value="@(l.Bounds?.NorthWest.Latitude??null)">
+							<input type="text" class="form-control" readonly name="WestLongitude" placeholder="Longitude" value="@(l.Bounds?.NorthWest.Longitude??null)">
 						</div>
 					</div>
 				</div>
@@ -154,8 +174,8 @@
 					<div class="form-group">
 						<label for="SouthLatitude">South East</label>
 						<div class="input-group">
-							<input type="text" class="form-control" name="SouthLatitude" placeholder="Latitude" value="@(l.Bounds?.SouthEast.Latitude??null)">
-							<input type="text" class="form-control" name="EastLongitude" placeholder="Longitude" value="@(l.Bounds?.SouthEast.Longitude??null)">
+							<input type="text" class="form-control" readonly name="SouthLatitude" placeholder="Latitude" value="@(l.Bounds?.SouthEast.Latitude??null)">
+							<input type="text" class="form-control" readonly name="EastLongitude" placeholder="Longitude" value="@(l.Bounds?.SouthEast.Longitude??null)">
 						</div>
 					</div>
 				</div>

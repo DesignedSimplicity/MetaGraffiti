@@ -62,6 +62,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		public string Description { get; set; }
 
+		//public string Website { get; set; }
+		//public string Keywords { get; set; }
+
 
 		public string City { get; set; }
 
