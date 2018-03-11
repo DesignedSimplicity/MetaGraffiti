@@ -7,13 +7,15 @@ using System.Web.Mvc;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
+using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Web.Admin.Models;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GeoController : Controller
     {
-		private GoogleLocationService _service = new GoogleLocationService(AutoConfig.GoogleMapsApiKey);
+		//private GoogleApiService _service = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
+		private GeoLookupService _service = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();
 
 		public GeoViewModel InitModel()

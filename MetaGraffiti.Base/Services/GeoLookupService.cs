@@ -1,44 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
-using RestSharp;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Base.Services
 {
-	// https://developers.google.com/maps/documentation/geocoding/start
-	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
-	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
-	public class GoogleLocationService : GoogleApiServiceBase
-	{
-		private Dictionary<string, dynamic> _cache = new Dictionary<string, dynamic>();
+    public class GeoLookupService
+    {
+		// ==================================================
+		// Internals
+		private GoogleApiService _google = null;
 
-		public GoogleLocationService(string apiKey) : base(apiKey) { }
+
+		// ==================================================
+		// Constructors
+		public GeoLookupService(GoogleApiService google)
+		{
+			_google = google;
+		}
+
+
+		// ==================================================
+		// Methods
+		public double LookupElevation(IGeoLatLon point)
+		{
+			return _google.RequestElevation(point).Elevation;
+		}
+
+		public GeoTimezoneInfo LookupTimezone(IGeoLatLon point)
+		{
+			var response = _google.RequestTimezone(point);
+			return GeoTimezoneInfo.ByTZID(response.TimeZoneId);
+		}
 
 		public GeoLocationInfo LoadLocation(string googlePlaceId)
 		{
-			var response = RequestLocation(googlePlaceId);
-			var results = response.results;
+			var response = _google.RequestLocation(googlePlaceId);
+			var result = response.Results.FirstOrDefault();
 
-			return ParseLocationResult(results[0]);
+			return result == null 
+				? null 
+				: ParseLocationResult(result.Data);
 		}
 
 		public List<GeoLocationInfo> LookupLocations(string text)
 		{
-			var response = RequestLocations(text);
-			var results = response.results;
+			var response = _google.RequestLocations(text);
 
 			var list = new List<GeoLocationInfo>();
-			foreach (var result in results)
+			foreach (var result in response.Results)
 			{
-				var location = ParseLocationResult(result);
+				var location = ParseLocationResult(result.Data);
 				list.Add(location);
 			}
 
@@ -47,76 +66,21 @@ namespace MetaGraffiti.Base.Services
 
 		public List<GeoLocationInfo> LookupLocations(IGeoLatLon point)
 		{
-			var response = RequestLocations(point);
-			var results = response.results;
+			var response = _google.RequestLocations(point);
 
 			var list = new List<GeoLocationInfo>();
-			foreach (var result in results)
+			foreach (var result in response.Results)
 			{
-				var location = ParseLocationResult(result);
+				var location = ParseLocationResult(result.Data);
 				list.Add(location);
 			}
 
 			return list;
 		}
 
-		public dynamic RequestLocation(string place_id)
-		{
-			var key = place_id;
-			if (_cache.ContainsKey(key)) return _cache[key];
 
-			var client = new RestClient("https://maps.googleapis.com");
-			var request = new RestRequest("maps/api/geocode/json", Method.GET);
-
-			request.AddParameter("key", _apiKey);
-			request.AddParameter("place_id", place_id);
-
-			var response = client.Execute(request);
-			dynamic data = JsonConvert.DeserializeObject(response.Content);
-
-			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
-			return data;
-		}
-
-		public dynamic RequestLocations(string text)
-		{
-			var key = text.Trim().ToLowerInvariant();
-			if (_cache.ContainsKey(key)) return _cache[key];
-
-			var client = new RestClient("https://maps.googleapis.com");
-			var request = new RestRequest("maps/api/geocode/json", Method.GET);
-
-			request.AddParameter("key", _apiKey);
-			request.AddParameter("address", text);
-
-			var response = client.Execute(request);
-			dynamic data = JsonConvert.DeserializeObject(response.Content);
-
-			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
-			return data;
-		}
-
-		public dynamic RequestLocations(IGeoLatLon point)
-		{
-			var location = GetLocationString(point);
-
-			var key = location;
-			if (_cache.ContainsKey(key)) return _cache[key];
-
-			var client = new RestClient("https://maps.googleapis.com");
-			var request = new RestRequest("maps/api/geocode/json", Method.GET);
-
-			request.AddParameter("key", _apiKey);
-			request.AddParameter("latlng", location);
-
-			var response = client.Execute(request);
-			dynamic data = JsonConvert.DeserializeObject(response.Content);
-
-			lock (_cache) { if (!_cache.ContainsKey(key)) _cache.Add(key, data); }
-			return data;
-		}
-
-
+		// ==================================================
+		// Helpers
 		private GeoLocationInfo ParseLocationResult(dynamic result)
 		{
 			var data = new GeoLocationData();
@@ -276,7 +240,7 @@ namespace MetaGraffiti.Base.Services
 
 			var center = result.geometry.location;
 			if (center != null) data.Center = new GeoPosition(
-				TypeConvert.ToDouble(center.lat.Value), 
+				TypeConvert.ToDouble(center.lat.Value),
 				TypeConvert.ToDouble(center.lng.Value)
 				);
 

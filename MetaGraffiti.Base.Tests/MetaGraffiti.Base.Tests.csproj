@@ -62,13 +62,14 @@
   <ItemGroup>
     <Compile Include="Geo\GeoCountryInfoTests.cs" />
     <Compile Include="Geo\GeoDistanceTests.cs" />
+    <Compile Include="Geo\GeoLookupServiceTests.cs" />
     <Compile Include="Geo\GeoRegionInfoTests.cs" />
     <Compile Include="Geo\GeoTimezoneInfoTests.cs" />
     <Compile Include="Geo\GeoLocationTests.cs" />
     <Compile Include="Geo\GeoRectangleTests.cs" />
-    <Compile Include="Google\GoogleLocationServiceTests.cs" />
-    <Compile Include="Google\GoogleTimezoneServiceTests.cs" />
-    <Compile Include="Google\GoogleElevationServiceTests.cs" />
+    <Compile Include="Google\GoogleLocationTests.cs" />
+    <Compile Include="Google\GoogleTimezoneTests.cs" />
+    <Compile Include="Google\GoogleElevationTests.cs" />
     <Compile Include="Ortho\GpxFileReaderTests.cs" />
     <Compile Include="Ortho\GpxFileInfoTests.cs" />
     <Compile Include="Ortho\GpxFileWriterTests.cs" />

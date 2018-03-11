@@ -4,30 +4,42 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using MetaGraffiti.Base.Services;
+using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Base.Modules.Geo;
 
-namespace MetaGraffiti.Base.Tests.Google
+namespace MetaGraffiti.Base.Tests.Geo
 {
 	[TestClass]
-	public class GoogleLocationServiceTests
+	public class GeoLookupServiceTests
 	{
-		private GoogleLocationService GetService()
+		private GeoLookupService GetService()
 		{
-			return new GoogleLocationService(Web.Admin.AutoConfig.GoogleMapsApiKey);
+			var google = new GoogleApiService(Web.Admin.AutoConfig.GoogleMapsApiKey);
+			return new GeoLookupService(google);
 		}
 
 		[TestMethod]
-		public void GoogleLocationService_TestRequest()
+		public void GeoLookupService_LookupTimezone()
 		{
 			var service = GetService();
 
-			var locations = service.RequestLocations(TestsHelper.GetNYC());
+			var timezone = service.LookupTimezone(TestsHelper.GetNYC());
 
-			Assert.IsNotNull(locations);
+			Assert.AreEqual("America/New_York", timezone.TZID);
 		}
 
 		[TestMethod]
-		public void GoogleLocationService_TestLookup()
+		public void GeoLookupService_LookupElevation()
+		{
+			var service = GetService();
+
+			var elevation = service.LookupElevation(new GeoPosition(0.0, 0.0));
+
+			Assert.AreEqual(0, elevation);
+		}
+
+		[TestMethod]
+		public void GeoLookupService_LookupLocations()
 		{
 			var service = GetService();
 

@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Ortho.Data;
-using MetaGraffiti.Base.Modules.Ortho.Info;
 using MetaGraffiti.Web.Admin.Models;
 using MetaGraffiti.Base.Services;
+using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -24,17 +24,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				if (manager == null) manager = new GpxManagerModel();
 				Session["TrackManager"] = manager;
 				return manager;
-			}
-		}
-
-		private List<GpxTrackExtract> ExtractedTracks
-		{
-			get
-			{
-				var tracks = (List<GpxTrackExtract>)Session["ExtractedTracks"];
-				if (tracks == null) tracks = new List<GpxTrackExtract>();
-				Session["ExtractedTracks"] = tracks;
-				return tracks;
 			}
 		}
 
@@ -161,8 +150,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					break;
 
 				case "TIMEZONE":
-					var google = new GoogleTimezoneService(AutoConfig.GoogleMapsApiKey);
-					manager.Timezone = google.LookupGeoTimezone(manager.FirstPoint);
+					var google = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
+					manager.Timezone = google.LookupTimezone(manager.FirstPoint);
 					break;
 
 				case "GPX":
