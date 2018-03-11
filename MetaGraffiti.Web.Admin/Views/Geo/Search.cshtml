@@ -137,7 +137,7 @@
 					<tr class="js-location-row" data-index="@(count)">
 						<td class="text-center">@(++count)</td>
 						<td>
-							<a href="/geo/location/?key=@(lr.Data.PlaceKey)">@lr.Name</a>
+							<a href="/geo/location/?key=@(lr.Data.GooglePlaceID)">@lr.Name</a>
 							@if (lr.Name != lr.Data.DisplayName)
 						{
 							<div class="small font-italic">@lr.Data.DisplayName</div>

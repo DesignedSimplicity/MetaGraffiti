@@ -10,11 +10,11 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 {
 	public class GeoLocationData
 	{
-		public GeoLocationData() { PlaceKey = CryptoGraffiti.NewHashID(); }
+		public GeoLocationData() { }
 
 		public string RawData { get; set; }
 
-		public string PlaceKey { get; set; } // place_id
+		public string GooglePlaceID { get; set; } // place_id
 
 		public string FullAddress { get; set; } // formatted_address
 
@@ -42,11 +42,11 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public IGeoPerimeter Bounds { get; set; }
 
 
-		public string AreaName { get; set; } // colloquial_area indicates a commonly-used alternative name for the entity.
+		public string ColloquialArea { get; set; } // colloquial_area indicates a commonly-used alternative name for the entity.
 
 		public string StreeNumber { get; set; } // street_address indicates a precise street address.
 		public string Route { get; set; } // route indicates a named route (such as "US 101").
-										  //public string Intersection { get; set; } // intersection indicates a major intersection, usually of two major roads.
+		public string Intersection { get; set; } // intersection indicates a major intersection, usually of two major roads.
 		public string PostalCode { get; set; } // postal_code indicates a postal code as used to address postal mail within the country.
 
 		public string Neighborhood { get; set; } // neighborhood indicates a named neighborhood

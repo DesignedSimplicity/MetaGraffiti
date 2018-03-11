@@ -85,7 +85,7 @@ namespace MetaGraffiti.Base.Services
 		{
 			var data = new GeoLocationData();
 
-			data.PlaceKey = result.place_id;
+			data.GooglePlaceID = result.place_id;
 			data.FullAddress = result.formatted_address;
 
 			var isCountry = false;
@@ -128,10 +128,12 @@ namespace MetaGraffiti.Base.Services
 					if (item.Value == "neighborhood")
 						data.Neighborhood = component.short_name;
 					if (item.Value == "colloquial_area")
-						data.AreaName = component.short_name;
+						data.ColloquialArea = component.short_name;
 
 					if (item.Value == "street_number")
 						data.StreeNumber = component.short_name;
+					if (item.Value == "intersection")
+						data.Intersection = component.short_name;
 					if (item.Value == "route")
 						data.Route = component.short_name;
 					if (item.Value == "postal_code")
@@ -196,9 +198,9 @@ namespace MetaGraffiti.Base.Services
 				data.DisplayName = data.Neighborhood;
 				data.DisplayNameType = "Neighborhood";
 			}
-			if (!String.IsNullOrWhiteSpace(data.AreaName))
+			if (!String.IsNullOrWhiteSpace(data.ColloquialArea))
 			{
-				data.DisplayName = data.AreaName;
+				data.DisplayName = data.ColloquialArea;
 				data.DisplayNameType = "AreaName";
 			}
 

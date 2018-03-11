@@ -15,9 +15,18 @@ A framework to process geographic and topographic data for map building and visu
 
 
 ## TODO
-* Fix regions that are not contained in country bounds (ex: Argentina, Santa Cruz)
-* Refactor Gpx and Kml namespaces into Geo/Carto/Topo namespace?
-* Move AutoConfig and Services from Web to Base project
+
+### Now
+* Finalize fields and edit form for GeoPlaceInfo
+* Standardize controller level cache for Tracks + Places
+
+### Next
+* Base RegionID off of CountryID * (1000 ^ Division)
+* Add Local Name data for non-English regions
+* Move Region and Country metadata to reference file/array
+* Add Japan level 1 and level 2 region data
+
+### Later
 * Unit tests for Gpx and Kml writer classes
 * Unit tests for additional Geo classes
 * Unit tests for service methods

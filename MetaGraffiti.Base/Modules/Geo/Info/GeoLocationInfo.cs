@@ -31,7 +31,39 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			ID = CryptoGraffiti.NewHashID();
 			Region = GeoRegionInfo.Find(data.Region);
 			Country = GeoCountryInfo.Find(data.Country);
+
+			PlaceKey = ID;
+			GoogleKey = data.GooglePlaceID;
+
+			Name = _data.Name;
+			DisplayAs = _data.ColloquialArea;
 		}
+
+
+		public string PlaceKey { get; set; }
+		public string GoogleKey { get; set; }
+
+
+		public string Name { get; set; }
+		public string LocalName { get; set; }
+		public string DisplayAs { get; set; }
+
+		public string Description { get; set; }
+
+
+		public string City { get; set; }
+
+		public string Address { get; set; }
+		public string Postcode { get; set; }
+
+
+		public string Subregions { get; set; } // Region2 \ 3 \ 4 \ 5
+
+		public string Localities { get; set; } // Locality \ Sublocality
+
+
+
+
 
 
 		// ==================================================
@@ -40,11 +72,6 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public string ID { get; private set; }
 
 		public GeoLocationData Data => _data;
-
-		public string Name { get { return _data.Name; } set { _data.Name = value; } }
-
-		public string LocalName { get; set; }
-		public string DisplayAs { get; set; }
 
 
 

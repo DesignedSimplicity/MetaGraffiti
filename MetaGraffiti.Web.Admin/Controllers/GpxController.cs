@@ -16,6 +16,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
 		private OrthoGpxService _gpxService = new OrthoGpxService();
 
+		//TODO: refactor this to a repository pattern
 		private GpxManagerModel TrackManager
 		{
 			get
@@ -35,11 +36,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Files = _gpxService.Init(rootUri);
 			model.Cache = _gpxService.LoadDirectory(rootUri, true);
 			model.Manager = this.TrackManager;
-			//model.Tracks = ExtractedTracks;
 
 			return model;
 		}
 
+		/// <summary>
+		/// Displays a calendar of GPX files and a list of all extracted tracks
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public ActionResult Index()
 		{
@@ -47,6 +51,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Lists any GPX files that had an error loading
+		/// </summary>
 		[HttpGet]
 		public ActionResult Debug()
 		{
@@ -54,6 +61,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Lists all GPX files in a given year with optional month
+		/// </summary>
 		[HttpGet]
 		public ActionResult Report(int year, int? month = null)
 		{
@@ -65,6 +75,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Displays a single GPX file with a list of points and a map
+		/// </summary>
 		[HttpGet]
 		public ActionResult Display(string uri)
 		{
@@ -137,6 +150,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Manage(string action = "", string name = "", string description = "", string timezone = "")
 		{
+			//TODO: convert inputs to a proper model
+			//TODO: move each action into separate methods
+
 			var model = InitModel();
 
 			var manager = model.Manager;
