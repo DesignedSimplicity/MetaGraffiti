@@ -63,7 +63,7 @@ namespace MetaGraffiti.Base.Services.External
 
 		public string ColloquialArea { get; private set; } // colloquial_area indicates a commonly-used alternative name for the entity.
 
-		public string FullAddress { get; private set; } // formatted_address
+		public string FormattedAddress { get; private set; } // formatted_address
 		public string StreeNumber { get; private set; } // street_address indicates a precise street address.
 		public string Route { get; private set; } // route indicates a named route (such as "US 101").
 		public string Intersection { get; private set; } // intersection indicates a major intersection, usually of two major roads.
@@ -88,7 +88,7 @@ namespace MetaGraffiti.Base.Services.External
 		private void ParseData()
 		{
 			this.PlaceID = _data.place_id;
-			this.FullAddress = _data.formatted_address;
+			this.FormattedAddress = _data.formatted_address;
 
 			var isCountry = false;
 			var firstComponent = _data.address_components[0];
@@ -208,13 +208,18 @@ namespace MetaGraffiti.Base.Services.External
 
 			if (!String.IsNullOrWhiteSpace(this.PostalCode))
 			{
-				this.Name = this.FullAddress;
+				this.Name = this.FormattedAddress;
 				this.NameSource = "PostalCode";
 			}
 			if (!String.IsNullOrWhiteSpace(this.StreeNumber))
 			{
-				this.Name = this.FullAddress;
+				this.Name = this.FormattedAddress;
 				this.NameSource = "Address";
+			}
+			if (!String.IsNullOrWhiteSpace(this.Premise))
+			{
+				this.Name = this.Premise;
+				this.NameSource = "Premise";
 			}
 
 			if (!String.IsNullOrWhiteSpace(this.PointOfInterest))

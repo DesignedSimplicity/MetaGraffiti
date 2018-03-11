@@ -137,15 +137,15 @@
 					<tr class="js-location-row" data-index="@(count)">
 						<td class="text-center">@(++count)</td>
 						<td>
-							<a href="/geo/location/?key=@(lr.Data.GooglePlaceID)">@lr.Name</a>
-							@if (lr.Name != lr.Data.DisplayName)
+							<a href="/geo/location/?key=@(lr.GoogleKey)">@lr.Name</a>
+							@if (lr.Name != lr.DisplayAs)
 						{
-							<div class="small font-italic">@lr.Data.DisplayName</div>
+							<div class="small font-italic">@lr.DisplayAs</div>
 					}
 						</td>
-						<td>@lr.Data.DisplayNameType</td>
+						<td>@lr.PlaceKey</td>
 						<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-						<td class="small">@lr.Data.FullAddress</td>
+						<td class="small">@lr.Description</td>
 					</tr>
 			}
 				}
