@@ -33,12 +33,21 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			Country = GeoCountryInfo.Find(data.Country);
 
 			PlaceKey = ID;
+			PlaceType = data.PlaceType;
 			GoogleKey = data.GoogleKey;
 
 			Name = data.Name;
+			LocalName = data.LocalName;
 			DisplayAs = data.DisplayAs;
 
-			PlaceType = data.PlaceType;
+			Description = data.Description;
+
+			//City
+			Address = data.StreetAddress;
+			Postcode = data.PostCode;
+
+			Subregions = data.Subregions;
+			Localities = data.Localities;
 		}
 
 

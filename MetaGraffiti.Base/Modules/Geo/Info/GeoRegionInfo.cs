@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
@@ -102,6 +103,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			if (r != null) return r;
 
 			r = ByName(text);
+			if (r != null) return r;
+
+			r = ByName(TextTranslate.StripAccents(text));
 			return r;
 		}
 

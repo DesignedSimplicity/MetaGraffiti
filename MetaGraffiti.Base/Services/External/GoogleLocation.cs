@@ -43,9 +43,10 @@ namespace MetaGraffiti.Base.Services.External
 		public dynamic Data => _data;
 
 
-		public string Name { get; private set; }
 		public string ShortName { get; private set; }
-		public string NameSource { get; private set; }
+		public string LongName { get; private set; }
+		public string TypedName { get; private set; }
+		public string TypedNameSource { get; private set; }
 
 		public string PlaceID { get; private set; }
 
@@ -95,8 +96,9 @@ namespace MetaGraffiti.Base.Services.External
 			if (firstComponent != null)
 			{
 				this.ShortName = firstComponent.short_name;
-				this.Name = firstComponent.short_name;
-				this.NameSource = "Political";
+				this.LongName = firstComponent.long_name;
+				this.TypedName = firstComponent.short_name;
+				this.TypedNameSource = "Political";
 				isCountry = firstComponent.types[0].Value == "country" && _data.address_components.Count == 1;
 			}
 
@@ -156,91 +158,91 @@ namespace MetaGraffiti.Base.Services.External
 			#region Default Name
 			if (isCountry && !String.IsNullOrWhiteSpace(this.Country))
 			{
-				this.Name = this.Country;
-				this.NameSource = "Country";
+				this.TypedName = this.Country;
+				this.TypedNameSource = "Country";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Region))
 			{
-				this.Name = this.Region;
-				this.NameSource = "Region";
+				this.TypedName = this.Region;
+				this.TypedNameSource = "Region";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Region2))
 			{
-				this.Name = this.Region2 + ", " + this.Name;
-				this.NameSource = "Region2";
+				this.TypedName = this.Region2 + ", " + this.TypedName;
+				this.TypedNameSource = "Region2";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Region3))
 			{
-				this.Name = this.Region3 + ", " + this.Name;
-				this.NameSource = "Region3";
+				this.TypedName = this.Region3 + ", " + this.TypedName;
+				this.TypedNameSource = "Region3";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Region4))
 			{
-				this.Name = this.Region4 + ", " + this.Name;
-				this.NameSource = "Region4";
+				this.TypedName = this.Region4 + ", " + this.TypedName;
+				this.TypedNameSource = "Region4";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Region5))
 			{
-				this.Name = this.Region5 + ", " + this.Name;
-				this.NameSource = "Region5";
+				this.TypedName = this.Region5 + ", " + this.TypedName;
+				this.TypedNameSource = "Region5";
 			}
 
 			if (!String.IsNullOrWhiteSpace(this.Locality))
 			{
-				this.Name = this.Locality;
-				this.NameSource = "Locality";
+				this.TypedName = this.Locality;
+				this.TypedNameSource = "Locality";
 			}
 			if (!String.IsNullOrWhiteSpace(this.SubLocality))
 			{
-				this.Name = this.SubLocality + ", " + this.Name;
-				this.NameSource = "SubLocality";
+				this.TypedName = this.SubLocality + ", " + this.TypedName;
+				this.TypedNameSource = "SubLocality";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Neighborhood))
 			{
-				this.Name = this.Neighborhood;
-				this.NameSource = "Neighborhood";
+				this.TypedName = this.Neighborhood;
+				this.TypedNameSource = "Neighborhood";
 			}
 			if (!String.IsNullOrWhiteSpace(this.ColloquialArea))
 			{
-				this.Name = this.ColloquialArea;
-				this.NameSource = "AreaName";
+				this.TypedName = this.ColloquialArea;
+				this.TypedNameSource = "AreaName";
 			}
 
 			if (!String.IsNullOrWhiteSpace(this.PostalCode))
 			{
-				this.Name = this.FormattedAddress;
-				this.NameSource = "PostalCode";
+				this.TypedName = this.FormattedAddress;
+				this.TypedNameSource = "PostalCode";
 			}
 			if (!String.IsNullOrWhiteSpace(this.StreeNumber))
 			{
-				this.Name = this.FormattedAddress;
-				this.NameSource = "Address";
+				this.TypedName = this.FormattedAddress;
+				this.TypedNameSource = "Address";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Premise))
 			{
-				this.Name = this.Premise;
-				this.NameSource = "Premise";
+				this.TypedName = this.Premise;
+				this.TypedNameSource = "Premise";
 			}
 
 			if (!String.IsNullOrWhiteSpace(this.PointOfInterest))
 			{
-				this.Name = this.PointOfInterest;
-				this.NameSource = "POI";
+				this.TypedName = this.PointOfInterest;
+				this.TypedNameSource = "POI";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Park))
 			{
-				this.Name = this.Park;
-				this.NameSource = "Park";
+				this.TypedName = this.Park;
+				this.TypedNameSource = "Park";
 			}
 			if (!String.IsNullOrWhiteSpace(this.Airport))
 			{
-				this.Name = this.Airport;
-				this.NameSource = "Airport";
+				this.TypedName = this.Airport;
+				this.TypedNameSource = "Airport";
 			}
 			if (!String.IsNullOrWhiteSpace(this.NaturalFeature))
 			{
-				this.Name = this.NaturalFeature;
-				this.NameSource = "NaturalFeature";
+				this.TypedName = this.NaturalFeature;
+				this.TypedNameSource = "NaturalFeature";
 			}
 			#endregion
 

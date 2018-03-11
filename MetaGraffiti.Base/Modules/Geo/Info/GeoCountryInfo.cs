@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
@@ -117,6 +118,14 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			var c = Cache.FirstOrDefault(x => String.Compare(x.Name, text, true) == 0);
 			if (c == null)
 			{
+				c = Cache.FirstOrDefault(x => String.Compare(x.NameLocal, text, true) == 0);
+				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLong, text, true) == 0);
+				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLocalLong, text, true) == 0);
+			}
+
+			if (c == null)
+			{
+				text = TextTranslate.StripAccents(text);
 				c = Cache.FirstOrDefault(x => String.Compare(x.NameLocal, text, true) == 0);
 				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLong, text, true) == 0);
 				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLocalLong, text, true) == 0);
