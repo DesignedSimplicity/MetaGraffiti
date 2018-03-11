@@ -10,8 +10,8 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
-					<th>Area</th>
 					<th>Region</th>
+					<th>District</th>
 				</tr>
 			</thead>
 			@{
@@ -20,9 +20,9 @@
 				{
 					<tr class="@(String.IsNullOrWhiteSpace(place.Country) ? "table-danger" : "")">
 						<td class="text-center">@(++count)</td>
-						<td>@place.Name</td>
-						<td>@place.Area</td>
+						<td><a href="/geo/search/?name=@place.Name @place.Country">@place.Name</a></td>
 						<td>@place.Region</td>
+						<td>@place.District</td>
 					</tr>
 				}
 			}

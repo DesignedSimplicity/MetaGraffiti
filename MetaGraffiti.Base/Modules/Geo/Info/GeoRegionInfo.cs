@@ -1092,6 +1092,17 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 				*/
 				#endregion
 
+
+				#region //Japan // https://en.wikipedia.org/wiki/ISO_3166-2:JP // https://en.wikipedia.org/wiki/Prefectures_of_Japan
+				/*
+				_cache.Add(new GeoRegionData(392, 2849, 1, "JP-01", "001", "Hokkaido", @"", 43.2203266, 142.8634737, 45.5281272, 139.7602944, 41.3858779, 145.8228658));
+				_cache.Add(new GeoRegionData(392, 2850, 1, "JP-001", "001", "Hokkaido", @"", 43.2203266, 142.8634737, 45.5281272, 139.7602944, 41.3858779, 145.8228658));
+				_cache.Add(new GeoRegionData(392, 2851, 1, "JP-001", "001", "Hokkaido", @"", 43.2203266, 142.8634737, 45.5281272, 139.7602944, 41.3858779, 145.8228658));
+				_cache.Add(new GeoRegionData(392, 2852, 1, "JP-001", "001", "Hokkaido", @"", 43.2203266, 142.8634737, 45.5281272, 139.7602944, 41.3858779, 145.8228658));
+				_cache.Add(new GeoRegionData(392, 2853, 1, "JP-001", "001", "Hokkaido", @"", 43.2203266, 142.8634737, 45.5281272, 139.7602944, 41.3858779, 145.8228658));
+				*/
+				#endregion
+
 				// set initialized flag
 				_initialized = true;
 			}

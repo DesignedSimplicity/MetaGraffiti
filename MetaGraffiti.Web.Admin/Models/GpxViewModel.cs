@@ -184,10 +184,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		public GpxCacheMetaData Data { get { return _cache.MetaData; } }
 
 
-		public DateTime StartTime { get { return Points.First().Timestamp.Value; } }
+		public DateTime StartTime { get { return Points.First()?.Timestamp.Value?? DateTime.MinValue; } }
 		public DateTime StartTimeLocal { get { return Data.Timezone.FromUTC(StartTime); } }
 
-		public DateTime FinishTime { get { return Points.Last().Timestamp.Value; } }
+		public DateTime FinishTime { get { return Points.Last()?.Timestamp.Value??DateTime.MaxValue; } }
 		public DateTime FinishTimeLocal { get { return Data.Timezone.FromUTC(FinishTime); } }
 		
 

@@ -43,6 +43,11 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		public string Name { get { return _data.Name; } set { _data.Name = value; } }
 
+		public string LocalName { get; set; }
+		public string DisplayAs { get; set; }
+
+
+
 		// --------------------------------------------------
 		// Inferred
 		public double Latitude => (_data.Center == null ? 0 : _data.Center.Latitude);
