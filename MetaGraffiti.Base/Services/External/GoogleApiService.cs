@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using RestSharp;
-using Newtonsoft.Json;
 
 using MetaGraffiti.Base.Modules.Geo;
 
@@ -150,55 +149,5 @@ namespace MetaGraffiti.Base.Services.External
 			dt = dt.AddSeconds(ts);
 			return dt;
 		}
-	}
-
-	// https://developers.google.com/maps/documentation/geocoding/start
-	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
-	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
-	public class GoogleLocationResponse
-	{
-		private string _data;
-
-		public GoogleLocationResponse(string data)
-		{
-			_data = data;
-
-			dynamic d = JsonConvert.DeserializeObject(_data);
-			var results = d.results;
-
-			Results = new List<GoogleLocationResult>();
-			foreach (var result in results)
-			{
-				Results.Add(new GoogleLocationResult(result));
-			}
-		}
-
-		public string Status { get; set; }
-		public List<GoogleLocationResult> Results { get; private set; }
-	}
-
-	public class GoogleLocationResult
-	{
-		public GoogleLocationResult(dynamic data) { Data = data; }
-
-		public dynamic Data { get; private set; }
-	}
-
-
-	// https://developers.google.com/maps/documentation/timezone/start
-	public class GoogleTimezoneResponse
-	{
-		public string Status { get; set; }
-		public string TimeZoneId { get; set; }
-		public string TimeZoneName { get; set; }
-	}
-
-	// https://developers.google.com/maps/documentation/elevation/start
-	// TOOD: https://developers.google.com/maps/documentation/javascript/examples/elevation-paths
-	public class GoogleElevationResponse
-	{
-		public string Status { get; set; }
-		public double Elevation { get; set; }
-		public double Resolution { get; set; }
 	}
 }

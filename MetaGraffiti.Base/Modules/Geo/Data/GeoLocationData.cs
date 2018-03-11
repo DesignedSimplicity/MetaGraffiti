@@ -8,6 +8,38 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Base.Modules.Geo.Data
 {
+	public class GeoLocationData2
+	{
+		public string PlaceKey { get; set; }
+		public string PlaceType { get; set; }
+
+		public string GoogleKey { get; set; }
+		public string IconKey { get; set; }
+
+		public string Timezone { get; set; }
+		public string Country { get; set; }
+		public string Region { get; set; }
+
+
+		public string Name { get; set; }
+		public string LocalName { get; set; }
+		public string DisplayAs { get; set; }
+		public string Description { get; set; }
+
+		public string StreetAddress { get; set; }
+		public string City { get; set; }
+		public string PostCode { get; set; }
+
+		public string Premise { get; set; }
+
+		public string Subregions { get; set; }
+		public string Localities { get; set; }
+
+
+		public IGeoCoordinate Center { get; set; }
+		public IGeoPerimeter Bounds { get; set; }
+	}
+
 	public class GeoLocationData
 	{
 		public GeoLocationData() { }

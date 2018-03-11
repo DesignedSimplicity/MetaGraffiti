@@ -12,6 +12,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		// ==================================================
 		// Internals
 		private GeoLocationData _data;
+		private GeoLocationData2 _data2;
 
 		private GeoTimezoneInfo _timezone;
 		private GeoCountryInfo _country;
@@ -35,8 +36,21 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			PlaceKey = ID;
 			GoogleKey = data.GooglePlaceID;
 
-			Name = _data.Name;
-			DisplayAs = _data.ColloquialArea;
+			Name = data.Name;
+			DisplayAs = data.ColloquialArea;
+		}
+		public GeoLocationInfo(GeoLocationData2 data)
+		{
+			_data2 = data;
+			ID = CryptoGraffiti.NewHashID();
+			Region = GeoRegionInfo.Find(data.Region);
+			Country = GeoCountryInfo.Find(data.Country);
+
+			PlaceKey = ID;
+			GoogleKey = data.GoogleKey;
+
+			Name = data.Name;
+			DisplayAs = data.DisplayAs;
 		}
 
 
@@ -77,11 +91,11 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		// --------------------------------------------------
 		// Inferred
-		public double Latitude => (_data.Center == null ? 0 : _data.Center.Latitude);
-		public double Longitude => (_data.Center == null ? 0 : _data.Center.Longitude);
-		public double? Elevation => (_data.Center == null ? 0 : _data.Center.Elevation);
+		public double Latitude => (_data2.Center == null ? 0 : _data2.Center.Latitude);
+		public double Longitude => (_data2.Center == null ? 0 : _data2.Center.Longitude);
+		public double? Elevation => (_data2.Center == null ? 0 : _data2.Center.Elevation);
 
-		public IGeoPerimeter Bounds => _data.Bounds;
+		public IGeoPerimeter Bounds => _data2.Bounds;
 
 		// --------------------------------------------------
 		// Derived

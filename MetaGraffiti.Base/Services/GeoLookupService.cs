@@ -47,7 +47,7 @@ namespace MetaGraffiti.Base.Services
 
 			return result == null 
 				? null 
-				: ParseLocationResult(result.Data);
+				: ParseLocationResult(result);
 		}
 
 		public List<GeoLocationInfo> LookupLocations(string text)
@@ -57,7 +57,7 @@ namespace MetaGraffiti.Base.Services
 			var list = new List<GeoLocationInfo>();
 			foreach (var result in response.Results)
 			{
-				var location = ParseLocationResult(result.Data);
+				var location = ParseLocationResult(result);
 				list.Add(location);
 			}
 
@@ -71,7 +71,7 @@ namespace MetaGraffiti.Base.Services
 			var list = new List<GeoLocationInfo>();
 			foreach (var result in response.Results)
 			{
-				var location = ParseLocationResult(result.Data);
+				var location = ParseLocationResult(result);
 				list.Add(location);
 			}
 
@@ -81,6 +81,52 @@ namespace MetaGraffiti.Base.Services
 
 		// ==================================================
 		// Helpers
+		private GeoLocationInfo ParseLocationResult(GoogleLocationResult result)
+		{
+			var data = new GeoLocationData2();
+
+			//data.PlaceKey = Cr
+			data.PlaceType = result.NameSource;
+			//data.IconKey
+
+			data.GoogleKey = result.PlaceID;
+
+			//data.Timezone =
+			data.Country = result.Country;
+			data.Region = result.Region;
+
+			data.Subregions = "";
+			if (!String.IsNullOrWhiteSpace(result.Region2))
+				data.Subregions += result.Region2;
+			if (!String.IsNullOrWhiteSpace(result.Region3))
+				data.Subregions += @" \ " + result.Region3;
+			if (!String.IsNullOrWhiteSpace(result.Region4))
+				data.Subregions += @" \ " + result.Region4;
+			if (!String.IsNullOrWhiteSpace(result.Region5))
+				data.Subregions += @" \ " + result.Region5;
+
+			data.Name = result.Name;
+			//LocalName
+			data.DisplayAs = result.ColloquialArea;
+			//Description
+
+			var address = $"{result.StreeNumber} {result.Route}";
+			data.StreetAddress = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
+			//City
+			data.PostCode = result.PostalCode;
+
+			data.Premise = result.Premise;
+			if (!String.IsNullOrWhiteSpace(result.SubPremise)) data.Premise += @" \ " + result.SubPremise;
+
+			data.Localities = result.Locality;
+			if (!String.IsNullOrWhiteSpace(result.SubLocality)) data.Localities += @" \ " + result.SubLocality;
+
+			data.Center = result.Center;
+			data.Bounds = result.Bounds;
+
+			return new GeoLocationInfo(data);
+		}
+
 		private GeoLocationInfo ParseLocationResult(dynamic result)
 		{
 			var data = new GeoLocationData();
