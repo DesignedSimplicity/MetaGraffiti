@@ -6,13 +6,14 @@ using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Carto;
 using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class CartoDataService
+	public class OrthoXlsService
 	{
 		private static object _lock = true;
 		private static XlsFileData _source;
@@ -64,9 +65,10 @@ namespace MetaGraffiti.Base.Services
 			return places;
 		}
 
-		public List<CartoPlaceData> ListPlaces()
+
+		public List<GeoLocationData> ListPlaces()
 		{
-			var places = new List<CartoPlaceData>();
+			var places = new List<GeoLocationData>();
 			foreach(var sheet in _source.Sheets)
 			{
 				var year = TypeConvert.ToInt(sheet.SheetName);
@@ -75,28 +77,28 @@ namespace MetaGraffiti.Base.Services
 					foreach (var p in ListRawPlaces(year))
 					{
 						var place = ParsePlace(p);
-						if (place != null && !places.Any(x => x.IsSamePlace(place))) places.Add(place);
+						if (place != null && !places.Any(x => IsSamePlace(x, place))) places.Add(place);
 					}
 				}
 			}			
 			return places;
 		}
 
-		public List<CartoPlaceData> ListPlaces(int year)
+		public List<GeoLocationData> ListPlaces(int year)
 		{
-			var places = new List<CartoPlaceData>();
+			var places = new List<GeoLocationData>();
 			foreach (var p in ListRawPlaces(year))
 			{
 				var place = ParsePlace(p);
-				if (place != null && !places.Any(x => x.IsSamePlace(place))) places.Add(place);
+				if (place != null && !places.Any(x => IsSamePlace(x, place))) places.Add(place);
 			}
 			return places;
 		}
 
 
-		public CartoPlaceData ParsePlace(string place)
+		public GeoLocationData ParsePlace(string place)
 		{
-			var p = new CartoPlaceData();
+			var p = new GeoLocationData();
 			p.Name = place;
 
 			var index = place.LastIndexOf(',');
@@ -126,13 +128,13 @@ namespace MetaGraffiti.Base.Services
 							}
 							else
 							{
-								p.District = area;
+								p.Locality = area;
 								p.Name = name;
 							}
 						}
 						else
 						{
-							p.District = area;
+							p.Locality = area;
 							p.Name = name;
 						}
 					}
@@ -140,6 +142,14 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			return p;
+		}
+
+		private bool IsSamePlace(GeoLocationData p1, GeoLocationData p2)
+		{
+			return String.Compare(p1.Country, p2.Country, true) == 0
+				&& String.Compare(p1.Region, p2.Region, true) == 0
+				&& String.Compare(p1.Locality, p2.Locality, true) == 0
+				&& String.Compare(p1.Name, p2.Name, true) == 0;
 		}
 	}
 }

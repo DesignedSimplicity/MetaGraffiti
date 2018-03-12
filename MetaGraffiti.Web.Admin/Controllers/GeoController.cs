@@ -14,8 +14,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GeoController : Controller
     {
-		private GeoLookupService _service = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
-		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();
+		private CartoLocationService _cartoService = new CartoLocationService();
+		private GeoLookupService _geoService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 
 		public GeoViewModel InitModel()
 		{
@@ -77,12 +77,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (!String.IsNullOrWhiteSpace(search.Name))
 			{
-				model.Locations = _service.LookupLocations(search.Name);
+				model.Locations = _geoService.LookupLocations(search.Name);
 			}
 			else if (search.Latitude.HasValue && search.Longitude.HasValue)
 			{
 				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
-				model.Locations = _service.LookupLocations(position);
+				model.Locations = _geoService.LookupLocations(position);
 			}
 
 			return View(model);
@@ -92,7 +92,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.Locations = _cache.Values.ToList();
+			model.Locations = _cartoService.ListLocations();
 
 			return View(model);
 		}
@@ -104,14 +104,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (!String.IsNullOrWhiteSpace(key))
 			{
-				var location = _service.LoadLocation(key);
+				var location = _geoService.LoadLocation(key);
 				id = location.ID.ToUpperInvariant();
-				_cache.Add(id, location);
+				_cartoService.CacheLocation(location);
 				return new RedirectResult($"/geo/location/{id}");
 			}
 
 			if (!String.IsNullOrWhiteSpace(id))
-				model.SelectedLocation = _cache[id];
+				model.SelectedLocation = _cartoService.GetLocation(id);
 
 			return View(model);
 		}
@@ -123,7 +123,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			var id = update.PlaceKey.ToUpperInvariant();
 
-			var location = _cache[id];
+			var location = _cartoService.GetLocation(id);
 
 			location.Name = update.Name;
 			location.LocalName = update.LocalName;
@@ -134,7 +134,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			location.PlaceType = update.PlaceType;
 
 			location.Address = update.Address;
-			location.City = update.City;
+			location.Locality = update.Locality;
 			location.Postcode = update.Postcode;
 
 			location.Region = GeoRegionInfo.Find(update.Region);
@@ -146,7 +146,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Remove(string id)
 		{
-			_cache.Remove(id.ToUpperInvariant());
+			_cartoService.RemoveLocation(id);
 
 			return new RedirectResult($"/geo/locations/");
 		}

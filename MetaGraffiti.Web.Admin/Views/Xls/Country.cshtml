@@ -10,19 +10,27 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
+					<th>Locality</th>
 					<th>Region</th>
-					<th>District</th>
+					<th>Location</th>
 				</tr>
 			</thead>
 			@{
 				var count = 0;
-				foreach (var place in Model.ListPlacesOrdered())
+				foreach (var row in Model.ListRowsOrdered())
 				{
-					<tr class="@(String.IsNullOrWhiteSpace(place.Country) ? "table-danger" : "")">
+					<tr class="@Model.GetRowCss(row)">
 						<td class="text-center">@(++count)</td>
-						<td><a href="/geo/search/?name=@place.Name @place.Country">@place.Name</a></td>
-						<td>@place.Region</td>
-						<td>@place.District</td>
+						<td><a href="/geo/search/?name=@row.Place.Name @row.Place.Country">@row.Place.Name</a></td>
+						<td>@row.Place.Locality</td>
+						<td>@row.Place.Region</td>
+						<td>
+							@if (row.Location != null)
+							{
+								<a href="/geo/location/@(row.Location.PlaceKey)">@row.Location.Name</a>
+								<span>@row.Location.Locality <b>@(row.Location.Region?.RegionName ?? "")</b></span>
+							}
+						</td>
 					</tr>
 				}
 			}

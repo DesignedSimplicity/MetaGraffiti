@@ -120,8 +120,8 @@ namespace MetaGraffiti.Base.Services
 			data.Premise = result.Premise;
 			if (!String.IsNullOrWhiteSpace(result.SubPremise)) data.Premise += @" \ " + result.SubPremise;
 
-			data.City = result.Locality;
-			data.Localities = result.SubLocality;
+			data.Locality = result.Locality;
+			data.Sublocalities = result.SubLocality;
 
 			data.Center = result.Center;
 			data.Bounds = result.Bounds;

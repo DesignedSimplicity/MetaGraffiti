@@ -72,7 +72,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public string Description { get; set; }
 
 		public string Address { get; set; }
-		public string City { get; set; }
+		public string Locality { get; set; }
 		public string Postcode { get; set; }
 
 		public string Premise { get; set; }

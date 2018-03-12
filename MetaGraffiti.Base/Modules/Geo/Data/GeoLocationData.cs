@@ -29,13 +29,13 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public string Description { get; set; }
 
 		public string Address { get; set; }
-		public string City { get; set; }
+		public string Locality { get; set; }
 		public string PostCode { get; set; }
 
 		public string Premise { get; set; }
 
 		public string Subregions { get; set; }
-		public string Localities { get; set; }
+		public string Sublocalities { get; set; }
 
 
 		public IGeoCoordinate Center { get; set; }

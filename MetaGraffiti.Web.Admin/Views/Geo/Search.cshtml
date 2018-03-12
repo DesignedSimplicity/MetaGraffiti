@@ -125,6 +125,7 @@
 					<th>Local Name</th>
 					<th>Display Name</th>
 					<th>Source Type</th>
+					<th>Locality</th>
 					<th>Region</th>
 					<th>Raw Data</th>
 				</tr>
@@ -134,15 +135,16 @@
 					var count = 0;
 					foreach (var lr in Model.Locations)
 					{
-						<tr class="js-location-row" data-index="@(count)">
-							<td class="text-center">@(++count)</td>
-							<td><a href="/geo/location/?key=@(lr.GoogleKey)">@lr.Name</a></td>
-							<td>@lr.LocalName</td>
-							<td>@lr.DisplayAs</td>
-							<td>@lr.PlaceType</td>
-							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-							<td><input value="@lr.Data.RawData" /></td>
-						</tr>
+				<tr class="js-location-row" data-index="@(count)">
+					<td class="text-center">@(++count)</td>
+					<td><a href="/geo/location/?key=@(lr.GoogleKey)">@lr.Name</a></td>
+					<td>@lr.LocalName</td>
+					<td>@lr.DisplayAs</td>
+					<td>@lr.PlaceType</td>
+					<td>@lr.Locality</td>
+					<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+					<td><input value="@lr.Data.RawData" /></td>
+				</tr>
 					}
 				}
 			</tbody>

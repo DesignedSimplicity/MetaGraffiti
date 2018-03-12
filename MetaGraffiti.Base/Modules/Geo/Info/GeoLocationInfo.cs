@@ -42,15 +42,15 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			Description = data.Description;
 
-			City = data.City;
+			Locality = data.Locality;
 			Address = data.Address;
 			Postcode = data.PostCode;
 
 			Subregions = data.Subregions;
-			Localities = data.Localities;
+			Localities = data.Sublocalities;
 
 			// override place type
-			if (Name == City)
+			if (Name == Locality)
 				PlaceType = "City";
 			//else if (Region != null && Name == Region.RegionName)
 				//PlaceType = "Region";
@@ -72,7 +72,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		//public string Keywords { get; set; }
 
 
-		public string City { get; set; }
+		public string Locality { get; set; }
 
 		public string Address { get; set; }
 		public string Postcode { get; set; }

@@ -81,6 +81,7 @@
 					<th>Local Name</th>
 					<th>Display Name</th>
 					<th>Source Type</th>
+					<th>Locality</th>
 					<th>Region</th>
 					<th>Action</th>
 				</tr>
@@ -96,6 +97,7 @@
 							<td>@lr.LocalName</td>
 							<td>@lr.DisplayAs</td>
 							<td>@lr.PlaceType</td>
+							<td>@lr.Locality</td>
 							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
 							<td>
 								<a class="btn btn-danger" href="/geo/remove/@(lr.PlaceKey)">Remove</a>
