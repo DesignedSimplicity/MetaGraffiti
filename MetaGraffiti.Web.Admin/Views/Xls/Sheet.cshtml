@@ -7,11 +7,11 @@
 	<span class="h1">Sheets</span>
 	<span class="h2">
 		:
-		<a href="/xls/sheets/">All</a>
+		<a href="/xls/sheet/">All</a>
 		@foreach (var sheet in Model.Sheets.OrderBy(x => x.SheetName))
 		{
 			<span> | </span>
-			<a class="@(Model.IsSelected(sheet) ? "font-italic" : "")" href="/xls/sheets/@(sheet.SheetName)">@sheet.SheetName</a>
+			<a class="@(Model.IsSelected(sheet) ? "font-italic" : "")" href="/xls/sheet/@(sheet.SheetName)">@sheet.SheetName</a>
 		}
 	</span>
 </div>

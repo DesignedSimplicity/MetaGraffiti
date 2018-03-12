@@ -27,7 +27,7 @@
 				{
 					<tr class="@(String.IsNullOrWhiteSpace(place.Country) ? "table-danger" : "")">
 						<td class="text-center">@(++count)</td>
-						<td>@place.Name</td>
+						<td><a href="/geo/search/?name=@place.Name @place.Country">@place.Name</a></td>
 						<td>@place.District</td>
 						<td>@place.Region</td>
 						<td>@place.Country</td>

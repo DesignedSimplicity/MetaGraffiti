@@ -82,7 +82,7 @@
 					<th>Display Name</th>
 					<th>Source Type</th>
 					<th>Region</th>
-					<th>Data</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -97,7 +97,9 @@
 							<td>@lr.DisplayAs</td>
 							<td>@lr.PlaceType</td>
 							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-							<td><input value="@lr.Data.RawData" /></td>
+							<td>
+								<a class="btn btn-danger" href="/geo/remove/@(lr.PlaceKey)">Remove</a>
+							</td>
 						</tr>
 					}
 				}

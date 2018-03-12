@@ -14,7 +14,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GeoController : Controller
     {
-		//private GoogleApiService _service = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 		private GeoLookupService _service = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();
 
@@ -142,6 +141,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			//location.Timezone = GeoTimezoneInfo.Find
 
 			return new RedirectResult($"/geo/location/{id}");
+		}
+
+		[HttpGet]
+		public ActionResult Remove(string id)
+		{
+			_cache.Remove(id.ToUpperInvariant());
+
+			return new RedirectResult($"/geo/locations/");
 		}
 	}
 }
