@@ -115,7 +115,7 @@ namespace MetaGraffiti.Base.Services
 			var address = $"{result.StreeNumber} {result.Route}";
 			data.Address = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
 			//data.City = result.City;
-			data.PostCode = result.PostalCode;
+			data.Postcode = result.PostalCode;
 
 			data.Premise = result.Premise;
 			if (!String.IsNullOrWhiteSpace(result.SubPremise)) data.Premise += @" \ " + result.SubPremise;

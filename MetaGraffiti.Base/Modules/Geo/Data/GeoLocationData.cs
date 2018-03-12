@@ -30,7 +30,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 
 		public string Address { get; set; }
 		public string Locality { get; set; }
-		public string PostCode { get; set; }
+		public string Postcode { get; set; }
 
 		public string Premise { get; set; }
 

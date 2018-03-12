@@ -9,6 +9,9 @@ namespace MetaGraffiti.Web.Admin
 
 		public static string RootConfigUri { get { return _configRoot; } }
 
+		public static string CartoDataUri = Path.Combine(RootConfigUri, @"KnE\LocationCache.xlsx");
+		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"KnE\ConsolidatedTrips.xlsx");
+
 
 		private static string _googleMapsApiKey = "";
 		public static string GoogleMapsApiKey

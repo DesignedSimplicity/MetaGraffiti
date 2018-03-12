@@ -15,6 +15,7 @@ namespace MetaGraffiti.Base.Services
 {
 	public class OrthoXlsService
 	{
+		//TODO: make this instance based and reusable for multiple files
 		private static object _lock = true;
 		private static XlsFileData _source;
 

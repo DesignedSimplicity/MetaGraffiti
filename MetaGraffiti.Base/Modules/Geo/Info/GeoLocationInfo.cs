@@ -28,11 +28,16 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public GeoLocationInfo(GeoLocationData data)
 		{
 			_data = data;
-			ID = CryptoGraffiti.NewHashID();
+			
 			Region = GeoRegionInfo.Find(data.Region);
 			Country = GeoCountryInfo.Find(data.Country);
 
-			PlaceKey = ID;
+			ID = (String.IsNullOrWhiteSpace(data.PlaceKey)
+					? CryptoGraffiti.NewHashID().ToUpperInvariant()
+					: data.PlaceKey.ToUpperInvariant()
+					);
+
+			PlaceKey = data.PlaceKey;
 			PlaceType = data.PlaceType;
 			GoogleKey = data.GoogleKey;
 
@@ -44,10 +49,10 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			Locality = data.Locality;
 			Address = data.Address;
-			Postcode = data.PostCode;
+			Postcode = data.Postcode;
 
 			Subregions = data.Subregions;
-			Localities = data.Sublocalities;
+			Sublocalities = data.Sublocalities;
 
 			// override place type
 			if (Name == Locality)
@@ -80,7 +85,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		public string Subregions { get; set; } // Region2 \ 3 \ 4 \ 5
 
-		public string Localities { get; set; } // Sublocalities
+		public string Sublocalities { get; set; } // Sublocalities
 
 
 

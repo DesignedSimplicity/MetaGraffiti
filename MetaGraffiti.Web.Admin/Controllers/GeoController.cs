@@ -17,6 +17,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		private CartoLocationService _cartoService = new CartoLocationService();
 		private GeoLookupService _geoService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 
+		public GeoController()
+		{
+			_cartoService.Init(AutoConfig.CartoDataUri);
+		}
+
 		public GeoViewModel InitModel()
 		{
 			var model = new GeoViewModel()
