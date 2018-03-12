@@ -57,7 +57,7 @@
 
 			var index = $(this).data("index");
 			var location = _locations[index];
-			
+
 			location.marker.setAnimation(null);
 
 			fitBounds(location.bounds);
@@ -77,31 +77,29 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
-					<th>Name <span class="small font-italic">Display</span></th>
-					<th>Type</th>
+					<th>Name</th>
+					<th>Local Name</th>
+					<th>Display Name</th>
+					<th>Source Type</th>
 					<th>Region</th>
-					<th>Full Address</th>
+					<th>Data</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var lr in Model.Locations)
-				{
-					<tr class="js-location-row" data-index="@(count)">
-						<td class="text-center">@(++count)</td>
-						<td>
-							<a href="/geo/location/?key=@(lr.Data.PlaceKey)">@lr.Name</a>
-							@if (lr.Name != lr.Data.DisplayName)
-						{
-							<div class="small font-italic">@lr.Data.DisplayName</div>
+					var count = 0;
+					foreach (var lr in Model.Locations)
+					{
+						<tr class="js-location-row" data-index="@(count)">
+							<td class="text-center">@(++count)</td>
+							<td><a href="/geo/location/@(lr.PlaceKey)">@lr.Name</a></td>
+							<td>@lr.LocalName</td>
+							<td>@lr.DisplayAs</td>
+							<td>@lr.PlaceType</td>
+							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+							<td><input value="@lr.Data.RawData" /></td>
+						</tr>
 					}
-						</td>
-						<td>@lr.Data.DisplayNameType</td>
-						<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-						<td class="small">@lr.Data.FullAddress</td>
-					</tr>
-			}
 				}
 			</tbody>
 		</table>

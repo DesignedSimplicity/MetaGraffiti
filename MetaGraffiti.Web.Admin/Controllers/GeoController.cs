@@ -122,10 +122,24 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			var id = update.ID.ToUpperInvariant();
+			var id = update.PlaceKey.ToUpperInvariant();
 
 			var location = _cache[id];
+
 			location.Name = update.Name;
+			location.LocalName = update.LocalName;
+			location.DisplayAs = update.DisplayAs;
+
+			location.Description = update.Description;
+
+			location.PlaceType = update.PlaceType;
+
+			location.Address = update.Address;
+			location.City = update.City;
+			location.Postcode = update.Postcode;
+
+			location.Region = GeoRegionInfo.Find(update.Region);
+			//location.Timezone = GeoTimezoneInfo.Find
 
 			return new RedirectResult($"/geo/location/{id}");
 		}

@@ -42,12 +42,18 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			Description = data.Description;
 
-			//City
-			Address = data.StreetAddress;
+			City = data.City;
+			Address = data.Address;
 			Postcode = data.PostCode;
 
 			Subregions = data.Subregions;
 			Localities = data.Localities;
+
+			// override place type
+			if (Name == City)
+				PlaceType = "City";
+			//else if (Region != null && Name == Region.RegionName)
+				//PlaceType = "Region";
 		}
 
 
@@ -74,7 +80,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 		public string Subregions { get; set; } // Region2 \ 3 \ 4 \ 5
 
-		public string Localities { get; set; } // Locality \ Sublocality
+		public string Localities { get; set; } // Sublocalities
 
 
 

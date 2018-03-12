@@ -28,7 +28,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Data
 		public string DisplayAs { get; set; }
 		public string Description { get; set; }
 
-		public string StreetAddress { get; set; }
+		public string Address { get; set; }
 		public string City { get; set; }
 		public string PostCode { get; set; }
 

@@ -55,11 +55,33 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class GeoLocationUpdateModel
 	{
-		public string ID { get; set; }
+		public string PlaceKey { get; set; }
+		public string PlaceType { get; set; }
 
-		public string Key { get; set; }
+		//public string GoogleKey { get; set; }
+		public string IconKey { get; set; }
+
+		public string Timezone { get; set; }
+		public string Country { get; set; }
+		public string Region { get; set; }
+
 
 		public string Name { get; set; }
+		public string LocalName { get; set; }
+		public string DisplayAs { get; set; }
+		public string Description { get; set; }
 
+		public string Address { get; set; }
+		public string City { get; set; }
+		public string Postcode { get; set; }
+
+		public string Premise { get; set; }
+
+		public string Subregions { get; set; }
+		public string Localities { get; set; }
+
+
+		public IGeoCoordinate Center { get; set; }
+		public IGeoPerimeter Bounds { get; set; }
 	}
 }

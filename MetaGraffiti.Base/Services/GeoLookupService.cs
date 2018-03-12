@@ -113,15 +113,15 @@ namespace MetaGraffiti.Base.Services
 				data.Subregions += @" \ " + result.Region5;
 
 			var address = $"{result.StreeNumber} {result.Route}";
-			data.StreetAddress = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
+			data.Address = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
 			//data.City = result.City;
 			data.PostCode = result.PostalCode;
 
 			data.Premise = result.Premise;
 			if (!String.IsNullOrWhiteSpace(result.SubPremise)) data.Premise += @" \ " + result.SubPremise;
 
-			data.Localities = result.Locality;
-			if (!String.IsNullOrWhiteSpace(result.SubLocality)) data.Localities += @" \ " + result.SubLocality;
+			data.City = result.Locality;
+			data.Localities = result.SubLocality;
 
 			data.Center = result.Center;
 			data.Bounds = result.Bounds;
