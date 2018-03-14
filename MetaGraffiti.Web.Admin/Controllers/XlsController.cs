@@ -20,7 +20,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public XlsController()
 		{
-			_xlsService.Init(AutoConfig.CartoDataUri);
+			_xlsService.Init(AutoConfig.PlaceDataUri);
 			_cartoService.Init(AutoConfig.CartoDataUri);
 		}
 

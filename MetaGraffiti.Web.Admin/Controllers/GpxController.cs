@@ -14,7 +14,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GpxController : Controller
     {
-		private OrthoGpxService _gpxService = new OrthoGpxService();
+		private GpxCacheService _gpxService;
+
+		public GpxController()
+		{
+			_gpxService = ServiceConfig.GpxSourceService;
+		}
 
 		//TODO: refactor this to a repository pattern
 		private GpxManagerModel TrackManager
@@ -33,8 +38,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			string rootUri = Path.Combine(AutoConfig.RootConfigUri, "GPS");
 
 			var model = new GpxViewModel();
-			model.Files = _gpxService.Init(rootUri);
-			model.Cache = _gpxService.LoadDirectory(rootUri, true);
+			//model.Files = _gpxService.Init(rootUri);
+			//model.Cache = _gpxService.LoadDirectory(rootUri, true);
+			model.Cache = _gpxService.ListCached();
 			model.Manager = this.TrackManager;
 
 			return model;

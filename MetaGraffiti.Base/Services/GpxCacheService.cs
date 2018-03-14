@@ -13,71 +13,13 @@ using MetaGraffiti.Base.Modules.Ortho.Info;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class OrthoGpxService
+	public class GpxCacheService
 	{
-		private static List<FileInfo> _gpxFiles = null;
-		private static Dictionary<string, GpxCache> _gpxCache = null;
+		private ICacheService<GpxCache> _cache = null;
 
-		/// <summary>
-		/// Recursively discovers all GPX files located in URI specified
-		/// </summary>
-		public List<FileInfo> Init(string uri)
+		public GpxCacheService(ICacheService<GpxCache> cache)
 		{
-			if (_gpxFiles == null)
-			{
-				_gpxFiles = new List<FileInfo>();
-				_gpxCache = new Dictionary<string, GpxCache>();
-				lock (_gpxFiles)
-				{
-					var root = new DirectoryInfo(uri);
-					foreach (var file in root.EnumerateFiles("*.*", SearchOption.AllDirectories))
-					{
-						if (file.Extension.ToLowerInvariant() == ".gpx")
-						{
-							_gpxFiles.Add(file);
-						}
-					}
-				}
-			}
-			return _gpxFiles;
-		}
-
-		/// <summary>
-		/// Loads and parses all of the files in the given directory
-		/// </summary>
-		public List<GpxCache> LoadDirectory(string uri, bool recursive = false)
-		{
-			// list matching files from cache
-			var start = new DirectoryInfo(uri).FullName;
-			var files = _gpxFiles.AsQueryable();
-			if (recursive)
-			{
-				if (!start.EndsWith(Path.DirectorySeparatorChar.ToString())) start += Path.DirectorySeparatorChar;
-				files = files.Where(x => x.FullName.StartsWith(start, StringComparison.InvariantCultureIgnoreCase));
-			}
-			else
-				files = files.Where(x => String.Compare(x.Directory.FullName, start, true) == 0);
-
-			// enumerate each file and load if necessary
-			var list = new List<GpxCache>();
-			lock (_gpxCache)
-			{
-				foreach (var file in files)
-				{
-					var key = file.FullName.ToLowerInvariant();
-					if (!_gpxCache.ContainsKey(key))
-					{
-						var gpx = new GpxFileInfo(file.FullName);
-						var cache = new GpxCache(gpx);
-						if (gpx.Valid) InitMetaData(cache);
-						_gpxCache.Add(key, cache);
-					}
-
-					// add new or exsting item to list
-					list.Add(_gpxCache[key]);
-				}
-			}
-			return list;
+			_cache = cache;
 		}
 
 		/// <summary>
@@ -85,20 +27,56 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public GpxCache LoadFile(string uri)
 		{
-			var key = uri.ToLowerInvariant();
-			if (!_gpxCache.ContainsKey(key)) return null;
-			var cache = _gpxCache[key];
-			if (cache.MetaData == null) InitMetaData(cache);
-			return cache;
+			// check for existing file
+			var ID = uri.ToLowerInvariant();
+			if (_cache.Contains(ID)) return _cache[ID];
+
+			// load and add to cache
+			var gpx = new GpxFileInfo(uri);
+			var cache = new GpxCache(gpx);
+
+			// initalize metadata if valid
+			if (gpx.Valid) InitMetaData(cache);
+
+			// add to cache and return
+			return _cache.Add(ID, cache);
 		}
+
+		/// <summary>
+		/// Loads and parses all of the files in the given directory
+		/// </summary>
+		public List<GpxCache> LoadDirectory(string uri, bool recursive = false)
+		{
+			// get all source files
+			var root = new DirectoryInfo(uri);
+			var files = root.EnumerateFiles("*.gpx", recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+
+			var list = new List<GpxCache>();
+			foreach (var file in files)
+			{
+				var gpx = LoadFile(file.FullName);
+				list.Add(gpx);
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// Retuns a list of all cached files
+		/// </summary>
+		/// <returns></returns>
+		public List<GpxCache> ListCached()
+		{
+			return _cache.All;
+		}
+
 
 		/// <summary>
 		/// Updates the cached metadata for the file and marks the record is dirty
 		/// </summary>
 		public GpxCache UpdateMetaData(string uri, GpxUpdateRequest update)
 		{
-			var key = uri.ToLowerInvariant();
-			var cache = _gpxCache[key];
+			var ID = uri.ToLowerInvariant();
+			var cache = _cache[ID];
 			cache.IsDirty = true;
 
 			var data = cache.MetaData;
@@ -115,8 +93,8 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public GpxCache UpdateFilters(string uri, GpxFilterRequest filter)
 		{
-			var key = uri.ToLowerInvariant();
-			var cache = _gpxCache[key];
+			var ID = uri.ToLowerInvariant();
+			var cache = _cache[ID];
 			cache.IsDirty = true;
 
 			cache.Filter = filter;
@@ -202,30 +180,34 @@ namespace MetaGraffiti.Base.Services
 				? Path.GetFileNameWithoutExtension(file.Uri)
 				: file.Name;
 			data.Description = file.Description;
-			data.Timestamp = file.Points.First().Timestamp.Value;
+
+			var first = file.Points.FirstOrDefault();
+			data.Timestamp = first?.Timestamp ?? DateTime.MinValue;
 
 			// TODO: calcuate geo perimiter
 
 
 			// determine country and region info
-			var point = file.Points.First();
-			var regions = GeoRegionInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
-			var countries = GeoCountryInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
-			data.Region = regions.FirstOrDefault();
-			if (data.Region != null)
+			if (first != null)
 			{
-				data.Country = data.Region.Country;
-				data.LocationName = $"{data.Region.RegionName}, {data.Country.Name}";
-			}
-			else
-			{
-				data.Country = countries.FirstOrDefault();
-				if (data.Country != null) data.LocationName = data.Country.Name;
-			}
+				var regions = GeoRegionInfo.ListByLocation(first).OrderBy(x => GeoDistance.BetweenPoints(x.Center, first).Meters);
+				var countries = GeoCountryInfo.ListByLocation(first).OrderBy(x => GeoDistance.BetweenPoints(x.Center, first).Meters);
+				data.Region = regions.FirstOrDefault();
+				if (data.Region != null)
+				{
+					data.Country = data.Region.Country;
+					data.LocationName = $"{data.Region.RegionName}, {data.Country.Name}";
+				}
+				else
+				{
+					data.Country = countries.FirstOrDefault();
+					if (data.Country != null) data.LocationName = data.Country.Name;
+				}
 
-			// best guess for timezone
-			data.Timezone = GuessTimezone(countries, regions);
-			data.LocalTime = data.Timezone.FromUTC(point.Timestamp.Value);
+				// best guess for timezone
+				data.Timezone = GuessTimezone(countries, regions);
+				data.LocalTime = data.Timezone.FromUTC(data.Timestamp);
+			}
 
 			// update cache
 			cache.MetaData = data;
@@ -294,8 +276,6 @@ namespace MetaGraffiti.Base.Services
 			return GeoTimezoneInfo.ByKey("UTC");
 		}
 	}
-
-
 	public class GpxCache
 	{
 		public bool IsCached { get { return File != null && MetaData != null; } }

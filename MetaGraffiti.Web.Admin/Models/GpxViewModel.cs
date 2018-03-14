@@ -15,7 +15,7 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class GpxViewModel : AdminViewModel
 	{
-		public List<FileInfo> Files { get; set; }
+		public List<FileInfo> Files { get { return Cache.Select(x => new FileInfo(x.File.Uri)).ToList(); } }
 		public List<GpxCache> Cache { get; set; }
 
 		public GpxManagerModel Manager { get; set; }

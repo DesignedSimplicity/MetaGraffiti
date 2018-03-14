@@ -37,9 +37,12 @@ namespace MetaGraffiti.Base.Tests
 				return Path.Combine(path, @"..\..\");
 		}
 
-		public static string GetTestDataDirectory()
+		public static string GetTestDataDirectory(string subdirectory = "")
 		{
-			return Path.Combine(GetTestRootDirectory(), "Data");
+			if (String.IsNullOrWhiteSpace(subdirectory))
+				return Path.Combine(GetTestRootDirectory(), "Data");
+			else
+				return Path.Combine(GetTestRootDirectory(), "Data", subdirectory);
 		}
 
 		public static string GetTestDataFileUri(string filename)
