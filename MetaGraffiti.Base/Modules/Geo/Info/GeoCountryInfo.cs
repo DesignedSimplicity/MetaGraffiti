@@ -113,6 +113,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		{
 			if (String.IsNullOrWhiteSpace(text)) return null;
 
+			text = text.Trim();
+
 			if (text.Length == 2 || text.Length == 3) return ByISO(text);
 
 			var c = Cache.FirstOrDefault(x => String.Compare(x.Name, text, true) == 0);

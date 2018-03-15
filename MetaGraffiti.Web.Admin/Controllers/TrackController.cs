@@ -24,6 +24,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	// track/import/				POST saves current edit session into known location/format
 	// track/export/				POST creates GPX or KML file for download from current edit session
 	// track/filter/				POST Filters an existing extract track specified by the ID
+	// track/revert/				POST Resets the filtered points back to the full initial data set
 	// track/extract/				POST Extracts a given set of points data from an existing GPX file into the current edit session
 	// track/remove/				POST Removes the given list of points from the current edit session
 	// track/edit/{id}				GET Displays a single set of points from the current edit session
@@ -31,7 +32,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	// track/delete/{id}			POST Removes the set of points from the current edit session
 
 
+	
+		// TODO: lookup timezone
+	// TODO: lookup country
 
+	// TODO: import
+	// TODO: validation
 
 	public class TrackController : Controller
 	{
@@ -55,12 +61,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			return View("Track", model);
-		}
-
-		[HttpGet]
-		public ActionResult Update()
-		{
-			return Redirect(TrackViewModel.GetTrackUrl());
 		}
 
 		/// <summary>
@@ -90,16 +90,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Exports all of the tracks in the current edit session to a new file
 		/// </summary>
-		public ActionResult Export(TrackExportRequest export)
+		public ActionResult Export(string format)
 		{
-			var model = InitModel();
+			var data = _service.Export(format);
+			var name = _service.Track.Name;
 
-			return View(model);
+			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}
-
-
-
-
 
 		/// <summary>
 		/// Extracts a given set of points data from an existing GPX file into the current edit session
@@ -110,7 +107,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return Redirect(TrackViewModel.GetEditUrl(extracted.ID));
 		}
-
 
 		/// <summary>
 		/// Displays a single set of points from the current edit session
@@ -135,7 +131,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedExtract = _service.Update(save);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
-			return View(model);
+			return View("Edit", model);
 		}
 
 		/// <summary>
@@ -147,6 +143,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var filtered = _service.Filter(filter);
 
 			return Redirect(TrackViewModel.GetEditUrl(filtered.ID));
+		}
+
+		/// <summary>
+		/// Resets the filtered points back to the full initial data set
+		/// </summary>
+		public ActionResult Revert(string ID)
+		{
+			var filtered = _service.Revert(ID);
+
+			return Redirect(TrackViewModel.GetEditUrl(ID));
 		}
 
 		/// <summary>

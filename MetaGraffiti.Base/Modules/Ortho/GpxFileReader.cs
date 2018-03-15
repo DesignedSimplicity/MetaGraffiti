@@ -67,7 +67,12 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			data.Description = ReadString(_xml.DocumentElement, "desc");
 			data.Timestamp = ReadDateTime(_xml.DocumentElement, "time");
 
-			// TODO: support other optional elements
+			// optional top elements
+			data.Url = ReadString(_xml.DocumentElement, "url");
+			data.UrlName = ReadString(_xml.DocumentElement, "urlname");
+			data.Keywords = ReadString(_xml.DocumentElement, "keywords");
+
+			// TODO: support other optional elements		
 
 			return data;
 		}
@@ -162,7 +167,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 			meta.Source = ReadString(node, "src");
 			meta.Url = ReadString(node, "url");
-			meta.UrlText = ReadString(node, "urlname");
+			meta.UrlName = ReadString(node, "urlname");
 		}
 
 		private GpxPointData ReadPoint(XmlNode node, GpxPointTypes pointType)

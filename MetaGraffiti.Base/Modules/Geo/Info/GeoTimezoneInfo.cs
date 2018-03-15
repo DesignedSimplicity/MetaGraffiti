@@ -103,6 +103,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		{
 			if (String.IsNullOrWhiteSpace(text)) return null;
 
+			text = text.Trim();
+
 			var t = ByKey(text);
 			if (t != null) return t;
 
@@ -113,6 +115,17 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			if (t != null) return t;
 
 			return ByName(text);
+		}
+
+		public static GeoTimezoneInfo ByCountry(GeoCountryInfo country)
+		{
+			if (country == null) return null;
+
+			switch (country.ISO2)
+			{
+				case "NZ": return ByTZID("Pacific/Auckland");
+				default: return null;
+			}
 		}
 
 		// --------------------------------------------------

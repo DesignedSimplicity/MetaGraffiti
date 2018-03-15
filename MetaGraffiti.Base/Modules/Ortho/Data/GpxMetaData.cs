@@ -16,13 +16,13 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 
 	public class GpxMetaData
 	{
-		public string Name;
-		public string Comment;
-		public string Description;
+		public string Name { get; set; }
+		public string Comment { get; set; }
+		public string Description { get; set; }
 
-		public string Source;
-		public string Url;
-		public string UrlText;
+		public string Source { get; set; }
+		public string Url { get; set; }
+		public string UrlName { get; set; }
 
 		public GpxMetaData CopyMetaData()
 		{
@@ -38,7 +38,7 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 			dest.Description = Description;
 			dest.Source = Source;
 			dest.Url = Url;
-			dest.UrlText = UrlText;
+			dest.UrlName = UrlName;
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
 		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? Gpx.XmlNamespaceV1 : Gpx.XmlNamespaceV1_1; } }
 
-		public void WriteHeader(string name, string description = null, DateTime? timestamp = null)
+		public void WriteHeader(IGpxFileHeader header)
 		{
 			_xml = new XmlDocument();
 			_xml.LoadXml(_gpxTemplateV1);
@@ -30,24 +30,52 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 			_xml.DocumentElement.Attributes["creator"].InnerText = Creator;
 			_xml.DocumentElement.Attributes["version"].InnerText = Version == GpxSchemaVersion.Version1 ? "1.0" : "1.1";
-			if (timestamp.HasValue)
+			if (header.Timestamp.HasValue)
 			{
 				var timestampNode = _xml.CreateElement("time", Namespace);
 				_xml.DocumentElement.AppendChild(timestampNode);
-				timestampNode.InnerText = timestamp.Value.ToString("s") + "Z";
+				timestampNode.InnerText = header.Timestamp.Value.ToString("s") + "Z";
 			}
-			if (!String.IsNullOrWhiteSpace(name))
+			if (!String.IsNullOrWhiteSpace(header.Name))
 			{
 				var nameNode = _xml.CreateElement("name", Namespace);
 				_xml.DocumentElement.AppendChild(nameNode);
-				nameNode.InnerText = name;
+				nameNode.InnerText = header.Name;
 			}
-			if (!String.IsNullOrWhiteSpace(description))
+			if (!String.IsNullOrWhiteSpace(header.Description))
 			{
 				var descriptionNode = _xml.CreateElement("desc", Namespace);
 				_xml.DocumentElement.AppendChild(descriptionNode);
-				descriptionNode.InnerText = description;
+				descriptionNode.InnerText = header.Description;
 			}
+			if (!String.IsNullOrWhiteSpace(header.Keywords))
+			{
+				var keywordsNode = _xml.CreateElement("keywords", Namespace);
+				_xml.DocumentElement.AppendChild(keywordsNode);
+				keywordsNode.InnerText = header.Keywords;
+			}
+			if (!String.IsNullOrWhiteSpace(header.Url))
+			{
+				var urlNode = _xml.CreateElement("url", Namespace);
+				_xml.DocumentElement.AppendChild(urlNode);
+				urlNode.InnerText = header.Url;
+			}
+			if (!String.IsNullOrWhiteSpace(header.UrlName))
+			{
+				var urlNameNode = _xml.CreateElement("urlname", Namespace);
+				_xml.DocumentElement.AppendChild(urlNameNode);
+				urlNameNode.InnerText = header.UrlName;
+			}
+		}
+
+		public void WriteHeader(string name, string description = null, DateTime? timestamp = null)
+		{
+			WriteHeader(new GpxFileData()
+			{
+				Name = name,
+				Description = description,
+				Timestamp = timestamp
+			});
 		}
 
 		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)

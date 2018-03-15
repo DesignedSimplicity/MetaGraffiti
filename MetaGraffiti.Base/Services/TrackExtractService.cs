@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -39,13 +40,18 @@ namespace MetaGraffiti.Base.Services
 			return deleted;
 		}
 
+		public string GenerateFilename()
+		{
+			return $"{String.Format("{0:yyyyMMdd}", _track.Timestamp)} {_track.Name}";
+		}
+
 		public TrackInfo Update(TrackUpdateRequest update)
 		{
 			_track.Name = update.Name;
 			_track.Description = update.Description;
 			_track.Keywords = update.Keywords;
 			_track.Url = update.Url;
-			_track.Link = update.Link;
+			_track.UrlName = update.UrlName;
 
 			_track.Timezone = GeoTimezoneInfo.Find(update.Timezone);
 			_track.Country = GeoCountryInfo.Find(update.Country);
@@ -69,7 +75,10 @@ namespace MetaGraffiti.Base.Services
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = gpx.Name;
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = Path.GetFileNameWithoutExtension(file.Name);
 
-			extract.Points = FilterPoints(gpx.Tracks.SelectMany(x => x.Points), request);
+			extract.SourcePoints = gpx.Tracks.SelectMany(x => x.Points).ToList();
+			extract.Points = FilterPoints(extract.SourcePoints, request);
+
+			InitTrack(extract);
 
 			_extracts.Add(extract.ID, extract);
 			return extract;
@@ -92,6 +101,13 @@ namespace MetaGraffiti.Base.Services
 			return extract;
 		}
 
+		public TrackExtractInfo Revert(string ID)
+		{
+			var extract = Get(ID);
+			extract.Points = extract.SourcePoints;
+			return extract;
+		}
+
 		public TrackExtractInfo Remove(TrackRemovePointsRequest request)
 		{
 			var extract = Get(request.ID);
@@ -109,17 +125,73 @@ namespace MetaGraffiti.Base.Services
 
 		public TrackInfo Import(TrackImportRequest request)
 		{
-			Update(request);
 			return null;
 		}
 
-		public TrackInfo Export(TrackExportRequest request)
+		public byte[] Export(string format)
 		{
-			Update(request);
-			return null;
+			if (format.ToUpperInvariant() == "GPX")
+				return GenerateGPX();
+			else if (format.ToUpperInvariant() == "KML")
+				return GenerateKML();
+			else
+				return null;
 		}
 
 
+		private byte[] GenerateGPX()
+		{
+			var writer = new GpxFileWriter();
+			writer.WriteHeader(_track);
+
+			foreach (var track in List())
+			{
+				writer.WriteTrack(track.Name, track.Description, track.Points);
+			}
+			return Encoding.ASCII.GetBytes(writer.GetXml());
+		}
+
+		private byte[] GenerateKML()
+		{
+			var writer = new KmlFileWriter();
+			writer.WriteHeader(_track.Name, _track.Description);
+
+			foreach (var track in List())
+			{
+				writer.WriteTrack(track.Name, track.Description, track.Points);
+			}
+			return Encoding.ASCII.GetBytes(writer.GetXml());
+		}
+
+
+		private void InitTrack(TrackExtractInfo extract)
+		{
+			// set initial name to source track
+			if (String.IsNullOrWhiteSpace(_track.Name)) _track.Name = extract.Name;
+
+			// set initial timestamp in UTC_track.Timestamp
+			var point = extract.Points.FirstOrDefault();
+			if (_track.Timestamp == null) _track.Timestamp = point.Timestamp;
+
+			// auto select country and region if identifiable
+			if (_track.Country == null)
+			{
+				var countries = GeoCountryInfo.ListByLocation(point);
+				if (countries.Count() == 1) _track.Country = countries.First();
+			}
+			if (_track.Region == null)
+			{
+				var regions = GeoRegionInfo.ListByLocation(point);
+				if (regions.Count() == 1)
+				{
+					var region = regions.First();
+					if (_track.Country.IsSame(region.Country)) _track.Region = region;
+				}
+			}
+
+			// set default for countries with single timezone
+			if (_track.Timezone == null && _track.Country != null) _track.Timezone = GeoTimezoneInfo.ByCountry(_track.Country);
+		}
 
 		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackFilterBase filter)
 		{
@@ -135,15 +207,17 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
-	public class TrackInfo
+	public class TrackInfo : IGpxFileHeader
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }
 
+		public DateTime? Timestamp { get; set; }
+
 		public string Keywords { get; set; }
 
 		public string Url { get; set; }
-		public string Link { get; set; }
+		public string UrlName { get; set; }
 
 		public GeoTimezoneInfo Timezone { get; set; }
 		public GeoCountryInfo Country { get; set; }
@@ -160,6 +234,8 @@ namespace MetaGraffiti.Base.Services
 		public string Description { get; set; }
 
 		public List<GpxPointData> Points { get; set; }
+
+		public List<GpxPointData> SourcePoints { get; set; }
 	}
 
 	public class TrackUpdateRequest
@@ -170,7 +246,7 @@ namespace MetaGraffiti.Base.Services
 		public string Keywords { get; set; }
 
 		public string Url { get; set; }
-		public string Link { get; set; }
+		public string UrlName { get; set; }
 
 		public string Timezone { get; set; }
 		public string Country { get; set; }
@@ -190,12 +266,12 @@ namespace MetaGraffiti.Base.Services
 
 
 
-	public class TrackImportRequest : TrackUpdateRequest
+	public class TrackImportRequest
 	{
 		public bool Overwrite { get; set; }
 	}
 
-	public class TrackExportRequest : TrackUpdateRequest
+	public class TrackExportRequest
 	{
 		public string Format { get; set; }
 	}

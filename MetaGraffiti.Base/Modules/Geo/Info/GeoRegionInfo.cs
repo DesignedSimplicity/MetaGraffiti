@@ -107,6 +107,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		{
 			if (String.IsNullOrWhiteSpace(text)) return null;
 
+			text = text.Trim();
+
 			var r = ByISO(text);
 			if (r != null) return r;
 

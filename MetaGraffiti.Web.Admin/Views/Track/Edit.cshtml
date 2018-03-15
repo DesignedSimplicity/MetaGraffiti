@@ -3,11 +3,15 @@
 
 @Html.Partial("_Nav")
 
+@{
+	var extract = Model.SelectedExtract;
+}
+
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _marker = null;
-	var _track = @Model.GetSelectedExtractJson();
+	var _track = @Model.GetExtractJson();
 
 	$(document).ready(function () {
 		initMap();
@@ -16,34 +20,25 @@
 		$(".js-point-row").hover(function () {
 			if (_marker != null) _marker.setMap(null);
 
-			var lat = $(this).data("lat");
-			var lng = $(this).data("lng");
-			var id = $(this).data("id").toString();
-			_marker = markPoint(lat, lng, id);
+			var index = $(this).index();
+			var point = _track.points[index];
+			_marker = markPoint(point.lat, point.lng, point.id);
 		});
 
 		$(".js-point-row").click(function () {
-			var lat = $(this).data("lat");
-			var lng = $(this).data("lng");
-			gotoPoint(lat, lng);
-		});
-
-		$(".js-location-button").click(function () {
-			$("#LocationName").val('...');
-			lookupLocation(_track[0].lat, _track[0].lng, setLocation);
+			var index = $(this).index();
+			var point = _track.points[index];
+			gotoPoint(point.lat, point.lng);
 		});
 	});
 
 	function loadTrack() {
-		showTrack(_track);
+		var points = _track.points;
+		var last = points.length - 1;
 
-		markStart(_track[0].lat, _track[0].lng);
-		markStop(_track[_track.length - 1].lat, _track[_track.length - 1].lng);
-	}
-
-	function setLocation(location) {
-		$("#LocationName").val(location);
-		$("#LocationName").parent().addClass("has-warning");
+		showTrack(points);
+		markStart(points[0].lat, points[0].lng);
+		markStop(points[last].lat, points[last].lng);
 	}
 </script>
 
@@ -54,166 +49,122 @@
 
 <div class="row">
 	<div class="col-sm-6">
+		@if (Model.HasConfirmation)
+		{
+			<div class="alert alert-success">@Model.ConfirmMessage</div>
+		}
 		<div class="row">
 			<div class="col-sm-6">
-				<form method="post" action="/gpx/update">
-					<input type="hidden" name="Uri" value="@data.Uri" />
+				<form method="post" action="@TrackViewModel.GetSaveUrl()">
+					<input type="hidden" name="ID" value="@extract.ID" />
 					<div class="form-group">
 						<label for="name">Name</label>
-						<input type="text" class="form-control" name="Name" placeholder="Name" value="@data.Name">
+						<input type="text" class="form-control" name="Name" value="@extract.Name">
 					</div>
 					<div class="form-group">
 						<label for="description">Description</label>
-						<input type="text" class="form-control" name="Description" placeholder="Description" value="@data.Description">
+						<input type="text" class="form-control" name="Description" value="@extract.Description">
 					</div>
+					<div class="row">
+						<div class="col">
+							<button type="submit" class="btn btn-success">Update Track</button>
+						</div>
+						<div class="col text-right">
+							<a href="@TrackViewModel.GetDeleteUrl(extract.ID)" class="btn btn-outline-danger js-confirm">Delete</a>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-6">
+				<form method="post" action="@TrackViewModel.GetFilterUrl()">
+					<input type="hidden" name="ID" value="@extract.ID" />
 					<div class="form-group">
-						<label for="country">Location</label>
-						<div class="input-group">
-							<input type="text" class="form-control" id="LocationName" name="LocationName" placeholder="Location" value="@data.LocationName">
-							<div class="input-group-append">
-								<button class="btn btn-outline-secondary js-location-button" type="button">Lookup</button>
+						<div class="row">
+							<div class="col">
+								<div>
+									<label for="start">Start</label>
+									<span class="float-right mt-2 badge badge-info">@Model.StartTime(extract)</span>
+								</div>
+								<input type="text" class="form-control" name="StartTimestamp" placeholder="Start Time" value="@Model.StartTime(extract).ToUniversalTime()">
+							</div>
+							<div class="col">
+								<div>
+									<label for="finish">Finish</label>
+									<span class="float-right mt-2 badge badge-info">@Model.FinishTime(extract)</span>
+								</div>
+								<input type="text" class="form-control" name="FinishTimestamp" placeholder="Finish Time" value="@Model.FinishTime(extract).ToUniversalTime()">
 							</div>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="timezone">Timezone</label>
-						<input type="text" class="form-control" id="TimezoneName" name="TimezoneName" placeholder="Timezone" value="@(data.Timezone?.Name??"")">
-					</div>
-					<button type="submit" class="btn btn-success">Update Metadata</button>
-					<a href="@GpxViewModel.GetExtractUrl(data.Uri)" class="btn btn-outline-primary">Extract Track</a>
-				</form>
-			</div>
-			<div class="col-sm-4">
-				<form method="post" action="/gpx/filter">
-					<input type="hidden" name="Uri" value="@data.Uri" />
-					<div class="form-group">
-						<div>
-							<label for="start">Start Time</label>
-							<span class="float-right mt-2 badge badge-info">@gpx.StartTimeLocal</span>
+						<div class="row">
+							<div class="col">
+								<label for="sat">Min Satellites</label>
+								<input type="text" class="form-control" name="MinimumSatellite" value="@Model.MinimumSatellite(extract)">
+							</div>
+							<div class="col">
+								<label for="dop">Max Dilution</label>
+								<input type="text" class="form-control" name="MaximumDilution" value="@Model.MaximumDilution(extract).ToString("0.0")">
+							</div>
+							<div class="col">
+								<label for="dop">Max Velocity</label>
+								<input type="text" class="form-control" name="MaximumVelocity" value="@Model.MaximumVelocity(extract).ToString("0.0")">
+							</div>
 						</div>
-						<input type="text" class="form-control" name="FilterStart" placeholder="Start Time" value="@(filter.FilterStart.HasValue ? filter.FilterStart.Value : gpx.StartTime)">
 					</div>
-					<div class="form-group">
-						<div>
-							<label for="finish">Finish Time</label>
-							<span class="float-right mt-2 badge badge-info">@gpx.FinishTimeLocal</span>
+					<div class="row">
+						<div class="col">
+							<button type="submit" class="btn btn-primary">Apply Filter</button>
 						</div>
-						<input type="text" class="form-control" name="FilterFinish" placeholder="Finish Time" value="@(filter.FilterFinish.HasValue ? filter.FilterFinish.Value : gpx.FinishTime)">
+						<div class="col text-right">
+							<a href="@TrackViewModel.GetRevertUrl(extract.ID)" class="btn btn-outline-warning js-confirm">Revert</a>
+						</div>
 					</div>
-					<div class="form-group">
-						<label for="dop">DOP Filter</label>
-						<input type="text" class="form-control" name="FilterDOP" placeholder="Maximum DOP" value="@filter.FilterDOP">
-					</div>
-					<div class="form-group">
-						<label for="sat">Satellites Filter</label>
-						<input type="text" class="form-control" name="FilterGPS" placeholder="Minimum Satellites" value="@filter.FilterGPS">
-					</div>
-					<button type="submit" class="btn btn-warning">Apply Filter</button>
-					<a href="@GpxViewModel.GetFilterUrl(data.Uri)" class="btn btn-outline-danger">Reset Filter</a>
 				</form>
-			</div>
-			<div class="col-sm-2">
-				<div class="form-group">
-					<label>Elapsed Time</label>
-					<input readonly type="text" class="form-control" value="@gpx.ElapsedTimeText">
-				</div>
-				<div class="form-group">
-					<label>Linear Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.LinearDistance.KM.ToString("#,##0.0") km">
-				</div>
-				<div class="form-group">
-					<label>Actual Distance</label>
-					<input readonly type="text" class="form-control" value="@gpx.ActualDistance.KM.ToString("#,##0.0") km">
-				</div>
-				<div class="form-group">
-					<label>Up / Down</label>
-					<input readonly type="text" class="form-control" value="@gpx.ElevationUp.Meters.ToString("#,##0") / @gpx.ElevationDown.Meters.ToString("#,##0") m">
-				</div>
-				<div class="btn-group d-flex" role="group" aria-label="Export">
-					<a href="@GpxViewModel.GetExportUrl(data.Uri)" class="btn btn-outline-info w-100">GPX</a>
-					<a href="@GpxViewModel.GetExportUrl(data.Uri, "kml")" class="btn btn-outline-info w-100">KML</a>
-				</div>
 			</div>
 		</div>
+
 		<br />
-		<table class="table table-striped table-bordered table-condensed">
-			<tr class="thead-dark">
-				<th>#</th>
-				<th>UTC Timestamp</th>
-				<th>Local Time</th>
-				<th>Lat / Long</th>
-				<th>Speed</th>
-				<th>Alt</th>
-				<th>Sats</th>
-				<th>H</th>
-				<th>V</th>
-				<th>P</th>
-				<th>T</th>
-				<th>S</th>
-				<th>C</th>
-			</tr>
-			<tr class="mark">
-				<th class="text-center">
-					@gpx.Points.Count()
-					<div>of</div>
-					@gpx.File.Points.Count()
-				</th>
-				<th>
-					UTC @(data.Timezone.OffsetUTC.TotalHours.ToString("0")):00
-					@data.Timezone.TZID.Replace("/", " / ")<br />
-					<br />
-				</th>
-				<th>
-					@gpx.StartTime.ToLongDateString()<br />
-					@gpx.StartTime.ToLongTimeString()<br />
-				</th>
-				<th class="small font-weight-bold">
-					<div>@gpx.Bounds.NorthWest.Latitude.ToString("0.000000"), @gpx.Bounds.NorthWest.Longitude.ToString("0.000000")</div>
-					<div>&nbsp;</div>
-					<div class="text-right">@gpx.Bounds.SouthEast.Latitude.ToString("0.000000"), @gpx.Bounds.SouthEast.Longitude.ToString("0.000000")</div>
-				</th>
-				<th class="text-right">@gpx.File.Velocity.Min.ToString("0.0")<br />@gpx.File.Velocity.Avg.ToString("0.0")<br />@gpx.File.Velocity.Max.ToString("0.0")</th>
-				<th class="text-right">@gpx.File.Elevation.Min.ToString("0")<br />@gpx.File.Elevation.Avg.ToString("0")<br />@gpx.File.Elevation.Max.ToString("0")</th>
-				<th class="text-right">@gpx.File.Satellites.Min.ToString("0")<br />@gpx.File.Satellites.Avg.ToString("0")<br />@gpx.File.Satellites.Max.ToString("0")</th>
-				<th class="@gpx.GetDOPCss(gpx.File.HDOP.Max)">
-					@gpx.File.HDOP.Min.ToString("0.0")<br />@gpx.File.HDOP.Avg.ToString("0.0")<br />@gpx.File.HDOP.Max.ToString("0.0")
-				</th>
-				<th class="@gpx.GetDOPCss(gpx.File.VDOP.Max)">
-					@gpx.File.VDOP.Min.ToString("0.0")<br />@gpx.File.VDOP.Avg.ToString("0.0")<br />@gpx.File.VDOP.Max.ToString("0.0")
-				</th>
-				<th class="@gpx.GetDOPCss(gpx.File.PDOP.Max)">
-					@gpx.File.PDOP.Min.ToString("0.0")<br />@gpx.File.PDOP.Avg.ToString("0.0")<br />@gpx.File.PDOP.Max.ToString("0.0")
-				</th>
-				<th colspan="3">
-					<div>Track</div>
-					<div class="text-center">Segment</div>
-					<div class="text-right">Course</div>
-				</th>
-			</tr>
-			@foreach (var t in gpx.File.Tracks)
-			{
-				var count = 1;
-				foreach (var p in t.Points)
-				{
-					var utc = data.Timezone.FromUTC(p.Timestamp.Value);
-					<tr class="js-point-row @(gpx.Points.Any(x => x.Timestamp == p.Timestamp) ? "" : "table-secondary text-muted")" data-lat="@p.Latitude" data-lng="@p.Longitude" data-id="@count">
-						<td>@count</td>
-						<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-						<td>@utc.ToString("yyyy-MM-dd")<br />@utc.ToString("hh:mm:ss tt")</td>
-						<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
-						<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-						<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
-						<td class="text-right">@p.Sats</td>
-						<td class="table-@gpx.GetDOPCss(p.HDOP)">@p.HDOP</td>
-						<td class="table-@gpx.GetDOPCss(p.VDOP)">@p.VDOP</td>
-						<td class="table-@gpx.GetDOPCss(p.PDOP)">@p.PDOP</td>
-						<td>@t.Number @t.Name</td>
-						<td>@p.Segment</td>
-						<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
-					</tr>
-					count++;
+		<form method="post" action="@TrackViewModel.GetRemoveUrl()">
+			<input type="hidden" name="ID" value="@extract.ID" />
+			<table class="table table-striped table-bordered table-condensed">
+				<tr class="thead-dark">
+					<th>@extract.Points.Count</th>
+					<th>Timestamp</th>
+					<th>Lat / Long</th>
+					<th>Elevation</th>
+					<th>Velocity (m/s)</th>
+					<th>Satellites</th>
+					<th>HDOP</th>
+					<th>VDOP</th>
+					<th>PDOP</th>
+					<th>Course</th>
+				</tr>
+				@{
+					var index = 0;
+					foreach (var p in extract.Points)
+					{
+						<tr class="js-point-row">
+							<td>
+								<label>
+									<input type="checkbox" name="Points" value="@index" /> @(index + 1)
+								</label>
+							</td>
+							<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+							<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
+							<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+							<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+							<td class="text-right">@p.Sats</td>
+							<td class="text-right">@p.HDOP</td>
+							<td class="text-right">@p.VDOP</td>
+							<td class="text-right">@p.PDOP</td>
+							<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
+						</tr>
+						index++;
+					}
 				}
-			}
-		</table>
+			</table>
+			<button type="submit" class="btn btn-danger">Remove Points</button>
+		</form>
 	</div>
 </div>
