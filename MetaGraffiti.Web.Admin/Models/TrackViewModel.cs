@@ -21,21 +21,44 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public DateTime StartTime(TrackExtractInfo track)
 		{
-			return track.Points.First().Timestamp.Value;
+			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
+			var time = track.Points.First().Timestamp.Value;
+			return timezone.FromUTC(time);
 		}
 
 		public DateTime FinishTime(TrackExtractInfo track)
 		{
-			return track.Points.Last().Timestamp.Value;
+			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
+			var time = track.Points.Last().Timestamp.Value;
+			return timezone.FromUTC(time);
 		}
 
 
+
+
+		public HtmlString GetSelectedExtractJson()
+		{
+			if (SelectedExtract == null) return new HtmlString("{}");
+
+			dynamic t = new JObject();
+			t.id = SelectedExtract.ID;
+			t.track = SelectedExtract.Name;
+			t.points = new JArray();
+			foreach (var point in SelectedExtract.Points)
+			{
+				dynamic p = new JObject();
+				p.lat = point.Latitude;
+				p.lng = point.Longitude;
+				t.points.Add(p);
+			}
+			return new HtmlString(t.ToString());
+		}
 
 		public HtmlString GetTrackJson()
 		{
 			if (Extracts == null || Extracts.Count == 0) new HtmlString("[]");
 
-			JArray json = new JArray();
+			JArray list = new JArray();
 			foreach (var track in Extracts)
 			{
 				dynamic t = new JObject();
@@ -49,14 +72,16 @@ namespace MetaGraffiti.Web.Admin.Models
 					p.lng = point.Longitude;
 					t.points.Add(p);
 				}
-				json.Add(t);
+				list.Add(t);
 			}
-			return new HtmlString(json.ToString());
+			return new HtmlString(list.ToString());
 		}
 
 		public static string GetTrackUrl() { return "/track/"; }
+		public static string GetResetUrl() { return "/track/reset/"; }
 		public static string GetUpdateUrl() { return "/track/update/"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
+		public static string GetExtractUrl(string uri) { return $"/track/extract/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetDeleteUrl(string ID) { return $"/track/delete/{ID}"; }
 		public static string GetEditUrl(string ID) { return $"/track/edit/{ID}"; }
 	}

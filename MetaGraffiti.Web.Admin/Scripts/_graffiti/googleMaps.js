@@ -73,6 +73,7 @@ function editBounds(bounds) {
 	return rectangle;
 }
 
+
 function showTrack(path, color) {
 	if (color == null) color = '#ff0000';
 	var track = new google.maps.Polyline({

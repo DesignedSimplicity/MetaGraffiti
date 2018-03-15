@@ -11,11 +11,30 @@
 	$(document).ready(function () {
 		initMap();
 
-		for (i = 0; i < _tracks.length; i++) {
-			var color = _mapColors[i % 10];
-			showTrack(_tracks[i].points, color);
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		var bounds = new google.maps.LatLngBounds();
+		for (index = 0; index < _tracks.length; index++) {
+			var color = _mapColors[index % 10];
+			showTrack(_tracks[index].points, color);
+			$("table > tbody > tr").eq(index).children().eq(0).css('background-color', color);
+
+			var points = _tracks[index].points;
+			for (var i = 0; i < points.length; i++) {
+				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
 		}
+		if (_tracks.length > 0) _mapGoogle.fitBounds(bounds);
+
+
+		$(".js-track-row").click(function () {
+			var index = $(this).index();
+
+			var points = _tracks[index].points;
+			var bounds = new google.maps.LatLngBounds();
+			for (var i = 0; i < points.length; i++) {
+				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+			_mapGoogle.fitBounds(bounds);
+		});
 	});
 </script>
 
@@ -27,10 +46,10 @@
 <div class="row">
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
-	{
-		<div class="alert alert-success">@Model.ConfirmMessage</div>
-}
-		<table class="table table-striped table-sm">
+		{
+			<div class="alert alert-success">@Model.ConfirmMessage</div>
+		}
+		<table class="table table-sm table-striped table-hover">
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
@@ -44,26 +63,25 @@
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var track in Model.Extracts)
-				{
-					<tr>
-						<td class="text-center">@(++count)</td>
-						<td>@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
-						<td>@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
-						<td class="font-weight-bold">@track.Name</td>
-						<td class="small">@track.Description</td>
-						<td class="small"><a href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">@track.SourceUri</a></td>
-						<td>
-							<a class="btn btn-sm btn-info" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
-							<a class="btn btn-sm btn-outline-danger js-confirm-delete" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
-						</td>
-					</tr>
-			}
+					var count = 0;
+					foreach (var track in Model.Extracts)
+					{
+						<tr class="js-track-row">
+							<td class="text-center">@(++count)</td>
+							<td>@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
+							<td>@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
+							<td class="font-weight-bold">@track.Name</td>
+							<td class="small">@track.Description</td>
+							<td class="small"><a href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">@track.SourceUri</a></td>
+							<td>
+								<a class="btn btn-sm btn-info" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
+								<a class="btn btn-sm btn-outline-danger js-confirm-delete" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
+							</td>
+						</tr>
+					}
 				}
 			</tbody>
 		</table>
-		<br />
 		<hr />
 		<form method="post" action="@TrackViewModel.GetUpdateUrl()">
 			<div class="form-group">
@@ -88,27 +106,36 @@
 			<div class="form-group">
 				<label for="Timezone">Timezone</label>
 				<div class="input-group">
-					<input type="text" class="form-control" name="Timezone" value="@(Model.Track.Timezone?.Name??" ")">
+					<input type="text" class="form-control @(Model.Track.Timezone == null ? "is-invalid" : "is-valid")" name="Timezone" value="@(Model.Track.Timezone?.Name??" ")">
 					<div class="input-group-append">
-						<a href="#" class="btn btn-outline-secondary" id="lookupTimezone">Lookup</a>
+						<a href="#" class="btn btn-outline-secondary disabled" id="lookupTimezone">Lookup</a>
 					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group has-danger">
 				<label for="Country">Country</label>
 				<div class="input-group">
-					<input type="text" class="form-control" name="Country" value="@(Model.Track.Country?.Name??"")">
+					<input type="text" class="form-control @(Model.Track.Country == null ? "is-invalid" : "is-valid")" name="Country" value="@(Model.Track.Country?.Name??"")">
 					<div class="input-group-append">
-						<a href="#" class="btn btn-outline-secondary" id="lookupCountry">Lookup</a>
+						<a href="#" class="btn btn-outline-secondary disabled" id="lookupCountry">Lookup</a>
 					</div>
 				</div>
 			</div>
-			<button type="submit" class="btn btn-success" value="update">Update</button>
+			<br />
+			<div class="row">
+				<div class="col">
+					<button type="submit" class="btn btn-success" value="update">Update</button>
+				</div>
+				<div class="col text-right">
+					<a href="@TrackViewModel.GetResetUrl()" class="btn btn-danger js-confirm-delete">Reset All</a>
+				</div>
+			</div>
+			
 
 			<!--
-		<button name="action" class="btn btn-outline-info" value="gpx">Save as GPX</button>
-		<button name="action" class="btn btn-outline-info" value="kml">Save as KML</button>
-			-->
+			<button name="action" class="btn btn-outline-info" value="gpx">Save as GPX</button>
+			<button name="action" class="btn btn-outline-info" value="kml">Save as KML</button>
+				-->
 		</form>
 
 		<br />
@@ -119,5 +146,5 @@
 			<button type="submit" class="btn btn-danger">Extract</button>
 		</form>
 	</div>
-	
+
 </div>

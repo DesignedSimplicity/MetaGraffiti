@@ -104,7 +104,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Extracts a given set of points data from an existing GPX file into the current edit session
 		/// </summary>
-		[HttpPost]
 		public ActionResult Extract(TrackExtractCreateRequest extract)
 		{
 			var extracted = _service.Create(extract);

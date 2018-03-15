@@ -23,6 +23,7 @@
 			<td>Local Time</td>
 			<td>Timezone</td>
 			<td>UTC Timestamp</td>
+			<td>Actions</td>
 		</tr>
 		var count = 0;
 		foreach (var item in list)
@@ -36,6 +37,9 @@
 				<td>@item.MetaData.LocalTime</td>
 				<td>@item.MetaData.Timezone.TZID</td>
 				<td>@item.MetaData.Timestamp</td>
+				<td>
+					<a class="btn btn-outline-info" href="@TrackViewModel.GetExtractUrl(item.File.Uri)">Extract</a>
+				</td>
 			</tr>
 		}
 	}
