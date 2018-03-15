@@ -9,6 +9,7 @@ namespace MetaGraffiti.Web.Admin
 			bundles.Add(new ScriptBundle("~/bundle/js")
 						.Include("~/Scripts/jquery-{version}.js")
 						.Include("~/Scripts/bootstrap.js")
+						.Include("~/Scripts/_graffiti/common.js")
 						);
 
 			bundles.Add(new StyleBundle("~/bundle/css")

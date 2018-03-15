@@ -257,6 +257,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\_graffiti\common.js" />
     <Content Include="Scripts\_graffiti\googleMaps.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -271,6 +272,7 @@
     <Compile Include="Controllers\GpxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
+    <Compile Include="Controllers\TrailController.cs" />
     <Compile Include="Controllers\XlsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -278,6 +280,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\GpxViewModel.cs" />
+    <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\XlsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -317,6 +320,7 @@
     <Content Include="Views\Geo\Locations.cshtml" />
     <Content Include="Views\Geo\Location.cshtml" />
     <Content Include="Views\Geo\Search.cshtml" />
+    <Content Include="Views\Track\Track.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -326,6 +330,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Trail\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

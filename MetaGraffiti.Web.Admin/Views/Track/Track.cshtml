@@ -1,0 +1,123 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrackViewModel
+
+@Html.Partial("_Nav")
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _tracks = @Model.GetTrackJson();
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < _tracks.length; i++) {
+			var color = _mapColors[i % 10];
+			showTrack(_tracks[i].points, color);
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		}
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		@if (Model.HasConfirmation)
+	{
+		<div class="alert alert-success">@Model.ConfirmMessage</div>
+}
+		<table class="table table-striped table-sm">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Start</th>
+					<th>Finish</th>
+					<th>Track Name</th>
+					<th>Description</th>
+					<th>Source</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+				var count = 0;
+				foreach (var track in Model.Extracts)
+				{
+					<tr>
+						<td class="text-center">@(++count)</td>
+						<td>@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
+						<td>@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
+						<td class="font-weight-bold">@track.Name</td>
+						<td class="small">@track.Description</td>
+						<td class="small"><a href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">@track.SourceUri</a></td>
+						<td>
+							<a class="btn btn-sm btn-info" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
+							<a class="btn btn-sm btn-outline-danger js-confirm-delete" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
+						</td>
+					</tr>
+			}
+				}
+			</tbody>
+		</table>
+		<br />
+		<hr />
+		<form method="post" action="@TrackViewModel.GetUpdateUrl()">
+			<div class="form-group">
+				<label for="Name">Name</label>
+				<input type="text" class="form-control" name="Name" value="@Model.Track.Name">
+			</div>
+			<div class="form-group">
+				<label for="Description">Description</label>
+				<textarea class="form-control" rows="3" name="Description">@Model.Track.Description</textarea>
+			</div>
+			<div class="form-group">
+				<label for="Keywords">Keywords</label>
+				<input type="text" class="form-control" name="Keywords" value="@Model.Track.Keywords">
+			</div>
+			<div class="form-group">
+				<label for="Url">Website</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Url" placeholder="http://" value="@Model.Track.Url">
+					<input type="text" class="form-control" name="Link" value="@Model.Track.Link" />
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="Timezone">Timezone</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Timezone" value="@(Model.Track.Timezone?.Name??" ")">
+					<div class="input-group-append">
+						<a href="#" class="btn btn-outline-secondary" id="lookupTimezone">Lookup</a>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="Country">Country</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Country" value="@(Model.Track.Country?.Name??"")">
+					<div class="input-group-append">
+						<a href="#" class="btn btn-outline-secondary" id="lookupCountry">Lookup</a>
+					</div>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-success" value="update">Update</button>
+
+			<!--
+		<button name="action" class="btn btn-outline-info" value="gpx">Save as GPX</button>
+		<button name="action" class="btn btn-outline-info" value="kml">Save as KML</button>
+			-->
+		</form>
+
+		<br />
+		<br />
+		<h3>Test Extract</h3>
+		<form method="post" action="@TrackViewModel.GetExtractUrl()">
+			<input name="Uri" value="C:\Code\GPX\Source\2018\02\20180206.gpx" />
+			<button type="submit" class="btn btn-danger">Extract</button>
+		</form>
+	</div>
+	
+</div>

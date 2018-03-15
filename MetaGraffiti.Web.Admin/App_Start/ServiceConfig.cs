@@ -27,9 +27,11 @@ namespace MetaGraffiti.Web.Admin
 					// recheck after lock expires
 					if (_gpxSourceCache != null) return new GpxCacheService(_gpxSourceCache);
 
-					// create new if not already exists
+					// create if not already exists
 					var cache = new BasicCacheService<GpxCache>();
 					var service = new GpxCacheService(cache);
+
+					// recursively load all gpx files in source directory
 					service.LoadDirectory(Path.Combine(AutoConfig.RootConfigUri, @"GPX\Source"), true);
 
 					// update shared static resource
@@ -51,10 +53,15 @@ namespace MetaGraffiti.Web.Admin
 					// recheck after lock expires
 					if (_gpxTrackCache != null) return new GpxCacheService(_gpxTrackCache);
 
-					// create new if not already exists
+					// create if not already exists
 					var cache = new BasicCacheService<GpxCache>();
 					var service = new GpxCacheService(cache);
-					service.LoadDirectory(Path.Combine(AutoConfig.RootConfigUri, @"GPX\Tracks"));
+
+					// load files in each country subdirectory
+					foreach (var dir in Directory.GetDirectories(Path.Combine(AutoConfig.RootConfigUri, @"GPX\Tracks")))
+					{
+						service.LoadDirectory(dir);
+					}
 
 					// update shared static resource
 					_gpxTrackCache = cache;

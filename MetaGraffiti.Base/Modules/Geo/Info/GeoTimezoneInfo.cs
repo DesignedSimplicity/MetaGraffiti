@@ -99,6 +99,22 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return t.ToInfo();
 		}
 
+		public static GeoTimezoneInfo Find(string text)
+		{
+			if (String.IsNullOrWhiteSpace(text)) return null;
+
+			var t = ByKey(text);
+			if (t != null) return t;
+
+			t = ByTZID(text);
+			if (t != null) return t;
+
+			t = BySystem(text);
+			if (t != null) return t;
+
+			return ByName(text);
+		}
+
 		// --------------------------------------------------
 		// Globals
 		private static bool _initialized = false;

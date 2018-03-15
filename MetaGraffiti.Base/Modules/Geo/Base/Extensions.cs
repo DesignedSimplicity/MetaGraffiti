@@ -23,7 +23,16 @@ namespace MetaGraffiti.Base.Modules.Geo
 		public static GeoTimezoneInfo ToInfo(this GeoTimezoneData data) { return (data == null ? null : new GeoTimezoneInfo(data)); }
 		public static IEnumerable<GeoTimezoneInfo> ToInfo(this IEnumerable<GeoTimezoneData> data) { return data.Select(x => new GeoTimezoneInfo(x)); }
 
+		public static string ToJson(this IGeoLatLon latlon)
+		{
+			if (latlon == null) return "{}";
 
+			dynamic json = new JObject();
+			json.lat = latlon.Latitude;
+			json.lng = latlon.Longitude;
+
+			return json.ToString();
+		}
 
 		public static string ToJson(this GeoLocationInfo location)
 		{

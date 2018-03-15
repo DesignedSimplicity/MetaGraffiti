@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="Modules\Carto\Base\" />
+    <Folder Include="Modules\Carto\Data\" />
   </ItemGroup>
 
 </Project>
