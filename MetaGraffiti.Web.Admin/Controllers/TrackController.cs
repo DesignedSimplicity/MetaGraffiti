@@ -33,11 +33,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 
 	
-		// TODO: lookup timezone
+	// TODO: lookup timezone
 	// TODO: lookup country
-
-	// TODO: import
-	// TODO: validation
 
 	public class TrackController : Controller
 	{
@@ -80,11 +77,33 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Creates an internal file from all of the tracks in the current edit session
 		/// </summary>
-		public ActionResult Import(TrackImportRequest import)
+		public ActionResult Import(bool overwrite = false)
 		{
 			var model = InitModel();
 
-			return View(model);
+			var track = _service.Track;
+			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
+			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
+			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
+			// TODO: check region 
+
+			if (model.HasError) return View(model);
+
+			// check existing filename and if overwrite
+			var filename = _service.GenerateFilename();
+			var uri = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name, filename + ".gpx");
+
+			if (System.IO.File.Exists(uri) && !overwrite)
+			{
+				model.ConfirmMessage = uri;
+				return View(model);
+			}
+
+			// do import
+			_service.Import(uri);
+
+			// TODO: redirect to display page
+			return Redirect(TrackViewModel.GetTrackUrl());
 		}
 
 		/// <summary>

@@ -7,13 +7,14 @@
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _tracks = @Model.GetTrackJson();
+	var _bounds = null;
 
 	$(document).ready(function () {
 		initMap();
 
 		initDirty();
 
-		var bounds = new google.maps.LatLngBounds();
+		_bounds = new google.maps.LatLngBounds();
 		for (index = 0; index < _tracks.length; index++) {
 			var color = _mapColors[index % 10];
 			showTrack(_tracks[index].points, color);
@@ -21,10 +22,10 @@
 
 			var points = _tracks[index].points;
 			for (var i = 0; i < points.length; i++) {
-				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
 			}
 		}
-		if (_tracks.length > 0) _mapGoogle.fitBounds(bounds);
+		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 
 
 		$(".js-track-row").click(function () {
@@ -36,6 +37,10 @@
 				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
 			}
 			_mapGoogle.fitBounds(bounds);
+		});
+
+		$(".js-reset-view").click(function () {
+			if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 		});
 	});
 </script>
@@ -59,7 +64,6 @@
 					<th>Finish</th>
 					<th>Track Name</th>
 					<th>Description</th>
-					<th>Source</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -74,9 +78,9 @@
 							<td>@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
 							<td class="font-weight-bold">@track.Name</td>
 							<td class="small">@track.Description</td>
-							<td class="small"><a href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">@track.SourceUri</a></td>
-							<td>
+							<td class="text-right">
 								<a class="btn btn-sm btn-primary" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
+								<a class="btn btn-sm btn-outline-info" href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">Source</a>
 								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
 							</td>
 						</tr>
@@ -125,13 +129,14 @@
 			</div>
 			<br />
 			<div class="row">
-				<div class="col-sm-8">
-					<button type="submit" class="btn btn-success" value="update">Update</button>
+				<div class="col">
+					<button type="submit" class="btn btn-success">Update</button>
 					<a href="@TrackViewModel.GetImportUrl()" class="btn btn-outline-primary js-check-dirty">Import</a>
 					<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-info js-check-dirty">Export GPX</a>
 					<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-info js-check-dirty">Export KML</a>
 				</div>
-				<div class="col-sm-4 text-right">
+				<div class="col text-right">
+					<button type="button" class="btn btn-outline-secondary js-reset-view">View All</button>
 					<a href="@TrackViewModel.GetResetUrl()" class="btn btn-danger js-confirm">Reset All</a>
 				</div>
 			</div>

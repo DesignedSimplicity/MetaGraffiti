@@ -322,6 +322,7 @@
     <Content Include="Views\Geo\Search.cshtml" />
     <Content Include="Views\Track\Track.cshtml" />
     <Content Include="Views\Track\Edit.cshtml" />
+    <Content Include="Views\Track\Import.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

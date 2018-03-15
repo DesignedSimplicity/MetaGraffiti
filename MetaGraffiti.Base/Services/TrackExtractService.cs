@@ -123,9 +123,11 @@ namespace MetaGraffiti.Base.Services
 
 
 
-		public TrackInfo Import(TrackImportRequest request)
+		public long Import(string uri)
 		{
-			return null;
+			var data = GenerateGPX();
+			File.WriteAllBytes(uri, data);
+			return data.Length;
 		}
 
 		public byte[] Export(string format)
@@ -260,22 +262,6 @@ namespace MetaGraffiti.Base.Services
 		public string Name { get; set; }
 		public string Description { get; set; }
 	}
-
-
-	
-
-
-
-	public class TrackImportRequest
-	{
-		public bool Overwrite { get; set; }
-	}
-
-	public class TrackExportRequest
-	{
-		public string Format { get; set; }
-	}
-
 
 	public class TrackRemovePointsRequest
 	{

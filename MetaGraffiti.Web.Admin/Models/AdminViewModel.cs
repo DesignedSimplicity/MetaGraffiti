@@ -12,6 +12,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		public string ConfirmMessage { get; set; }
 		public bool HasConfirmation { get { return !String.IsNullOrWhiteSpace(ConfirmMessage); } }
 
+		public List<string> ErrorMessages { get; set; } = new List<string>();
+		public bool HasError { get { return ErrorMessages.Count > 0; } }
+
 		public AdminAreas Area
 		{
 			get
