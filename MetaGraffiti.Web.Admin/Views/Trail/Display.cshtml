@@ -1,0 +1,121 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _tracks = @Model.GetTrackJson();
+	var _bounds = null;
+
+	$(document).ready(function () {
+		initMap();
+
+		_bounds = new google.maps.LatLngBounds();
+		for (index = 0; index < _tracks.length; index++) {
+			var color = _mapColors[index % 10];
+			showTrack(_tracks[index].points, color);
+			$("table > tbody > tr").eq(index).children().eq(0).css('background-color', color);
+
+			var points = _tracks[index].points;
+			for (var i = 0; i < points.length; i++) {
+				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+		}
+		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
+
+		$(".js-track-row").click(function () {
+			var index = $(this).index();
+
+			var points = _tracks[index].points;
+			var bounds = new google.maps.LatLngBounds();
+			for (var i = 0; i < points.length; i++) {
+				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+			_mapGoogle.fitBounds(bounds);
+		});
+
+		$(".js-reset-view").click(function () {
+			if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="h2">@Model.Trail.Name</div>
+				<div class="h3">@Model.Trail.Description</div>
+				<div class="h4">@Model.Trail.Keywords</div>
+				<div class="h5">
+					<a href="@Model.Trail.Url">@Model.Trail.UrlName</a>
+				</div>
+				<div class="h6">
+					Date:
+					<span>@Model.Trail.LocalDate.ToString("dddd") @Model.Trail.LocalDate.ToString("dd")</span>
+					<a href="@TrailViewModel.GetReportUrl(Model.Trail.LocalDate.Year, Model.Trail.LocalDate.Month)">@Model.Trail.LocalDate.ToString("MMMM")</a>
+					<a href="@TrailViewModel.GetReportUrl(Model.Trail.LocalDate.Year)">@Model.Trail.LocalDate.Year</a>
+				</div>
+				<div class="h6">Country: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name)">@Model.Trail.Country.Name</a></div>
+				<div class="h6">Timezone: @Model.Trail.Timezone.Name</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<form method="post" action="@TrailViewModel.GetModifyUrl()">
+					<input type="hidden" name="ID" value="@Model.Trail.ID" />
+					<button type="submit" class="btn btn-outline-primary">Edit Tracks</button>
+					<button type="button" class="btn btn-success js-reset-view">Reset View</button>
+				</form>				
+			</div>
+		</div>
+		<hr />
+		<table class="table table-sm table-striped table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Track</th>
+					<th>Start</th>
+					<th>Finish</th>
+					<th>Time</th>
+					<th class="text-right">KM</th>
+					<th class="text-right">Up</th>
+					<th class="text-right">Down</th>
+					<th class="text-right">Source&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					foreach (var track in Model.Trail.Tracks)
+					{
+						<tr class="js-track-row">
+							<td class="text-center">@(++count)</td>
+							<td>
+								<div class="font-weight-bold">@track.Name</div>
+								<div class="small">@track.Description</div>
+							</td>
+							<td>@track.StartTime.ToString("yyyy-MM-dd")<br />@track.StartTime.ToString("hh:mm:ss tt")</td>
+							<td>@track.FinishTime.ToString("yyyy-MM-dd")<br />@track.FinishTime.ToString("hh:mm:ss tt")</td>
+							<td>@track.ElapsedTimeText</td>
+							<td class="text-right">@track.EstimatedKilometers.ToString("0.0")</td>
+							<td class="text-right">@track.EstimatedAscent.ToString("#,##0")</td>
+							<td class="text-right">@track.EstimatedDescent.ToString("#,##0")</td>
+							<td class="text-right">
+								@if (!String.IsNullOrWhiteSpace(track.Source))
+								{
+									<a class="btn btn-sm btn-outline-info" href="@GpxViewModel.GetDisplayUrl(track.Source)">Source</a>
+								}
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

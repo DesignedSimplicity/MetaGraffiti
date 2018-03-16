@@ -60,6 +60,11 @@ namespace MetaGraffiti.Base.Services
 			trail.Name = data.Name; //filename.Substring(9).Trim();
 			trail.Description = data.Description;
 
+			// load secondary information
+			trail.Keywords = data.Keywords;
+			trail.Url = data.Url;
+			trail.UrlName = data.UrlName;
+
 			// populate info classes
 			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
 			trail.Timezone = GeoTimezoneInfo.ByCountry(trail.Country);
@@ -131,6 +136,7 @@ namespace MetaGraffiti.Base.Services
 		public void Reload(string uri)
 		{
 			_trails = null;
+			_init = false;
 			Init(uri);
 		}
 	}

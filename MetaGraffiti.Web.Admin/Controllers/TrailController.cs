@@ -115,9 +115,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Updates the metadata in an existing GPX track data file (name, description, keywords, but NOT track/point data)
 		/// </summary>
 		[HttpPost]
-		public ActionResult Update(string id)
+		public ActionResult Modify(string id)
 		{
-			return View();
+			var trail = _service.GetTrail(id);
+
+			var trackService = new TrackExtractService();
+			
+			trackService.Modify(trail.Uri);
+
+			return Redirect(TrackViewModel.GetTrackUrl());
 		}
 
 		/// <summary>

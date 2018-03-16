@@ -45,6 +45,36 @@ namespace MetaGraffiti.Base.Services
 			return $"{String.Format("{0:yyyyMMdd}", _track.Timestamp)} {_track.Name}";
 		}
 
+		public TrackInfo Modify(string uri)
+		{
+			_track = new TrackInfo();
+
+			var reader = new GpxFileReader(uri);
+			var source = reader.ReadFile();
+
+			_track.Name = source.Name;
+			_track.Description = source.Description;
+			_track.Keywords = source.Keywords;
+			_track.Url = source.Url;
+			_track.UrlName = source.UrlName;
+
+			/*
+			_track.Timezone = GeoTimezoneInfo.Find(update.Timezone);
+			_track.Country = GeoCountryInfo.Find(update.Country);
+			_track.Region = GeoRegionInfo.Find(update.Region);
+			*/
+			foreach (var track in source.Tracks)
+			{
+				var extract = new TrackExtractCreateRequest();
+				extract.Uri = uri;
+				extract.StartTimestamp = track.Points.First().Timestamp;
+				extract.FinishTimestamp = track.Points.Last().Timestamp;
+				Create(extract);
+			}
+
+			return _track;
+		}
+
 		public TrackInfo Update(TrackUpdateRequest update)
 		{
 			_track.Name = update.Name;

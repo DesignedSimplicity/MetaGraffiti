@@ -2,6 +2,7 @@
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -46,7 +47,35 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
+		public HtmlString GetTrackJson()
+		{
+			if (Trail == null || Trail.Tracks.Count == 0) new HtmlString("[]");
+
+			JArray list = new JArray();
+			foreach (var track in Trail.Tracks)
+			{
+				dynamic t = new JObject();
+				//t.id = track.ID;
+				t.track = track.Name;
+				t.points = new JArray();
+				foreach (var point in track.Points)
+				{
+					dynamic p = new JObject();
+					p.lat = point.Latitude;
+					p.lng = point.Longitude;
+					t.points.Add(p);
+				}
+				list.Add(t);
+			}
+			return new HtmlString(list.ToString());
+		}
+
+
 		public static string GetTrailUrl() { return "/trail/"; }
+
+		public static string GetRefreshUrl() { return "/trail/refresh/"; }
+
+		public static string GetModifyUrl() { return "/trail/modify/"; }
 
 		public static string GetReportUrl() { return "/trail/report/"; }
 

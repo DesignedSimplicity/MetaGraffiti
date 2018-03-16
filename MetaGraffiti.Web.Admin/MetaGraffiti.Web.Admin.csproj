@@ -327,6 +327,7 @@
     <Content Include="Views\Trail\Index.cshtml" />
     <Content Include="Views\Trail\Country.cshtml" />
     <Content Include="Views\Trail\Report.cshtml" />
+    <Content Include="Views\Trail\Display.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
