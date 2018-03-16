@@ -122,9 +122,9 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
-
+		// TODO: copy all related source files into known directory
 		public long Import(string uri)
-		{
+		{			
 			var data = GenerateGPX();
 			File.WriteAllBytes(uri, data);
 			return data.Length;

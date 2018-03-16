@@ -12,7 +12,12 @@ using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-    public class GpxController : Controller
+	// gpx/							GET displays a summary of the GPX source files
+	// gpx/import/					GET displays a list of all GPX source files which have not yet been imported
+	// gpx/report/?					GET displays a detailed and filterable report and include links to imported files
+	// gpx/preview/{id}				GET displays a preview of a given GPX file on a map and provides actions to extract point data
+
+	public class GpxController : Controller
     {
 		private GpxCacheService _gpxService;
 

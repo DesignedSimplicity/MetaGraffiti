@@ -1,0 +1,78 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _marker = null;
+	var _track = {};
+
+	$(document).ready(function () {
+		initMap();
+		loadTrack();
+
+		$(".js-point-row").hover(function () {
+			if (_marker != null) _marker.setMap(null);
+
+			var index = $(this).index();
+			var point = _track.points[index];
+			_marker = markPoint(point.lat, point.lng, point.id);
+		});
+
+		$(".js-point-row").click(function () {
+			var index = $(this).index();
+			var point = _track.points[index];
+			gotoPoint(point.lat, point.lng);
+		});
+	});
+
+	function loadTrack() {
+		var points = _track.points;
+		var last = points.length - 1;
+
+		showTrack(points);
+		markStart(points[0].lat, points[0].lng);
+		markStop(points[last].lat, points[last].lng);
+	}
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<h2>@Model.Country.Name Trails</h2>
+		<table class="table table-striped">
+			<thead class="table-dark">
+				<tr>
+					<th>#</th>
+					<th>Location</th>
+					<th>Date</th>
+					<th>Trail</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var index = 0;
+					foreach (var trail in Model.Trails)
+					{
+						<tr>
+							<td>@(index + 1)</td>
+							<td>@trail.Country.Name</td>
+							<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+							<td>
+								<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
+								<div class="small">@trail.Description</div>
+							</td>
+						</tr>
+						index++;
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

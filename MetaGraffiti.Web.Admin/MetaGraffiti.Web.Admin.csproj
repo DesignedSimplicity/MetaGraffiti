@@ -281,6 +281,7 @@
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\GpxViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
+    <Compile Include="Models\TrailViewModel.cs" />
     <Compile Include="Models\XlsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -323,6 +324,9 @@
     <Content Include="Views\Track\Track.cshtml" />
     <Content Include="Views\Track\Edit.cshtml" />
     <Content Include="Views\Track\Import.cshtml" />
+    <Content Include="Views\Trail\Index.cshtml" />
+    <Content Include="Views\Trail\Country.cshtml" />
+    <Content Include="Views\Trail\Report.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -332,7 +336,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Trail\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

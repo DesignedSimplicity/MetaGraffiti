@@ -78,45 +78,61 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			});
 		}
 
-		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)
+		public void WriteTrack(GpxTrackData track)
 		{
 			// create header if needed
-			if (_xml == null) WriteHeader(name, description, points.First().Timestamp.Value);
-			
+			if (_xml == null) WriteHeader(track.Name, track.Description, track.Points.First().Timestamp.Value);
+
 			// create track
-			var track = _xml.CreateElement("trk", Namespace);
-			_xml.DocumentElement.AppendChild(track);
+			var trk = _xml.CreateElement("trk", Namespace);
+			_xml.DocumentElement.AppendChild(trk);
 
-				if (!String.IsNullOrWhiteSpace(name))
+			if (!String.IsNullOrWhiteSpace(track.Name))
+			{
+				var nameNode = _xml.CreateElement("name", Namespace);
+				trk.AppendChild(nameNode);
+				nameNode.InnerText = track.Name;
+			}
+			if (!String.IsNullOrWhiteSpace(track.Description))
+			{
+				var descriptionNode = _xml.CreateElement("desc", Namespace);
+				trk.AppendChild(descriptionNode);
+				descriptionNode.InnerText = track.Description;
+			}
+			if (!String.IsNullOrWhiteSpace(track.Source))
+			{
+				var sourceNode = _xml.CreateElement("src", Namespace);
+				trk.AppendChild(sourceNode);
+				sourceNode.InnerText = track.Source;
+			}
+
+			XmlElement tracksegmentNode = null;
+			var segment = -1;
+			foreach (var p in track.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+			{
+				if (segment != p.Segment)
 				{
-					var nameNode = _xml.CreateElement("name", Namespace);
-					track.AppendChild(nameNode);
-					nameNode.InnerText = name;
-				}
-				if (!String.IsNullOrWhiteSpace(description))
-				{
-					var descriptionNode = _xml.CreateElement("desc", Namespace);
-					track.AppendChild(descriptionNode);
-					descriptionNode.InnerText = description;
+					// create new segments as needed
+					tracksegmentNode = _xml.CreateElement("trkseg", Namespace);
+					trk.AppendChild(tracksegmentNode);
+					segment = p.Segment;
 				}
 
-				XmlElement tracksegmentNode = null;
-				var segment = -1;
-				foreach (var p in points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
-				{
-					if (segment != p.Segment)
-					{
-						// create new segments as needed
-						tracksegmentNode = _xml.CreateElement("trkseg", Namespace);
-						track.AppendChild(tracksegmentNode);
-						segment = p.Segment;
-					}
+				// add points to segments
+				var pointNode = _xml.CreateElement("trkpt", Namespace);
+				tracksegmentNode.AppendChild(pointNode);
+				SetPoint(pointNode, p);
+			}
+		}
 
-					// add points to segments
-					var pointNode = _xml.CreateElement("trkpt", Namespace);
-					tracksegmentNode.AppendChild(pointNode);
-					SetPoint(pointNode, p);
-				}
+		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)
+		{
+			WriteTrack(new GpxTrackData()
+			{
+				Name = name,
+				Description = description,
+				Points = points.ToList()
+			});
 		}
 
 		public string GetXml()

@@ -12,30 +12,9 @@ using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-	// gpx/							GET displays a summary of the GPX source files
-	// gpx/import/					GET displays a list of all GPX source files which have not yet been imported
-	// gpx/report/?					GET displays a detailed and filterable report and include links to imported files
-	// gpx/preview/{id}				GET displays a preview of a given GPX file on a map and provides actions to extract point data
-
-
-	// track/						GET Displays all segments in current edit session
-	// track/reset/					GET Clears the current cache of tracks extracts
-	// track/update/				POST Updates metadata for current edit session
-	// track/import/				POST saves current edit session into known location/format
-	// track/export/				POST creates GPX or KML file for download from current edit session
-	// track/filter/				POST Filters an existing extract track specified by the ID
-	// track/revert/				POST Resets the filtered points back to the full initial data set
-	// track/extract/				POST Extracts a given set of points data from an existing GPX file into the current edit session
-	// track/remove/				POST Removes the given list of points from the current edit session
-	// track/edit/{id}				GET Displays a single set of points from the current edit session
-	// track/save/{id}				POST Updates the set of points from the current edit session
-	// track/delete/{id}			POST Removes the set of points from the current edit session
-
-
-	
-	// TODO: lookup timezone
-	// TODO: lookup country
-
+	/// <summary>
+	/// Extracts points from GPX files in order to regroup and export to a new filed or import into internal storage
+	/// </summary>
 	public class TrackController : Controller
 	{
 		private TrackExtractService _service = new TrackExtractService();
@@ -55,6 +34,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Index()
 		{
+			// TODO: lookup timezone
+			// TODO: lookup country
+			// TODO: display/lookup region
+
 			var model = InitModel();
 
 			return View("Track", model);
@@ -87,23 +70,32 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
 			// TODO: check region 
 
+			// show error messages if necessary
 			if (model.HasError) return View(model);
+
+			// check folders are initialized
+			var folder = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name);
+			if (!Directory.Exists(AutoConfig.TrackRootUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrackRootUri}");
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
 			// check existing filename and if overwrite
 			var filename = _service.GenerateFilename();
-			var uri = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name, filename + ".gpx");
+			var uri = Path.Combine(folder, filename + ".gpx");
 
+			// show overwrite confirmation if necessary
 			if (System.IO.File.Exists(uri) && !overwrite)
 			{
 				model.ConfirmMessage = uri;
 				return View(model);
 			}
 
-			// do import
+			// create internal file
 			_service.Import(uri);
 
+			// TODO: auto-reset track extact session
+			// TODO: force load into trail cache
 			// TODO: redirect to display page
-			return Redirect(TrackViewModel.GetTrackUrl());
+			return Redirect(TrailViewModel.GetDisplayUrl(filename));
 		}
 
 		/// <summary>

@@ -41,27 +41,27 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			}
 		}
 
-		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)
+		public void WriteTrack(GpxTrackData track)
 		{
 			// create header if needed
-			if (_xml == null) WriteHeader(name, description);
+			if (_xml == null) WriteHeader(track.Name, track.Description);
 
 			// create placemark
 			var pm = _xml.CreateElement("Placemark", null);
 			_xml.DocumentElement.FirstChild.AppendChild(pm);
 
 			// add details
-			if (!String.IsNullOrWhiteSpace(name))
+			if (!String.IsNullOrWhiteSpace(track.Name))
 			{
 				var nameNode = _xml.CreateElement("name", null);
 				pm.AppendChild(nameNode);
-				nameNode.InnerText = name;
+				nameNode.InnerText = track.Name;
 			}
-			if (!String.IsNullOrWhiteSpace(description))
+			if (!String.IsNullOrWhiteSpace(track.Description))
 			{
 				var descriptionNode = _xml.CreateElement("description", null);
 				pm.AppendChild(descriptionNode);
-				descriptionNode.InnerText = description;
+				descriptionNode.InnerText = track.Description;
 			}
 
 			// create track
@@ -69,7 +69,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			pm.AppendChild(trackNode);
 
 			// add points
-			foreach (var p in points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+			foreach (var p in track.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
 			{
 				var whenNode = _xml.CreateElement("when", null);
 				trackNode.AppendChild(whenNode);
@@ -79,6 +79,16 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				trackNode.AppendChild(pointNode);
 				pointNode.InnerText = $"{p.Longitude} {p.Latitude} {p.Elevation}".TrimEnd();
 			}
+		}
+
+		public void WriteTrack(string name, string description, IEnumerable<GpxPointData> points)
+		{
+			WriteTrack(new GpxTrackData()
+			{
+				Name = name,
+				Description = description,
+				Points = points.ToList()
+			});
 		}
 
 		public string GetXml()

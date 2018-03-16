@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public enum AdminAreas { Home, Geo, Gpx, Xls, Track }
+	public enum AdminAreas { Home, Trail, Geo, Gpx, Track, Xls }
 
 	public class AdminViewModel
 	{
@@ -14,6 +14,14 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<string> ErrorMessages { get; set; } = new List<string>();
 		public bool HasError { get { return ErrorMessages.Count > 0; } }
+
+		public AdminAreas[] Areas
+		{
+			get
+			{
+				return (AdminAreas[])Enum.GetValues(typeof(AdminAreas));
+			}
+		}
 
 		public AdminAreas Area
 		{

@@ -1,19 +1,19 @@
-﻿<div class="jumbotron">
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model AdminViewModel
+<div class="jumbotron">
 	<div class="container">
 		<h1 class="display-1">MetaGraffiti</h1>
 	</div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-md-2">
-			<a class="display-3" href="/geo">Geo</a>
-		</div>
-		<div class="col-md-2">
-			<a class="display-3" href="/gpx">Gpx</a>
-		</div>
-		<div class="col-md-2">
-			<a class="display-3" href="/Xls">Xls</a>
-		</div>
-	</div>
+	@foreach (var area in Model.Areas)
+	{
+		if (area != AdminAreas.Home)
+		{
+			<div>
+				<a class="display-3" href="/@(area.ToString())">@area.ToString()</a>
+			</div>
+		}
+	}
 </div>
