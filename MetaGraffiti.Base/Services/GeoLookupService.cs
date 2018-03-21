@@ -40,6 +40,25 @@ namespace MetaGraffiti.Base.Services
 			return GeoTimezoneInfo.ByTZID(response.TimeZoneId);
 		}
 
+		public GeoTimezoneInfo FindTimezone(string name)
+		{
+			return GeoTimezoneInfo.All.Where(x => x.TZID.EndsWith(name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
+		}
+
+		public GeoTimezoneInfo GuessTimezone(GeoCountryInfo country)
+		{
+			if (country == null) return null;
+
+			switch (country.ISO2)
+			{
+				case "AR": return GeoTimezoneInfo.ByTZID("America/Buenos_Aires");
+				case "CL": return GeoTimezoneInfo.ByTZID("America/Santiago");
+				case "JP": return GeoTimezoneInfo.ByTZID("Asia/Tokyo");
+				case "NZ": return GeoTimezoneInfo.ByTZID("Pacific/Auckland");
+				default: return null;
+			}
+		}
+
 		public GeoLocationInfo LoadLocation(string googlePlaceId)
 		{
 			var response = _google.RequestLocation(googlePlaceId);
@@ -76,6 +95,44 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			return list;
+		}
+
+		public List<GeoCountryInfo> SearchCountries(string name)
+		{
+			var list = new List<GeoCountryInfo>();
+			if (String.IsNullOrWhiteSpace(name)) return list;
+
+			var country = GeoCountryInfo.Find(name);
+			if (country != null)
+			{				
+				list.Add(country);
+				return list;
+			}
+
+			return GeoCountryInfo.All.Where(x => x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+		}
+
+		public List<GeoRegionInfo> SearchRegions(string name, GeoCountryInfo country)
+		{
+			var list = new List<GeoRegionInfo>();
+			if (String.IsNullOrWhiteSpace(name)) return list;
+
+			var countryID = (country?.CountryID ?? 0);
+			var region = GeoRegionInfo.Find(name);
+			if (region != null)
+			{
+				if (countryID == 0 || region.CountryID == countryID)
+				{
+					list.Add(region);
+					return list;
+				}
+			}
+
+			var locals = GeoRegionInfo.All.Where(x => x.CountryID == countryID);
+			return locals.Where(x => x.RegionName.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)
+				|| x.RegionAbbr.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)
+				|| x.RegionNameLocal.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)
+				).ToList();
 		}
 
 

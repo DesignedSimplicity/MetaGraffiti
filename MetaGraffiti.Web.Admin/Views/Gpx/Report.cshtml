@@ -38,6 +38,7 @@
 				<td>@item.MetaData.Timezone.TZID</td>
 				<td>@item.MetaData.Timestamp</td>
 				<td>
+					<a class="btn btn-outline-info" href="@TrackViewModel.GetPreviewUrl(item.File.Uri)">Preview</a>
 					<a class="btn btn-outline-info" href="@TrackViewModel.GetExtractUrl(item.File.Uri)">Extract</a>
 				</td>
 			</tr>

@@ -94,6 +94,11 @@ namespace MetaGraffiti.Web.Admin.Models
 				return "danger";
 		}
 
+		public bool IsTimezoneValid { get { return Track.Timezone != null && Track.Timezone.Key != "UTC;"; } }
+		public bool IsCountryValid { get { return Track.Country != null; } }
+		public bool IsRegionValid { get { return IsCountryValid && Track.Country.HasRegions && Track.Region != null; } }
+
+
 		// TODO: consolidate JSON
 		public HtmlString GetExtractJson()
 		{
@@ -143,6 +148,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetImportUrl() { return "/track/import/"; }
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
+		public static string GetPreviewUrl(string uri) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetExtractUrl(string uri) { return $"/track/extract/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetDeleteUrl(string ID) { return $"/track/delete/{ID}"; }
 		public static string GetEditUrl(string ID) { return $"/track/edit/{ID}"; }

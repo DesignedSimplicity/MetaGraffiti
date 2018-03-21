@@ -12,6 +12,7 @@ namespace MetaGraffiti.Base.Services
 {
 	public class TrackExtractService
 	{
+		private static GeoLookupService _lookupService = new GeoLookupService(null);
 		private static BasicCacheService<TrackExtractData> _extracts = new BasicCacheService<TrackExtractData>();
 		private static TrackData _track = new TrackData();
 
@@ -69,7 +70,7 @@ namespace MetaGraffiti.Base.Services
 				extract.Uri = uri;
 				extract.StartTimestamp = track.Points.First().Timestamp;
 				extract.FinishTimestamp = track.Points.Last().Timestamp;
-				Create(extract);
+				Extract(extract);
 			}
 
 			return _track;
@@ -80,32 +81,45 @@ namespace MetaGraffiti.Base.Services
 			_track.Name = update.Name;
 			_track.Description = update.Description;
 			_track.Keywords = update.Keywords;
-			_track.Url = update.Url;
+
+			_track.Url = update.Url; // TODO: make sure url is prefixed with http/s
 			_track.UrlName = update.UrlName;
 
+			_track.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
+			_track.Region = _lookupService.SearchRegions(update.Region, _track.Country).FirstOrDefault();
+			_track.Location = update.Location;
+
 			_track.Timezone = GeoTimezoneInfo.Find(update.Timezone);
-			_track.Country = GeoCountryInfo.Find(update.Country);
-			_track.Region = GeoRegionInfo.Find(update.Region);
+			if (_track.Timezone == null && _track.Country != null) _track.Timezone = _lookupService.GuessTimezone(_track.Country);
 
 			return _track;
 		}
 
-		public TrackExtractData Create(TrackExtractCreateRequest request)
+		public TrackExtractData Create(string uri)
 		{
-			var file = new FileInfo(request.Uri);
+			var file = new FileInfo(uri);
 			var reader = new GpxFileReader(file.FullName);
 			var gpx = reader.ReadFile();
 
 			var extract = new TrackExtractData();
 
 			extract.ID = CryptoGraffiti.NewHashID();
-			extract.SourceUri = request.Uri;
+			extract.SourceUri = uri;
 
-			extract.Name = request.Name;
+			extract.Name = Path.GetFileNameWithoutExtension(uri);
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = gpx.Name;
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = Path.GetFileNameWithoutExtension(file.Name);
 
 			extract.SourcePoints = gpx.Tracks.SelectMany(x => x.Points).ToList();
+			extract.Points = extract.SourcePoints.ToList();
+
+			return extract;
+		}
+
+		public TrackExtractData Extract(TrackExtractCreateRequest request)
+		{
+			var extract = Create(request.Uri);
+
 			extract.Points = FilterPoints(extract.SourcePoints, request);
 
 			InitTrack(extract);
@@ -264,23 +278,8 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			// set default for countries with single timezone
-			if (_track.Timezone == null && _track.Country != null) _track.Timezone = GuessTimezone(_track.Country);
+			if (_track.Timezone == null && _track.Country != null) _track.Timezone = new GeoLookupService(null).GuessTimezone(_track.Country);
 		}
-
-		private GeoTimezoneInfo GuessTimezone(GeoCountryInfo country)
-		{
-			if (country == null) return null;
-
-			switch (country.ISO2)
-			{
-				case "AR": return GeoTimezoneInfo.ByTZID("America/Buenos_Aires");
-				case "CL": return GeoTimezoneInfo.ByTZID("America/Santiago");
-				case "JP": return GeoTimezoneInfo.ByTZID("Asia/Tokyo");
-				case "NZ": return GeoTimezoneInfo.ByTZID("Pacific/Auckland");
-				default: return null;
-			}
-		}
-
 
 		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackFilterBase filter)
 		{
@@ -312,6 +311,7 @@ namespace MetaGraffiti.Base.Services
 		public GeoTimezoneInfo Timezone { get; set; }
 		public GeoCountryInfo Country { get; set; }
 		public GeoRegionInfo Region { get; set; }
+		public string Location { get; set; }
 	}
 
 	public class TrackExtractData
@@ -341,6 +341,7 @@ namespace MetaGraffiti.Base.Services
 		public string Timezone { get; set; }
 		public string Country { get; set; }
 		public string Region { get; set; }
+		public string Location { get; set; }
 	}
 
 	public class TrackExtractUpdateRequest

@@ -116,14 +116,28 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
+		/// Displays the track on a map before extraction
+		/// </summary>
+		public ActionResult Preview(string uri)
+		{
+			var model = InitModel();
+
+			var extract = _service.Create(uri);
+			model.SelectedExtract = extract;
+
+			return View(model);
+		}
+
+		/// <summary>
 		/// Extracts a given set of points data from an existing GPX file into the current edit session
 		/// </summary>
 		public ActionResult Extract(TrackExtractCreateRequest extract)
 		{
-			var extracted = _service.Create(extract);
+			var extracted = _service.Extract(extract);
 
 			return Redirect(TrackViewModel.GetEditUrl(extracted.ID));
 		}
+
 
 		/// <summary>
 		/// Displays a single set of points from the current edit session

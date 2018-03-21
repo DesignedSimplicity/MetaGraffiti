@@ -10,9 +10,9 @@
 	var _bounds = null;
 
 	$(document).ready(function () {
-		initMap();
-
 		initDirty();
+
+		initMap();
 
 		_bounds = new google.maps.LatLngBounds();
 		for (index = 0; index < _tracks.length; index++) {
@@ -25,7 +25,10 @@
 				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
 			}
 		}
-		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
+		
+		if (_tracks.length > 0) {
+			_mapGoogle.fitBounds(_bounds);
+		}
 
 
 		$(".js-track-row").click(function () {
@@ -42,6 +45,67 @@
 		$(".js-reset-view").click(function () {
 			if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 		});
+
+
+		$("#CountryField, #RegionField, #LocationField, #TimezoneField").change(function () {
+			$(this).removeClass("is-valid").removeClass("is-invalid");
+			$(this).addClass("is-invalid");
+		});
+
+		$("#LocationField").click(function () {
+			var text = $(this).val();
+			if (text.length == 0) {
+				lookupLocation();
+			} else {
+
+			}
+		});
+
+		$("#lookupTimezone").click(function () {
+			var field = $("#TimezoneField");
+			var text = field.val();
+			if (text.length == 0) {
+				geocodeTimezone();
+			} else {
+				lookupTimezone(text);
+			}
+		});
+
+		function updateTimezone(name) {
+			var field = $("#TimezoneField");
+			if (name.length > 0) {
+				field.val(name);
+				field.removeClass("is-invalid");
+				field.addClass("is-valid");
+			} else {
+				field.addClass("is-invalid");
+			}
+		}
+
+		function geocodeTimezone() {
+			var center = _bounds.getCenter();
+			$.getJSON('/api/timezones/point/?lat=' + center.lat() + "&lng=" + center.lng())
+				.done(function (data) {
+					updateTimezone(data.tzid);
+				})
+				.fail(function (jqXHR, textStatus, err) {
+					updateTimezone('');
+				});
+		}
+
+		function lookupTimezone(name) {
+			$.getJSON('/api/timezones/?id=' + name)
+				.done(function (data) {
+					updateTimezone(data.tzid);
+				})
+				.fail(function (jqXHR, textStatus, err) {
+					updateTimezone('');
+				});
+		}
+
+		function lookupLocation() {
+
+		}
 	});
 </script>
 
@@ -95,9 +159,22 @@
 		</table>
 		<hr />
 		<form method="post" action="@TrackViewModel.GetUpdateUrl()">
-			<div class="form-group">
-				<label for="Name">Name</label>
-				<input type="text" class="form-control" name="Name" value="@Model.Track.Name">
+			<div class="row">
+				<div class="col">
+					<div class="form-group">
+						<label for="Name">Name</label>
+						<input type="text" class="form-control" name="Name" value="@Model.Track.Name">
+					</div>
+				</div>
+				<div class="col">
+					<label for="Timezone">Timezone</label>
+					<div class="input-group">
+						<input type="text" class="form-control @(Model.IsTimezoneValid ? "is-valid" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(Model.Track.Timezone?.Name ?? "")">
+						<div class="input-group-append">
+							<a href="#" class="btn btn-outline-secondary" id="lookupTimezone">Lookup</a>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div class="form-group">
 				<label for="Description">Description</label>
@@ -115,20 +192,16 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label for="Timezone">Timezone</label>
+				<label for="Country">Location</label>
 				<div class="input-group">
-					<input type="text" class="form-control @(Model.Track.Timezone == null ? "is-invalid" : "is-valid")" name="Timezone" value="@(Model.Track.Timezone?.Name??" ")">
+					<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" placeholder="Country" value="@(Model.Track.Country?.Name ?? "")">
+					@if (Model.IsCountryValid && Model.Track.Country.HasRegions)
+					{
+						<input type="text" class="form-control @(Model.IsRegionValid ? " is-valid" : "is-invalid" )" name="Region" id="RegionField" placeholder="Region" value="@(Model.Track.Region?.RegionName ?? "")">
+					}
+					<input type="text" class="form-control" name="Location" id="LocationField" placeholder="Location" value="@Model.Track.Location">
 					<div class="input-group-append">
-						<a href="#" class="btn btn-outline-secondary disabled" id="lookupTimezone">Lookup</a>
-					</div>
-				</div>
-			</div>
-			<div class="form-group has-danger">
-				<label for="Country">Country</label>
-				<div class="input-group">
-					<input type="text" class="form-control @(Model.Track.Country == null ? "is-invalid" : "is-valid")" name="Country" value="@(Model.Track.Country?.Name??"")">
-					<div class="input-group-append">
-						<a href="#" class="btn btn-outline-secondary disabled" id="lookupCountry">Lookup</a>
+						<a href="#" class="btn btn-outline-secondary" id="lookupCountry">Lookup</a>
 					</div>
 				</div>
 			</div>
