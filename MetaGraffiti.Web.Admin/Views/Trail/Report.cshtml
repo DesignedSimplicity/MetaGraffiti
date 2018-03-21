@@ -3,37 +3,75 @@
 
 @Html.Partial("_Nav")
 
-<div>
-	<h2>Report</h2>
-	<table class="table table-striped">
-		<thead class="table-dark">
-			<tr>
-				<th>Location</th>
-				<th>Date</th>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Distance</th>
-				<th>Time</th>
-				<th>Tracks</th>
-				<th>Points</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var trail in Model.Trails)
+
+<div class="row">
+	<div class="col-sm-4">
+		<div class="h3">
+			@if (Model.SelectedMonth.HasValue)
 			{
-				<tr>
-					<td>@trail.Country.Name</td>
-					<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
-					<td>
-						<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
-					</td>
-					<td>@trail.Description</td>
-					<td></td>
-					<td></td>
-					<td>@trail.Tracks.Count</td>
-					<td>@trail.Tracks.SelectMany(x => x.Points).Count()</td>
-				</tr>
+				<a href="@TrailViewModel.GetReportUrl(Model.SelectedYear.Value)">@Model.SelectedYear</a>
+				<span> \ </span>
+				@Model.GetMonth(Model.SelectedMonth)
 			}
-		</tbody>
-	</table>
+			else
+			{
+				@Model.SelectedYear
+			}
+		</div>
+	</div>
+	<div class="col-sm-8 text-right">
+		@if (Model.SelectedMonth.HasValue)
+		{
+			<div class="h6">
+				@for (int month = 1; month <= 12; month++)
+				{
+					<a class="@(Model.SelectedMonth == month ? "font-italic" : "")" href="@TrailViewModel.GetReportUrl(Model.SelectedYear.Value, month)">@Model.GetMonth(month)</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+		else if (Model.SelectedYear.HasValue)
+		{
+			<div class="h5">
+				@for (var year = Model.FirstDate.Year; year <= Model.LastDate.Year; year++)
+				{
+					<a class="@(Model.SelectedYear == year ? "font-italic" : "")" href="@TrailViewModel.GetReportUrl(year)">@year</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+	</div>
 </div>
+<hr />
+
+<table class="table table-striped">
+	<thead class="table-dark">
+		<tr>
+			<th>Location</th>
+			<th>Date</th>
+			<th>Name</th>
+			<th>Description</th>
+			<th>Distance</th>
+			<th>Time</th>
+			<th>Tracks</th>
+			<th>Points</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var trail in Model.Trails)
+		{
+			<tr>
+				<td>@trail.Country.Name</td>
+				<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+				<td>
+					<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
+				</td>
+				<td>@trail.Description</td>
+				<td></td>
+				<td></td>
+				<td>@trail.Tracks.Count</td>
+				<td>@trail.Tracks.SelectMany(x => x.Points).Count()</td>
+			</tr>
+		}
+	</tbody>
+</table>

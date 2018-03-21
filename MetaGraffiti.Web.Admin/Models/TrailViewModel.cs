@@ -18,6 +18,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		public DateTime LastDate { get; set; }
 
 
+		public int? SelectedYear { get; set; }
+		public int? SelectedMonth { get; set; }
+
+
 		public TopoTrailInfo Trail { get; set; }
 
 		public List<TopoTrailInfo> Trails { get; set; }

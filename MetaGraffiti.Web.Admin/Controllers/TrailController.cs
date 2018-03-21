@@ -29,6 +29,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new TrailViewModel();
 
+			model.Trails = _service.ListAll();
+			model.FirstDate = model.Trails.Min(x => x.LocalDate);
+			model.LastDate = model.Trails.Max(x => x.LocalDate);
+
 			model.Countries = _service.ListCountries().OrderBy(x => x.Name);
 
 			return model;
@@ -41,10 +45,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.Trails = _service.ListAll();
-			model.FirstDate = model.Trails.Min(x => x.LocalDate);
-			model.LastDate = model.Trails.Max(x => x.LocalDate);
-
 			return View(model);
 		}
 
@@ -54,6 +54,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Report(TrailReportRequest report)
 		{
 			var model = InitModel();
+
+			model.SelectedYear = report.Year;
+			model.SelectedMonth = report.Month;
 
 			model.Trails = _service.Report(report);
 

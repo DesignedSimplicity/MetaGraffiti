@@ -34,10 +34,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Index()
 		{
-			// TODO: lookup timezone
-			// TODO: lookup country
-			// TODO: display/lookup region
-
 			var model = InitModel();
 
 			return View("Track", model);
@@ -63,6 +59,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Import(bool overwrite = false)
 		{
 			// TODO: move this to trail controller
+			// TODO: move logic into trail service
 
 			var model = InitModel();
 
@@ -70,7 +67,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
 			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
 			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
-			// TODO: check region 
+			if (track.Country != null && track.Country.HasRegions && track.Region == null) model.ErrorMessages.Add("Region is missing.");
 
 			// show error messages if necessary
 			if (model.HasError) return View(model);
@@ -122,7 +119,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			// adjust uri if necessary
 			// TODO: move this into a service
 			if (!uri.Contains(@"\"))
 			{
@@ -143,6 +139,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Extract(TrackExtractCreateRequest extract)
 		{
+			// TODO: make this HTTPPOST only
 			var extracted = _service.Extract(extract);
 
 			return Redirect(TrackViewModel.GetEditUrl(extracted.ID));
@@ -218,7 +215,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Removes the set of points from the current edit session
+		/// Removes the set of extracted points from the current edit session
 		/// </summary>
 		public ActionResult Delete(string id)
 		{
@@ -230,7 +227,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Clears all tracks from the current edit session
+		/// Clears all extracts from the current edit session
 		/// </summary>
 		public ActionResult Reset()
 		{
