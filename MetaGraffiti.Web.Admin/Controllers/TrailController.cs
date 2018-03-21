@@ -103,8 +103,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var trail =_service.GetTrail(id);
-			//model.Country = 
-			//model.Region = 
+
+			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
 
 			model.Trail = trail;
 

@@ -49,6 +49,10 @@
 
 <div class="row">
 	<div class="col-sm-6">
+		@if (Model.HasError)
+		{
+			<div class="alert alert-danger">@Model.ErrorMessages.First()</div>
+		}
 		<div class="row">
 			<div class="col-sm-8">
 				<div class="h2">@Model.Trail.Name</div>

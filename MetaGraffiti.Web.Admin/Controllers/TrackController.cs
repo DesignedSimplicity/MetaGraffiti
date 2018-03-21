@@ -62,6 +62,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Import(bool overwrite = false)
 		{
+			// TODO: move this to trail controller
+
 			var model = InitModel();
 
 			var track = _service.Track;
@@ -92,11 +94,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			// create internal file
 			_service.Import(uri);
 
-			// TODO: build timezone/country into keywords
-			// TODO: move this to trail controller
-			// TODO: auto-reset track extact session
-			// TODO: force load into trail cache
-			// TODO: redirect to display page
+			// reset track extract cache
+			_service.Reset();
+
+			// reload trails data before redirect
+			new TrailDataService().Reset();
+
+			// redirect to new trail page
 			return Redirect(TrailViewModel.GetDisplayUrl(filename));
 		}
 

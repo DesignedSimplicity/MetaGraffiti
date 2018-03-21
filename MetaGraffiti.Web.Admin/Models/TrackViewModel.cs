@@ -62,7 +62,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
-	public HtmlString GetExtractJson()
+		// TODO: consolidate JSON
+		public HtmlString GetExtractJson()
 		{
 			if (SelectedExtract == null) return new HtmlString("{}");
 
@@ -80,6 +81,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			return new HtmlString(t.ToString());
 		}
 
+		// TODO: consolidate JSON
 		public HtmlString GetTrackJson()
 		{
 			if (Extracts == null || Extracts.Count == 0) new HtmlString("[]");

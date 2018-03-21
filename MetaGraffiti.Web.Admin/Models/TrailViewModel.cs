@@ -46,7 +46,7 @@ namespace MetaGraffiti.Web.Admin.Models
 					: CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Value);
 		}
 
-
+		// TODO: consolidate JSON
 		public HtmlString GetTrackJson()
 		{
 			if (Trail == null || Trail.Tracks.Count == 0) new HtmlString("[]");

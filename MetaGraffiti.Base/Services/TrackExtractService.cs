@@ -225,7 +225,7 @@ namespace MetaGraffiti.Base.Services
 			var country = $"GEOCOUNTRY:{_track.Country.ISO3}";
 			tags.Add(country.ToUpperInvariant(), country);
 
-			_track.Keywords = String.Join(",", tags.Values);
+			_track.Keywords = String.Join(", ", tags.Values);
 		}
 
 		private GpxTrackData PrepareTrackData(TrackExtractData track)

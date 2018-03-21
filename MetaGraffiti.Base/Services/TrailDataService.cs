@@ -39,63 +39,6 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-		private TopoTrailInfo LoadTrail(FileInfo file)
-		{
-			// initial topo trail setup
-			var trail = new TopoTrailInfo();
-			var filename = Path.GetFileNameWithoutExtension(file.Name);
-			trail.ID = filename.ToUpperInvariant();
-			trail.Uri = file.FullName;
-
-			// setup local timestamps
-			var datetime = filename.Substring(0, 8);
-			var timestamp = DateTime.ParseExact(datetime, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-			trail.LocalDate = DateTime.SpecifyKind(timestamp, DateTimeKind.Unspecified);
-
-			// load gpx file data
-			var reader = new GpxFileReader(file.FullName);
-			var data = reader.ReadFile();
-
-			// load primary information
-			trail.Name = data.Name; //filename.Substring(9).Trim();
-			trail.Description = data.Description;
-
-			// load secondary information
-			trail.Keywords = data.Keywords;
-			trail.Url = data.Url;
-			trail.UrlName = data.UrlName;
-
-			// populate info classes
-			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
-			trail.Timezone = ExtractTimezone(trail.Keywords);
-
-			// create track data
-			trail.Tracks = new List<TopoTrackInfo>();
-			foreach(var track in data.Tracks)
-			{
-				trail.Tracks.Add(new TopoTrackInfo(trail, track));
-			}
-
-			return trail;
-		}
-
-		private GeoTimezoneInfo ExtractTimezone(string keywords)
-		{
-			if (!String.IsNullOrWhiteSpace(keywords))
-			{
-				var index = keywords.IndexOf("GEOTIMEZONE:");
-				if (index > -1)
-				{
-					var tz = keywords.Substring(index);
-					index = tz.IndexOf(',');
-					if (index > 0) tz = tz.Substring(0, index - 1);
-					tz = tz.Trim();
-					return GeoTimezoneInfo.ByTZID(tz);
-				}
-			}
-			return null;
-		}
-
 		public List<TopoTrailInfo> ListAll()
 		{
 			return _trails.All;
@@ -150,11 +93,86 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
+		public void Reset()
+		{
+			_trails = null;
+			_init = false;
+		}
+
 		public void Reload(string uri)
 		{
 			_trails = null;
 			_init = false;
 			Init(uri);
+		}
+
+
+		private TopoTrailInfo LoadTrail(FileInfo file)
+		{
+			// initial topo trail setup
+			var trail = new TopoTrailInfo();
+			var filename = Path.GetFileNameWithoutExtension(file.Name);
+			trail.ID = filename.ToUpperInvariant();
+			trail.Uri = file.FullName;
+
+			// setup local timestamps
+			var datetime = filename.Substring(0, 8);
+			var timestamp = DateTime.ParseExact(datetime, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
+			trail.LocalDate = DateTime.SpecifyKind(timestamp, DateTimeKind.Unspecified);
+
+			// load gpx file data
+			var reader = new GpxFileReader(file.FullName);
+			var data = reader.ReadFile();
+
+			// load primary information
+			trail.Name = data.Name; //filename.Substring(9).Trim();
+			trail.Description = data.Description;
+
+			// load secondary information
+			trail.Keywords = data.Keywords;
+			trail.Url = data.Url;
+			trail.UrlName = data.UrlName;
+
+			// populate info classes
+			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
+			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
+
+			// process keywords
+			ProcessKeywords(trail);
+
+			// create track data
+			trail.Tracks = new List<TopoTrackInfo>();
+			foreach (var track in data.Tracks)
+			{
+				trail.Tracks.Add(new TopoTrackInfo(trail, track));
+			}
+
+			return trail;
+		}
+
+		private void ProcessKeywords(TopoTrailInfo trail)
+		{
+			if (!String.IsNullOrWhiteSpace(trail.Keywords))
+			{
+				var keywords = new List<string>();
+				var tags = trail.Keywords.Split(',');
+				foreach (var tag in tags)
+				{
+					var t = tag.Trim().ToUpperInvariant();
+					if (t.StartsWith("GEOTIMEZONE:"))
+					{
+						var tzid = t.Replace("GEOTIMEZONE:", "");
+						trail.Timezone = GeoTimezoneInfo.ByTZID(tzid);
+					}
+					else if (t.StartsWith("GEOCOUNTRY:"))
+					{
+						// TODO: match with current countr
+					}
+					else if (!String.IsNullOrWhiteSpace(t))
+						keywords.Add(tag.Trim());
+				}
+				trail.Keywords = String.Join(", ", keywords);
+			}
 		}
 	}
 
