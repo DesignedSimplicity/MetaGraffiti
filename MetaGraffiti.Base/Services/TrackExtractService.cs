@@ -195,7 +195,10 @@ namespace MetaGraffiti.Base.Services
 			writer.SetVersion(version);
 			writer.WriteHeader(_track);
 
-			if (version == GpxSchemaVersion.Version1_1) writer.WriteMetadata(_track.Timezone.TZID, _track.Country.Name);
+			if (version == GpxSchemaVersion.Version1_1)
+			{
+				writer.WriteMetadata(_track.Timezone.TZID, _track.Country.Name, _track.Region?.RegionName ?? "");
+			}
 
 			foreach (var track in List())
 			{

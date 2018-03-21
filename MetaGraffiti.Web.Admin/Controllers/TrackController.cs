@@ -122,6 +122,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
+			// adjust uri if necessary
+			if (!uri.Contains(@"\"))
+			{
+				var year = uri.Substring(0, 4);
+				var month = uri.Substring(4, 2);
+				var name = uri;
+				uri = Path.Combine(AutoConfig.SourceRootUri, year, month, name + ".gpx");
+			}
+
 			var extract = _service.Create(uri);
 			model.SelectedExtract = extract;
 

@@ -68,6 +68,10 @@
 					<a href="@TrailViewModel.GetReportUrl(Model.Trail.LocalDate.Year)">@Model.Trail.LocalDate.Year</a>
 				</div>
 				<div class="h6">Country: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name)">@Model.Trail.Country.Name</a></div>
+				@if (Model.Trail.Region != null)
+				{
+					<div class="h6">Region: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name, Model.Trail.Region.RegionAbbr)">@Model.Trail.Region.RegionName</a></div>
+				}
 				<div class="h6">Timezone: @Model.Trail.Timezone.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
@@ -75,7 +79,7 @@
 					<input type="hidden" name="ID" value="@Model.Trail.ID" />
 					<button type="submit" class="btn btn-outline-primary">Edit Tracks</button>
 					<button type="button" class="btn btn-success js-reset-view">Reset View</button>
-				</form>				
+				</form>
 			</div>
 		</div>
 		<hr />
@@ -113,7 +117,7 @@
 							<td class="text-right">
 								@if (!String.IsNullOrWhiteSpace(track.Source))
 								{
-									<a class="btn btn-sm btn-outline-info" href="@GpxViewModel.GetDisplayUrl(track.Source)">Source</a>
+									<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">Source</a>
 								}
 							</td>
 						</tr>
