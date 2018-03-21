@@ -36,7 +36,7 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 		public List<GpxPointData> Waypoints { get; set; }
 	}
 
-	public class GpxExtraData
+	public class GpxExtensionData
 	{
 		public string ID { get; set; }
 		public string Timezone { get; set; }

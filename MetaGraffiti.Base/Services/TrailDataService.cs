@@ -138,7 +138,7 @@ namespace MetaGraffiti.Base.Services
 			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
 
 			// process custom data
-			var custom = reader.ReadCustomData();
+			var custom = reader.ReadExtension();
 			if (!String.IsNullOrWhiteSpace(custom.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(custom.Timezone);
 			if (!String.IsNullOrWhiteSpace(custom.Country)) trail.Country = GeoCountryInfo.Find(custom.Country);
 			if (!String.IsNullOrWhiteSpace(custom.Region)) trail.Region = GeoRegionInfo.Find(custom.Region);

@@ -87,18 +87,21 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 		public void WriteMetadata(string timezone, string country, string region = "")
 		{
+			var extensions = _xml.CreateElement("extensions");
+			_root.AppendChild(extensions);
+
 			var timezoneNode = _xml.CreateElement("timezone");
-			_root.AppendChild(timezoneNode);
+			extensions.AppendChild(timezoneNode);
 			timezoneNode.InnerText = timezone;
 
 			var countryNode = _xml.CreateElement("country");
-			_root.AppendChild(countryNode);
+			extensions.AppendChild(countryNode);
 			countryNode.InnerText = country;
 
 			if (!String.IsNullOrWhiteSpace(region))
 			{
 				var regionNode = _xml.CreateElement("region");
-				_root.AppendChild(regionNode);
+				extensions.AppendChild(regionNode);
 				regionNode.InnerText = region;
 			}
 		}

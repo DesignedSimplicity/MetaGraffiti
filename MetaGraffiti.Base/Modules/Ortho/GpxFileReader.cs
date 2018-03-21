@@ -91,14 +91,14 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		/// <summary>
 		/// Extracts additional custom data if exists
 		/// </summary>
-		public GpxExtraData ReadCustomData()
+		public GpxExtensionData ReadExtension()
 		{
-			var data = new GpxExtraData();
-			data.ID = ReadCustom("id");
-			data.Timezone = ReadCustom("timezone");
-			data.Country = ReadCustom("country");
-			data.Region = ReadCustom("region");
-			data.Location = ReadCustom("location");
+			var data = new GpxExtensionData();
+			data.ID = ReadExtension("id");
+			data.Timezone = ReadExtension("timezone");
+			data.Country = ReadExtension("country");
+			data.Region = ReadExtension("region");
+			data.Location = ReadExtension("location");
 			return data;
 		}
 
@@ -218,9 +218,12 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			return p;
 		}
 
-		private string ReadCustom(string name)
+		private string ReadExtension(string name)
 		{
-			var n = MetadataNode.SelectSingleNode(name);
+			var ex = MetadataNode.SelectSingleNode("extensions");
+			if (ex == null) return null;
+
+			var n = ex.SelectSingleNode(name);
 			if (n == null)
 				return null;
 			else

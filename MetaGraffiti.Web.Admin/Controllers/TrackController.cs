@@ -123,6 +123,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			// adjust uri if necessary
+			// TODO: move this into a service
 			if (!uri.Contains(@"\"))
 			{
 				var year = uri.Substring(0, 4);

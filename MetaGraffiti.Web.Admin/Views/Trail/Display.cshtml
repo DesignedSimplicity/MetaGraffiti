@@ -73,6 +73,9 @@
 					<div class="h6">Region: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name, Model.Trail.Region.RegionAbbr)">@Model.Trail.Region.RegionName</a></div>
 				}
 				<div class="h6">Timezone: @Model.Trail.Timezone.Name</div>
+				<div>
+					@Model.Trail.Uri
+				</div>
 			</div>
 			<div class="col-sm-4 text-right">
 				<form method="post" action="@TrailViewModel.GetModifyUrl()">
