@@ -29,6 +29,8 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public GeoCountryInfo Country { get; set; }
 
+		public GeoRegionInfo Region { get; set; }
+
 		public GeoTimezoneInfo Timezone { get; set; }
 
 		

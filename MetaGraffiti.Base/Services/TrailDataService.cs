@@ -137,8 +137,13 @@ namespace MetaGraffiti.Base.Services
 			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
 			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
 
-			// process keywords
-			ProcessKeywords(trail);
+			// process custom data
+			var custom = reader.ReadCustomData();
+			if (!String.IsNullOrWhiteSpace(custom.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(custom.Timezone);
+			if (!String.IsNullOrWhiteSpace(custom.Country)) trail.Country = GeoCountryInfo.Find(custom.Country);
+			if (!String.IsNullOrWhiteSpace(custom.Region)) trail.Region = GeoRegionInfo.Find(custom.Region);
+			// TODO: add location
+			// TODO: add ID
 
 			// create track data
 			trail.Tracks = new List<TopoTrackInfo>();
@@ -150,6 +155,7 @@ namespace MetaGraffiti.Base.Services
 			return trail;
 		}
 
+		/*
 		private void ProcessKeywords(TopoTrailInfo trail)
 		{
 			if (!String.IsNullOrWhiteSpace(trail.Keywords))
@@ -174,6 +180,7 @@ namespace MetaGraffiti.Base.Services
 				trail.Keywords = String.Join(", ", keywords);
 			}
 		}
+		*/
 	}
 
 	public class TrailReportRequest

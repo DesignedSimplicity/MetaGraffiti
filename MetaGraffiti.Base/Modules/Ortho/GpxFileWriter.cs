@@ -13,58 +13,93 @@ namespace MetaGraffiti.Base.Modules.Ortho
 	public class GpxFileWriter
 	{
 		private const string _gpxTemplateV1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
+		private const string _gpxTemplateV1_1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.1"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/1"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd""></gpx>";
 
 		private XmlDocument _xml = null;
+		private XmlNode _root = null;
 
 		public GpxSchemaVersion Version { get; private set; } = GpxSchemaVersion.Version1;
 		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
 		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? Gpx.XmlNamespaceV1 : Gpx.XmlNamespaceV1_1; } }
 
+		public void SetVersion(GpxSchemaVersion version)
+		{
+			if (_xml != null)
+				throw new Exception("Header already written.");
+			else
+				Version = version;
+		}
+
 		public void WriteHeader(IGpxFileHeader header)
 		{
 			_xml = new XmlDocument();
-			_xml.LoadXml(_gpxTemplateV1);
+			_xml.LoadXml(Version == GpxSchemaVersion.Version1 ? _gpxTemplateV1 : _gpxTemplateV1_1);
 
 			XmlNamespaceManager ns = new XmlNamespaceManager(_xml.NameTable);
 			ns.AddNamespace("gpx", Namespace);
 
 			_xml.DocumentElement.Attributes["creator"].InnerText = Creator;
 			_xml.DocumentElement.Attributes["version"].InnerText = Version == GpxSchemaVersion.Version1 ? "1.0" : "1.1";
+
+			_root = _xml.DocumentElement;
+			if (Version == GpxSchemaVersion.Version1_1)
+			{
+				_root = _xml.CreateElement("metadata", Namespace);
+				_xml.DocumentElement.AppendChild(_root);
+			}
 			if (header.Timestamp.HasValue)
 			{
 				var timestampNode = _xml.CreateElement("time", Namespace);
-				_xml.DocumentElement.AppendChild(timestampNode);
+				_root.AppendChild(timestampNode);
 				timestampNode.InnerText = header.Timestamp.Value.ToString("s") + "Z";
 			}
 			if (!String.IsNullOrWhiteSpace(header.Name))
 			{
 				var nameNode = _xml.CreateElement("name", Namespace);
-				_xml.DocumentElement.AppendChild(nameNode);
+				_root.AppendChild(nameNode);
 				nameNode.InnerText = header.Name;
 			}
 			if (!String.IsNullOrWhiteSpace(header.Description))
 			{
 				var descriptionNode = _xml.CreateElement("desc", Namespace);
-				_xml.DocumentElement.AppendChild(descriptionNode);
+				_root.AppendChild(descriptionNode);
 				descriptionNode.InnerText = header.Description;
 			}
 			if (!String.IsNullOrWhiteSpace(header.Keywords))
 			{
 				var keywordsNode = _xml.CreateElement("keywords", Namespace);
-				_xml.DocumentElement.AppendChild(keywordsNode);
+				_root.AppendChild(keywordsNode);
 				keywordsNode.InnerText = header.Keywords;
 			}
 			if (!String.IsNullOrWhiteSpace(header.Url))
 			{
 				var urlNode = _xml.CreateElement("url", Namespace);
-				_xml.DocumentElement.AppendChild(urlNode);
+				_root.AppendChild(urlNode);
 				urlNode.InnerText = header.Url;
 			}
 			if (!String.IsNullOrWhiteSpace(header.UrlName))
 			{
 				var urlNameNode = _xml.CreateElement("urlname", Namespace);
-				_xml.DocumentElement.AppendChild(urlNameNode);
+				_root.AppendChild(urlNameNode);
 				urlNameNode.InnerText = header.UrlName;
+			}
+		}
+
+		public void WriteMetadata(string timezone, string country, string region = "")
+		{
+			var timezoneNode = _xml.CreateElement("timezone");
+			_root.AppendChild(timezoneNode);
+			timezoneNode.InnerText = timezone;
+
+			var countryNode = _xml.CreateElement("country");
+			_root.AppendChild(countryNode);
+			countryNode.InnerText = country;
+
+			if (!String.IsNullOrWhiteSpace(region))
+			{
+				var regionNode = _xml.CreateElement("region");
+				_root.AppendChild(regionNode);
+				regionNode.InnerText = region;
 			}
 		}
 

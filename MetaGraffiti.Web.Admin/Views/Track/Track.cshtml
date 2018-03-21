@@ -8,6 +8,8 @@
 <script>
 	var _tracks = @Model.GetTrackJson();
 	var _bounds = null;
+	var _start = null;
+	var _stop = null;
 
 	$(document).ready(function () {
 		initDirty();
@@ -25,11 +27,22 @@
 				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
 			}
 		}
-		
 		if (_tracks.length > 0) {
 			_mapGoogle.fitBounds(_bounds);
 		}
 
+		$(".js-track-row").hover(function () {
+			var index = $(this).index();
+
+			var points = _tracks[index].points;
+			var last = points.length - 1;
+
+			if (_start != null) _start.setMap(null);
+			_start = markStart(points[0].lat, points[0].lng);
+
+			if (_stop != null) _stop.setMap(null);
+			_stop = markStop(points[last].lat, points[last].lng);
+		});
 
 		$(".js-track-row").click(function () {
 			var index = $(this).index();
@@ -149,7 +162,7 @@
 							<td class="text-nowrap">@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
 							<td class="text-nowrap">
 								<a class="btn btn-sm btn-primary" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
-								<a class="btn btn-sm btn-outline-info" href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">Source</a>
+								<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.SourceUri)">Source</a>
 								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
 							</td>
 						</tr>
@@ -184,6 +197,7 @@
 				<label for="Keywords">Keywords</label>
 				<input type="text" class="form-control" name="Keywords" value="@Model.Track.Keywords">
 			</div>
+			<!--
 			<div class="form-group">
 				<label for="Url">Website</label>
 				<div class="input-group">
@@ -191,6 +205,7 @@
 					<input type="text" class="form-control" name="UrlName" value="@Model.Track.UrlName" />
 				</div>
 			</div>
+			-->
 			<div class="form-group">
 				<label for="Country">Location</label>
 				<div class="input-group">
@@ -212,9 +227,9 @@
 					<a href="@TrackViewModel.GetImportUrl()" class="btn btn-outline-primary js-check-dirty">Import</a>
 					<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-info js-check-dirty">Export GPX</a>
 					<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-info js-check-dirty">Export KML</a>
-					<button type="button" class="btn btn-outline-secondary js-reset-view">View All</button>
 				</div>
 				<div class="col-sm-4 text-right">
+					<button type="button" class="btn btn-outline-secondary js-reset-view">Zoom All</button>
 					<a href="@TrackViewModel.GetResetUrl()" class="btn btn-danger js-confirm">Remove All</a>
 				</div>
 			</div>

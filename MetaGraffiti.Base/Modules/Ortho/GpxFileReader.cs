@@ -51,6 +51,17 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		// ==================================================
 		// Methods
 
+		private XmlNode MetadataNode
+		{
+			get
+			{
+				if (_version == GpxSchemaVersion.Version1_1)
+					return _xml.DocumentElement.FirstChild;
+				else
+					return (XmlNode)_xml.DocumentElement;
+			}
+		}
+
 		/// <summary>
 		/// Reads the file header data
 		/// </summary>
@@ -63,17 +74,31 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			Version = TypeConvert.ToDecimal(_xml.DocumentElement.Attributes["version"].InnerText);
 
 			// common top elements
-			data.Name = ReadString(_xml.DocumentElement, "name");
-			data.Description = ReadString(_xml.DocumentElement, "desc");
-			data.Timestamp = ReadDateTime(_xml.DocumentElement, "time");
+			data.Name = ReadString(MetadataNode, "name");
+			data.Description = ReadString(MetadataNode, "desc");
+			data.Timestamp = ReadDateTime(MetadataNode, "time");
 
 			// optional top elements
-			data.Url = ReadString(_xml.DocumentElement, "url");
-			data.UrlName = ReadString(_xml.DocumentElement, "urlname");
-			data.Keywords = ReadString(_xml.DocumentElement, "keywords");
+			data.Url = ReadString(MetadataNode, "url");
+			data.UrlName = ReadString(MetadataNode, "urlname");
+			data.Keywords = ReadString(MetadataNode, "keywords");
 
-			// TODO: support other optional elements		
+			// TODO: support other optional elements
 
+			return data;
+		}
+
+		/// <summary>
+		/// Extracts additional custom data if exists
+		/// </summary>
+		public GpxExtraData ReadCustomData()
+		{
+			var data = new GpxExtraData();
+			data.ID = ReadCustom("id");
+			data.Timezone = ReadCustom("timezone");
+			data.Country = ReadCustom("country");
+			data.Region = ReadCustom("region");
+			data.Location = ReadCustom("location");
 			return data;
 		}
 
@@ -191,6 +216,15 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			p.PDOP = ReadDecimal(node, "pdop");
 
 			return p;
+		}
+
+		private string ReadCustom(string name)
+		{
+			var n = MetadataNode.SelectSingleNode(name);
+			if (n == null)
+				return null;
+			else
+				return TypeConvert.ToString(n.InnerText);
 		}
 
 		private double? ReadDouble(XmlNode node, string name)

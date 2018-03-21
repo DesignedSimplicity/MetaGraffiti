@@ -35,4 +35,13 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 		public List<GpxRouteData> Routes { get; set; }
 		public List<GpxPointData> Waypoints { get; set; }
 	}
+
+	public class GpxExtraData
+	{
+		public string ID { get; set; }
+		public string Timezone { get; set; }
+		public string Country { get; set; }
+		public string Region { get; set; }
+		public string Location { get; set; }
+	}
 }

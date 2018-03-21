@@ -171,8 +171,8 @@ namespace MetaGraffiti.Base.Services
 
 		public long Import(string uri)
 		{
-			ConsolidateKeywords();
-			var data = GenerateGPX();
+			//ConsolidateKeywords();
+			var data = GenerateGPX(GpxSchemaVersion.Version1_1);
 			File.WriteAllBytes(uri, data);
 			return data.Length;
 		}
@@ -180,7 +180,7 @@ namespace MetaGraffiti.Base.Services
 		public byte[] Export(string format)
 		{
 			if (format.ToUpperInvariant() == "GPX")
-				return GenerateGPX();
+				return GenerateGPX(GpxSchemaVersion.Version1);
 			else if (format.ToUpperInvariant() == "KML")
 				return GenerateKML();
 			else
@@ -188,10 +188,14 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
-		private byte[] GenerateGPX()
+		private byte[] GenerateGPX(GpxSchemaVersion version)
 		{
 			var writer = new GpxFileWriter();
+
+			writer.SetVersion(version);
 			writer.WriteHeader(_track);
+
+			if (version == GpxSchemaVersion.Version1_1) writer.WriteMetadata(_track.Timezone.TZID, _track.Country.Name);
 
 			foreach (var track in List())
 			{
@@ -214,6 +218,7 @@ namespace MetaGraffiti.Base.Services
 			return Encoding.ASCII.GetBytes(writer.GetXml());
 		}
 
+		/*
 		private void ConsolidateKeywords()
 		{
 			var keywords = _track.Keywords;
@@ -241,6 +246,7 @@ namespace MetaGraffiti.Base.Services
 
 			_track.Keywords = String.Join(", ", tags.Values);
 		}
+		*/
 
 		private GpxTrackData PrepareTrackData(TrackExtractData track)
 		{
@@ -273,7 +279,11 @@ namespace MetaGraffiti.Base.Services
 				if (regions.Count() == 1)
 				{
 					var region = regions.First();
-					if (_track.Country.IsSame(region.Country)) _track.Region = region;
+					if (_track.Country == null || _track.Country.IsSame(region.Country))
+					{
+						_track.Region = region;
+						_track.Country = region.Country;
+					}
 				}
 			}
 

@@ -20,13 +20,13 @@
 		$(".js-point-row").hover(function () {
 			if (_marker != null) _marker.setMap(null);
 
-			var index = $(this).index() - 1;
+			var index = $(this).index();
 			var point = _track.points[index];
 			_marker = markPoint(point.lat, point.lng, point.id);
 		});
 
 		$(".js-point-row").click(function () {
-			var index = $(this).index() - 1;
+			var index = $(this).index();
 			var point = _track.points[index];
 			gotoPoint(point.lat, point.lng);
 		});
@@ -78,37 +78,41 @@
 			</div>
 		</div>
 		<table class="table table-striped table-bordered table-sm">
-			<tr class="thead-dark">
-				<th>Point #</th>
-				<th>Timestamp</th>
-				<th>Lat / Long</th>
-				<th>Elevation</th>
-				<th>Course</th>
-				<th>M/S</th>
-				<th>GPS</th>
-				<th>HDOP</th>
-				<th>VDOP</th>
-				<th>PDOP</th>
-			</tr>
-			@{
-				var index = 0;
-				foreach (var p in extract.Points)
-				{
-					<tr class="js-point-row">
-						<td>@((index + 1).ToString("0000"))</td>
-						<td>@p.Timestamp.Value.ToString("yyyy-MM-dd") @p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-						<td>@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")</td>
-						<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
-						<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
-						<td class="text-center table-@Model.GetSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-						<td class="text-center table-@Model.GetSatsCss(p.Sats)">@p.Sats</td>
-						<td class="text-center table-@Model.GetDOPCss(p.HDOP)">@p.HDOP</td>
-						<td class="text-center table-@Model.GetDOPCss(p.VDOP)">@p.VDOP</td>
-						<td class="text-center table-@Model.GetDOPCss(p.PDOP)">@p.PDOP</td>
-					</tr>
-					index++;
+			<thead>
+				<tr class="thead-dark">
+					<th>Point #</th>
+					<th>Timestamp</th>
+					<th>Lat / Long</th>
+					<th>Elevation</th>
+					<th>Course</th>
+					<th>M/S</th>
+					<th>GPS</th>
+					<th>HDOP</th>
+					<th>VDOP</th>
+					<th>PDOP</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var index = 0;
+					foreach (var p in extract.Points)
+					{
+						<tr class="js-point-row">
+							<td>@((index + 1).ToString("0000"))</td>
+							<td>@p.Timestamp.Value.ToString("yyyy-MM-dd") @p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+							<td>@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")</td>
+							<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+							<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
+							<td class="text-center table-@Model.GetSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+							<td class="text-center table-@Model.GetSatsCss(p.Sats)">@p.Sats</td>
+							<td class="text-center table-@Model.GetDOPCss(p.HDOP)">@p.HDOP</td>
+							<td class="text-center table-@Model.GetDOPCss(p.VDOP)">@p.VDOP</td>
+							<td class="text-center table-@Model.GetDOPCss(p.PDOP)">@p.PDOP</td>
+						</tr>
+						index++;
+					}
 				}
-			}
+			</tbody>
 		</table>
 	</div>
 </div>
