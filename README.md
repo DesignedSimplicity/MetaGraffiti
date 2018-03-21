@@ -15,6 +15,11 @@ A framework to process geographic and topographic data for map building and visu
 
 
 ## TODO
+1. Import GPX to write v1.1 files
+2. Add Country/Region/Timezone to imported GPX files
+
+
+
 
 ### Now
 * Finalize fields and edit form for GeoPlaceInfo

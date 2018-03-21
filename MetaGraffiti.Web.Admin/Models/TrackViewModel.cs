@@ -12,48 +12,57 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TrackViewModel : AdminViewModel
 	{
-		public TrackInfo Track { get; set; }
+		public TrackData Track { get; set; }
 
-		public List<TrackExtractInfo> Extracts { get; set; }
+		public List<TrackExtractData> Extracts { get; set; }
 
-		public TrackExtractInfo SelectedExtract { get; set; }
-
-
+		public TrackExtractData SelectedExtract { get; set; }
 
 
-		public DateTime StartTime(TrackExtractInfo track)
+
+
+		public DateTime StartTime(TrackExtractData track)
 		{
 			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
-			var time = track.Points.First().Timestamp.Value;
+			var time = track.Points.FirstOrDefault()?.Timestamp.Value ?? DateTime.MinValue;
 			return timezone.FromUTC(time);
 		}
 
-		public DateTime FinishTime(TrackExtractInfo track)
+		public DateTime FinishTime(TrackExtractData track)
 		{
 			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
-			var time = track.Points.Last().Timestamp.Value;
+			var time = track.Points.LastOrDefault()?.Timestamp.Value ?? DateTime.MaxValue;
 			return timezone.FromUTC(time);
 		}
 
-		public decimal MaximumVelocity(TrackExtractInfo track)
+		public decimal MaximumVelocity(TrackExtractData track)
 		{
 			return track.Points.Max(x => (x.Speed ?? 0));
 		}
 
-		public decimal MaximumDilution(TrackExtractInfo track)
+		public decimal MaximumDilution(TrackExtractData track)
 		{
 			return track.Points.Max(x => x.GetDOP());
 		}
 
-		public int MinimumSatellite(TrackExtractInfo track)
+		public int MinimumSatellite(TrackExtractData track)
 		{
 			return track.Points.Min(x => (x.Sats ?? 0));
 		}
 
+		public double TotalDistance(TrackExtractData track)
+		{
+			return GeoDistance.BetweenPoints(track.Points, true).KM;
+		}
+
+		public string ElapsedTime(TrackExtractData track)
+		{
+			var ts = FinishTime(track).Subtract(StartTime(track));
+			return String.Format("{0:0} hr{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s"));
+		}
 
 
-
-		public HtmlString GetExtractJson()
+	public HtmlString GetExtractJson()
 		{
 			if (SelectedExtract == null) return new HtmlString("{}");
 

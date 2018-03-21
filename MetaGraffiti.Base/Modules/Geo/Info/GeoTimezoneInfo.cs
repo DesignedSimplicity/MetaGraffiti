@@ -117,20 +117,6 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return ByName(text);
 		}
 
-		public static GeoTimezoneInfo ByCountry(GeoCountryInfo country)
-		{
-			if (country == null) return null;
-
-			switch (country.ISO2)
-			{
-				case "AR": return ByTZID("America/Buenos_Aires");
-				case "CL": return ByTZID("America/Santiago");
-				case "JP": return ByTZID("Asia/Tokyo");
-				case "NZ": return ByTZID("Pacific/Auckland");
-				default: return null;
-			}
-		}
-
 		// --------------------------------------------------
 		// Globals
 		private static bool _initialized = false;

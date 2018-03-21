@@ -67,7 +67,7 @@ namespace MetaGraffiti.Base.Services
 
 			// populate info classes
 			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
-			trail.Timezone = GeoTimezoneInfo.ByCountry(trail.Country);
+			trail.Timezone = ExtractTimezone(trail.Keywords);
 
 			// create track data
 			trail.Tracks = new List<TopoTrackInfo>();
@@ -77,6 +77,23 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			return trail;
+		}
+
+		private GeoTimezoneInfo ExtractTimezone(string keywords)
+		{
+			if (!String.IsNullOrWhiteSpace(keywords))
+			{
+				var index = keywords.IndexOf("GEOTIMEZONE:");
+				if (index > -1)
+				{
+					var tz = keywords.Substring(index);
+					index = tz.IndexOf(',');
+					if (index > 0) tz = tz.Substring(0, index - 1);
+					tz = tz.Trim();
+					return GeoTimezoneInfo.ByTZID(tz);
+				}
+			}
+			return null;
 		}
 
 		public List<TopoTrailInfo> ListAll()

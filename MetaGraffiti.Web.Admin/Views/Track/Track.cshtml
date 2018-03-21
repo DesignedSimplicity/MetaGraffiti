@@ -60,10 +60,11 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
+					<th class="w-50">Track</th>
+					<th>KM</th>
+					<th>Time</th>
 					<th>Start</th>
 					<th>Finish</th>
-					<th>Track Name</th>
-					<th>Description</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
@@ -74,11 +75,15 @@
 					{
 						<tr class="js-track-row">
 							<td class="text-center">@(++count)</td>
-							<td>@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
-							<td>@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
-							<td class="font-weight-bold">@track.Name</td>
-							<td class="small">@track.Description</td>
-							<td class="text-right">
+							<td>
+								<div class="font-weight-bold">@track.Name</div>
+								<div class="small">@track.Description</div>
+							</td>
+							<td>@Model.TotalDistance(track).ToString("#,##0.0")</td>
+							<td class="text-nowrap">@Model.ElapsedTime(track)</td>
+							<td class="text-nowrap">@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
+							<td class="text-nowrap">@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
+							<td class="text-nowrap">
 								<a class="btn btn-sm btn-primary" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
 								<a class="btn btn-sm btn-outline-info" href="@GpxViewModel.GetDisplayUrl(track.SourceUri)">Source</a>
 								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.ID)">Remove</a>
@@ -129,15 +134,15 @@
 			</div>
 			<br />
 			<div class="row">
-				<div class="col">
+				<div class="col-sm-8">
 					<button type="submit" class="btn btn-success">Update</button>
 					<a href="@TrackViewModel.GetImportUrl()" class="btn btn-outline-primary js-check-dirty">Import</a>
 					<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-info js-check-dirty">Export GPX</a>
 					<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-info js-check-dirty">Export KML</a>
 				</div>
-				<div class="col text-right">
+				<div class="col-sm-4 text-right">
 					<button type="button" class="btn btn-outline-secondary js-reset-view">View All</button>
-					<a href="@TrackViewModel.GetResetUrl()" class="btn btn-danger js-confirm">Reset All</a>
+					<a href="@TrackViewModel.GetResetUrl()" class="btn btn-danger js-confirm">Remove All</a>
 				</div>
 			</div>
 		</form>

@@ -92,6 +92,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			// create internal file
 			_service.Import(uri);
 
+			// TODO: build timezone/country into keywords
+			// TODO: move this to trail controller
 			// TODO: auto-reset track extact session
 			// TODO: force load into trail cache
 			// TODO: redirect to display page
@@ -153,7 +155,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var filtered = _service.Filter(filter);
 
-			return Redirect(TrackViewModel.GetEditUrl(filtered.ID));
+			if (filtered == null)
+			{
+				var model = InitModel();
+
+				model.SelectedExtract = _service.Get(filter.ID);
+				model.ErrorMessages.Add("Filter contains no points and was not applied.");
+
+				return View("Edit", model);
+			}
+			else
+				return Redirect(TrackViewModel.GetEditUrl(filtered.ID));
 		}
 
 		/// <summary>
