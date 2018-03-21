@@ -12,9 +12,17 @@ namespace MetaGraffiti.Base.Services
 {
     public class TrailDataService
     {
+		// ==================================================
+		// Internals
 		private static object _init = false;
 		private static BasicCacheService<TopoTrailInfo> _trails;
 
+		// ==================================================
+		// Methods
+
+		/// <summary>
+		/// Initializes repository with all local GPX files
+		/// </summary>
 		public void Init(string uri)
 		{
 			lock (_init)
@@ -39,11 +47,17 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-		public List<TopoTrailInfo> ListAll()
+		/// <summary>
+		/// Lists all loaded GPX files
+		/// </summary>
+		public List<TopoTrailInfo> ListTrails()
 		{
 			return _trails.All;
 		}
 
+		/// <summary>
+		/// Lists all countries referenced across all GPX files
+		/// </summary>
 		public List<GeoCountryInfo> ListCountries()
 		{
 			var list = new List<GeoCountryInfo>();
@@ -54,6 +68,9 @@ namespace MetaGraffiti.Base.Services
 			return list;
 		}
 
+		/// <summary>
+		/// Retrieves a specific GPX file from the cache
+		/// </summary>
 		public TopoTrailInfo GetTrail(string id)
 		{
 			return _trails[id.ToUpperInvariant()];
@@ -61,23 +78,25 @@ namespace MetaGraffiti.Base.Services
 
 		public List<TopoTrailInfo> ListByDate(int year, int? month = null, int? day = null)
 		{
-			return null;
+			return Report(new TrailReportRequest() { Year = year, Month = month, Day = day });
 		}
 
 		public List<TopoTrailInfo> ListByCountry(GeoCountryInfo country)
 		{
-			return _trails.All.Where(x => x.Country.CountryID == country.CountryID).ToList();
+			return Report(new TrailReportRequest() { Country = country.ISO3 });
 		}
 
 		public List<TopoTrailInfo> ListByRegion(GeoRegionInfo region)
 		{
-			return null;
+			return Report(new TrailReportRequest() { Region = region.RegionISO });
 		}
 
+		/*
 		public List<TopoTrailInfo> ListByPerimeter(IGeoPerimeter perimeter)
 		{
 			return null;
 		}
+		*/
 
 		public List<TopoTrailInfo> Report(TrailReportRequest request)
 		{
@@ -87,26 +106,34 @@ namespace MetaGraffiti.Base.Services
 			if (request.Month.HasValue) query = query.Where(x => x.LocalDate.Month == request.Month);
 			if (request.Day.HasValue) query = query.Where(x => x.LocalDate.Day == request.Day);
 
-			var country = GeoCountryInfo.Find(request.Country);
-			if (country != null) query = query.Where(x => x.Country.CountryID == country.CountryID);
+			if (!String.IsNullOrWhiteSpace(request.Country))
+			{
+				var country = GeoCountryInfo.Find(request.Country);
+				if (country != null) query = query.Where(x => x.Country.CountryID == country.CountryID);
+			}
+
+			if (!String.IsNullOrWhiteSpace(request.Region))
+			{
+				var region = GeoRegionInfo.Find(request.Region);
+				if (region != null) query = query.Where(x => x.Region.RegionID == region.RegionID);
+			}
 
 			return query.ToList();
 		}
 
-		public void Reset()
+
+
+		/// <summary>
+		/// Clears the GPX file cache
+		/// </summary>
+		public void ResetCache()
 		{
 			_trails = null;
 			_init = false;
 		}
 
-		public void Reload(string uri)
-		{
-			_trails = null;
-			_init = false;
-			Init(uri);
-		}
-
-
+		// ==================================================
+		// Helpers
 		private TopoTrailInfo LoadTrail(FileInfo file)
 		{
 			// initial topo trail setup
@@ -142,8 +169,7 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(custom.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(custom.Timezone);
 			if (!String.IsNullOrWhiteSpace(custom.Country)) trail.Country = GeoCountryInfo.Find(custom.Country);
 			if (!String.IsNullOrWhiteSpace(custom.Region)) trail.Region = GeoRegionInfo.Find(custom.Region);
-			// TODO: add location
-			// TODO: add ID
+			// TODO: read location + ID
 
 			// create track data
 			trail.Tracks = new List<TopoTrackInfo>();
@@ -154,33 +180,6 @@ namespace MetaGraffiti.Base.Services
 
 			return trail;
 		}
-
-		/*
-		private void ProcessKeywords(TopoTrailInfo trail)
-		{
-			if (!String.IsNullOrWhiteSpace(trail.Keywords))
-			{
-				var keywords = new List<string>();
-				var tags = trail.Keywords.Split(',');
-				foreach (var tag in tags)
-				{
-					var t = tag.Trim().ToUpperInvariant();
-					if (t.StartsWith("GEOTIMEZONE:"))
-					{
-						var tzid = t.Replace("GEOTIMEZONE:", "");
-						trail.Timezone = GeoTimezoneInfo.ByTZID(tzid);
-					}
-					else if (t.StartsWith("GEOCOUNTRY:"))
-					{
-						// TODO: match with current countr
-					}
-					else if (!String.IsNullOrWhiteSpace(t))
-						keywords.Add(tag.Trim());
-				}
-				trail.Keywords = String.Join(", ", keywords);
-			}
-		}
-		*/
 	}
 
 	public class TrailReportRequest

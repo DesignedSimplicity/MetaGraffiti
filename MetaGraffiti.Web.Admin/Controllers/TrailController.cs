@@ -3,6 +3,7 @@ using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,22 +19,23 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 	public class TrailController : Controller
     {
-		private TrailDataService _service = new TrailDataService();
+		private TrackExtractService _trackExtractService = new TrackExtractService();
+		private TrailDataService _trailDataService = new TrailDataService();
 
 		public TrailController()
 		{
-			_service.Init(AutoConfig.TrackRootUri);
+			_trailDataService.Init(AutoConfig.TrackRootUri);
 		}
 
 		private TrailViewModel InitModel()
 		{
 			var model = new TrailViewModel();
 
-			model.Trails = _service.ListAll();
+			model.Trails = _trailDataService.ListTrails();
 			model.FirstDate = model.Trails.Min(x => x.LocalDate);
 			model.LastDate = model.Trails.Max(x => x.LocalDate);
 
-			model.Countries = _service.ListCountries().OrderBy(x => x.Name);
+			model.Countries = _trailDataService.ListCountries().OrderBy(x => x.Name);
 
 			return model;
 		}
@@ -58,7 +60,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedYear = report.Year;
 			model.SelectedMonth = report.Month;
 
-			model.Trails = _service.Report(report);
+			model.Trails = _trailDataService.Report(report);
 
 			return View(model);
 		}
@@ -79,7 +81,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				{
 					model.Region = r;
 					model.Country = r.Country;
-					model.Trails = _service.ListByRegion(r);
+					model.Trails = _trailDataService.ListByRegion(r);
 				}
 			}
 			else
@@ -90,7 +92,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				else
 				{
 					model.Country = c;
-					model.Trails = _service.ListByCountry(c);
+					model.Trails = _trailDataService.ListByCountry(c);
 				}
 			}
 
@@ -105,7 +107,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			var trail =_service.GetTrail(id);
+			var trail =_trailDataService.GetTrail(id);
 
 			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
 
@@ -120,13 +122,57 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Modify(string id)
 		{
-			var trail = _service.GetTrail(id);
+			var trail = _trailDataService.GetTrail(id);
 
-			var trackService = new TrackExtractService();
-			
-			trackService.Modify(trail.Uri);
+			_trackExtractService.EditTrack(trail.Uri);
 
 			return Redirect(TrackViewModel.GetTrackUrl());
+		}
+
+		/// <summary>
+		/// Creates an internal file from all of the tracks in the current edit session
+		/// </summary>
+		public ActionResult Import(bool overwrite = false)
+		{
+			var model = InitModel();
+
+			// TODO: move this into TrailDataService
+			var track = _trackExtractService.Track;
+			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
+			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
+			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
+			if (track.Country != null && track.Country.HasRegions && track.Region == null) model.ErrorMessages.Add("Region is missing.");
+
+			// show error messages if necessary
+			if (model.HasError) return View(model);
+
+			// check folders are initialized
+			var folder = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name);
+			if (!Directory.Exists(AutoConfig.TrackRootUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrackRootUri}");
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+			// check existing filename and if overwrite
+			var filename = $"{String.Format("{0:yyyyMMdd}", track.Timestamp)} {track.Name}";
+			var uri = Path.Combine(folder, filename + ".gpx");
+
+			// show overwrite confirmation if necessary
+			if (System.IO.File.Exists(uri) && !overwrite)
+			{
+				model.ConfirmMessage = uri;
+				return View(model);
+			}
+
+			// create internal file
+			_trackExtractService.WriteTrackFile(uri);
+
+			// reset track extract cache
+			_trackExtractService.ResetSession();
+
+			// reload trails data before redirect
+			_trailDataService.ResetCache();
+
+			// redirect to new trail page
+			return Redirect(TrailViewModel.GetDisplayUrl(filename));
 		}
 
 		/// <summary>
@@ -134,7 +180,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Refresh()
 		{
-			_service.Reload(AutoConfig.TrackRootUri);
+			_trailDataService.ResetCache();
 
 			return Redirect(TrailViewModel.GetTrailUrl());
 		}

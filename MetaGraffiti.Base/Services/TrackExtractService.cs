@@ -12,71 +12,101 @@ namespace MetaGraffiti.Base.Services
 {
 	public class TrackExtractService
 	{
+		// ==================================================
+		// Internals
 		private static GeoLookupService _lookupService = new GeoLookupService(null);
 		private static BasicCacheService<TrackExtractData> _extracts = new BasicCacheService<TrackExtractData>();
 		private static TrackData _track = new TrackData();
 
+
+		// ==================================================
+		// Properties
 		public TrackData Track { get { return _track; } }
 
-		public void Reset()
+
+		// ==================================================
+		// Methods
+
+		/// <summary>
+		/// Resets current edit session
+		/// </summary>
+		public void ResetSession()
 		{
 			_track = new TrackData();
 			_extracts = new BasicCacheService<TrackExtractData>();
 		}
 
-		public List<TrackExtractData> List()
+		/// <summary>
+		/// Lists all track extracts in edit session
+		/// </summary>
+		public List<TrackExtractData> ListExtracts()
 		{
 			return _extracts.All;
 		}
 
-		public TrackExtractData Get(string ID)
+		/// <summary>
+		/// Gets a specific extract from edit session
+		/// </summary>
+		public TrackExtractData GetExtract(string ID)
 		{
 			return _extracts[ID.ToUpperInvariant()];
 		}
 
-		public TrackExtractData Delete(string ID)
+		/// <summary>
+		/// Removes a specific extract from edit session
+		/// </summary>
+		public TrackExtractData DeleteExtract(string ID)
 		{
 			var deleted = _extracts[ID.ToUpperInvariant()];
 			_extracts.Remove(ID.ToUpperInvariant());
 			return deleted;
 		}
 
-		public string GenerateFilename()
-		{
-			return $"{String.Format("{0:yyyyMMdd}", _track.Timestamp)} {_track.Name}";
-		}
-
-		public TrackData Modify(string uri)
+		/// <summary>
+		/// Creates an edit session for an existing trail file
+		/// </summary>
+		public TrackData EditTrack(string uri)
 		{
 			_track = new TrackData();
 
 			var reader = new GpxFileReader(uri);
-			var source = reader.ReadFile();
 
+			// load common properties
+			var source = reader.ReadFile();
 			_track.Name = source.Name;
 			_track.Description = source.Description;
 			_track.Keywords = source.Keywords;
 			_track.Url = source.Url;
 			_track.UrlName = source.UrlName;
 
-			/*
-			_track.Timezone = GeoTimezoneInfo.Find(update.Timezone);
-			_track.Country = GeoCountryInfo.Find(update.Country);
-			_track.Region = GeoRegionInfo.Find(update.Region);
-			*/
+			// load custom properties
+			var data = reader.ReadExtension();
+			_track.Timezone = GeoTimezoneInfo.Find(data.Timezone);
+			_track.Country = GeoCountryInfo.Find(data.Country);
+			_track.Region = GeoRegionInfo.Find(data.Region);
+			// TODO: read location + ID
+
+			// extract each track into edit session
 			foreach (var track in source.Tracks)
 			{
-				var extract = new TrackExtractCreateRequest();
-				extract.Uri = uri;
-				extract.StartTimestamp = track.Points.First().Timestamp;
-				extract.FinishTimestamp = track.Points.Last().Timestamp;
-				Extract(extract);
+				var request = new TrackExtractCreateRequest();
+
+				request.Uri = uri;
+				request.Name = track.Name;
+				request.Description = track.Description;
+				request.StartTimestamp = track.Points.First().Timestamp;
+				request.FinishTimestamp = track.Points.Last().Timestamp;
+
+				CreateExtract(request);
 			}
 
 			return _track;
 		}
 
-		public TrackData Update(TrackUpdateRequest update)
+		/// <summary>
+		/// Updates the track file level metadata
+		/// </summary>
+		public TrackData UpdateTrack(TrackUpdateRequest update)
 		{
 			_track.Name = update.Name;
 			_track.Description = update.Description;
@@ -95,42 +125,60 @@ namespace MetaGraffiti.Base.Services
 			return _track;
 		}
 
-		public TrackExtractData Create(string uri)
+		/// <summary>
+		/// Prepares a track extract from all of the data in a given file
+		/// </summary>
+		public TrackExtractData PrepareExtract(string uri)
 		{
+			// load file and read data
 			var file = new FileInfo(uri);
 			var reader = new GpxFileReader(file.FullName);
-			var gpx = reader.ReadFile();
+			var source = reader.ReadFile();
 
+			// create new extract entity
 			var extract = new TrackExtractData();
-
 			extract.ID = CryptoGraffiti.NewHashID();
 			extract.SourceUri = uri;
 
-			extract.Name = Path.GetFileNameWithoutExtension(uri);
-			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = gpx.Name;
+			// set default name value
+			extract.Name = source.Name; 
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = Path.GetFileNameWithoutExtension(file.Name);
 
-			extract.SourcePoints = gpx.Tracks.SelectMany(x => x.Points).ToList();
+			// prepare points and source points lists
+			extract.SourcePoints = source.Tracks.SelectMany(x => x.Points).ToList();
 			extract.Points = extract.SourcePoints.ToList();
 
 			return extract;
 		}
 
-		public TrackExtractData Extract(TrackExtractCreateRequest request)
+		/// <summary>
+		/// Creates a track extract from a specific set of data and adds it to the edit session
+		/// </summary>
+		public TrackExtractData CreateExtract(TrackExtractCreateRequest request)
 		{
-			var extract = Create(request.Uri);
+			var extract = PrepareExtract(request.Uri);
 
+			// update name and description if provided
+			if (!String.IsNullOrWhiteSpace(request.Name)) extract.Name = request.Name;
+			if (!String.IsNullOrWhiteSpace(request.Description)) extract.Description = request.Description;
+
+			// apply points filters
 			extract.Points = FilterPoints(extract.SourcePoints, request);
 
-			InitTrack(extract);
+			// initialize track metadata if required
+			InitMetadata(extract);
 
+			// add to edits ession and return
 			_extracts.Add(extract.ID, extract);
 			return extract;
 		}
 
-		public TrackExtractData Update(TrackExtractUpdateRequest request)
+		/// <summary>
+		/// Updates track extract metadata for given track
+		/// </summary>
+		public TrackExtractData UpdateExtract(TrackExtractUpdateRequest request)
 		{
-			var save = Get(request.ID);
+			var save = GetExtract(request.ID);
 
 			save.Name = request.Name;
 			save.Description = request.Description;
@@ -138,46 +186,52 @@ namespace MetaGraffiti.Base.Services
 			return save;
 		}
 
-		public TrackExtractData Filter(TrackFilterPointsRequest request)
+		/// <summary>
+		/// Filters tracks points with given criteria
+		/// </summary>
+		public TrackExtractData ApplyFilter(TrackFilterPointsRequest request)
 		{
-			var extract = Get(request.ID);
+			var extract = GetExtract(request.ID);
 			var points = FilterPoints(extract.Points, request);
 
+			// TODO: need better way to address when filter excludes everything
 			if (points.Count == 0) return null;
 
 			extract.Points = points;
 			return extract;
 		}
 
-		public TrackExtractData Revert(string ID)
+		/// <summary>
+		/// Reverts the set of points to the origional data
+		/// </summary>
+		public TrackExtractData RevertFilter(string ID)
 		{
-			var extract = Get(ID);
+			var extract = GetExtract(ID);
 			extract.Points = extract.SourcePoints;
 			return extract;
 		}
 
-		public TrackExtractData Remove(TrackRemovePointsRequest request)
+		/// <summary>
+		/// Removes one or more points from the list of filtered points
+		/// </summary>
+		public TrackExtractData RemovePoints(TrackRemovePointsRequest request)
 		{
-			var extract = Get(request.ID);
+			var extract = GetExtract(request.ID);
 
 			List<GpxPointData> points = new List<GpxPointData>();
 			for(var index = 0; index < extract.Points.Count; index++)
 			{
 				if (!request.Points.Contains(index)) points.Add(extract.Points[index]);
 			}
+
 			extract.Points = points;
 			return extract;
 		}
 
-		public long Import(string uri)
-		{
-			//ConsolidateKeywords();
-			var data = GenerateGPX(GpxSchemaVersion.Version1_1);
-			File.WriteAllBytes(uri, data);
-			return data.Length;
-		}
-
-		public byte[] Export(string format)
+		/// <summary>
+		/// Exports edit session as new file for download
+		/// </summary>
+		public byte[] CreateTrackFile(string format)
 		{
 			if (format.ToUpperInvariant() == "GPX")
 				return GenerateGPX(GpxSchemaVersion.Version1);
@@ -187,7 +241,19 @@ namespace MetaGraffiti.Base.Services
 				return null;
 		}
 
+		/// <summary>
+		/// Imports edit session as new trail file
+		/// </summary>
+		public long WriteTrackFile(string uri)
+		{
+			var data = GenerateGPX(GpxSchemaVersion.Version1_1);
+			File.WriteAllBytes(uri, data);
+			return data.Length;
+		}
 
+
+		// ==================================================
+		// Helpers
 		private byte[] GenerateGPX(GpxSchemaVersion version)
 		{
 			var writer = new GpxFileWriter();
@@ -200,7 +266,7 @@ namespace MetaGraffiti.Base.Services
 				writer.WriteMetadata(_track.Timezone.TZID, _track.Country.Name, _track.Region?.RegionName ?? "");
 			}
 
-			foreach (var track in List())
+			foreach (var track in ListExtracts())
 			{
 				var t = PrepareTrackData(track);
 				writer.WriteTrack(t);
@@ -213,43 +279,13 @@ namespace MetaGraffiti.Base.Services
 			var writer = new KmlFileWriter();
 			writer.WriteHeader(_track.Name, _track.Description);
 
-			foreach (var track in List())
+			foreach (var track in ListExtracts())
 			{
-				var t = PrepareTrackData(track);
-				writer.WriteTrack(t);
+				writer.WriteTrack(track.Name, track.Description, track.Points);
 			}
+
 			return Encoding.ASCII.GetBytes(writer.GetXml());
 		}
-
-		/*
-		private void ConsolidateKeywords()
-		{
-			var keywords = _track.Keywords;
-			Dictionary<string, string> tags = new Dictionary<string, string>();
-			if (!String.IsNullOrWhiteSpace(keywords))
-			{
-				var keys = keywords.Split(',');
-				foreach (var key in keys)
-				{
-					if (!String.IsNullOrWhiteSpace(key))
-					{
-						var k = key.Trim().ToUpperInvariant();
-						if (!tags.ContainsKey(k) && !k.StartsWith("GEOCOUNTRY") && !k.StartsWith("GEOTIMEZONE"))
-						{
-							tags.Add(k, key.Trim());
-						}
-					}
-				}
-			}
-
-			var timezone = $"GEOTIMEZONE:{_track.Timezone.TZID}";
-			tags.Add(timezone.ToUpperInvariant(), timezone);
-			var country = $"GEOCOUNTRY:{_track.Country.ISO3}";
-			tags.Add(country.ToUpperInvariant(), country);
-
-			_track.Keywords = String.Join(", ", tags.Values);
-		}
-		*/
 
 		private GpxTrackData PrepareTrackData(TrackExtractData track)
 		{
@@ -261,7 +297,7 @@ namespace MetaGraffiti.Base.Services
 			return t;
 		}
 
-		private void InitTrack(TrackExtractData extract)
+		private void InitMetadata(TrackExtractData extract)
 		{
 			// set initial name to source track
 			if (String.IsNullOrWhiteSpace(_track.Name)) _track.Name = extract.Name;
@@ -321,6 +357,8 @@ namespace MetaGraffiti.Base.Services
 		public string Url { get; set; }
 		public string UrlName { get; set; }
 
+		
+		// Custom extension values
 		public GeoTimezoneInfo Timezone { get; set; }
 		public GeoCountryInfo Country { get; set; }
 		public GeoRegionInfo Region { get; set; }
@@ -378,6 +416,9 @@ namespace MetaGraffiti.Base.Services
 
 		// Name to give extract
 		public string Name { get; set; }
+
+		// Description to give extract
+		public string Description { get; set; }
 	}
 
 	public class TrackFilterPointsRequest : TrackFilterBase

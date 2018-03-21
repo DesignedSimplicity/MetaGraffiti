@@ -79,6 +79,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetRefreshUrl() { return "/trail/refresh/"; }
 
+		public static string GetImportUrl() { return "/trail/import/"; }
+
 		public static string GetModifyUrl() { return "/trail/modify/"; }
 
 		public static string GetReportUrl() { return "/trail/report/"; }

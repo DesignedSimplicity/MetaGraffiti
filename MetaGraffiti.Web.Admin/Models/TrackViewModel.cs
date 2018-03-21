@@ -145,7 +145,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTrackUrl() { return "/track/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }
 		public static string GetUpdateUrl() { return "/track/update/"; }
-		public static string GetImportUrl() { return "/track/import/"; }
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
 		public static string GetPreviewUrl(string uri) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}"; }

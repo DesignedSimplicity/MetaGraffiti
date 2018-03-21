@@ -70,7 +70,7 @@
 				<div class="h6">Country: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name)">@Model.Trail.Country.Name</a></div>
 				@if (Model.Trail.Region != null)
 				{
-					<div class="h6">Region: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name, Model.Trail.Region.RegionAbbr)">@Model.Trail.Region.RegionName</a></div>
+					<div class="h6">Region: <a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name, Model.Trail.Region.RegionISO)">@Model.Trail.Region.RegionName</a></div>
 				}
 				<div class="h6">Timezone: @Model.Trail.Timezone.Name</div>
 				<div>

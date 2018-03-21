@@ -17,14 +17,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	/// </summary>
 	public class TrackController : Controller
 	{
-		private TrackExtractService _service = new TrackExtractService();
+		private TrackExtractService _trackExtractService = new TrackExtractService();
 
 		private TrackViewModel InitModel()
 		{
 			var model = new TrackViewModel();
 
-			model.Track = _service.Track;
-			model.Extracts = _service.List();
+			model.Track = _trackExtractService.Track;
+			model.Extracts = _trackExtractService.ListExtracts();
 
 			return model;
 		}
@@ -47,58 +47,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			_service.Update(update);
+			_trackExtractService.UpdateTrack(update);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			return View("Track", model);
-		}
-
-		/// <summary>
-		/// Creates an internal file from all of the tracks in the current edit session
-		/// </summary>
-		public ActionResult Import(bool overwrite = false)
-		{
-			// TODO: move this to trail controller
-			// TODO: move logic into trail service
-
-			var model = InitModel();
-
-			var track = _service.Track;
-			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
-			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
-			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
-			if (track.Country != null && track.Country.HasRegions && track.Region == null) model.ErrorMessages.Add("Region is missing.");
-
-			// show error messages if necessary
-			if (model.HasError) return View(model);
-
-			// check folders are initialized
-			var folder = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name);
-			if (!Directory.Exists(AutoConfig.TrackRootUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrackRootUri}");
-			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-
-			// check existing filename and if overwrite
-			var filename = _service.GenerateFilename();
-			var uri = Path.Combine(folder, filename + ".gpx");
-
-			// show overwrite confirmation if necessary
-			if (System.IO.File.Exists(uri) && !overwrite)
-			{
-				model.ConfirmMessage = uri;
-				return View(model);
-			}
-
-			// create internal file
-			_service.Import(uri);
-
-			// reset track extract cache
-			_service.Reset();
-
-			// reload trails data before redirect
-			new TrailDataService().Reset();
-
-			// redirect to new trail page
-			return Redirect(TrailViewModel.GetDisplayUrl(filename));
 		}
 
 		/// <summary>
@@ -106,8 +58,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Export(string format)
 		{
-			var data = _service.Export(format);
-			var name = _service.Track.Name;
+			var data = _trackExtractService.CreateTrackFile(format);
+			var name = _trackExtractService.Track.Name;
 
 			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}
@@ -128,7 +80,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				uri = Path.Combine(AutoConfig.SourceRootUri, year, month, name + ".gpx");
 			}
 
-			var extract = _service.Create(uri);
+			var extract = _trackExtractService.PrepareExtract(uri);
 			model.SelectedExtract = extract;
 
 			return View(model);
@@ -140,7 +92,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Extract(TrackExtractCreateRequest extract)
 		{
 			// TODO: make this HTTPPOST only
-			var extracted = _service.Extract(extract);
+			var extracted = _trackExtractService.CreateExtract(extract);
 
 			return Redirect(TrackViewModel.GetEditUrl(extracted.ID));
 		}
@@ -153,7 +105,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.SelectedExtract = _service.Get(id);
+			model.SelectedExtract = _trackExtractService.GetExtract(id);
 
 			return View(model);
 		}
@@ -166,7 +118,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.SelectedExtract = _service.Update(save);
+			model.SelectedExtract = _trackExtractService.UpdateExtract(save);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			return View("Edit", model);
@@ -178,13 +130,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Filter(TrackFilterPointsRequest filter)
 		{
-			var filtered = _service.Filter(filter);
+			var filtered = _trackExtractService.ApplyFilter(filter);
 
 			if (filtered == null)
 			{
 				var model = InitModel();
 
-				model.SelectedExtract = _service.Get(filter.ID);
+				model.SelectedExtract = _trackExtractService.GetExtract(filter.ID);
 				model.ErrorMessages.Add("Filter contains no points and was not applied.");
 
 				return View("Edit", model);
@@ -198,7 +150,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Revert(string ID)
 		{
-			var filtered = _service.Revert(ID);
+			var filtered = _trackExtractService.RevertFilter(ID);
 
 			return Redirect(TrackViewModel.GetEditUrl(ID));
 		}
@@ -209,7 +161,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Remove(TrackRemovePointsRequest remove)
 		{
-			var removed = _service.Remove(remove);
+			var removed = _trackExtractService.RemovePoints(remove);
 
 			return Redirect(TrackViewModel.GetEditUrl(removed.ID));
 		}
@@ -221,7 +173,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			_service.Delete(id);
+			_trackExtractService.DeleteExtract(id);
 
 			return Redirect(TrackViewModel.GetTrackUrl());
 		}
@@ -231,7 +183,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Reset()
 		{
-			_service.Reset();
+			_trackExtractService.ResetSession();
 
 			return Redirect(TrackViewModel.GetTrackUrl());
 		}
