@@ -18,7 +18,7 @@
 					}
 				</ul>
 			</div>
-			<a class="btn btn-danger" href="@TrackViewModel.GetTrackUrl()">Resolve</a>
+			<a class="btn btn-danger" href="@TrackViewModel.GetManageUrl()">Resolve</a>
 		}
 		else if (Model.HasConfirmation)
 		{
@@ -30,7 +30,7 @@
 			<form method="post">
 				<input type="hidden" name="Overwrite" value="true" />
 				<button type="submit" class="btn btn-warning">Overwrite</button>
-				<a class="btn btn-outline-secondary" href="@TrackViewModel.GetTrackUrl()">Rename</a>
+				<a class="btn btn-outline-secondary" href="@TrackViewModel.GetManageUrl()">Rename</a>
 			</form>
 
 		}

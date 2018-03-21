@@ -126,7 +126,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			_trackExtractService.EditTrack(trail.Uri);
 
-			return Redirect(TrackViewModel.GetTrackUrl());
+			return Redirect(TrackViewModel.GetManageUrl());
 		}
 
 		/// <summary>

@@ -12,6 +12,8 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TrackViewModel : AdminViewModel
 	{
+		public List<TrackFileModel> Sources { get; set; }
+
 		public TrackData Track { get; set; }
 
 		public List<TrackExtractData> Extracts { get; set; }
@@ -143,6 +145,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 		public static string GetTrackUrl() { return "/track/"; }
+
+		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }
 		public static string GetUpdateUrl() { return "/track/update/"; }
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
@@ -155,5 +159,44 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetFilterUrl() { return "/track/filter/"; }
 		public static string GetRemoveUrl() { return "/track/remove/"; }
 		public static string GetRevertUrl(string ID) { return $"/track/revert/{ID}"; }
+	}
+
+	public class TrackFileModel
+	{
+		public string Uri { get; set; }
+		public string FileName { get; set; }
+		public string Directory { get; set; }
+
+		public TrackData Metadata { get; set; }
+
+		public TimeSpan Elapsed { get; set; }
+		public double Distance { get; set; }
+
+		public bool IsLoop { get; set; }
+		public bool IsWalk { get; set; }
+
+		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
+		public List<GeoLocationInfo> Locations { get; set; } = new List<GeoLocationInfo>();
+
+		public string LocationText
+		{
+			get
+			{
+				var text = Metadata.Country.Name;
+				if (Metadata.Region != null) text += @" \ " + Metadata.Region.RegionName;
+				return text;
+			}
+		}
+
+		public DateTime LocalTime
+		{
+			get
+			{
+				if (Metadata.Timezone != null && Metadata.Timestamp.HasValue)
+					return Metadata.Timezone.FromUTC(Metadata.Timestamp.Value);
+				else
+					return Metadata.Timestamp ?? DateTime.MinValue;
+			}
+		}
 	}
 }

@@ -9,15 +9,17 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Web.Admin.Models;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
+using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
 	/// <summary>
-	/// Extracts points from GPX files in order to regroup and export to a new filed or import into internal storage
+	/// Extracts points from GPX files in order to regroup and export to a new file
 	/// </summary>
 	public class TrackController : Controller
 	{
 		private TrackExtractService _trackExtractService = new TrackExtractService();
+		private GeoLookupService _geoLookupService = new GeoLookupService(null);
 
 		private TrackViewModel InitModel()
 		{
@@ -30,9 +32,66 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Displays all segments in current edit session
+		/// 
 		/// </summary>
 		public ActionResult Index()
+		{
+			var model = InitModel();
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Displays a list of GPX files in referenced directory path
+		/// </summary>
+		public ActionResult Import(string uri)
+		{
+			var model = InitModel();
+
+			model.Sources = new List<TrackFileModel>();
+			var dir = new DirectoryInfo(uri);
+			foreach(var file in dir.GetFiles("*.gpx"))
+			{
+				var source = new TrackFileModel();
+				source.Uri = file.FullName;
+				source.FileName = file.Name;
+				source.Directory = dir.FullName;
+
+				source.Metadata = _trackExtractService.ReadTrack(file.FullName);
+				var data = source.Metadata.Data;
+
+				var points = data.Tracks.SelectMany(x => x.Points);
+				var start = points.First();
+				var finish = points.Last();
+				source.Elapsed = finish.Timestamp.Value.Subtract(start.Timestamp.Value);
+
+				source.Distance = GeoDistance.BetweenPoints(points).KM;
+
+				if (!source.Metadata.Timestamp.HasValue) source.Metadata.Timestamp = start.Timestamp;
+
+				source.Metadata.Country = _geoLookupService.NearestCountry(start);
+				source.Metadata.Region = _geoLookupService.NearestRegion(start);
+				source.Metadata.Timezone = _geoLookupService.GuessTimezone(source.Metadata.Country);
+
+				source.Regions = _geoLookupService.NearbyRegions(start);
+				foreach(var region in _geoLookupService.NearbyRegions(finish))
+				{
+					if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
+				}
+
+				source.IsWalk = ((source.Distance / source.Elapsed.TotalHours) < 10);
+				source.IsLoop = (GeoDistance.BetweenPoints(start, finish).Meters < 200);
+
+				model.Sources.Add(source);
+			}
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Displays all segments in current edit session
+		/// </summary>
+		public ActionResult Manage()
 		{
 			var model = InitModel();
 
@@ -51,17 +110,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			return View("Track", model);
-		}
-
-		/// <summary>
-		/// Exports all of the tracks in the current edit session to a new file
-		/// </summary>
-		public ActionResult Export(string format)
-		{
-			var data = _trackExtractService.CreateTrackFile(format);
-			var name = _trackExtractService.Track.Name;
-
-			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}
 
 		/// <summary>
@@ -175,7 +223,18 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			_trackExtractService.DeleteExtract(id);
 
-			return Redirect(TrackViewModel.GetTrackUrl());
+			return Redirect(TrackViewModel.GetManageUrl());
+		}
+
+		/// <summary>
+		/// Exports all of the tracks in the current edit session to a new file
+		/// </summary>
+		public ActionResult Export(string format)
+		{
+			var data = _trackExtractService.CreateTrackFile(format);
+			var name = _trackExtractService.Track.Name;
+
+			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}
 
 		/// <summary>
@@ -185,7 +244,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_trackExtractService.ResetSession();
 
-			return Redirect(TrackViewModel.GetTrackUrl());
+			return Redirect(TrackViewModel.GetManageUrl());
 		}
 	}
 }

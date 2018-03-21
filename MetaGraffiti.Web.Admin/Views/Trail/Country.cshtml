@@ -16,7 +16,7 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<h2>@Model.Country.Name Trails</h2>
+		<h2>@Model.Country.Name @(Model.Region == null ? "" : @" \ " + Model.Region.RegionName) Trails</h2>
 		<table class="table table-striped">
 			<thead class="table-dark">
 				<tr>

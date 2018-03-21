@@ -97,6 +97,12 @@ namespace MetaGraffiti.Base.Services
 			return list;
 		}
 
+		public GeoCountryInfo NearestCountry(IGeoLatLon point)
+		{
+			var countries = GeoCountryInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
+			return countries.FirstOrDefault();
+		}
+
 		public List<GeoCountryInfo> SearchCountries(string name)
 		{
 			var list = new List<GeoCountryInfo>();
@@ -110,6 +116,16 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			return GeoCountryInfo.All.Where(x => x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
+		}
+
+		public List<GeoRegionInfo> NearbyRegions(IGeoLatLon point)
+		{
+			return GeoRegionInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters).ToList();
+		}
+
+		public GeoRegionInfo NearestRegion(IGeoLatLon point)
+		{
+			return NearbyRegions(point).FirstOrDefault();
 		}
 
 		public List<GeoRegionInfo> SearchRegions(string name, GeoCountryInfo country)

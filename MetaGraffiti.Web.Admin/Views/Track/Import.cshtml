@@ -1,0 +1,52 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrackViewModel
+
+@Html.Partial("_Nav")
+
+<div class="h2">Import</div>
+
+<table class="table table-striped table-sm">
+	<thead class="table-dark">
+		<tr>
+			<td>#</td>
+			<td>File</td>
+			<td>Date</td>
+			<td>Time (hours)</td>
+			<td>Distance (KM)</td>
+			<td>Country</td>
+			<td>Region</td>
+			<td>Locations</td>
+			<td>Type</td>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var index = 0;
+			foreach (var source in Model.Sources.OrderByDescending(x => x.LocalTime))
+			{
+				<tr>
+					<td>@(index + 1)</td>
+					<td>
+						<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
+					</td>
+					<td>@source.LocalTime</td>
+					<td>@source.Elapsed.TotalHours.ToString("0.0")</td>
+					<td>@source.Distance.ToString("#,##0.0")</td>
+					<td>@source.Metadata.Country.Name</td>
+					<td>@(source.Metadata.Region?.RegionName ?? "")</td>
+					<td>
+						@foreach(var region in source.Regions)
+						{
+							<div>@region.RegionName</div>
+						}
+					</td>
+					<td>
+						@(source.IsWalk ? "Walk " : "")
+						@(source.IsLoop ? "Loop " : "")
+					</td>
+				</tr>
+				index++;
+			}
+		}
+	</tbody>
+</table>
