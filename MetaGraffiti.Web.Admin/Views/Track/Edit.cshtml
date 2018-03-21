@@ -87,7 +87,7 @@
 							<button type="submit" class="btn btn-success">Update Track</button>
 						</div>
 						<div class="col text-right">
-							<a href="@TrackViewModel.GetDeleteUrl(extract.ID)" class="btn btn-outline-danger js-confirm">Delete</a>
+							<a href="@TrackViewModel.GetDeleteUrl(extract.ID)" class="btn btn-outline-danger js-confirm">Remove</a>
 						</div>
 					</div>
 				</form>
@@ -120,12 +120,22 @@
 								<input type="text" class="form-control" name="MinimumSatellite" value="@Model.MinimumSatellite(extract)">
 							</div>
 							<div class="col">
-								<label for="MaximumDilution">Max Dilution</label>
-								<input type="text" class="form-control" name="MaximumDilution" value="@Model.MaximumDilution(extract).ToString("0.0")">
-							</div>
-							<div class="col">
 								<label for="MaximumVelocity">Max Velocity</label>
 								<input type="text" class="form-control" name="MaximumVelocity" value="@Model.MaximumVelocity(extract).ToString(" 0.0")">
+							</div>
+							<div class="col">
+								<label for="MaximumDilution">Max Dilution</label>
+								<input type="text" class="form-control" name="MaximumDilution" value="@Model.MaximumDilution(extract).ToString(" 0.0")">
+							</div>
+							<div class="col">
+								<div>
+									<label>
+										Missing DOP
+									</label>
+								</div>
+								<label>
+									<input type="checkbox" name="MissingDilution" value="true"> Delete?
+								</label>
 							</div>
 						</div>
 					</div>
@@ -144,18 +154,18 @@
 		<br />
 		<form method="post" action="@TrackViewModel.GetRemoveUrl()">
 			<input type="hidden" name="ID" value="@extract.ID" />
-			<table class="table table-striped table-bordered table-condensed">
+			<table class="table table-striped table-bordered table-sm">
 				<tr class="thead-dark">
-					<th>#</th>
+					<th>Point #</th>
 					<th>Timestamp</th>
 					<th>Lat / Long</th>
 					<th>Elevation</th>
-					<th>Velocity (m/s)</th>
-					<th>Satellites</th>
+					<th>Course</th>
+					<th>M/S</th>
+					<th>GPS</th>
 					<th>HDOP</th>
 					<th>VDOP</th>
 					<th>PDOP</th>
-					<th>Course</th>
 				</tr>
 				@{
 					var index = 0;
@@ -164,26 +174,25 @@
 						<tr class="js-point-row">
 							<td>
 								<label>
-									<input type="checkbox" name="Points" value="@index" /> @(index + 1)
+									<input type="checkbox" name="Points" value="@index" /> @((index + 1).ToString("0000"))
 								</label>
 							</td>
-							<td>@p.Timestamp.Value.ToString("yyyy-MM-dd")<br />@p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-							<td>@p.Latitude.ToString("0.000000"),<br />@p.Longitude.ToString("0.000000")</td>
-							<td class="text-right">@((p.Elevation ?? 0).ToString("#,##0"))</td>
-							<td class="text-right">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-							<td class="text-right">@p.Sats</td>
-							<td class="text-right">@p.HDOP</td>
-							<td class="text-right">@p.VDOP</td>
-							<td class="text-right">@p.PDOP</td>
-							<td class="text-right">@((p.Course ?? 0).ToString("##0"))</td>
+							<td>@p.Timestamp.Value.ToString("yyyy-MM-dd") @p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
+							<td>@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")</td>
+							<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+							<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
+							<td class="text-center table-@Model.GetSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+							<td class="text-center table-@Model.GetSatsCss(p.Sats)">@p.Sats</td>
+							<td class="text-center table-@Model.GetDOPCss(p.HDOP)">@p.HDOP</td>
+							<td class="text-center table-@Model.GetDOPCss(p.VDOP)">@p.VDOP</td>
+							<td class="text-center table-@Model.GetDOPCss(p.PDOP)">@p.PDOP</td>
 						</tr>
 						index++;
 					}
 				}
 			</table>
-			<button type="submit" class="btn btn-danger">Remove Points</button>
-			<br />
-			<br />
+			<button type="submit" class="btn btn-danger">Remove Selected Points</button>
 		</form>
+		<br />
 	</div>
 </div>

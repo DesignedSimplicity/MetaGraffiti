@@ -37,7 +37,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public decimal MaximumVelocity(TrackExtractData track)
 		{
-			return track.Points.Max(x => (x.Speed ?? 0));
+			return track.Points.Max(x => x.Speed ?? 0);
 		}
 
 		public decimal MaximumDilution(TrackExtractData track)
@@ -61,6 +61,38 @@ namespace MetaGraffiti.Web.Admin.Models
 			return String.Format("{0:0} hr{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s"));
 		}
 
+		public string GetDOPCss(decimal? dop)
+		{
+			var d = dop ?? 99;
+			if (d < 3)
+				return "success";
+			else if (d < 5)
+				return "warning";
+			else
+				return "danger";
+		}
+
+		public string GetSpeedCss(decimal? speed)
+		{
+			var s = speed ?? 9;
+			if (s < 1)
+				return "success";
+			else if (s < 2)
+				return "warning";
+			else
+				return "danger";
+		}
+
+		public string GetSatsCss(int? sats)
+		{
+			var s = sats ?? 0;
+			if (s > 10)
+				return "success";
+			else if (s > 5)
+				return "warning";
+			else
+				return "danger";
+		}
 
 		// TODO: consolidate JSON
 		public HtmlString GetExtractJson()

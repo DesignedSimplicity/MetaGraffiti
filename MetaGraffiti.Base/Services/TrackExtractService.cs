@@ -290,8 +290,9 @@ namespace MetaGraffiti.Base.Services
 			if (filter.StartTimestamp.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MinValue) >= filter.StartTimestamp.Value);
 			if (filter.FinishTimestamp.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MaxValue) <= filter.FinishTimestamp.Value);
 			if (filter.MinimumSatellite.HasValue) query = query.Where(x => (x.Sats ?? 0) >= filter.MinimumSatellite.Value);
+			if (filter.MaximumVelocity.HasValue) query = query.Where(x => (x.Speed ?? 0) <= filter.MaximumVelocity.Value);
 			if (filter.MaximumDilution.HasValue) query = query.Where(x => x.MaxDOP <= filter.MaximumDilution.Value);
-			if (filter.MaximumVelocity.HasValue) query = query.Where(x => x.Speed <= filter.MaximumVelocity.Value);
+			if (filter.MissingDilution) query = query.Where(x => x.HDOP.HasValue && x.VDOP.HasValue && x.PDOP.HasValue);
 			return query.OrderBy(x => x.Timestamp).ToList();
 		}
 	}
@@ -386,7 +387,9 @@ namespace MetaGraffiti.Base.Services
 
 		// Data quality filters
 		public int? MinimumSatellite { get; set; }
-		public int? MaximumDilution { get; set; }
 		public int? MaximumVelocity { get; set; }
+
+		public int? MaximumDilution { get; set; }
+		public bool MissingDilution { get; set; }
 	}
 }
