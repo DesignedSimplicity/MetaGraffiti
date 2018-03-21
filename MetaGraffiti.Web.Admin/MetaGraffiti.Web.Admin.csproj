@@ -331,7 +331,7 @@
     <Content Include="Views\Track\Preview.cshtml" />
     <Content Include="Views\Trail\Import.cshtml" />
     <Content Include="Views\Track\Index.cshtml" />
-    <Content Include="Views\Track\Import.cshtml" />
+    <Content Include="Views\Track\Browse.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

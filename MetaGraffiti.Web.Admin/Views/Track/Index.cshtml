@@ -4,10 +4,11 @@
 
 @Html.Partial("_Nav")
 
-<div class="h2">List</div>
+<div class="h2">Browse Import Source</div>
 
 <div class="row">
 	<div class="col">
-		<a class="btn btn-primary" href="/track/import/?uri=C:\Code\GPX\Source\2018\01">Start</a>
+		<a class="btn btn-primary" href="@TrackViewModel.GetBrowseRootUrl()">Browse Sources</a>
+		<a class="btn btn-success" href="@TrackViewModel.GetBrowseCurrentUrl()">Current Month</a>
 	</div>
 </div>

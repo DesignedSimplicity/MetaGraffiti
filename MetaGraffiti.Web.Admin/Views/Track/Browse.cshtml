@@ -1,0 +1,116 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrackViewModel
+
+@Html.Partial("_Nav")
+
+@if (Model.HasError)
+{
+	<div class="alert alert-danger">@Model.ErrorMessages.First()</div>
+}
+else
+{
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="h2">Browse: @Model.Directory.FullName <span class="h3"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Back</a></span></div>
+			@{
+				var dirs = Model.Directory.GetDirectories();
+				if (dirs.Count() > 0)
+				{
+					<div class="row">
+						<div class="col-sm-6">
+							<table class="table table-striped">
+								<thead class="table-dark">
+									<tr>
+										<td>Path</td>
+										<td>Directories</td>
+										<td>Files</td>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var dir in dirs)
+									{
+										<tr>
+											<td>
+												<a href="@TrackViewModel.GetBrowseUrl(dir.FullName)">@dir.FullName</a>
+											</td>
+											<td>
+												@dir.GetDirectories().Count()
+											</td>
+											<td>
+												@dir.GetFiles("*.gpx").Count()
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				}
+			}
+		</div>
+		<div class="col-sm-4">
+			<form method="get" action="@TrackViewModel.GetBrowseUrl("")">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text">Uri</span>
+					</div>
+					<input type="text" class="form-control" name="Uri" value="@Model.Directory.FullName" />
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-primary">Browse</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<br />
+	<div>
+		@if (Model.Sources.Count > 0)
+		{
+			<table class="table table-striped table-sm">
+				<thead class="table-dark">
+					<tr>
+						<td>#</td>
+						<td>File</td>
+						<td>Date</td>
+						<td>Time (hours)</td>
+						<td>Distance (KM)</td>
+						<td>Country</td>
+						<td>Region</td>
+						<td>Locations</td>
+						<td>Type</td>
+					</tr>
+				</thead>
+				<tbody>
+					@{
+						var index = 0;
+						foreach (var source in Model.Sources.OrderByDescending(x => x.LocalTime))
+						{
+							<tr>
+								<td>@(index + 1)</td>
+								<td>
+									<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
+								</td>
+								<td>@source.LocalTime</td>
+								<td>@source.Elapsed.TotalHours.ToString("0.0")</td>
+								<td>@source.Distance.ToString("#,##0.0")</td>
+								<td>@source.Metadata.Country.Name</td>
+								<td>@(source.Metadata.Region?.RegionName ?? "")</td>
+								<td>
+									@foreach (var region in source.Regions)
+									{
+										<div>@region.RegionName</div>
+									}
+								</td>
+								<td>
+									@(source.IsWalk ? "Walk " : "")
+									@(source.IsLoop ? "Loop " : "")
+								</td>
+							</tr>
+							index++;
+						}
+					}
+				</tbody>
+			</table>
+		}
+	</div>
+}

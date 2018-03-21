@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TrackViewModel : AdminViewModel
 	{
+		public DirectoryInfo Directory { get; set; }
 		public List<TrackFileModel> Sources { get; set; }
 
 		public TrackData Track { get; set; }
@@ -145,6 +147,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 		public static string GetTrackUrl() { return "/track/"; }
+
+		public static string GetBrowseUrl(string uri) { return $"/track/browse/?uri={uri}"; }
+		public static string GetBrowseRootUrl() { return GetBrowseUrl(AutoConfig.SourceRootUri); }
+		public static string GetBrowseCurrentUrl() { return GetBrowseUrl(Path.Combine(AutoConfig.SourceRootUri, DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString("00"))); }
 
 		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }

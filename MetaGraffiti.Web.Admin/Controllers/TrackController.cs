@@ -44,13 +44,20 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Displays a list of GPX files in referenced directory path
 		/// </summary>
-		public ActionResult Import(string uri)
+		public ActionResult Browse(string uri)
 		{
 			var model = InitModel();
 
-			model.Sources = new List<TrackFileModel>();
 			var dir = new DirectoryInfo(uri);
-			foreach(var file in dir.GetFiles("*.gpx"))
+			model.Directory = dir;
+			if (!dir.Exists)
+			{
+				model.ErrorMessages.Add($"Directory does not exist! {uri}");
+				return View(model);
+			}
+
+			model.Sources = new List<TrackFileModel>();
+			foreach (var file in dir.GetFiles("*.gpx"))
 			{
 				var source = new TrackFileModel();
 				source.Uri = file.FullName;
