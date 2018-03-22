@@ -11,12 +11,9 @@ else
 {
 	<div>
 		<div class="float-left">
-			<div class="h2">
-				Browse: @Model.Directory.FullName
-				@if (Model.Directory.FullName != AutoConfig.TrackSourceUri)
-				{
-					<span class="h3"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Back</a></span>
-				}
+			<div>				
+				<span class="h2"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Browse:</a></span>
+				<span class="h3">@Model.Directory.FullName</span>
 			</div>
 			@{
 				var dirs = Model.Directory.GetDirectories();
@@ -28,25 +25,29 @@ else
 							<table class="table table-striped">
 								<thead class="table-dark">
 									<tr>
-										<td>Path</td>
-										<td>Directories</td>
-										<td>Files</td>
+										<th>Path</th>
+										<th>Name</th>
+										<th class="text-right">Folders</th>
+										<th class="text-right">Tracks</th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach (var dir in dirs)
 									{
-										<tr>
-											<td>
-												<a href="@TrackViewModel.GetBrowseUrl(dir.FullName)">@dir.FullName</a>
-											</td>
-											<td>
-												@dir.GetDirectories().Count()
-											</td>
-											<td>
-												@dir.GetFiles("*.gpx").Count()
-											</td>
-										</tr>
+									<tr>
+										<td>
+											<a href="@TrackViewModel.GetBrowseUrl(dir.FullName)">@dir.FullName</a>
+										</td>
+										<td>
+											<span class="h4">@dir.Name</span>
+										</td>
+										<td class="h5 text-right">
+											@(dir.GetDirectories().Count() > 0 ? dir.GetDirectories().Count().ToString() : "")
+										</td>
+										<td class="h5 text-right">
+											@(dir.GetFiles("*.gpx").Count() > 0 ? dir.GetFiles("*.gpx").Count().ToString() : "")
+										</td>
+									</tr>
 									}
 								</tbody>
 							</table>
@@ -70,7 +71,7 @@ else
 			&nbsp;
 			<a class="btn btn-success" href="@TrackViewModel.GetBrowseCurrentUrl()">Newest</a>
 			&nbsp;
-			<a class="btn btn-warning" href="@TrackViewModel.GetManageUrl()">Current</a>
+			<a class="btn btn-@(Model.Extracts.Count() == 0? "secondary" : "warning")" href="@TrackViewModel.GetManageUrl()">Current</a>
 		</form>
 	</div>
 	<div class="clearfix"></div>
