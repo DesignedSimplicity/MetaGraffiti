@@ -28,14 +28,14 @@
 				{
 					<tr class="@Model.GetRowCss(row)">
 						<td class="text-center">@(++count)</td>
-						<td><a href="/geo/search/?name=@row.Place.Name @row.Place.Country">@row.Place.Name</a></td>
+						<td><a href="@CartoViewModel.GetSearchUrl(row.Place.Name, row.Place.Country)">@row.Place.Name</a></td>
 						<td>@row.Place.Locality</td>
 						<td>@row.Place.Region</td>
 						<td>@row.Place.Country</td>
 						<td>
 							@if (row.Location != null)
 							{
-								<a href="/geo/location/@(row.Location.Key)">@row.Location.Name</a>
+								<a href="@CartoViewModel.GetEditUrl(row.Location.Key)">@row.Location.Name</a>
 								<span>@row.Location.Locality <b>@(row.Location.Region?.RegionName ?? "")</b></span>
 							}
 						</td>

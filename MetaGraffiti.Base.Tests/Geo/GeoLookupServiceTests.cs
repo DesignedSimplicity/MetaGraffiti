@@ -38,6 +38,7 @@ namespace MetaGraffiti.Base.Tests.Geo
 			Assert.AreEqual(0, elevation);
 		}
 
+		/*
 		[TestMethod]
 		public void GeoLookupService_LookupLocations()
 		{
@@ -60,5 +61,6 @@ namespace MetaGraffiti.Base.Tests.Geo
 			Assert.IsTrue(location.Bounds.SouthEast.Latitude != 0);
 			Assert.IsTrue(location.Bounds.SouthEast.Longitude != 0);
 		}
+		*/
 	}
 }

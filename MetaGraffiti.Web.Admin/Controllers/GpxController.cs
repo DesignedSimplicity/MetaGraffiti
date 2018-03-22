@@ -21,7 +21,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	// TODO: deprecate
 	public class GpxController : Controller
     {
-		private GpxCacheService _gpxService;
+		private GpxCacheService_DEPRECATED _gpxService;
 
 		public GpxController()
 		{

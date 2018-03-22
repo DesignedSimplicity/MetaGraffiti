@@ -11,18 +11,20 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
 
+// TODO: migrate to PlaceController
 namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class XlsController : Controller
     {
 		private CartoPlaceService _cartoPlaceService;
-		private OrthoXlsService _xlsService = new OrthoXlsService();
+		private OrthoXlsService _xlsService;
 
 		public XlsController()
 		{
 			_cartoPlaceService = new CartoPlaceService(null);
 			_cartoPlaceService.LoadPlaces(AutoConfig.CartoDataUri);
 
+			_xlsService = new OrthoXlsService();
 			_xlsService.Init(AutoConfig.PlaceDataUri);
 		}
 

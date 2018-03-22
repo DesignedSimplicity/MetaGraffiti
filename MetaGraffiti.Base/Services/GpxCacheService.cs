@@ -14,11 +14,11 @@ using MetaGraffiti.Base.Modules.Ortho.Info;
 namespace MetaGraffiti.Base.Services
 {
 	// TODO: deprecate
-	public class GpxCacheService
+	public class GpxCacheService_DEPRECATED
 	{
 		private ICacheService<GpxCache> _cache = null;
 
-		public GpxCacheService(ICacheService<GpxCache> cache)
+		public GpxCacheService_DEPRECATED(ICacheService<GpxCache> cache)
 		{
 			_cache = cache;
 		}

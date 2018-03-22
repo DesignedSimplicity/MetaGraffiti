@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+// TODO: rename to TopoController
 namespace MetaGraffiti.Web.Admin.Controllers
 {
 	// trail/						GET Displays a calendar and a list of countries with their respective GPX imported track data

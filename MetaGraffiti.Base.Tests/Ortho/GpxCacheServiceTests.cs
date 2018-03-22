@@ -15,10 +15,10 @@ namespace MetaGraffiti.Base.Tests.Ortho
 	{
 		private BasicCacheService<GpxCache> _cache = new BasicCacheService<GpxCache>();
 
-		public GpxCacheService GetService()
+		public GpxCacheService_DEPRECATED GetService()
 		{
 			_cache = new BasicCacheService<GpxCache>();
-			return new GpxCacheService(_cache);
+			return new GpxCacheService_DEPRECATED(_cache);
 		}
 
 		[TestMethod]
