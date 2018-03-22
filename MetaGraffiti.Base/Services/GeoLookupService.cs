@@ -12,8 +12,9 @@ using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Base.Services
 {
-    public class GeoLookupService
-    {
+	// TODO: refactor this into a general GeoGraffiti service layer
+	public class GeoLookupService
+	{
 		// ==================================================
 		// Internals
 		private GoogleApiService _google = null;
@@ -29,11 +30,16 @@ namespace MetaGraffiti.Base.Services
 
 		// ==================================================
 		// Methods
+		
+		// --------------------------------------------------
+		// Elevation
 		public double LookupElevation(IGeoLatLon point)
 		{
 			return _google.RequestElevation(point).Elevation;
 		}
 
+		// --------------------------------------------------
+		// Timezone
 		public GeoTimezoneInfo LookupTimezone(IGeoLatLon point)
 		{
 			var response = _google.RequestTimezone(point);
@@ -59,44 +65,8 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-		public GeoLocationInfo LoadLocation(string googlePlaceId)
-		{
-			var response = _google.RequestLocation(googlePlaceId);
-			var result = response.Results.FirstOrDefault();
-
-			return result == null 
-				? null 
-				: ParseLocationResult(result);
-		}
-
-		public List<GeoLocationInfo> LookupLocations(string text)
-		{
-			var response = _google.RequestLocations(text);
-
-			var list = new List<GeoLocationInfo>();
-			foreach (var result in response.Results)
-			{
-				var location = ParseLocationResult(result);
-				list.Add(location);
-			}
-
-			return list;
-		}
-
-		public List<GeoLocationInfo> LookupLocations(IGeoLatLon point)
-		{
-			var response = _google.RequestLocations(point);
-
-			var list = new List<GeoLocationInfo>();
-			foreach (var result in response.Results)
-			{
-				var location = ParseLocationResult(result);
-				list.Add(location);
-			}
-
-			return list;
-		}
-
+		// --------------------------------------------------
+		// Country
 		public GeoCountryInfo NearestCountry(IGeoLatLon point)
 		{
 			var countries = GeoCountryInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters);
@@ -110,7 +80,7 @@ namespace MetaGraffiti.Base.Services
 
 			var country = GeoCountryInfo.Find(name);
 			if (country != null)
-			{				
+			{
 				list.Add(country);
 				return list;
 			}
@@ -118,6 +88,8 @@ namespace MetaGraffiti.Base.Services
 			return GeoCountryInfo.All.Where(x => x.Name.StartsWith(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
 		}
 
+		// --------------------------------------------------
+		// Region
 		public List<GeoRegionInfo> NearbyRegions(IGeoLatLon point)
 		{
 			return GeoRegionInfo.ListByLocation(point).OrderBy(x => GeoDistance.BetweenPoints(x.Center, point).Meters).ToList();
@@ -152,6 +124,49 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
+		// --------------------------------------------------
+		// Location
+		public GeoLocationInfo LoadLocation(string googlePlaceId)
+		{
+			var response = _google.RequestLocation(googlePlaceId);
+			var result = response.Results.FirstOrDefault();
+
+			return result == null
+				? null
+				: ParseLocationResult(result);
+		}
+
+		public List<GeoLocationInfo> LookupLocations(string text)
+		{
+			var response = _google.RequestLocations(text);
+
+			var list = new List<GeoLocationInfo>();
+			foreach (var result in response.Results)
+			{
+				var location = ParseLocationResult(result);
+				list.Add(location);
+			}
+
+			return list;
+		}
+
+		public List<GeoLocationInfo> LookupLocations(IGeoLatLon point)
+		{
+			var response = _google.RequestLocations(point);
+
+			var list = new List<GeoLocationInfo>();
+			foreach (var result in response.Results)
+			{
+				var location = ParseLocationResult(result);
+				list.Add(location);
+			}
+
+			return list;
+		}
+
+		
+
+
 		// ==================================================
 		// Helpers
 		private GeoLocationInfo ParseLocationResult(GoogleLocationResult result)
@@ -160,18 +175,18 @@ namespace MetaGraffiti.Base.Services
 
 			data.RawData = JsonConvert.SerializeObject(result.Data);
 
-			//data.PlaceKey = Cr
+			data.GoogleKey = result.PlaceID;
+
+			//data.PlaceKey = // TODO: generate temp placekey
 			data.PlaceType = result.TypedNameSource;
 			//data.IconKey
-
-			data.GoogleKey = result.PlaceID;
 
 			data.Name = TextTranslate.StripAccents(result.ShortName);
 			data.LocalName = (data.Name == result.LongName ? "" : result.LongName);
 			data.DisplayAs = (data.Name == result.TypedName ? "" : result.TypedName);
 			data.Description = result.ColloquialArea;
 
-			//data.Timezone =
+			//data.Timezone = // TODO: determine timezone
 			data.Country = result.Country;
 			data.Region = result.Region;
 
@@ -187,7 +202,6 @@ namespace MetaGraffiti.Base.Services
 
 			var address = $"{result.StreeNumber} {result.Route}";
 			data.Address = (String.IsNullOrWhiteSpace(address) ? result.Intersection : address);
-			//data.City = result.City;
 			data.Postcode = result.PostalCode;
 
 			data.Premise = result.Premise;

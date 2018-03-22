@@ -9,6 +9,7 @@ using MetaGraffiti.Base.Services;
 
 namespace MetaGraffiti.Base.Tests.Ortho
 {
+	// TODO: deprecate
 	[TestClass]
 	public class GpxCacheServiceTests
 	{

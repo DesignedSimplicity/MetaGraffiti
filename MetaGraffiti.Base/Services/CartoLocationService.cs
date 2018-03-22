@@ -11,7 +11,7 @@ using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Services
 {
-    public class CartoLocationService
+	public class CartoLocationService
     {
 		private static bool _inited = false;
 		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();
@@ -79,7 +79,7 @@ namespace MetaGraffiti.Base.Services
 
 		public void CacheLocation(GeoLocationInfo location)
 		{
-			var id = location.PlaceKey.ToUpperInvariant();
+			var id = location.ID.ToUpperInvariant();
 			if (_cache.ContainsKey(id))
 				_cache[id] = location;
 			else

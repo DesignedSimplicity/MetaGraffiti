@@ -1,4 +1,5 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model GeoViewModel
 
 @Html.Partial("_Nav")
 
@@ -52,16 +53,12 @@
 		<div class="h2"><a href="/geo/regions/">Regions</a></div>
 		<br />
 		<hr />
-		<div class="h2"><a href="/geo/locations/">Locations</a></div>
-		<div class="h2"><a href="/geo/search/">Search</a></div>
-		<br />
-		<hr />
 		<h3>Visited Countries</h3>
 		@foreach (var c in Model.VisitedCountries)
-	{
-		<div class="h4">
-			<a href="/geo/country/@(c.CountryID)">@c.Name</a>
-		</div>
-}
+		{
+			<div class="h4">
+				<a href="/geo/country/@(c.CountryID)">@c.Name</a>
+			</div>
+		}
 	</div>
 </div>

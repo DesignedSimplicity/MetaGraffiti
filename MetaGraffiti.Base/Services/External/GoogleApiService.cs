@@ -13,6 +13,8 @@ namespace MetaGraffiti.Base.Services.External
 		// ==================================================
 		// Internals
 		private string _apiKey;
+
+		//TODO: refactor this to use basic cache classes
 		private Dictionary<string, GoogleLocationResponse> _cacheLocation = new Dictionary<string, GoogleLocationResponse>();
 		private Dictionary<string, GoogleTimezoneResponse> _cacheTimezone = new Dictionary<string, GoogleTimezoneResponse>();
 		private Dictionary<string, GoogleElevationResponse> _cacheElevation = new Dictionary<string, GoogleElevationResponse>();

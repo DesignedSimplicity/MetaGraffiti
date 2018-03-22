@@ -1,4 +1,5 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoViewModel
 
 @Html.Partial("_Nav")
 
@@ -22,12 +23,11 @@
 		initMap();
 
 		for (i = 0; i < _locations.length; i++) {
-			var location = _locations[i];
-			location.marker = markPoint(location.center.lat, location.center.lng, location.name);
+			var number = i + 1;
+			if (number > 10) number = null;
 
-			var color = _mapColors[i % 10];
-			console.log(color);
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+			var location = _locations[i];
+			location.marker = markPoint(location.center.lat, location.center.lng, location.name, number);
 		}
 
 		if (_locations.length > 0) fitBounds(_locations[0].bounds);
@@ -38,9 +38,8 @@
 
 			var index = $(this).data("index");
 			var location = _locations[index];
-			var color = _mapColors[index % 10];
 
-			_bounds = drawBounds(location.bounds, color);
+			_bounds = drawBounds(location.bounds);
 
 			for (i = 0; i < _locations.length; i++) {
 				if (i == index) {
@@ -57,7 +56,6 @@
 
 			var index = $(this).data("index");
 			var location = _locations[index];
-
 			location.marker.setAnimation(null);
 
 			fitBounds(location.bounds);
@@ -72,7 +70,54 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2">Locations</div>
+		<h2>Search</h2>
+		<div class="row">
+			<div class="col">
+				<form method="post" action="/carto/search/">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.Search.Name">
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="submit">Search</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col">
+				<form method="post" action="/carto/search/">
+					<div class="form-group">
+						<label for="timezone">Position</label>
+						<div class="input-group">
+							<input type="text" class="form-control" name="Latitude" placeholder="Latitude" value="@Model.Search.Latitude">
+							<input type="text" class="form-control" name="Longitude" placeholder="Longitude" value="@Model.Search.Longitude">
+							<div class="input-group-append">
+								<button class="btn btn-info" type="submit">Geocode</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--
+		<div class="row">
+			<div class="col">
+				<div class="form-group">
+					<label for="description">Region</label>
+					<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.Search.Region">
+				</div>
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<label for="description">Country</label>
+					<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.Search.Country">
+				</div>
+			</div>
+		</div>
+		-->
+		<hr />
+		<h2>Locations</h2>
 		<table class="table table-striped table-sm">
 			<thead class="thead-dark">
 				<tr>
@@ -83,7 +128,7 @@
 					<th>Source Type</th>
 					<th>Locality</th>
 					<th>Region</th>
-					<th>Action</th>
+					<th>Raw Data</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -93,23 +138,17 @@
 					{
 						<tr class="js-location-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
-							<td><a href="/geo/location/@(lr.PlaceKey)">@lr.Name</a></td>
+							<td><a href="/carto/location/?key=@(lr.GoogleKey)">@lr.Name</a></td>
 							<td>@lr.LocalName</td>
 							<td>@lr.DisplayAs</td>
 							<td>@lr.PlaceType</td>
 							<td>@lr.Locality</td>
 							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-							<td>
-								<a class="btn btn-danger" href="/geo/remove/@(lr.PlaceKey)">Remove</a>
-							</td>
+							<td><input value="@lr.Data.RawData" /></td>
 						</tr>
 					}
 				}
 			</tbody>
 		</table>
-		<hr />
-		<div>
-			<a class="btn btn-info" href="/xls/export/">Export</a>
-		</div>
 	</div>
 </div>

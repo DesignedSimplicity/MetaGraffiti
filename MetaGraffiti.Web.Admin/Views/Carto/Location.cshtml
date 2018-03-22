@@ -1,4 +1,5 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoViewModel
 
 @Html.Partial("_Nav")
 
@@ -52,7 +53,7 @@
 			Location<span class="h3">: @l.Name</span>
 		</div>
 		<br />
-		<form method="post" action="/geo/location/">
+		<form method="post" action="/carto/location/">
 			<input type="hidden" name="ID" value="@l.ID" />
 
 			<div class="row">

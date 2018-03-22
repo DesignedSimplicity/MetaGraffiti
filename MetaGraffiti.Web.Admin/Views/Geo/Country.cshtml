@@ -1,4 +1,5 @@
-﻿@model MetaGraffiti.Web.Admin.Models.GeoViewModel
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model GeoViewModel
 
 @Html.Partial("_Nav")
 @{
@@ -48,7 +49,7 @@
 
 			var region = _regions[i];
 			region.rectangle = showBounds(region.bounds, color);
-			
+
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
