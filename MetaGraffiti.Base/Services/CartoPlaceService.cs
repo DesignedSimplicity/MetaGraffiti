@@ -38,7 +38,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Loads cached places from local storage
 		/// </summary>
-		public void LoadPlaces(string uri)
+		public void Init(string uri)
 		{
 			lock (_cache)
 			{

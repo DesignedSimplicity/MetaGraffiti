@@ -1,0 +1,39 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model PlaceViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-md-2">
+		<h2>Country</h2>
+		@foreach (var country in Model.Countries)
+		{
+			<div class="h3">
+				<a href="@PlaceViewModel.GetReportUrl(country.ISO2)">@country.Name</a>
+			</div>
+		}
+	</div>
+	<div class="col-md-2">
+		<h2>Year</h2>
+		@foreach (var year in Model.Years.OrderByDescending(x => x))
+		{
+			<div class="h3">
+				<a href="@PlaceViewModel.GetReportUrl(year)">@year</a>
+			</div>
+		}
+	</div>
+	<div class="col-md-2">
+		<h2>Search</h2>
+		<form method="get" action="@PlaceViewModel.GetSearchUrl()">
+			<div class="form-group">
+				<input type="text" class="form-control" name="name" placeholder="Name" />
+			</div>
+			<div class="form-group">
+				<input type="text" class="form-control" name="country" placeholder="Country" />
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Search</button>
+			</div>
+		</form>
+	</div>
+</div>

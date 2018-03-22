@@ -18,8 +18,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public CartoController()
 		{
-			_cartoPlaceService = new CartoPlaceService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
-			_cartoPlaceService.LoadPlaces(AutoConfig.CartoDataUri);
+			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
 		public CartoViewModel InitModel()

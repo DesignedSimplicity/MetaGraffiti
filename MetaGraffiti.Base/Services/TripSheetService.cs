@@ -21,7 +21,7 @@ namespace MetaGraffiti.Base.Services
 			_source = null;
 		}
 
-		public void Load(string uri)
+		public void Init(string uri)
 		{
 			lock (_lock)
 			{

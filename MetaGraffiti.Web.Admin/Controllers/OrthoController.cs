@@ -10,12 +10,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class OrthoController : Controller
     {
-		private OrthoXlsService _xlsService;
+		private TripSheetService _tripSheetService;
 
 		public OrthoController()
 		{
-			_xlsService = new OrthoXlsService();
-			_xlsService.Init(AutoConfig.PlaceDataUri);
+			_tripSheetService = ServiceConfig.TripSheetService;
 		}
 
 		public ActionResult Index()
@@ -27,7 +26,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new OrthoViewModel();
 
-			model.Sheets = _xlsService.ListSheets();
+			model.Sheets = _tripSheetService.ListSheets();
 			model.SelectedSheet = id;
 
 			return View("Sheet", model);
