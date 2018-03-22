@@ -32,12 +32,20 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public ActionResult Index()
 		{
+			// TODO: create landing page
 			return Browse(AutoConfig.TrackSourceUri);
+		}
+
+		/// <summary>
+		/// Lists any GPX files that had an error loading
+		/// </summary>
+		public ActionResult Debug()
+		{
+			// TODO: create GPX debug process
+			var model = InitModel();
+			return View(model);
 		}
 
 		/// <summary>

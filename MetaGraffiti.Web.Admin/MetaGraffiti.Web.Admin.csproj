@@ -271,7 +271,6 @@
     <Compile Include="Controllers\Api\TimezonesController.cs" />
     <Compile Include="Controllers\CartoController.cs" />
     <Compile Include="Controllers\GeoController.cs" />
-    <Compile Include="Controllers\GpxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrthoController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
@@ -283,7 +282,6 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
-    <Compile Include="Models\GpxViewModel.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
@@ -309,14 +307,8 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Gpx\Index.cshtml" />
-    <Content Include="Views\Gpx\Report.cshtml" />
-    <Content Include="Views\Gpx\Display.cshtml" />
-    <Content Include="Views\Gpx\_Gpx.cshtml" />
     <Content Include="Views\Shared\_Nav.cshtml" />
     <Content Include="Views\Geo\Countries.cshtml" />
-    <Content Include="Views\Gpx\Debug.cshtml" />
-    <Content Include="Views\Gpx\Manage.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Track\Track.cshtml" />

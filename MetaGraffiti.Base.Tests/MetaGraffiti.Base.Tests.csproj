@@ -70,7 +70,6 @@
     <Compile Include="Google\GoogleLocationTests.cs" />
     <Compile Include="Google\GoogleTimezoneTests.cs" />
     <Compile Include="Google\GoogleElevationTests.cs" />
-    <Compile Include="Ortho\GpxCacheServiceTests.cs" />
     <Compile Include="Ortho\GpxFileReaderTests.cs" />
     <Compile Include="Ortho\GpxFileInfoTests.cs" />
     <Compile Include="Ortho\GpxFileWriterTests.cs" />
