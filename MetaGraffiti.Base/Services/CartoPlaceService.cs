@@ -28,6 +28,12 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Methods
 
+		public void ResetCache()
+		{
+			_cached = false;
+			_cache = new BasicCacheService<CartoPlaceInfo>();
+		}
+
 		/// <summary>
 		/// Loads cached places from local storage
 		/// </summary>
@@ -67,6 +73,11 @@ namespace MetaGraffiti.Base.Services
 		public CartoPlaceInfo FindByGooglePlaceID(string googlePlaceID)
 		{
 			return _cache.All.FirstOrDefault(x => x.GoogleKey == googlePlaceID);
+		}
+
+		public void DeletePlace(string key)
+		{
+			_cache.RemoveOrIgnore(key.ToUpperInvariant());
 		}
 
 

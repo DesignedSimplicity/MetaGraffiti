@@ -17,6 +17,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public CartoPlaceSearch Search { get; set; } = new CartoPlaceSearch();
 
+
 		public HtmlString GetPlacesJson()
 		{
 			var json = "";
@@ -34,37 +35,17 @@ namespace MetaGraffiti.Web.Admin.Models
 			return new HtmlString(place.ToJson());
 		}
 
+
+		public static string GetCartoUrl() { return $"/carto/"; }
+		public static string GetReloadUrl() { return $"/carto/reload/"; }
+
 		public static string GetPreviewUrl(string googlePlaceID) { return $"/carto/preview/?googlePlaceID={googlePlaceID}"; }
 
-		public static string GetPlaceEditUrl(string key) { return $"/carto/place/{key}"; }
-
-
-
-
-
-
-
-
-		public List<GeoLocationInfo> Locations { get; set; }
-
-		public GeoLocationInfo SelectedLocation { get; set; }
-
-
-		
-
-
-		public HtmlString GetJson(GeoLocationInfo location)
-		{
-			if (location == null) return new HtmlString("{}");
-
-			return new HtmlString(location.ToJson());
-		}
-
-		public HtmlString GetData(GeoLocationInfo location)
-		{
-			return new HtmlString(Json.Encode(location.Data));
-		}
+		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetEditUrl(string key) { return $"/carto/place/{key}"; }
+		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }
 	}
+
 
 	public class CartoPlaceSearch
 	{
@@ -78,6 +59,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public double? Longitude { get; set; }
 	}
 
+
+	// TODO: break into create and update models
 	public class CartoLocationUpdateModel
 	{
 		public string ID { get; set; }

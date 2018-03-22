@@ -15,15 +15,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
     public class CartoController : Controller
     {
 		private CartoPlaceService _cartoPlaceService;
-		private CartoLocationService _cartoLocationService = new CartoLocationService();
-		private GeoLookupService _geoLookupService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 
 		public CartoController()
 		{
 			_cartoPlaceService = new CartoPlaceService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 			_cartoPlaceService.LoadPlaces(AutoConfig.CartoDataUri);
-
-			_cartoLocationService.Init(AutoConfig.CartoDataUri);
 		}
 
 		public CartoViewModel InitModel()
@@ -41,6 +37,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
+		/// <summary>
+		/// Lists all cached locations in system
+		/// </summary>
+		/// <returns></returns>
 		public ActionResult Places()
 		{
 			var model = InitModel();
@@ -50,19 +50,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-
-		public ActionResult Locations()
-		{
-			var model = InitModel();
-
-			model.Locations = _cartoLocationService.ListLocations();
-
-			return View(model);
-		}
-
-
-
-
+		/// <summary>
+		/// Searches google for places by name
+		/// </summary>
 		public ActionResult Search(CartoPlaceSearch search)
 		{
 			var model = InitModel();
@@ -83,19 +73,25 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Displays a google location for import
+		/// </summary>
 		[HttpGet]
 		public ActionResult Preview(string googlePlaceID)
 		{
 			var model = InitModel();
 			
 			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
-			if (place != null) return new RedirectResult(CartoViewModel.GetPlaceEditUrl(place.Key));
+			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
 
 			model.Place = _cartoPlaceService.GetLocation(googlePlaceID);
 
 			return View("Place", model);
 		}
 
+		/// <summary>
+		/// Displays an existing cached place for edit
+		/// </summary>
 		[HttpGet]
 		public ActionResult Place(string id)
 		{
@@ -109,12 +105,35 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
+		public ActionResult Delete(string id)
+		{
+			var key = id.ToUpperInvariant();
+
+			_cartoPlaceService.DeletePlace(key);
+
+			return new RedirectResult(CartoViewModel.GetPlacesUrl());
+		}
+
+
+		public ActionResult Reload()
+		{
+			_cartoPlaceService.ResetCache();
+
+			return new RedirectResult(CartoViewModel.GetCartoUrl());
+		}
+
+
+
+
+
 		[HttpPost]
 		public ActionResult Location(CartoLocationUpdateModel update)
 		{
+			// TODO: migrate to _cartoPlaceService
 			var model = InitModel();
 
 			var id = update.ID.ToUpperInvariant();
+			/*
 
 			var location = _cartoLocationService.GetLocation(id);
 
@@ -132,16 +151,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			location.Region = GeoRegionInfo.Find(update.Region);
 			//location.Timezone = GeoTimezoneInfo.Find
-
+			*/
 			return new RedirectResult($"/carto/location/{id}");
-		}
-
-		[HttpGet]
-		public ActionResult Remove(string id)
-		{
-			_cartoLocationService.RemoveLocation(id);
-
-			return new RedirectResult($"/carto/locations/");
 		}
 	}
 }

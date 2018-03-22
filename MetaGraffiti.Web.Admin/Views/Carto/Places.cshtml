@@ -80,18 +80,18 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var lr in Model.Places)
+					foreach (var p in Model.Places)
 					{
 						<tr class="js-location-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
-							<td><a href="/carto/location/@(lr.Key)">@lr.Name</a></td>
-							<td>@lr.LocalName</td>
-							<td>@lr.DisplayAs</td>
-							<td>@lr.PlaceType</td>
-							<td>@lr.Locality</td>
-							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+							<td><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
+							<td>@p.LocalName</td>
+							<td>@p.DisplayAs</td>
+							<td>@p.PlaceType</td>
+							<td>@p.Locality</td>
+							<td>@(p.Region == null ? "" : p.Region.RegionName) @(p.Country == null ? "" : p.Country.ISO2)</td>
 							<td>
-								<a class="btn btn-danger" href="/carto/remove/@(lr.Key)">Remove</a>
+								<a class="btn btn-sm btn-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(p.Key)">Delete</a>
 							</td>
 						</tr>
 					}
