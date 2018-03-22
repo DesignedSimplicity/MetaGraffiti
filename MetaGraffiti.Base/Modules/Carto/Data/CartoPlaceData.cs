@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Carto.Data
 {
-    public class CartoPlaceData
+	public class CartoPlaceData
 	{
 		public string PlaceKey { get; set; }
 		public string PlaceType { get; set; }

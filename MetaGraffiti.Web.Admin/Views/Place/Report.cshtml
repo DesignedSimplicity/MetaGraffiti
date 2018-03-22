@@ -1,0 +1,89 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model PlaceViewModel
+
+@Html.Partial("_Nav")
+
+<script>
+	$(document).ready(function () {
+		$("input").click(function () {
+			$("form").submit();
+		});
+	});
+</script>
+
+<form>
+	<div class="row">
+		<div class="col-sm-1">
+			<div class="h3">Year:&nbsp;</div>
+		</div>
+		<div class="col-sm-11">
+			<div class="form-group h4">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="year" id="YearAll" value="" @(!Model.SelectedYear.HasValue ? "checked" : "")>
+					<label class="form-check-label" for="YearAll">All</label>
+				</div>
+				@foreach (var year in Model.Years)
+			{
+				<div class="form-check form-check-inline @(Model.IsSelected(year) ? "text-primary font-underline" : "")">
+					<input class="form-check-input" type="radio" name="year" id="Year@(year)" value="@year" @(Model.IsSelected(year) ? "checked" : "")>
+					<label class="form-check-label" for="Year@(year)">@year</label>
+				</div>
+		}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-1">
+			<div class="h4">Country:&nbsp;</div>
+		</div>
+		<div class="col-sm-11">
+			<div class="form-group h5">
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="country" id="CountryAll" value="" @(Model.SelectedCountry == null ? "checked" : "")>
+					<label class="form-check-label" for="CountryAll">All</label>
+				</div>
+				@foreach (var country in Model.Countries)
+				{
+					<div class="form-check form-check-inline @(Model.IsSelected(country) ? "text-info" : "")">
+						<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
+						<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+	
+</form>
+<br />
+<table class="table table-striped table-sm">
+	<thead class="thead-dark">
+		<tr>
+			<th class="table-primary text-center">#</th>
+			<th>Name</th>
+			<th>Locality</th>
+			<th>Region</th>
+			<th>Country</th>
+			<th>Place</th>
+		</tr>
+	</thead>
+	@{
+		var count = 0;
+		foreach (var row in Model.ListPlaces())
+		{
+			<tr class="@Model.GetStatusCss(row)">
+				<td class="text-center">@(++count)</td>
+				<td><a href="@PlaceViewModel.GetSearchUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
+				<td>@row.Data.Locality</td>
+				<td>@row.Data.Region</td>
+				<td>@row.Data.Country</td>
+				<td>
+					@if (row.Place != null)
+					{
+						<a href="@CartoViewModel.GetEditUrl(row.Place.Key)">@row.Place.Name</a>
+						<span>@row.Place.Locality <b>@(row.Place.Region?.RegionName ?? "")</b></span>
+					}
+				</td>
+			</tr>
+		}
+	}
+</table>

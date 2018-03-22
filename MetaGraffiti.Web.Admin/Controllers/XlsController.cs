@@ -65,7 +65,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				row.Place = place;
 
 				var country = GeoCountryInfo.Find(place.Country);
-				if (country != null) row.Location = _cartoPlaceService.FindPlace(place.Name, country);
+				if (country != null) row.Location = _cartoPlaceService.FindPlace(country, place.Name);
 
 				rows.Add(row);
 			}
@@ -86,7 +86,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var row = new XlsRowModel();
 				row.Place = place;
-				row.Location = _cartoPlaceService.FindPlace(place.Name, country);
+				row.Location = _cartoPlaceService.FindPlace(country, place.Name);
 
 				rows.Add(row);
 			}

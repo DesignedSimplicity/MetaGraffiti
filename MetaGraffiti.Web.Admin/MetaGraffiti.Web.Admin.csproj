@@ -274,6 +274,7 @@
     <Compile Include="Controllers\GpxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrthoController.cs" />
+    <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\TrailController.cs" />
     <Compile Include="Controllers\XlsController.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\GpxViewModel.cs" />
+    <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
     <Compile Include="Models\OrthoViewModel.cs" />
@@ -320,7 +322,6 @@
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
     <Content Include="Views\Xls\Index.cshtml" />
-    <Content Include="Views\Xls\Sheet.cshtml" />
     <Content Include="Views\Xls\Year.cshtml" />
     <Content Include="Views\Xls\Country.cshtml" />
     <Content Include="Views\Track\Track.cshtml" />
@@ -337,6 +338,7 @@
     <Content Include="Views\Carto\Index.cshtml" />
     <Content Include="Views\Carto\Places.cshtml" />
     <Content Include="Views\Ortho\Sheet.cshtml" />
+    <Content Include="Views\Place\Report.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

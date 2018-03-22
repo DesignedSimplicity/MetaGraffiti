@@ -82,13 +82,29 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
-		public CartoPlaceInfo FindPlace(string name, GeoCountryInfo country)
+		public CartoPlaceInfo FindPlace(GeoCountryInfo country, string name, bool deep = false)
 		{
 			var search = _cache.All.Where(x => x.Country.CountryID == country.CountryID);
-			search = search.Where(x => String.Compare(x.Name, name, true) == 0);
+			search = FindPlace(search, name, deep);
 			return search.FirstOrDefault();
 		}
 
+		public CartoPlaceInfo FindPlace(GeoRegionInfo region, string name, bool deep = false)
+		{
+			var search = _cache.All.Where(x => x.Region.RegionID == region.RegionID);
+			search = FindPlace(search, name, deep);
+			return search.FirstOrDefault();
+		}
+
+		private IEnumerable<CartoPlaceInfo> FindPlace(IEnumerable<CartoPlaceInfo> places, string name, bool deep = false)
+		{
+			if (deep)
+				return places.Where(x => (String.Compare(x.Name, name, true) == 0)
+					|| (String.Compare(x.LocalName, name, true) == 0)
+					|| (String.Compare(x.DisplayAs, name, true) == 0));
+			else
+				return places.Where(x => String.Compare(x.Name, name, true) == 0);
+		}
 
 
 
