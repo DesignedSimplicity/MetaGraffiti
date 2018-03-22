@@ -180,7 +180,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		public double Distance { get; set; }
 
 		public bool IsLoop { get; set; }
+		public bool IsBike { get; set; }
 		public bool IsWalk { get; set; }
+		public bool IsFast { get; set; }
+		public bool IsBad { get; set; }
 
 		public TopoTrailInfo Trail { get; set; }
 

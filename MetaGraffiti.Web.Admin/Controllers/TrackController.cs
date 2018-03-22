@@ -93,8 +93,20 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
 				}
 
-				source.IsWalk = ((source.Distance / source.Elapsed.TotalHours) < 10);
-				source.IsLoop = (GeoDistance.BetweenPoints(start, finish).Meters < 200);
+				var speed = source.Distance / source.Elapsed.TotalHours;
+				source.IsWalk = speed <= 5; // km/h
+				source.IsBike = speed > 5 && speed < 15; // km/h
+
+				var max = points.Max(x => x.Speed ?? 0);
+				source.IsFast = max > 5; // m/s
+
+				var loop = GeoDistance.BetweenPoints(start, finish).Meters;
+				source.IsLoop = loop < 200;
+
+				var bad = max > 33; // m/s
+				if (!bad) bad = points.Average(x => (x.Sats ?? 0)) < 5;
+				if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20;
+				source.IsBad = bad;
 
 				model.Sources.Add(source);
 			}
