@@ -50,25 +50,4 @@ namespace MetaGraffiti.Base.Modules.Carto
 	public class CartoArea
 	{		
 	}
-
-	public class CartoPlace
-	{
-		public string Name { get; set; }
-
-		public GeoCountryInfo Country { get; set; }
-		public GeoRegionInfo Region { get; set; }
-
-
-		/*
-		public string Details { get; set; }
-
-		public string Address { get; set; }
-		public string City { get; set; }
-		public string Region { get; set; }
-		public string District { get; set; }
-		public string PostCode { get; set; }
-
-		public string Keywords { get; set; }
-		*/
-	}
 }

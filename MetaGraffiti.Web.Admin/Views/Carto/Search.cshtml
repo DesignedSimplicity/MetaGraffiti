@@ -3,49 +3,40 @@
 
 @Html.Partial("_Nav")
 
-@{
-	var l = Model.SelectedLocation;
-}
-
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _bounds = null;
 
-	var _locations = [
-		@foreach (var lr in Model.Locations)
-		{
-			<text>@Model.GetJson(lr),</text>
-		}
-	]
+	var _places = @Model.GetPlacesJson();
 
 	$(document).ready(function () {
 		initMap();
 
-		for (i = 0; i < _locations.length; i++) {
+		for (i = 0; i < _places.length; i++) {
 			var number = i + 1;
 			if (number > 10) number = null;
 
-			var location = _locations[i];
-			location.marker = markPoint(location.center.lat, location.center.lng, location.name, number);
+			var place = _places[i];
+			place.marker = markPoint(place.center.lat, place.center.lng, place.name, number);
 		}
 
-		if (_locations.length > 0) fitBounds(_locations[0].bounds);
+		if (_places.length > 0) fitBounds(_places[0].bounds);
 
 
 		$(".js-location-row").hover(function () {
 			if (_bounds) _bounds.setMap(null);
 
 			var index = $(this).data("index");
-			var location = _locations[index];
+			var place = _places[index];
 
-			_bounds = drawBounds(location.bounds);
+			_bounds = drawBounds(place.bounds);
 
-			for (i = 0; i < _locations.length; i++) {
+			for (i = 0; i < _places.length; i++) {
 				if (i == index) {
-					_locations[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
 				} else {
-					_locations[i].marker.setAnimation(null);
+					_places[i].marker.setAnimation(null);
 				}
 			}
 		});
@@ -55,10 +46,10 @@
 			$(this).css("font-weight", "bold");
 
 			var index = $(this).data("index");
-			var location = _locations[index];
-			location.marker.setAnimation(null);
+			var place = _places[index];
+			place.marker.setAnimation(null);
 
-			fitBounds(location.bounds);
+			fitBounds(place.bounds);
 		});
 	});
 </script>
@@ -128,23 +119,32 @@
 					<th>Source Type</th>
 					<th>Locality</th>
 					<th>Region</th>
-					<th>Raw Data</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var lr in Model.Locations)
+					foreach (var p in Model.Places)
 					{
-						<tr class="js-location-row" data-index="@(count)">
+						var existing = (p.Key != p.GoogleKey);
+						<tr class="js-location-row @(existing ? "table-success" : "")" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
-							<td><a href="/carto/location/?key=@(lr.GoogleKey)">@lr.Name</a></td>
-							<td>@lr.LocalName</td>
-							<td>@lr.DisplayAs</td>
-							<td>@lr.PlaceType</td>
-							<td>@lr.Locality</td>
-							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
-							<td><input value="@lr.Data.RawData" /></td>
+							<td>
+								@if (existing)
+								{
+									<a href="@CartoViewModel.GetPlaceEditUrl(p.Key)">@p.Name</a>
+								}
+								else
+								{
+									<a href="@CartoViewModel.GetPreviewUrl(p.GoogleKey)">@p.Name</a>
+
+								}
+							</td>
+							<td>@p.LocalName</td>
+							<td>@p.DisplayAs</td>
+							<td>@p.PlaceType</td>
+							<td>@p.Locality</td>
+							<td>@(p.Region == null ? "" : p.Region.RegionName) @(p.Country == null ? "" : p.Country.ISO2)</td>
 						</tr>
 					}
 				}

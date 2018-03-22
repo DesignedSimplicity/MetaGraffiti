@@ -11,13 +11,47 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CartoViewModel : AdminViewModel
 	{
+		public CartoPlaceInfo Place { get; set; }
+
 		public List<CartoPlaceInfo> Places { get; set; }
+
+		public CartoPlaceSearch Search { get; set; } = new CartoPlaceSearch();
+
+		public HtmlString GetPlacesJson()
+		{
+			var json = "";
+			foreach (var place in Places)
+			{
+				json += place.ToJson() + ",";
+			}
+			return new HtmlString("[" + json + "]");
+		}
+
+		public HtmlString GetJson(CartoPlaceInfo place)
+		{
+			if (place == null) return new HtmlString("{}");
+
+			return new HtmlString(place.ToJson());
+		}
+
+		public static string GetPreviewUrl(string googlePlaceID) { return $"/carto/preview/?googlePlaceID={googlePlaceID}"; }
+
+		public static string GetPlaceEditUrl(string key) { return $"/carto/place/{key}"; }
+
+
+
+
+
+
+
 
 		public List<GeoLocationInfo> Locations { get; set; }
 
 		public GeoLocationInfo SelectedLocation { get; set; }
 
-		public CartoLocationSearchModel Search { get; set; } = new CartoLocationSearchModel();
+
+		
+
 
 		public HtmlString GetJson(GeoLocationInfo location)
 		{
@@ -32,7 +66,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 	}
 
-	public class CartoLocationSearchModel
+	public class CartoPlaceSearch
 	{
 		public string Name { get; set; }
 

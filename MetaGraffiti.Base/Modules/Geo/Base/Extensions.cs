@@ -34,6 +34,8 @@ namespace MetaGraffiti.Base.Modules.Geo
 			return json.ToString();
 		}
 
+
+		// TODO: deprecate
 		public static string ToJson(this GeoLocationInfo location)
 		{
 			if (location == null) return "{}";

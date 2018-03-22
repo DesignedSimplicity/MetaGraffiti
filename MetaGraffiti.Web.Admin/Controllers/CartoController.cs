@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
@@ -13,13 +14,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class CartoController : Controller
     {
-		private CartoPlaceService _cartoPlaceService = new CartoPlaceService(null);
+		private CartoPlaceService _cartoPlaceService;
 		private CartoLocationService _cartoLocationService = new CartoLocationService();
 		private GeoLookupService _geoLookupService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 
 		public CartoController()
 		{
-			_cartoPlaceService.InitPlaces(AutoConfig.CartoDataUri);
+			_cartoPlaceService = new CartoPlaceService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
+			_cartoPlaceService.LoadPlaces(AutoConfig.CartoDataUri);
 
 			_cartoLocationService.Init(AutoConfig.CartoDataUri);
 		}
@@ -61,44 +63,51 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 
 
-		public ActionResult Search(CartoLocationSearchModel search)
+		public ActionResult Search(CartoPlaceSearch search)
 		{
 			var model = InitModel();
 
-			model.Search = (search == null ? new CartoLocationSearchModel() : search);
-			model.Locations = new List<GeoLocationInfo>();
+			model.Search = (search == null ? new CartoPlaceSearch() : search);
+			model.Places = new List<CartoPlaceInfo>();
 
 			if (!String.IsNullOrWhiteSpace(search.Name))
 			{
-				model.Locations = _geoLookupService.LookupLocations(search.Name);
+				model.Places = _cartoPlaceService.LookupLocations(search.Name);
 			}
 			else if (search.Latitude.HasValue && search.Longitude.HasValue)
 			{
 				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
-				model.Locations = _geoLookupService.LookupLocations(position);
+				model.Places = _cartoPlaceService.LookupLocations(position);
 			}
 
 			return View(model);
 		}
 
 		[HttpGet]
-		public ActionResult Location(string id = "", string key = "")
+		public ActionResult Preview(string googlePlaceID)
 		{
 			var model = InitModel();
+			
+			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
+			if (place != null) return new RedirectResult(CartoViewModel.GetPlaceEditUrl(place.Key));
 
-			if (!String.IsNullOrWhiteSpace(key))
-			{
-				var location = _geoLookupService.LoadLocation(key);
-				id = location.ID.ToUpperInvariant();
-				_cartoLocationService.CacheLocation(location);
-				return new RedirectResult($"/carto/location/{id}");
-			}
+			model.Place = _cartoPlaceService.GetLocation(googlePlaceID);
 
-			if (!String.IsNullOrWhiteSpace(id))
-				model.SelectedLocation = _cartoLocationService.GetLocation(id);
-
-			return View(model);
+			return View("Place", model);
 		}
+
+		[HttpGet]
+		public ActionResult Place(string id)
+		{
+			var key = id.ToUpperInvariant();
+
+			var model = InitModel();
+
+			model.Place = _cartoPlaceService.GetPlace(key);
+
+			return View("Place", model);
+		}
+
 
 		[HttpPost]
 		public ActionResult Location(CartoLocationUpdateModel update)

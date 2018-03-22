@@ -3,6 +3,63 @@
 
 @Html.Partial("_Nav")
 
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _bounds = null;
+
+	var _places = @Model.GetPlacesJson();
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < _places.length; i++) {
+			var place = _places[i];
+			place.marker = markPoint(place.center.lat, place.center.lng, place.name);
+
+			var color = _mapColors[i % 10];
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		}
+
+		if (_places.length > 0) fitBounds(_places[0].bounds);
+
+
+		$(".js-location-row").hover(function () {
+			if (_bounds) _bounds.setMap(null);
+
+			var index = $(this).data("index");
+			var place = _places[index];
+			var color = _mapColors[index % 10];
+
+			_bounds = drawBounds(place.bounds, color);
+
+			for (i = 0; i < _places.length; i++) {
+				if (i == index) {
+					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+				} else {
+					_places[i].marker.setAnimation(null);
+				}
+			}
+		});
+
+		$(".js-location-row").click(function () {
+			$(".js-location-row").css("font-weight", "");
+			$(this).css("font-weight", "bold");
+
+			var index = $(this).data("index");
+			var place = _places[index];
+
+			place.marker.setAnimation(null);
+
+			fitBounds(place.bounds);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-sm-6">
@@ -12,22 +69,38 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
-					<th>Country</th>
+					<th>Local Name</th>
+					<th>Display Name</th>
+					<th>Source Type</th>
+					<th>Locality</th>
 					<th>Region</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var p in Model.Places)
+					foreach (var lr in Model.Places)
 					{
-						<tr>
+						<tr class="js-location-row" data-index="@(count)">
 							<td class="text-center">@(++count)</td>
-							<td><a href="/carto/place/@(p.Key)">@p.Name</a></td>
+							<td><a href="/carto/location/@(lr.Key)">@lr.Name</a></td>
+							<td>@lr.LocalName</td>
+							<td>@lr.DisplayAs</td>
+							<td>@lr.PlaceType</td>
+							<td>@lr.Locality</td>
+							<td>@(lr.Region == null ? "" : lr.Region.RegionName) @(lr.Country == null ? "" : lr.Country.ISO2)</td>
+							<td>
+								<a class="btn btn-danger" href="/carto/remove/@(lr.Key)">Remove</a>
+							</td>
 						</tr>
 					}
 				}
 			</tbody>
 		</table>
+		<hr />
+		<div>
+			<a class="btn btn-info" href="/xls/export/">Export</a>
+		</div>
 	</div>
 </div>

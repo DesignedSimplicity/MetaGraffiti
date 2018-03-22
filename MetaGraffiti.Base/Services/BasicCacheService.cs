@@ -9,6 +9,7 @@ namespace MetaGraffiti.Base.Services
 		string Key { get; }
 	}
 
+	// TODO: move cache locking/init toggle into interface
 	public interface ICacheService<T>
 	{
 		void Reset();

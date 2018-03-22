@@ -1,10 +1,11 @@
 ﻿using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -12,10 +13,9 @@ namespace MetaGraffiti.Base.Services
 	{
 		// ==================================================
 		// Internals
-		private GoogleApiService _google = null;
 		private static bool _cached = false;
 		private static BasicCacheService<CartoPlaceInfo> _cache = new BasicCacheService<CartoPlaceInfo>();
-
+		private GoogleApiService _google = null;
 
 		// ==================================================
 		// Constructors
@@ -31,7 +31,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Loads cached places from local storage
 		/// </summary>
-		public void InitPlaces(string uri)
+		public void LoadPlaces(string uri)
 		{
 			lock (_cache)
 			{
@@ -59,6 +59,59 @@ namespace MetaGraffiti.Base.Services
 			return _cache.All;
 		}
 
+		public CartoPlaceInfo GetPlace(string key)
+		{
+			return _cache[key.ToUpperInvariant()];
+		}
 
+		public CartoPlaceInfo FindByGooglePlaceID(string googlePlaceID)
+		{
+			return _cache.All.FirstOrDefault(x => x.GoogleKey == googlePlaceID);
+		}
+
+
+
+		public CartoPlaceInfo GetLocation(string googlePlaceID)
+		{
+			var existing = FindByGooglePlaceID(googlePlaceID);
+			if (existing != null) return existing;
+
+			var response = _google.RequestLocation(googlePlaceID);
+			var result = response.Results.FirstOrDefault();
+			if (result == null)
+				return null;
+			else
+				return new CartoPlaceInfo(result);
+		}
+
+		public List<CartoPlaceInfo> LookupLocations(string text)
+		{
+			var response = _google.RequestLocations(text);
+
+			var list = new List<CartoPlaceInfo>();
+			foreach (var result in response.Results)
+			{
+				var place = FindByGooglePlaceID(result.PlaceID);
+				if (place == null) place = new CartoPlaceInfo(result);
+				list.Add(place);
+			}
+
+			return list;
+		}
+
+		public List<CartoPlaceInfo> LookupLocations(IGeoLatLon point)
+		{
+			var response = _google.RequestLocations(point);
+
+			var list = new List<CartoPlaceInfo>();
+			foreach (var result in response.Results)
+			{
+				var place = FindByGooglePlaceID(result.PlaceID);
+				if (place == null) place = new CartoPlaceInfo(result);
+				list.Add(place);
+			}
+
+			return list;
+		}
 	}
 }
