@@ -1,4 +1,6 @@
 ﻿using MetaGraffiti.Base.Modules.Carto.Data;
+using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
@@ -45,13 +47,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedYear = year;
 			model.SelectedCountry = GeoCountryInfo.Find(country);
 
-			model.Places = new List<PlaceModel>();
+			model.FilteredPlaces = new List<PlaceModel>();
 			var import = _tripSheetService.ListPlaces(year, country);
 			foreach(var data in import)
 			{
 				var place = new PlaceModel();
 				place.Data = data;
-				model.Places.Add(place);
+				model.FilteredPlaces.Add(place);
 
 				var r = GeoRegionInfo.Find(data.Region);
 				if (r != null) place.Place = _cartoPlaceService.FindPlace(r, data.Name, true);
@@ -66,6 +68,47 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View(model);
 		}
+
+		/// <summary>
+		/// Searches google for places by name
+		/// </summary>
+		public ActionResult Search(CartoPlaceSearch search)
+		{
+			var model = InitModel();
+
+			model.SearchCriteria = (search == null ? new CartoPlaceSearch() : search);
+			model.SearchResults = new List<CartoPlaceInfo>();
+
+			if (!String.IsNullOrWhiteSpace(search.Name))
+			{
+				model.SearchResults = _cartoPlaceService.LookupLocations(search.Name);
+			}
+			else if (search.Latitude.HasValue && search.Longitude.HasValue)
+			{
+				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
+				model.SearchResults = _cartoPlaceService.LookupLocations(position);
+			}
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Displays a google location for import
+		/// </summary>
+		[HttpGet]
+		public ActionResult Preview(string googlePlaceID)
+		{
+			var model = InitModel();
+
+			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
+			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
+
+			model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(googlePlaceID);
+
+			return View(model);
+		}
+
+
 
 		/*
 		public ActionResult Export()

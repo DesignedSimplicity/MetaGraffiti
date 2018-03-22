@@ -20,12 +20,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public HtmlString GetPlacesJson()
 		{
-			var json = "";
-			foreach (var place in Places)
-			{
-				json += place.ToJson() + ",";
-			}
-			return new HtmlString("[" + json + "]");
+			return JsonViewModel.GetJson(Places);
 		}
 
 		public HtmlString GetJson(CartoPlaceInfo place)

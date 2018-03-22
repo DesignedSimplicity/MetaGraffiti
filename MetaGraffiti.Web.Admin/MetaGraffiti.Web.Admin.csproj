@@ -282,6 +282,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
+    <Compile Include="Models\JsonViewModel.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
@@ -327,6 +328,8 @@
     <Content Include="Views\Ortho\Sheet.cshtml" />
     <Content Include="Views\Place\Report.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\Place\Search.cshtml" />
+    <Content Include="Views\Place\Preview.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

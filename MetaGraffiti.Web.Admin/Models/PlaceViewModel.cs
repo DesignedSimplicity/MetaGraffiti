@@ -10,26 +10,34 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class PlaceViewModel : AdminViewModel
 	{
+		public List<int> Years { get; set; }
+		public List<GeoCountryInfo> Countries { get; set; }
+
+		public int? SelectedYear { get; set; }
+		public GeoCountryInfo SelectedCountry { get; set; }
+
+
+
 		public List<CartoPlaceInfo> ExistingPlaces { get; set; }
 
 		public List<CartoPlaceData> ImportPlaces { get; set; }
 
-		public List<PlaceModel> Places { get; set; }
+		public List<PlaceModel> FilteredPlaces { get; set; }
 
-		public List<GeoCountryInfo> Countries { get; set; }
-		public List<int> Years { get; set; }
+
+		public CartoPlaceInfo PreviewPlace { get; set; }
+		public CartoPlaceSearch SearchCriteria { get; set; }
+		public List<CartoPlaceInfo> SearchResults { get; set; }
+
 
 
 
 		public IEnumerable<PlaceModel> ListPlaces()
 		{
-			return Places.OrderBy(x => x.Data.Country).ThenBy(x => x.Data.Name);
+			return FilteredPlaces.OrderBy(x => x.Data.Country).ThenBy(x => x.Data.Name);
 		}
 
 
-
-		public int? SelectedYear { get; set; }
-		public GeoCountryInfo SelectedCountry { get; set; }
 
 
 
@@ -57,12 +65,27 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
+		public HtmlString GetPlacesJson()
+		{
+			return JsonViewModel.GetJson(SearchResults);
+		}
+
+		public HtmlString GetPlaceJson(CartoPlaceInfo place)
+		{
+			if (place == null) return new HtmlString("{}");
+
+			return new HtmlString(place.ToJson());
+		}
+
+
 
 		public static string GetReportUrl(int year) { return $"/place/report/?year={year}"; }
 		public static string GetReportUrl(string country) { return $"/place/report/?country={country}"; }
 
-		public static string GetSearchUrl() { return "/places/search/"; }
+		public static string GetSearchUrl() { return "/place/search/"; }
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
+
+		public static string GetPreviewUrl(string googlePlaceID) { return $"/place/preview/?googlePlaceID={googlePlaceID}"; }
 	}
 
 	public class PlaceModel
