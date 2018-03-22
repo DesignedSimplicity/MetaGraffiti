@@ -6,6 +6,7 @@ using System.Web;
 
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
 using Newtonsoft.Json.Linq;
 
@@ -149,8 +150,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTrackUrl() { return "/track/"; }
 
 		public static string GetBrowseUrl(string uri) { return $"/track/browse/?uri={uri}"; }
-		public static string GetBrowseRootUrl() { return GetBrowseUrl(AutoConfig.SourceRootUri); }
-		public static string GetBrowseCurrentUrl() { return GetBrowseUrl(Path.Combine(AutoConfig.SourceRootUri, DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString("00"))); }
+		public static string GetBrowseRootUrl() { return GetBrowseUrl(AutoConfig.TrackSourceUri); }
+		public static string GetBrowseCurrentUrl() { return GetBrowseUrl(Path.Combine(AutoConfig.TrackSourceUri, DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString("00"))); }
 
 		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }
@@ -180,6 +181,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public bool IsLoop { get; set; }
 		public bool IsWalk { get; set; }
+
+		public TopoTrailInfo Trail { get; set; }
 
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
 		public List<GeoLocationInfo> Locations { get; set; } = new List<GeoLocationInfo>();

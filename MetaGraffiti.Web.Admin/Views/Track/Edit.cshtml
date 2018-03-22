@@ -84,9 +84,10 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<button type="submit" class="btn btn-success">Update Track</button>
+							<button type="submit" class="btn btn-success">Save</button>
 						</div>
 						<div class="col text-right">
+							<a href="@TrackViewModel.GetManageUrl()" class="btn btn-secondary">Manage</a>
 							<a href="@TrackViewModel.GetDeleteUrl(extract.ID)" class="btn btn-outline-danger js-confirm">Remove</a>
 						</div>
 					</div>

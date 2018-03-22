@@ -9,8 +9,8 @@ namespace MetaGraffiti.Web.Admin
 
 		public static string RootConfigUri { get { return _configRoot; } }
 
-		public static string SourceRootUri = Path.Combine(RootConfigUri, @"Gpx\Source\");
-		public static string TrackRootUri = Path.Combine(RootConfigUri, @"Gpx\Tracks\");
+		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Gpx\Source\");
+		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Gpx\Tracks\");
 		public static string CartoDataUri = Path.Combine(RootConfigUri, @"KnE\LocationCache.xlsx");
 		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"KnE\ConsolidatedTrips.xlsx");
 

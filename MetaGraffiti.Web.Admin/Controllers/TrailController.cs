@@ -24,7 +24,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public TrailController()
 		{
-			_trailDataService.Init(AutoConfig.TrackRootUri);
+			_trailDataService.Init(AutoConfig.TrailSourceUri);
 		}
 
 		private TrailViewModel InitModel()
@@ -147,8 +147,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			if (model.HasError) return View(model);
 
 			// check folders are initialized
-			var folder = Path.Combine(AutoConfig.TrackRootUri, track.Country.Name);
-			if (!Directory.Exists(AutoConfig.TrackRootUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrackRootUri}");
+			var folder = Path.Combine(AutoConfig.TrailSourceUri, track.Country.Name);
+			if (!Directory.Exists(AutoConfig.TrailSourceUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrailSourceUri}");
 			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
 			// check existing filename and if overwrite

@@ -9,13 +9,20 @@
 }
 else
 {
-	<div class="row">
-		<div class="col-sm-8">
-			<div class="h2">Browse: @Model.Directory.FullName <span class="h3"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Back</a></span></div>
+	<div>
+		<div class="float-left">
+			<div class="h2">
+				Browse: @Model.Directory.FullName
+				@if (Model.Directory.FullName != AutoConfig.TrackSourceUri)
+				{
+					<span class="h3"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Back</a></span>
+				}
+			</div>
 			@{
 				var dirs = Model.Directory.GetDirectories();
 				if (dirs.Count() > 0)
 				{
+					<br />
 					<div class="row">
 						<div class="col-sm-6">
 							<table class="table table-striped">
@@ -48,20 +55,23 @@ else
 				}
 			}
 		</div>
-		<div class="col-sm-4">
-			<form method="get" action="@TrackViewModel.GetBrowseUrl("")">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text">Uri</span>
-					</div>
-					<input type="text" class="form-control" name="Uri" value="@Model.Directory.FullName" />
-					<div class="input-group-append">
-						<button type="submit" class="btn btn-primary">Browse</button>
-					</div>
+		<form class="form-inline float-right" method="get" action="@TrackViewModel.GetBrowseUrl("")">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">Uri</span>
 				</div>
-			</form>
-		</div>
+				<input type="text" class="form-control" name="Uri" value="@Model.Directory.FullName" />
+				<div class="input-group-append">
+					<button type="submit" class="btn btn-primary">Browse</button>
+				</div>
+			</div>
+			&nbsp;
+			<a class="btn btn-info" href="@TrackViewModel.GetBrowseRootUrl()">Goto Root</a>
+			&nbsp;
+			<a class="btn btn-success" href="@TrackViewModel.GetBrowseCurrentUrl()">Goto Current</a>
+		</form>
 	</div>
+	<div class="clearfix"></div>
 	<br />
 	<div>
 		@if (Model.Sources.Count > 0)
@@ -78,6 +88,7 @@ else
 						<td>Region</td>
 						<td>Locations</td>
 						<td>Type</td>
+						<td>Trail</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -104,6 +115,12 @@ else
 								<td>
 									@(source.IsWalk ? "Walk " : "")
 									@(source.IsLoop ? "Loop " : "")
+								</td>
+								<td>
+									@if (source.Trail != null)
+									{
+										<a class="btn btn-info" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
+									}
 								</td>
 							</tr>
 							index++;

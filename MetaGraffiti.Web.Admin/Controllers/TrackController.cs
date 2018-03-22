@@ -20,6 +20,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	{
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private GeoLookupService _geoLookupService = new GeoLookupService(null);
+		private TrailDataService _trailDataService = new TrailDataService();
 
 		private TrackViewModel InitModel()
 		{
@@ -36,9 +37,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Index()
 		{
-			var model = InitModel();
-
-			return View(model);
+			return Browse(AutoConfig.TrackSourceUri);
 		}
 
 		/// <summary>
@@ -46,7 +45,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Browse(string uri)
 		{
+			// TODO: move this into a (new?) service
+
 			var model = InitModel();
+
+			_trailDataService.Init(AutoConfig.TrailSourceUri);
+			var trails = _trailDataService.ListTrails();
 
 			var dir = new DirectoryInfo(uri);
 			model.Directory = dir;
@@ -63,6 +67,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				source.Uri = file.FullName;
 				source.FileName = file.Name;
 				source.Directory = dir.FullName;
+
+				var existing = trails.SelectMany(x => x.Tracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(file.Name));
+				source.Trail = existing?.Trail;
 
 				source.Metadata = _trackExtractService.ReadTrack(file.FullName);
 				var data = source.Metadata.Data;
@@ -92,7 +99,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				model.Sources.Add(source);
 			}
 
-			return View(model);
+			return View("Browse", model);
 		}
 
 		/// <summary>
@@ -132,7 +139,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				var year = uri.Substring(0, 4);
 				var month = uri.Substring(4, 2);
 				var name = uri;
-				uri = Path.Combine(AutoConfig.SourceRootUri, year, month, name + ".gpx");
+				uri = Path.Combine(AutoConfig.TrackSourceUri, year, month, name + ".gpx");
 			}
 
 			var extract = _trackExtractService.PrepareExtract(uri);
