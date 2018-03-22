@@ -335,6 +335,7 @@
     <Content Include="Views\Carto\Locations.cshtml" />
     <Content Include="Views\Carto\Search.cshtml" />
     <Content Include="Views\Carto\Index.cshtml" />
+    <Content Include="Views\Carto\Places.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

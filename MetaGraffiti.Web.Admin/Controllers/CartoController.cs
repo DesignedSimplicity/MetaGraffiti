@@ -13,11 +13,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class CartoController : Controller
     {
+		private CartoPlaceService _cartoPlaceService = new CartoPlaceService(null);
 		private CartoLocationService _cartoLocationService = new CartoLocationService();
 		private GeoLookupService _geoLookupService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
 
 		public CartoController()
 		{
+			_cartoPlaceService.InitPlaces(AutoConfig.CartoDataUri);
+
 			_cartoLocationService.Init(AutoConfig.CartoDataUri);
 		}
 
@@ -31,6 +34,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Index()
         {
 			var model = InitModel();
+
+			return View(model);
+		}
+
+
+		public ActionResult Places()
+		{
+			var model = InitModel();
+
+			model.Places = _cartoPlaceService.ListPlaces();
 
 			return View(model);
 		}

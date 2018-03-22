@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CartoViewModel : AdminViewModel
 	{
+		public List<CartoPlaceInfo> Places { get; set; }
+
 		public List<GeoLocationInfo> Locations { get; set; }
 
 		public GeoLocationInfo SelectedLocation { get; set; }
