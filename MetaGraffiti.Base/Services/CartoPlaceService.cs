@@ -1,6 +1,7 @@
 ﻿using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
 using System;
@@ -81,8 +82,18 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
+		public CartoPlaceInfo FindPlace(string name, GeoCountryInfo country)
+		{
+			var search = _cache.All.Where(x => x.Country.CountryID == country.CountryID);
+			search = search.Where(x => String.Compare(x.Name, name, true) == 0);
+			return search.FirstOrDefault();
+		}
 
-		public CartoPlaceInfo GetLocation(string googlePlaceID)
+
+
+
+
+		public CartoPlaceInfo LookupByPlaceID(string googlePlaceID)
 		{
 			var existing = FindByGooglePlaceID(googlePlaceID);
 			if (existing != null) return existing;

@@ -11,7 +11,8 @@ using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class CartoLocationService
+	// TODO: deprecated
+	public class CartoLocationService_DEPRECATED
     {
 		private static bool _inited = false;
 		private static Dictionary<string, GeoLocationInfo> _cache = new Dictionary<string, GeoLocationInfo>();

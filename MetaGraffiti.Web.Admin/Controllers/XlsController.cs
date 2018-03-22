@@ -15,13 +15,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class XlsController : Controller
     {
-		private CartoLocationService _cartoService = new CartoLocationService();
+		private CartoPlaceService _cartoPlaceService;
 		private OrthoXlsService _xlsService = new OrthoXlsService();
 
 		public XlsController()
 		{
+			_cartoPlaceService = new CartoPlaceService(null);
+			_cartoPlaceService.LoadPlaces(AutoConfig.CartoDataUri);
+
 			_xlsService.Init(AutoConfig.PlaceDataUri);
-			_cartoService.Init(AutoConfig.CartoDataUri);
 		}
 
 		public XlsViewModel InitModel()
@@ -61,7 +63,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				row.Place = place;
 
 				var country = GeoCountryInfo.Find(place.Country);
-				if (country != null) row.Location = _cartoService.FindLocation(place.Name, country);
+				if (country != null) row.Location = _cartoPlaceService.FindPlace(place.Name, country);
 
 				rows.Add(row);
 			}
@@ -82,7 +84,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var row = new XlsRowModel();
 				row.Place = place;
-				row.Location = _cartoService.FindLocation(place.Name, country);
+				row.Location = _cartoPlaceService.FindPlace(place.Name, country);
 
 				rows.Add(row);
 			}
@@ -155,7 +157,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 				// add location rows
 				var id = 1;
-				var locations = _cartoService.ListLocations();
+				var locations = _cartoPlaceService.ListPlaces();
 				foreach (var location in locations)
 				{
 					row++;
@@ -164,7 +166,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					// place idenity
 					ws.Cells[row, cell++].Value = id++;
 					ws.Cells[row, cell++].Value = location.PlaceType;
-					ws.Cells[row, cell++].Value = location.PlaceKey;
+					ws.Cells[row, cell++].Value = location.Key;
 					ws.Cells[row, cell++].Value = location.GoogleKey;
 
 					// geo political
@@ -183,11 +185,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					ws.Cells[row, cell++].Value = location.Locality;
 					ws.Cells[row, cell++].Value = location.Postcode;
 					ws.Cells[row, cell++].Value = location.Subregions;
-					ws.Cells[row, cell++].Value = location.Sublocalities;
+					//ws.Cells[row, cell++].Value = location.Sublocalities;
 
 					// physical location
-					ws.Cells[row, cell++].Value = location.Latitude;
-					ws.Cells[row, cell++].Value = location.Longitude;
+					ws.Cells[row, cell++].Value = location.Center.Latitude;
+					ws.Cells[row, cell++].Value = location.Center.Longitude;
 					ws.Cells[row, cell++].Value = (location.Bounds?.NorthWest.Latitude ?? 0.0);
 					ws.Cells[row, cell++].Value = (location.Bounds?.SouthEast.Latitude ?? 0.0);
 					ws.Cells[row, cell++].Value = (location.Bounds?.NorthWest.Longitude ?? 0.0);

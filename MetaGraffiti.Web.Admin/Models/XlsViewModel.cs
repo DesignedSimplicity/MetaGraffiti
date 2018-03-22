@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
@@ -49,6 +49,6 @@ namespace MetaGraffiti.Web.Admin.Models
 	public class XlsRowModel
 	{
 		public GeoLocationData Place { get; set; }
-		public GeoLocationInfo Location { get; set; }
+		public CartoPlaceInfo Location { get; set; }
 	}
 }

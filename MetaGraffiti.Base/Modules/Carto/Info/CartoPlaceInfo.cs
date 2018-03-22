@@ -36,6 +36,8 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		public GeoCountryInfo Country => GeoCountryInfo.Find(_data.Country);
 		public GeoRegionInfo Region => GeoRegionInfo.Find(_data.Region);
 
+		public GeoTimezoneInfo Timezone => null; // TODO: fix timezone
+
 
 		public IGeoLatLon Center => new GeoPosition(_data.CenterLatitude, _data.CenterLongitude);
 		public IGeoPerimeter Bounds => new GeoRectangle(_data.NorthLatitude, _data.WestLongitude, _data.SouthLatitude, _data.EastLongitude);

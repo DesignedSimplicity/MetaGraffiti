@@ -84,7 +84,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
 			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
 
-			model.Place = _cartoPlaceService.GetLocation(googlePlaceID);
+			model.Place = _cartoPlaceService.LookupByPlaceID(googlePlaceID);
 
 			return View("Place", model);
 		}
