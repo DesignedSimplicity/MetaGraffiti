@@ -95,15 +95,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Sheet(string id = "")
-		{
-			var model = InitModel();
-
-			model.Sheets = _xlsService.ListSheets();
-			model.SelectedSheet = id;
-
-			return View(model);
-		}
 
 
 		public ActionResult Reset()

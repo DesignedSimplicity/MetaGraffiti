@@ -183,6 +183,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public bool IsBike { get; set; }
 		public bool IsWalk { get; set; }
 		public bool IsFast { get; set; }
+		public bool IsShort { get; set; }
 		public bool IsBad { get; set; }
 
 		public TopoTrailInfo Trail { get; set; }

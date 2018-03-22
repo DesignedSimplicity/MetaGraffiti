@@ -39,11 +39,6 @@ namespace MetaGraffiti.Web.Admin.Models
 			else
 				return "";
 		}
-
-		public bool IsSelected(XlsSheetData sheet)
-		{
-			return (String.Compare(sheet.SheetName, SelectedSheet, true) == 0);
-		}
 	}
 
 	public class XlsRowModel

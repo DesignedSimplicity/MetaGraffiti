@@ -273,6 +273,7 @@
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\GpxController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrthoController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\TrailController.cs" />
     <Compile Include="Controllers\XlsController.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Models\GpxViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
+    <Compile Include="Models\OrthoViewModel.cs" />
     <Compile Include="Models\XlsViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -329,12 +331,12 @@
     <Content Include="Views\Trail\Display.cshtml" />
     <Content Include="Views\Track\Preview.cshtml" />
     <Content Include="Views\Trail\Import.cshtml" />
-    <Content Include="Views\Track\Index.cshtml" />
     <Content Include="Views\Track\Browse.cshtml" />
     <Content Include="Views\Carto\Place.cshtml" />
     <Content Include="Views\Carto\Search.cshtml" />
     <Content Include="Views\Carto\Index.cshtml" />
     <Content Include="Views\Carto\Places.cshtml" />
+    <Content Include="Views\Ortho\Sheet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

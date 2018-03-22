@@ -27,7 +27,7 @@
 						<td>
 							@if (row.Location != null)
 							{
-								<a href="/geo/location/@(row.Location.PlaceKey)">@row.Location.Name</a>
+								<a href="@CartoViewModel.GetEditUrl(row.Location.Key)">@row.Location.Name</a>
 								<span>@row.Location.Locality <b>@(row.Location.Region?.RegionName ?? "")</b></span>
 							}
 						</td>

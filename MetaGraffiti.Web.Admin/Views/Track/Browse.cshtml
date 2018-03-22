@@ -11,7 +11,7 @@ else
 {
 	<div>
 		<div class="float-left">
-			<div>				
+			<div>
 				<span class="h2"><a href="@TrackViewModel.GetBrowseUrl(Model.Directory.Parent.FullName)">Browse:</a></span>
 				<span class="h3">@Model.Directory.FullName</span>
 			</div>
@@ -34,20 +34,20 @@ else
 								<tbody>
 									@foreach (var dir in dirs)
 									{
-									<tr>
-										<td>
-											<a href="@TrackViewModel.GetBrowseUrl(dir.FullName)">@dir.FullName</a>
-										</td>
-										<td>
-											<span class="h4">@dir.Name</span>
-										</td>
-										<td class="h5 text-right">
-											@(dir.GetDirectories().Count() > 0 ? dir.GetDirectories().Count().ToString() : "")
-										</td>
-										<td class="h5 text-right">
-											@(dir.GetFiles("*.gpx").Count() > 0 ? dir.GetFiles("*.gpx").Count().ToString() : "")
-										</td>
-									</tr>
+										<tr>
+											<td>
+												<a href="@TrackViewModel.GetBrowseUrl(dir.FullName)">@dir.FullName</a>
+											</td>
+											<td>
+												<span class="h4">@dir.Name</span>
+											</td>
+											<td class="h5 text-right">
+												@(dir.GetDirectories().Count() > 0 ? dir.GetDirectories().Count().ToString() : "")
+											</td>
+											<td class="h5 text-right">
+												@(dir.GetFiles("*.gpx").Count() > 0 ? dir.GetFiles("*.gpx").Count().ToString() : "")
+											</td>
+										</tr>
 									}
 								</tbody>
 							</table>
@@ -99,7 +99,7 @@ else
 				<tbody>
 					@{
 						var index = 0;
-						foreach (var source in Model.Sources.OrderByDescending(x => x.LocalTime))
+						foreach (var source in Model.Sources.OrderBy(x => x.LocalTime))
 						{
 							<tr>
 								<td>@(index + 1)</td>
@@ -114,8 +114,16 @@ else
 								</td>
 								<td class="text-center">@source.LocalTime.ToString("yyyy-MM-dd")</td>
 								<td class="text-center">@source.LocalTime.ToShortTimeString()</td>
-
 								<td>
+									@if (source.IsShort)
+									{
+										<span class="badge badge-pill badge-secondary">Short</span>
+									}
+									@if (source.IsLoop)
+									{
+										<span class="badge badge-pill badge-success">Loop</span>
+									}
+
 									@if (source.IsBike)
 									{
 										<span class="badge badge-pill badge-info">Bike</span>
@@ -131,14 +139,6 @@ else
 									@if (source.IsBad)
 									{
 										<span class="badge badge-pill badge-danger">Bad</span>
-									}
-									@if (source.IsLoop)
-									{
-										<span class="badge badge-pill badge-success">Loop</span>
-									}
-									else
-									{
-										<span class="badge badge-pill badge-secondary">Oneway</span>
 									}
 								</td>
 								<td>@source.Elapsed.TotalHours.ToString("0.0")</td>

@@ -1,5 +1,5 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model XlsViewModel
+@model OrthoViewModel
 
 @Html.Partial("_Nav")
 
@@ -7,16 +7,15 @@
 	<span class="h1">Sheets</span>
 	<span class="h2">
 		:
-		<a href="/xls/sheet/">All</a>
+		<a href="/ortho/sheet/">All</a>
 		@foreach (var sheet in Model.Sheets.OrderBy(x => x.SheetName))
 		{
 			<span> | </span>
-			<a class="@(Model.IsSelected(sheet) ? "font-italic" : "")" href="/xls/sheet/@(sheet.SheetName)">@sheet.SheetName</a>
+			<a class="@(Model.IsSelected(sheet) ? "font-italic" : "")" href="/ortho/sheet/@(sheet.SheetName)">@sheet.SheetName</a>
 		}
 	</span>
 </div>
 @{
-
 	<hr />
 	var selectedSheets = (String.IsNullOrWhiteSpace(Model.SelectedSheet) ? Model.Sheets : Model.Sheets.Where(x => Model.IsSelected(x)));
 	foreach (var sheet in selectedSheets)

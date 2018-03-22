@@ -105,8 +105,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 				var bad = max > 33; // m/s
 				if (!bad) bad = points.Average(x => (x.Sats ?? 0)) < 5;
-				if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20;
+				if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20; // TODO: fix this threshold for old files without DOP data
 				source.IsBad = bad;
+
+				source.IsShort = points.Count() < 30;
 
 				model.Sources.Add(source);
 			}
