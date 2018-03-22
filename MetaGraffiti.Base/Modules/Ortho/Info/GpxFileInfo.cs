@@ -7,6 +7,7 @@ using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
+// TODO: cleanup after purge of GpxController
 namespace MetaGraffiti.Base.Modules.Ortho.Info
 {
 	public class GpxFileInfo
