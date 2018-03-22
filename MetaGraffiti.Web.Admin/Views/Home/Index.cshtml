@@ -3,17 +3,29 @@
 <div class="jumbotron">
 	<div class="container">
 		<h1 class="display-1">MetaGraffiti</h1>
+		<div>
+			@foreach (var area in Model.Areas)
+			{
+				if (area != AdminAreas.Home)
+				{
+					<a class="h1" href="/@(area.ToString())">@area.ToString()</a>
+					<span>&nbsp;</span>
+				}
+			}
+		</div>
 	</div>
 </div>
 
 <div class="container">
-	@foreach (var area in Model.Areas)
-	{
-		if (area != AdminAreas.Home)
-		{
-			<div>
-				<a class="display-3" href="/@(area.ToString())">@area.ToString()</a>
-			</div>
-		}
-	}
+	<div class="row">
+		<div class="col">
+			<div><a href="/carto/"><div class="display-1">CartoGraffiti</div> <div class="h1">Create Maps</div></a></div>
+			<div><a href="/trail/"><div class="display-1">TopoGraffiti</div> <div class="h1">Browse Trails</div></a></div>
+			<div><a href="/geo/"><div class="display-1">GeoGraffiti</div> <div class="h1">All Metadata</div></a></div>
+		</div>
+		<div class="col">
+			<div><a href="/xls/"><span class="display-4">Add Place</span></a></div>
+			<div><a href="/track/"><span class="display-4">Add Track</span></a></div>
+		</div>
+	</div>
 </div>

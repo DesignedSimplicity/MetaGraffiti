@@ -41,7 +41,7 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public List<TrackExtractData> ListExtracts()
 		{
-			return _extracts.All;
+			return _extracts.All; // TODO: NOW: order by first point timestamp
 		}
 
 		/// <summary>
