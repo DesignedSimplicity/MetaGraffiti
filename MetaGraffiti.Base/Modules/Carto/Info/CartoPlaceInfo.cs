@@ -5,6 +5,7 @@ using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
     public class CartoPlaceInfo : ICacheEntity
 	{
 		private CartoPlaceData _data;
+		private string _raw;
 
 		public string Key => _data.PlaceKey;
 
@@ -62,6 +64,11 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		}
 
 
+		public string GetRawData()
+		{
+			return _raw;
+		}
+
 
 		public CartoPlaceInfo(CartoPlaceData data)
 		{
@@ -70,12 +77,13 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 
 		public CartoPlaceInfo(GoogleLocationResult result)
 		{
+			_raw = result.RawJson;
 			_data = new CartoPlaceData();
 
 			_data.PlaceKey = result.PlaceID;
 			_data.GoogleKey = result.PlaceID;
 			
-			_data.PlaceType = result.TypedNameSource; // TODO: make better map to place type
+			_data.PlaceType = result.TypedNameSource;
 
 			_data.Name = TextTranslate.StripAccents(result.ShortName);
 			_data.LocalName = (_data.Name == result.LongName ? "" : result.LongName);
@@ -115,6 +123,22 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 			_data.WestLongitude = result.Bounds.NorthWest.Longitude;
 			_data.SouthLatitude = result.Bounds.SouthEast.Latitude;
 			_data.EastLongitude = result.Bounds.SouthEast.Longitude;
+
+			// update place type based on current data
+			MapPlaceType();
+		}
+
+
+		private void MapPlaceType()
+		{
+			if (_data.Name.EndsWith(" Hut"))
+				_data.PlaceType = "Hut";
+			else if (_data.Name.EndsWith(" Park"))
+				_data.PlaceType = "Park";
+			else if (_data.PlaceType == "NaturalFeature")
+				_data.PlaceType = "Nature";
+			else if (_data.PlaceType == "Locality" && _data.Name == _data.Locality)
+				_data.PlaceType = "City";
 		}
 	}
 }

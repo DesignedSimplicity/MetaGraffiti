@@ -46,14 +46,7 @@ namespace MetaGraffiti.Base.Services
 
 		public List<GeoCountryInfo> ListCountries()
 		{
-			var list = new List<GeoCountryInfo>();
-
-			foreach(var c in ListPlaces().Select(x => x.Country).Distinct())
-			{
-				var country = GeoCountryInfo.Find(c);
-				if (country != null && !list.Any(x => x.CountryID == country.CountryID)) list.Add(country);
-			}
-			return list.OrderBy(x => x.Name).ToList();
+			return GeoCountryInfo.ListAsDistinct(ListPlaces().Select(x => x.Country).Distinct());
 		}
 
 

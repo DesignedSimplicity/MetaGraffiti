@@ -11,10 +11,25 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CartoViewModel : AdminViewModel
 	{
-		public CartoPlaceInfo Place { get; set; }
+		public List<string> PlaceTypes { get; set; }
+		public List<GeoCountryInfo> Countries { get; set; }
 
 		public List<CartoPlaceInfo> Places { get; set; }
 
+		public List<CartoPlaceInfo> ReportPlaces { get; set; }
+
+		public CartoPlaceInfo Place { get; set; }
+		public GeoCountryInfo Country { get; set; }
+
+
+
+		public CartoPlaceInfo FindLocalityPlace(CartoPlaceInfo place)
+		{
+			if (String.IsNullOrWhiteSpace(place.Locality)) return null;
+			var places = Places.Where(x => x.Country.CountryID == place.Country.CountryID && String.Compare(x.Name, place.Locality, true) == 0);
+			if (place.Region != null) places = places.Where(x => x.Region !=null && x.Region.RegionID == place.Region.RegionID);
+			return places.FirstOrDefault();
+		}
 
 
 		public HtmlString GetPlacesJson()
@@ -34,7 +49,12 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetPersistUrl() { return $"/carto/persist/"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 
+
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }
+		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}"; }
+
+		
 		public static string GetSaveUrl() { return $"/carto/update/"; }		
 		public static string GetEditUrl(string key) { return $"/carto/place/{key}"; }
 		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }

@@ -4,11 +4,34 @@
 @Html.Partial("_Nav")
 
 <div class="row">
-	<div class="col-sm-6">
-		<div class="h2"><a href="/carto/places/">Places</a></div>
-		<br />
-		<hr />
-		<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist</a>
-		<a class="btn btn-danger js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload</a>
+	<div class="col-sm-2">
+		<div class="h3">By Country</div>
+		@foreach (var country in Model.Countries)
+		{
+			<div class="h4">
+				<a href="@CartoViewModel.GetCountryUrl(country)">@country.Name</a>
+			</div>
+		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h3">By Type</div>
+		@foreach (var placeType in Model.PlaceTypes)
+		{
+			<div class="h4">
+				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
+			</div>
+		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h2"><a href="/carto/places/">All Places</a></div>
+		<div class="row">
+			<div class="col">
+				<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist</a>
+			</div>
+			<div class="col text-right">
+				<a class="btn btn-danger js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload</a>
+			</div>
+		</div>
+
 	</div>
 </div>

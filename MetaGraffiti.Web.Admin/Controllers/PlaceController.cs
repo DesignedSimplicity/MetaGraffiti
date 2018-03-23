@@ -49,13 +49,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedYear = year;
 			model.SelectedCountry = GeoCountryInfo.Find(country);
 
-			model.FilteredPlaces = new List<PlaceModel>();
+			var places = new List<PlaceModel>();
 			var import = _tripSheetService.ListPlaces(year, country);
 			foreach(var data in import)
 			{
 				var place = new PlaceModel();
 				place.Data = data;
-				model.FilteredPlaces.Add(place);
+				places.Add(place);
 
 				var r = GeoRegionInfo.Find(data.Region);
 				if (r != null) place.Place = _cartoPlaceService.FindPlace(r, data.Name, true);
@@ -66,6 +66,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					if (c != null) place.Place = _cartoPlaceService.FindPlace(c, data.Name, true);
 				}				
 			}
+			model.FilteredPlaces = places;
 			model.ImportPlaces = import;
 
 			return View(model);

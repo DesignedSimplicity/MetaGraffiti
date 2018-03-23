@@ -141,6 +141,22 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			return Cache.Where(x => x.Bounds.Contains(point)).ToInfo();
 		}
 
+		public static List<GeoCountryInfo> ListAsDistinct(IEnumerable<string> countries)
+		{
+			var list = new List<GeoCountryInfo>();
+			foreach (var c in countries)
+			{
+				var country = Find(c);
+				if (country != null && !list.Any(x => x.CountryID == country.CountryID)) list.Add(country);
+			}
+			return list.OrderBy(x => x.Name).ToList();
+		}
+
+		public static List<GeoCountryInfo> DistinctList(IEnumerable<GeoCountryInfo> countries)
+		{
+			return ListAsDistinct(countries.Select(x => x.ISO2));
+		}
+
 		// --------------------------------------------------
 		// Globals
 		private static bool _initialized = false;

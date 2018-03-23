@@ -9,11 +9,18 @@ var _mapColors = [
 	'#ffc107',
 	'#dc3545',
 
+	/*
 	'#b8daff',
 	'#c3e6cb',
 	'#bee5eb',
 	'#ffeeba',
 	'#f5c6cb',
+	*/
+	'#007bff',
+	'#28a745',
+	'#17a2b8',
+	'#ffc107',
+	'#dc3545',
 ];
 
 function initMap() {

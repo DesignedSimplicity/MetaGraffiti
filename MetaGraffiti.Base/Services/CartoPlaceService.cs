@@ -1,15 +1,17 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+using OfficeOpenXml;
+
+using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Crypto;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
-using OfficeOpenXml;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -80,8 +82,16 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-		
 
+		public List<string> ListPlaceTypes()
+		{
+			return _cache.All.Select(x => x.PlaceType).Distinct().ToList();
+		}
+
+		public List<GeoCountryInfo> ListCountries()
+		{
+			return GeoCountryInfo.ListAsDistinct(_cache.All.Select(x => x.Country.ISO2).Distinct());
+		}
 
 		/// <summary>
 		/// Lists all places in current cache
@@ -129,6 +139,59 @@ namespace MetaGraffiti.Base.Services
 					|| (String.Compare(x.DisplayAs, name, true) == 0));
 			else
 				return places.Where(x => String.Compare(x.Name, name, true) == 0);
+		}
+
+
+		public List<CartoPlaceInfo> ReportPlaces(CartoPlaceReportRequest request)
+		{
+			var query = _cache.All.AsQueryable();
+
+			var placeType = request.PlaceType;
+			if (!String.IsNullOrWhiteSpace(placeType))
+			{
+				placeType = placeType.Replace(',', ';').ToLowerInvariant();
+				if (placeType.Contains(';'))
+				{
+					var placeTypes = placeType.Split(';').Select(x => x.Trim()).ToList();
+					query = query.Where(x => placeTypes.Contains(x.PlaceType.ToLowerInvariant()));
+				}
+				else
+					query = query.Where(x => (String.Compare(x.PlaceType, placeType, true) == 0));
+			}
+
+			var country = GeoCountryInfo.Find(request.Country);
+			if (country != null) query = query.Where(x => x.Country.CountryID == country.CountryID);
+
+			var region = GeoRegionInfo.Find(request.Region);
+			if (region != null) query = query.Where(x => x.Region.RegionID == region.RegionID);
+
+			var locality = request.Locality;
+			if (!String.IsNullOrWhiteSpace(locality)) query = query.Where(x => String.Compare(x.Locality, locality, true) == 0);
+
+			var name = request.Name;
+			if (!String.IsNullOrWhiteSpace(name))
+			{
+				name = name.Replace("%", "*");
+				var n = name.Trim('*').ToLowerInvariant();
+				if (name.StartsWith("*") && name.EndsWith("*"))
+					query = query.Where(x => x.Name.ToLowerInvariant().Contains(n));
+				else if (name.StartsWith("*"))
+					query = query.Where(x => x.Name.ToLowerInvariant().StartsWith(n));
+				else if (name.EndsWith("*"))
+					query = query.Where(x => x.Name.ToLowerInvariant().EndsWith(n));
+				else
+					query = query.Where(x => x.Name.ToLowerInvariant() == n);
+			}
+
+			var text = request.Text;
+			if (!String.IsNullOrWhiteSpace(text))
+			{
+				var t = text.ToLowerInvariant();
+				query = query.Where(x => GetFullTextSearch(x).Contains(t));
+			}
+
+			query = query.OrderBy(x => x.Country.Name).ThenBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name);
+			return query.ToList();
 		}
 
 
@@ -199,6 +262,12 @@ namespace MetaGraffiti.Base.Services
 
 
 
+
+
+		private string GetFullTextSearch(CartoPlaceInfo place)
+		{
+			return $"{place.Name} {place.LocalName} {place.DisplayAs} {place.Address}".ToLowerInvariant();
+		}
 
 		private byte[] BuildWorkbook()
 		{
@@ -289,39 +358,33 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
-	public class CartoPlaceCreateRequest : CartoPlaceData
+	public class CartoPlaceReportRequest
 	{
-		/*
+		/// <summary>
+		/// Supports a , or ; seperated list for multiple types
+		/// </summary>
 		public string PlaceType { get; set; }
 
-		public string GoogleKey { get; set; }
-		public string IconKey { get; set; }
+		/// <summary>
+		/// Matches on name field only, supports wildcards (* or %)
+		/// </summary>
+		public string Name { get; set; }
 
+		/// <summary>
+		/// Partial match in multiple common text fields
+		/// </summary>
+		public string Text { get; set; }
 
-		public string Timezone { get; set; }
+		/// <summary>
+		/// Exact match filters
+		/// </summary>
 		public string Country { get; set; }
 		public string Region { get; set; }
-
-
-		public string Name { get; set; }
-		public string LocalName { get; set; }
-		public string DisplayAs { get; set; }
-
-		public string Description { get; set; }
-
-		public string Address { get; set; }
 		public string Locality { get; set; }
-		public string Postcode { get; set; }
+	}
 
-		public string Subregions { get; set; }
-
-		public double CenterLatitude { get; set; }
-		public double CenterLongitude { get; set; }
-		public double NorthLatitude { get; set; }
-		public double WestLongitude { get; set; }
-		public double SouthLatitude { get; set; }
-		public double EastLongitude { get; set; }
-		*/
+	public class CartoPlaceCreateRequest : CartoPlaceData
+	{
 	}
 
 	public class CartoPlaceUpdateRequest : CartoPlaceCreateRequest

@@ -1,0 +1,127 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoViewModel
+
+@Html.Partial("_Nav")
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	var _places = @Model.GetPlacesJson();
+	var _bounds = null;
+	var _all = null;
+
+	$(document).ready(function () {
+		initMap();
+
+		_all = new google.maps.LatLngBounds();
+		for (i = 0; i < _places.length; i++) {
+			var place = _places[i];
+			place.marker = markPoint(place.center.lat, place.center.lng, place.name);
+
+			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
+			_all.extend(center);
+
+			var color = _mapColors[i % 10];
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		}
+
+		if (_places.length > 0) fitBounds(_all);
+
+
+		$(".js-place-row").hover(function () {
+			if (_bounds) _bounds.setMap(null);
+
+			var index = $(this).index();
+			var place = _places[index];
+			var color = _mapColors[index % 10];
+
+			_bounds = drawBounds(place.bounds, color);
+
+			for (i = 0; i < _places.length; i++) {
+				if (i == index) {
+					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+				} else {
+					_places[i].marker.setAnimation(null);
+				}
+			}
+		});
+
+		$(".js-place-row").click(function () {
+			var index = $(this).index();
+			var place = _places[index];
+
+			place.marker.setAnimation(null);
+
+			fitBounds(place.bounds);
+		});
+
+		$(".js-view-all").click(function () {
+			fitBounds(_all);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="row">
+			<div class="col-sm-10">
+				<div class="h2">@Model.Country.Name Places</div>
+			</div>
+			<div class="col-sm-2 text-right">
+				<a class="btn btn-outline-info js-view-all" href="#">View All</a>
+			</div>
+		</div>
+
+		<table class="table table-sm table-striped table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Type</th>
+					<th>Name</th>
+					<th>Local Name</th>
+					<th>Display Name</th>
+					<th>Locality</th>
+					<th>Region</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					foreach (var p in Model.Places)
+					{
+						<tr class="js-place-row">
+							<td class="text-center">@(++count)</td>
+							<td>@p.PlaceType</td>
+							<td class="h4"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
+							<td>@p.LocalName</td>
+							<td>@p.DisplayAs</td>
+							<td>
+								@{
+									var locality = Model.FindLocalityPlace(p);
+									if (locality == null)
+									{
+										<span>@p.Locality</span>
+									}
+									else if (locality.Key == p.Key)
+									{
+										<span class="font-italic">@p.Locality</span>
+									}
+									else
+									{
+										<a href="@CartoViewModel.GetEditUrl(locality.Key)">@p.Locality</a>
+									}
+								}
+							</td>
+							<td>@(p.Region == null ? "" : p.Region.RegionName)</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

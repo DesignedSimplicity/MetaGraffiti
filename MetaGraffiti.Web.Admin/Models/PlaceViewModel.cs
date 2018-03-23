@@ -86,5 +86,8 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public CartoPlaceData Data { get; set; }
 		public CartoPlaceInfo Place { get; set; }
+
+		//public CartoPlaceInfo Locality { get; set; }
+		//public CartoPlaceInfo RegionPlace { get; set; }
 	}
 }

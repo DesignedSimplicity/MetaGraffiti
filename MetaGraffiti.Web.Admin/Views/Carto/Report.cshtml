@@ -1,0 +1,59 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoViewModel
+
+@Html.Partial("_Nav")
+
+<div class="h2">Places Report</div>
+<table class="table table-striped table-sm">
+	<thead class="thead-dark">
+		<tr>
+			<th class="text-center">#</th>
+			<th>Type</th>
+			<th>Name</th>
+			<th>Local Name</th>
+			<th>Display Name</th>
+			<th>Locality</th>
+			<th>Region</th>
+			<th>Country</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var count = 0;
+			foreach (var p in Model.ReportPlaces)
+			{
+				<tr data-index="@(count)">
+					<td class="text-center">@(++count)</td>
+					<td>@p.PlaceType</td>
+					<td class="h4"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
+					<td>@p.LocalName</td>
+					<td>@p.DisplayAs</td>
+					<td>
+						@{
+							var locality = Model.FindLocalityPlace(p);
+							if (locality == null)
+							{
+								<span>@p.Locality</span>
+							}
+							else if (locality.Key == p.Key)
+							{
+								<span class="font-italic">@p.Locality</span>
+							}
+							else
+							{
+								<a href="@CartoViewModel.GetEditUrl(locality.Key)">@p.Locality</a>
+							}
+						}
+					</td>
+					<td>@(p.Region == null ? "" : p.Region.RegionName)</td>
+					<td>@p.Country.Name</td>
+					<td>
+						<a class="btn btn-sm btn-info" href="@CartoViewModel.GetEditUrl(p.Key)">Manage</a>
+						<a class="btn btn-sm btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(p.Key)">Delete</a>
+					</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

@@ -40,7 +40,8 @@ namespace MetaGraffiti.Base.Services.External
 
 		public GoogleLocationResult(dynamic data) { _data = data; ParseData(); }
 
-		public dynamic Data => _data;
+		public dynamic RawData => _data;
+		public string RawJson => JsonConvert.SerializeObject(_data, Formatting.Indented);
 
 
 		public string ShortName { get; private set; }
@@ -84,6 +85,8 @@ namespace MetaGraffiti.Base.Services.External
 		public string Airport { get; private set; } // airport indicates an airport.
 		public string Park { get; private set; } // park indicates a named park.
 		public string PointOfInterest { get; private set; } // point_of_interest indicates a named point of interest. Typically, these "POI"s are prominent local entities that don't easily fit in another category, such as "Empire State Building" or "Statue of Liberty."
+
+		public string Lodging { get; private set; }
 
 
 		private void ParseData()
@@ -151,6 +154,9 @@ namespace MetaGraffiti.Base.Services.External
 						this.Airport = component.short_name;
 					if (item.Value == "natural_feature")
 						this.NaturalFeature = component.short_name;
+
+					if (item.Value == "lodging")
+						this.Lodging = component.short_name;
 				}
 			}
 			#endregion
@@ -245,6 +251,11 @@ namespace MetaGraffiti.Base.Services.External
 			{
 				this.TypedName = this.NaturalFeature;
 				this.TypedNameSource = "NaturalFeature";
+			}
+			if (!String.IsNullOrWhiteSpace(this.Lodging))
+			{
+				this.TypedName = this.ShortName;
+				this.TypedNameSource = "Lodging";
 			}
 			#endregion
 

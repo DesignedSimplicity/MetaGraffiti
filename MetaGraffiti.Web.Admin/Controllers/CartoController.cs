@@ -25,6 +25,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new CartoViewModel();
 
+			model.Places = _cartoPlaceService.ListPlaces();
+
+			model.Countries = _cartoPlaceService.ListCountries();
+			model.PlaceTypes = _cartoPlaceService.ListPlaceTypes();
+
 			return model;
 		}
 
@@ -36,24 +41,36 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-		/// <summary>
-		/// Lists all cached locations in system
-		/// </summary>
-		/// <returns></returns>
 		public ActionResult Places()
 		{
 			var model = InitModel();
 
-			model.Places = _cartoPlaceService.ListPlaces();
+			return View(model);
+		}
+
+		public ActionResult Country(string id)
+		{
+			var model = InitModel();
+
+			model.Country = GeoCountryInfo.Find(id);
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.Country.ISO2 });			
 
 			return View(model);
 		}
 
 
-		/// <summary>
-		/// Displays an existing cached place for edit
-		/// </summary>
-		[HttpGet]
+
+
+		public ActionResult Report(CartoPlaceReportRequest report)
+		{
+			var model = InitModel();
+
+			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report);
+
+			return View(model);
+		}
+
+
 		public ActionResult Place(string id)
 		{
 			var key = id.ToUpperInvariant();
@@ -83,6 +100,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return new RedirectResult(CartoViewModel.GetPlacesUrl());
 		}
+
+
 
 		public ActionResult Persist()
 		{
