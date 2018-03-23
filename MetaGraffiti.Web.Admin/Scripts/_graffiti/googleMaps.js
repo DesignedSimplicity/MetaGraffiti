@@ -55,17 +55,19 @@ function fitBounds(bounds) {
 	_mapGoogle.fitBounds(bounds);
 }
 
-function editBounds(bounds) {
+function editBounds(bounds, color, fill) {
+	if (color == null) color = '#ff0000';
+	if (fill == null) fill = 0.2;
 	var rectangle = new google.maps.Rectangle({
 		bounds: bounds,
 		editable: true,
 		//draggable: true,
 		geodesic: false,
-		strokeColor: '#ff0000',
+		strokeColor: color,
 		strokeOpacity: 0.8,
 		strokeWeight: 2,
-		fillColor: '#ff0000',
-		fillOpacity: 0.4,
+		fillColor: color,
+		fillOpacity: fill,
 		map: _mapGoogle
 	});
 

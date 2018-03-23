@@ -70,14 +70,6 @@ namespace MetaGraffiti.Web.Admin.Models
 			return JsonViewModel.GetJson(SearchResults);
 		}
 
-		public HtmlString GetPlaceJson(CartoPlaceInfo place)
-		{
-			if (place == null) return new HtmlString("{}");
-
-			return new HtmlString(place.ToJson());
-		}
-
-
 
 		public static string GetReportUrl(int year) { return $"/place/report/?year={year}"; }
 		public static string GetReportUrl(string country) { return $"/place/report/?country={country}"; }

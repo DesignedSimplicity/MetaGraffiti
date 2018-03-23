@@ -5,11 +5,34 @@
 }
 
 <script>
+	var _place = @Model.GetPlaceJson();
+	var _marker = null;
+	var _bounds = null;
+
 	$(document).ready(function () {
-		$("#NorthLatitude, #WestLongitude, #SouthLatitude, #EastLongitude").focus(function () {
-			var p = $(this).val();
-			console.log(p);
-		});
+		initMap();
+
+		_marker = dragPoint(_place.center.lat, _place.center.lng, _place.name);
+		_marker.addListener('dragend', updateCenter);
+
+		_bounds = editBounds(_place.bounds, null, '');
+		_bounds.addListener('bounds_changed', updateBounds);
+
+		function updateCenter() {
+			var c = _marker.getPosition();
+			$("#CenterLatitude").val(c.lat());
+			$("#CenterLongitude").val(c.lng());
+		}
+
+		function updateBounds() {
+			var ne = _bounds.getBounds().getNorthEast();
+			var sw = _bounds.getBounds().getSouthWest();
+
+			$("#NorthLatitude").val(ne.lat());
+			$("#WestLongitude").val(sw.lng());
+			$("#SouthLatitude").val(sw.lat());
+			$("#EastLongitude").val(ne.lng());
+		}
 	});
 </script>
 
@@ -51,13 +74,13 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="PlaceFlags">Flags</label>
-			<input type="text" disabled class="form-control" name="PlaceFlags" value="">
+			<input type="text" class="form-control" disabled name="PlaceFlags" value="">
 		</div>
 	</div>
 	<div class="col">
 		<div class="form-group">
 			<label for="IconKey">Icon</label>
-			<input type="text" disabled class="form-control" name="IconKey" value="">
+			<input type="text" class="form-control" disabled name="IconKey" value="">
 		</div>
 	</div>
 </div>
@@ -87,13 +110,15 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="Country">Country</label>
-			<input type="text" readonly class="form-control" name="Country" value="@place.Country.Name">
+			<input type="hidden" name="Country" value="@place.Country.Name">
+			<input type="text" class="form-control" readonly value="@place.Country.Name">
 		</div>
 	</div>
 	<div class="col">
 		<div class="form-group">
 			<label for="Subregions">Subregions</label>
-			<input type="text" disabled class="form-control" name="Subregions" value="@place.Subregions">
+			<input type="hidden" name="Subregions" value="@place.Subregions">
+			<input type="text" class="form-control" readonly value="@place.Subregions">
 		</div>
 	</div>
 	<div class="col">
@@ -113,8 +138,8 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="PlaceKey">Place Key</label>
-			<input type="hidden" name="PlaceKey" value="@(Model.IsGooglePlace ? "" : place.Key)">
-			<input type="text" class="form-control" readonly name="PlaceKeyDisplay" value="@(Model.IsGooglePlace ? "" : place.Key)">
+			<input type="hidden" name="PlaceKey" value="@(Model.IsPreview ? "" : place.Key)">
+			<input type="text" class="form-control" readonly value="@(Model.IsPreview ? "" : place.Key)">
 		</div>
 	</div>
 	<div class="col">
@@ -141,7 +166,7 @@
 		<div class="form-group">
 			<label for="GoogleKey">Google Key</label>
 			<input type="hidden" name="GoogleKey" value="@place.GoogleKey">
-			<input type="text" class="form-control" readonly name="GoogleKeyDisplay" value="@place.GoogleKey">
+			<input type="text" class="form-control" readonly value="@place.GoogleKey">
 		</div>
 	</div>
 	<div class="col">
@@ -157,7 +182,7 @@
 		<div class="form-group">
 			<label for="TimezoneKey">Timezone</label>
 			<div class="input-group">
-				<input type="text" class="form-control" name="TimezoneKey" value="">
+				<input type="text" class="form-control" name="Timezone" value="">
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary" type="button">Lookup</button>
 				</div>

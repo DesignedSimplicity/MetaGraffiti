@@ -103,16 +103,26 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var place = _cartoPlaceService.FindByGooglePlaceID(id);
-			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
-
-			model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(id);
+			if (place != null)
+			{
+				//return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
+				model.PreviewPlace = place;
+				model.ConfirmMessage = "Place already exists!";
+			}
+			else
+				model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(id);
 
 			return View(model);
 		}
 
 		[HttpPost]
-		public ActionResult Create()
+		public ActionResult Create(CartoPlaceCreateRequest request)
 		{
+			// TODO: do validation
+			var place = _cartoPlaceService.CreatePlace(request);
+			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
+
+			// show validation error messages
 			var model = InitModel();
 
 			return View(model);

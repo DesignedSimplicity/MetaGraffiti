@@ -33,17 +33,26 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetCartoUrl() { return $"/carto/"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetSaveUrl() { return $"/carto/update/"; }
 		public static string GetEditUrl(string key) { return $"/carto/place/{key}"; }
 		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }
 	}
 
 	public class CartoPlaceFormModel
 	{
+		public CartoPlaceFormModel(CartoPlaceInfo place) { Place = place; }
+
 		public CartoPlaceInfo Place { get; set; }
 
-		public bool IsGooglePlace { get { return Place.GoogleKey == Place.Key; } }
+		public bool IsPreview { get { return Place.GoogleKey == Place.Key; } }
 
-		public CartoPlaceFormModel(CartoPlaceInfo place) { Place = place; }
+		public HtmlString GetPlaceJson()
+		{
+			if (Place == null) return new HtmlString("{}");
+
+			return new HtmlString(Place.ToJson());
+		}
+
 	}
 
 

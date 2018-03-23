@@ -4,43 +4,13 @@
 @Html.Partial("_Nav")
 
 @{
-	var place = Model.PreviewPlace;
+	var place = new CartoPlaceFormModel(Model.PreviewPlace);
 }
 
 
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
-<script>
-	var _place = @Model.GetPlaceJson(place);
-	var _marker = null;
-	var _bounds = null;
 
-	$(document).ready(function () {
-		initMap();
-
-		_marker = dragPoint(_place.center.lat, _place.center.lng, _place.name);
-		_marker.addListener('dragend', updateCenter);
-
-		_bounds = editBounds(_place.bounds, null, '');
-		_bounds.addListener('bounds_changed', updateBounds);
-
-		function updateCenter() {
-			var c = _marker.getPosition();
-			$("#CenterLatitude").val(c.lat());
-			$("#CenterLongitude").val(c.lng());
-		}
-
-		function updateBounds() {
-			var ne = _bounds.getBounds().getNorthEast();
-			var sw = _bounds.getBounds().getSouthWest();
-
-			$("#NorthLatitude").val(ne.lat());
-			$("#WestLongitude").val(sw.lng());
-			$("#SouthLatitude").val(sw.lat());
-			$("#EastLongitude").val(ne.lng());
-		}
-	});
-</script>
 
 <div id="map-container">
 	<div id="map">
@@ -49,15 +19,25 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2">
-			Place<span class="h3">: @place.Name</span>
-		</div>
-		<br />
+		@if (Model.HasConfirmation)
+		{
+			<div class="alert alert-warning">
+				<span class="h4">@Model.ConfirmMessage</span>
+				<a href="@CartoViewModel.GetEditUrl(Model.PreviewPlace.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
+			</div>
+		}
+
 		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
-			@Html.Partial("Forms/_Place", new CartoPlaceFormModel(place))
+			@Html.Partial("Forms/_Place", place)
 			<hr />
-			<input type="hidden" name="ID" value="@place.Key" />
-			<button class="btn btn-primary" type="submit">Create</button>
+			<div class="row">
+				<div class="col">
+					<button class="btn btn-primary" type="submit">Create</button>
+				</div>
+				<div class="col text-right">
+					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(Model.PreviewPlace.GoogleKey)">Reset</a>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>
