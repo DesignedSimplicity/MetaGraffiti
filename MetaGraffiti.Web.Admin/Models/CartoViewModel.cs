@@ -37,6 +37,15 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }
 	}
 
+	public class CartoPlaceFormModel
+	{
+		public CartoPlaceInfo Place { get; set; }
+
+		public bool IsGooglePlace { get { return Place.GoogleKey == Place.Key; } }
+
+		public CartoPlaceFormModel(CartoPlaceInfo place) { Place = place; }
+	}
+
 
 	public class CartoPlaceSearch
 	{

@@ -1,17 +1,167 @@
-﻿
-@{
-    Layout = null;
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoPlaceFormModel
+@{ 
+	var place = Model.Place;
 }
 
-<!DOCTYPE html>
+<script>
+	$(document).ready(function () {
+		$("#NorthLatitude, #WestLongitude, #SouthLatitude, #EastLongitude").focus(function () {
+			var p = $(this).val();
+			console.log(p);
+		});
+	});
+</script>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>_Place</title>
-</head>
-<body>
-    <div> 
-    </div>
-</body>
-</html>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="Name">Name</label>
+			<input type="text" class="form-control" name="Name" value="@place.Name">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="LocalName">Local Name</label>
+			<input type="text" class="form-control" name="LocalName" value="@place.LocalName">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="DisplayAs">Display As</label>
+			<input type="text" class="form-control" name="DisplayAs" value="@place.DisplayAs">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="Description">Description</label>
+			<input type="text" class="form-control" name="Description" value="@place.Description">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="PlaceType">Place Type</label>
+			<input type="text" class="form-control" name="PlaceType" value="@place.PlaceType">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="PlaceFlags">Flags</label>
+			<input type="text" disabled class="form-control" name="PlaceFlags" value="">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="IconKey">Icon</label>
+			<input type="text" disabled class="form-control" name="IconKey" value="">
+		</div>
+	</div>
+</div>
+
+<hr />
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="Address">Address</label>
+			<input type="text" class="form-control" name="Address" value="@place.Address">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="Locality">Locality</label>
+			<input type="text" class="form-control" name="Locality" value="@place.Locality">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="Postcode">Postcode</label>
+			<input type="text" class="form-control" name="Postcode" value="@place.Postcode">
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="Country">Country</label>
+			<input type="text" readonly class="form-control" name="Country" value="@place.Country.Name">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="Subregions">Subregions</label>
+			<input type="text" disabled class="form-control" name="Subregions" value="@place.Subregions">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="Region">Region</label>
+			<div class="input-group">
+				<input type="text" class="form-control @(place.Region == null ? "is-invalid": "is-valid")" id="Region" name="Region" value="@(place.Region?.RegionName??"")">
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary js-region-lookup" type="button">Lookup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<hr />
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="PlaceKey">Place Key</label>
+			<input type="hidden" name="PlaceKey" value="@(Model.IsGooglePlace ? "" : place.Key)">
+			<input type="text" class="form-control" readonly name="PlaceKeyDisplay" value="@(Model.IsGooglePlace ? "" : place.Key)">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="NorthLatitude">North West</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="NorthLatitude" id="NorthLatitude" placeholder="Latitude" value="@(place.Bounds.NorthWest.Latitude.ToString("0.0000000000"))">
+				<input type="text" class="form-control" name="WestLongitude" id="WestLongitude" placeholder="Longitude" value="@(place.Bounds.NorthWest.Longitude.ToString("0.0000000000"))">
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="CenterLatitude">Center</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="CenterLatitude" id="CenterLatitude" placeholder="Latitude" value="@place.Center.Latitude.ToString("0.0000000000")">
+				<input type="text" class="form-control" name="CenterLongitude" id="CenterLongitude" placeholder="Longitude" value="@place.Center.Longitude.ToString("0.0000000000")">
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col">
+		<div class="form-group">
+			<label for="GoogleKey">Google Key</label>
+			<input type="hidden" name="GoogleKey" value="@place.GoogleKey">
+			<input type="text" class="form-control" readonly name="GoogleKeyDisplay" value="@place.GoogleKey">
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="SouthLatitude">South East</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="SouthLatitude" placeholder="Latitude" value="@(place.Bounds.SouthEast.Latitude.ToString("0.0000000000"))">
+				<input type="text" class="form-control" name="EastLongitude" placeholder="Longitude" value="@(place.Bounds.SouthEast.Longitude.ToString("0.0000000000"))">
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="form-group">
+			<label for="TimezoneKey">Timezone</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="TimezoneKey" value="">
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="button">Lookup</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

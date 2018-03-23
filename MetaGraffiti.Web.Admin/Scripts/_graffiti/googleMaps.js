@@ -59,6 +59,7 @@ function editBounds(bounds) {
 	var rectangle = new google.maps.Rectangle({
 		bounds: bounds,
 		editable: true,
+		//draggable: true,
 		geodesic: false,
 		strokeColor: '#ff0000',
 		strokeOpacity: 0.8,
@@ -110,7 +111,21 @@ function markPoint(lat, lng, title, number) {
 	if (number) marker.setIcon('http://maps.google.com/mapfiles/kml/paddle/' + number + '.png');
 
 	marker.setMap(_mapGoogle);
-	
+
+	return marker;
+}
+
+function dragPoint(lat, lng, title, number) {
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(lat, lng),
+		draggable: true,
+		title: title,
+	});
+
+	if (number) marker.setIcon('http://maps.google.com/mapfiles/kml/paddle/' + number + '.png');
+
+	marker.setMap(_mapGoogle);
+
 	return marker;
 }
 
