@@ -154,12 +154,21 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
-		public CartoPlaceInfo CreatePlace(CartoPlaceCreateRequest request)
+		public CartoPlaceInfo CreatePlace(CartoPlaceCreateRequest create)
 		{
-			request.PlaceKey = CryptoGraffiti.NewHashID();
-			var place = new CartoPlaceInfo(request);
+			create.PlaceKey = CryptoGraffiti.NewHashID();
+			var place = new CartoPlaceInfo(create);
 
 			_cache.Add(place);
+
+			return place;
+		}
+
+		public CartoPlaceInfo UpdatePlace(CartoPlaceUpdateRequest update)
+		{
+			var place = new CartoPlaceInfo(update);
+
+			_cache.Update(place.Key, place);
 
 			return place;
 		}

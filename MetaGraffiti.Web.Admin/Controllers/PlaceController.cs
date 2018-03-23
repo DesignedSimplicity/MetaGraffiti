@@ -106,11 +106,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			if (place != null)
 			{
 				//return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
-				model.PreviewPlace = place;
+				model.Place = place;
 				model.ConfirmMessage = "Place already exists!";
 			}
 			else
-				model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(id);
+				model.Place = _cartoPlaceService.LookupByPlaceID(id);
 
 			return View(model);
 		}

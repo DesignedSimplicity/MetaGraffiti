@@ -60,7 +60,12 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="Description">Description</label>
-			<input type="text" class="form-control" name="Description" value="@place.Description">
+			<div class="input-group">
+				<input type="text" class="form-control" name="Description" value="@place.Description">
+				<div class="input-group-append">
+					<a target="_blank" class="btn btn-outline-info" href="http://www.google.com/search?q=@("wiki " + Model.Place.Name + " " + Model.Place.Country)&btnI">Wikipedia</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

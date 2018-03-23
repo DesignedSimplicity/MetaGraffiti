@@ -65,6 +65,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View("Place", model);
 		}
 
+		public ActionResult Update(CartoPlaceUpdateRequest request)
+		{
+			var model = InitModel();
+
+			model.Place = _cartoPlaceService.UpdatePlace(request);
+			model.ConfirmMessage = $"Updated at {DateTime.Now}";
+
+			return View("Place", model);
+		}
 
 		public ActionResult Delete(string id)
 		{
@@ -81,39 +90,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_cartoPlaceService.ResetCache();
 
 			return new RedirectResult(CartoViewModel.GetCartoUrl());
-		}
-
-
-
-
-
-		[HttpPost]
-		public ActionResult Location(CartoLocationUpdateModel update)
-		{
-			// TODO: migrate to _cartoPlaceService
-			var model = InitModel();
-
-			var id = update.ID.ToUpperInvariant();
-			/*
-
-			var location = _cartoLocationService.GetLocation(id);
-
-			location.Name = update.Name;
-			location.LocalName = update.LocalName;
-			location.DisplayAs = update.DisplayAs;
-
-			location.Description = update.Description;
-
-			location.PlaceType = update.PlaceType;
-
-			location.Address = update.Address;
-			location.Locality = update.Locality;
-			location.Postcode = update.Postcode;
-
-			location.Region = GeoRegionInfo.Find(update.Region);
-			//location.Timezone = GeoTimezoneInfo.Find
-			*/
-			return new RedirectResult($"/carto/location/{id}");
 		}
 	}
 }

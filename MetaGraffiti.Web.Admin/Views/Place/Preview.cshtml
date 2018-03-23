@@ -4,7 +4,7 @@
 @Html.Partial("_Nav")
 
 @{
-	var place = new CartoPlaceFormModel(Model.PreviewPlace);
+	var place = new CartoPlaceFormModel(Model.Place);
 }
 
 
@@ -23,10 +23,9 @@
 		{
 			<div class="alert alert-warning">
 				<span class="h4">@Model.ConfirmMessage</span>
-				<a href="@CartoViewModel.GetEditUrl(Model.PreviewPlace.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
+				<a href="@CartoViewModel.GetEditUrl(Model.Place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
 			</div>
 		}
-
 		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
 			@Html.Partial("Forms/_Place", place)
 			<hr />
@@ -35,7 +34,7 @@
 					<button class="btn btn-primary" type="submit">Create</button>
 				</div>
 				<div class="col text-right">
-					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(Model.PreviewPlace.GoogleKey)">Reset</a>
+					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(Model.Place.GoogleKey)">Reset</a>
 				</div>
 			</div>
 		</form>

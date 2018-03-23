@@ -25,7 +25,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<PlaceModel> FilteredPlaces { get; set; }
 
 
-		public CartoPlaceInfo PreviewPlace { get; set; }
+		public CartoPlaceInfo Place { get; set; }
 		public CartoPlaceSearch SearchCriteria { get; set; }
 		public List<CartoPlaceInfo> SearchResults { get; set; }
 
