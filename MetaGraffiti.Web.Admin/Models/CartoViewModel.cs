@@ -15,7 +15,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<CartoPlaceInfo> Places { get; set; }
 
-		public CartoPlaceSearch Search { get; set; } = new CartoPlaceSearch();
 
 
 		public HtmlString GetPlacesJson()
@@ -33,8 +32,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetCartoUrl() { return $"/carto/"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
-		public static string GetSearchUrl(string name, string country = "") { return $"/carto/search/?name={name} {country}"; }
-		public static string GetPreviewUrl(string googlePlaceID) { return $"/carto/preview/?googlePlaceID={googlePlaceID}"; }
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
 		public static string GetEditUrl(string key) { return $"/carto/place/{key}"; }
 		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }

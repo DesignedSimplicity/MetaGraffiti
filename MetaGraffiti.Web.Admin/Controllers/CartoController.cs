@@ -49,44 +49,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		/// <summary>
-		/// Searches google for places by name
-		/// </summary>
-		public ActionResult Search(CartoPlaceSearch search)
-		{
-			var model = InitModel();
-
-			model.Search = (search == null ? new CartoPlaceSearch() : search);
-			model.Places = new List<CartoPlaceInfo>();
-
-			if (!String.IsNullOrWhiteSpace(search.Name))
-			{
-				model.Places = _cartoPlaceService.LookupLocations(search.Name);
-			}
-			else if (search.Latitude.HasValue && search.Longitude.HasValue)
-			{
-				var position = new GeoPosition(search.Latitude.Value, search.Longitude.Value);
-				model.Places = _cartoPlaceService.LookupLocations(position);
-			}
-
-			return View(model);
-		}
-
-		/// <summary>
-		/// Displays a google location for import
-		/// </summary>
-		[HttpGet]
-		public ActionResult Preview(string googlePlaceID)
-		{
-			var model = InitModel();
-			
-			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
-			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
-
-			model.Place = _cartoPlaceService.LookupByPlaceID(googlePlaceID);
-
-			return View("Place", model);
-		}
 
 		/// <summary>
 		/// Displays an existing cached place for edit

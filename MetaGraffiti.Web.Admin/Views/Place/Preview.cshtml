@@ -21,23 +21,6 @@
 		drawBounds(_place.bounds, null, '');
 
 		fitBounds(_place.bounds);
-
-		$('#Region').change(function () {
-			$('#Region').addClass("is-invalid");
-		});
-		$(".js-region-lookup").click(function () {
-			var id = $('#Region').val();
-
-			$.getJSON('/api/regions/' + id)
-				.done(function (data) {
-					$('#Region').text(data.RegionName);
-					$('#Region').removeClass("is-invalid");
-					$('#Region').addClass("is-valid");
-				})
-				.fail(function (jqXHR, textStatus, err) {
-					$('#Region').addClass("is-invalid");
-				});
-		});
 	});
 </script>
 
@@ -52,7 +35,7 @@
 			Place<span class="h3">: @place.Name</span>
 		</div>
 		<br />
-		<form method="post" action="/carto/location/">
+		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
 			<input type="hidden" name="ID" value="@place.Key" />
 
 			<div class="row">

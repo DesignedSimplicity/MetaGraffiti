@@ -85,7 +85,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetSearchUrl() { return "/place/search/"; }
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
 
-		public static string GetPreviewUrl(string googlePlaceID) { return $"/place/preview/?googlePlaceID={googlePlaceID}"; }
+		public static string GetPreviewUrl(string id) { return $"/place/preview/{id}"; }
+
+		public static string GetCreateUrl() { return "/place/create/"; }
 	}
 
 	public class PlaceModel

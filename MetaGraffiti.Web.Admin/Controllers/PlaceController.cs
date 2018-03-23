@@ -37,6 +37,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
         {
 			var model = InitModel();
 
+			// client side search: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+
 			return View(model);
         }
 
@@ -96,14 +98,22 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Displays a google location for import
 		/// </summary>
 		[HttpGet]
-		public ActionResult Preview(string googlePlaceID)
+		public ActionResult Preview(string id)
 		{
 			var model = InitModel();
 
-			var place = _cartoPlaceService.FindByGooglePlaceID(googlePlaceID);
+			var place = _cartoPlaceService.FindByGooglePlaceID(id);
 			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
 
-			model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(googlePlaceID);
+			model.PreviewPlace = _cartoPlaceService.LookupByPlaceID(id);
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Create()
+		{
+			var model = InitModel();
 
 			return View(model);
 		}

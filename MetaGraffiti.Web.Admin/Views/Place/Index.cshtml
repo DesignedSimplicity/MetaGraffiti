@@ -3,6 +3,33 @@
 
 @Html.Partial("_Nav")
 
+<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)&libraries=places"></script>
+<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+<script>
+	$(document).ready(function () {
+		var searchField = document.getElementById('SearchPlace');
+		var searchBox = new google.maps.places.SearchBox(searchField);
+		searchBox.addListener('places_changed', function () {
+			var places = searchBox.getPlaces();
+
+			if (places.length == 0) {
+				return;
+			}
+
+			var place = places[0];
+			if (place.place_id) {
+				$("#GooglePlaceID").val(place.place_id);
+				$("#GoogleSearchForm").submit();
+			}
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-md-2">
 		<h2>Country</h2>
@@ -24,6 +51,16 @@
 	</div>
 	<div class="col-md-2">
 		<h2>Search</h2>
+		<form id="GoogleSearchForm" method="get" action="@PlaceViewModel.GetPreviewUrl("")">
+			<div class="form-group">
+				<input type="text" class="form-control" id="SearchPlace" placeholder="Search" />
+			</div>
+			<div class="form-group">
+				<input type="hidden" name="id" id="GooglePlaceID" />
+			</div>
+		</form>
+		<hr />
+		<h2>Lookup</h2>
 		<form method="get" action="@PlaceViewModel.GetSearchUrl()">
 			<div class="form-group">
 				<input type="text" class="form-control" name="name" placeholder="Name" />
