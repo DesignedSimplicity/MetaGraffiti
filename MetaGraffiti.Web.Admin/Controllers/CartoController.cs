@@ -84,10 +84,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return new RedirectResult(CartoViewModel.GetPlacesUrl());
 		}
 
+		public ActionResult Persist()
+		{
+			_cartoPlaceService.Save();
+			_cartoPlaceService.Reload();
+
+			return new RedirectResult(CartoViewModel.GetCartoUrl());
+		}
 
 		public ActionResult Reload()
 		{
-			_cartoPlaceService.ResetCache();
+			_cartoPlaceService.Reload();
 
 			return new RedirectResult(CartoViewModel.GetCartoUrl());
 		}
