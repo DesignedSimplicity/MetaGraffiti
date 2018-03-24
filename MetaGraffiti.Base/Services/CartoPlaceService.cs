@@ -85,7 +85,7 @@ namespace MetaGraffiti.Base.Services
 
 		public List<string> ListPlaceTypes()
 		{
-			return _cache.All.Select(x => x.PlaceType).Distinct().ToList();
+			return _cache.All.Select(x => x.PlaceType).Distinct().OrderBy(x => x).ToList();
 		}
 
 		public List<GeoCountryInfo> ListCountries()
@@ -126,7 +126,7 @@ namespace MetaGraffiti.Base.Services
 
 		public CartoPlaceInfo FindPlace(GeoRegionInfo region, string name, bool deep = false)
 		{
-			var search = _cache.All.Where(x => x.Region.RegionID == region.RegionID);
+			var search = _cache.All.Where(x => x.Region != null && x.Region.RegionID == region.RegionID);
 			search = FindPlace(search, name, deep);
 			return search.FirstOrDefault();
 		}

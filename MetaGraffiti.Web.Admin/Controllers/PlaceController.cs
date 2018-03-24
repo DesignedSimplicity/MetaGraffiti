@@ -16,6 +16,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
 		private CartoPlaceService _cartoPlaceService;
 		private TripSheetService _tripSheetService;
+		private GeoLookupService _geoLookupService;
 
 		public PlaceController()
 		{
@@ -107,12 +108,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var place = _cartoPlaceService.FindByGooglePlaceID(id);
 			if (place != null)
 			{
-				//return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
 				model.Place = place;
 				model.ConfirmMessage = "Place already exists!";
 			}
 			else
+			{
 				model.Place = _cartoPlaceService.LookupByPlaceID(id);
+				// TODO: backfill country and region if they are not set
+			}
 
 			return View(model);
 		}

@@ -19,5 +19,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public GeoCountryInfo SelectedCountry { get; set; }
 
 		public List<GeoCountryInfo> VisitedCountries { get; set; }
+
+		public static string GetCountryUrl(GeoCountryInfo country) { return $"/geo/country/{country.CountryID}"; }
 	}
 }

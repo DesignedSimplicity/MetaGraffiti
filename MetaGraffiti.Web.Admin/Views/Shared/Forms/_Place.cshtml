@@ -1,6 +1,6 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
 @model CartoPlaceFormModel
-@{ 
+@{
 	var place = Model.Place;
 }
 
@@ -32,6 +32,22 @@
 			$("#WestLongitude").val(sw.lng());
 			$("#SouthLatitude").val(sw.lat());
 			$("#EastLongitude").val(ne.lng());
+		}
+
+
+		$(".js-region-lookup").click(function () {
+			$("#Region").val("...").addClass("is-invalid").removeClass("is-valid");
+			geocodeRegion();
+		});
+
+		function geocodeRegion() {
+			$.getJSON('/api/regions/point/?lat=' + _place.center.lat + "&lng=" + _place.center.lng)
+				.done(function (data) {
+					$("#Region").val(data.RegionName).addClass("is-valid").removeClass("is-invalid");
+				})
+				.fail(function (jqXHR, textStatus, err) {
+					$("#Region").val('').addClass("is-invalid").removeClass("is-valid");
+				});
 		}
 	});
 </script>
@@ -115,8 +131,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="Country">Country</label>
-			<input type="hidden" name="Country" value="@place.Country.Name">
-			<input type="text" class="form-control" readonly value="@place.Country.Name">
+			<input type="text" name="Country" class="form-control  @(place.Country == null ? "is-invalid" : "is-valid")" value="@(place.Country?.Name??"")">
 		</div>
 	</div>
 	<div class="col">
@@ -130,7 +145,7 @@
 		<div class="form-group">
 			<label for="Region">Region</label>
 			<div class="input-group">
-				<input type="text" class="form-control @(place.Region == null ? "is-invalid": "is-valid")" id="Region" name="Region" value="@(place.Region?.RegionName??"")">
+				<input type="text" class="form-control @(place.Region == null ? "is-invalid" : "is-valid")" id="Region" name="Region" value="@(place.Region?.RegionName ?? "")">
 				<div class="input-group-append">
 					<button class="btn btn-outline-secondary js-region-lookup" type="button">Lookup</button>
 				</div>
@@ -178,8 +193,8 @@
 		<div class="form-group">
 			<label for="SouthLatitude">South East</label>
 			<div class="input-group">
-				<input type="text" class="form-control" name="SouthLatitude" placeholder="Latitude" value="@(place.Bounds.SouthEast.Latitude.ToString("0.0000000000"))">
-				<input type="text" class="form-control" name="EastLongitude" placeholder="Longitude" value="@(place.Bounds.SouthEast.Longitude.ToString("0.0000000000"))">
+				<input type="text" class="form-control" name="SouthLatitude" id="SouthLatitude" placeholder="Latitude" value="@(place.Bounds.SouthEast.Latitude.ToString("0.0000000000"))">
+				<input type="text" class="form-control" name="EastLongitude" id="EastLongitude" placeholder="Longitude" value="@(place.Bounds.SouthEast.Longitude.ToString("0.0000000000"))">
 			</div>
 		</div>
 	</div>
@@ -189,7 +204,7 @@
 			<div class="input-group">
 				<input type="text" class="form-control" name="Timezone" value="">
 				<div class="input-group-append">
-					<button class="btn btn-outline-secondary" type="button">Lookup</button>
+					<button class="btn btn-outline-secondary" disabled type="button">Lookup</button>
 				</div>
 			</div>
 		</div>

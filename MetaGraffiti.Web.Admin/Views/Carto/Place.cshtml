@@ -24,7 +24,16 @@
 				@Model.ConfirmMessage
 			</div>
 		}
-		<div class="h2">Editing: <span class="h3">@Model.Place.Name</span></div>
+			<div class="row">
+				<div class="col-sm-8">
+					<div class="h2">Editing: <span class="h3">@Model.Place.Name</span></div>
+				</div>
+				<div class="col-sm-4 text-right">
+					<div class="h3">
+						<a href="@CartoViewModel.GetCountryUrl(Model.Place.Country)">@Model.Place.Country.Name</a>
+					</div>
+				</div>
+			</div>
 		<hr />
 		<form method="post" action="@CartoViewModel.GetSaveUrl()">
 			@Html.Partial("Forms/_Place", place)

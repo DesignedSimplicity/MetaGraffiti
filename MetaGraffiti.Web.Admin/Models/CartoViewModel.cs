@@ -27,8 +27,16 @@ namespace MetaGraffiti.Web.Admin.Models
 		{
 			if (String.IsNullOrWhiteSpace(place.Locality)) return null;
 			var places = Places.Where(x => x.Country.CountryID == place.Country.CountryID && String.Compare(x.Name, place.Locality, true) == 0);
-			if (place.Region != null) places = places.Where(x => x.Region !=null && x.Region.RegionID == place.Region.RegionID);
-			return places.FirstOrDefault();
+			if (place.Region == null)
+				return places.FirstOrDefault();
+			else
+			{
+				var p = places.Where(x => x.Region != null && x.Region.RegionID == place.Region.RegionID).FirstOrDefault();
+				if (p != null)
+					return p;
+				else
+					return places.FirstOrDefault();				
+			}
 		}
 
 

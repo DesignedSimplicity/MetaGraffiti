@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Controllers.Api
@@ -21,13 +21,25 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 
 		public IHttpActionResult GetRegion(string id)
 		{
-			var r = GeoRegionInfo.Find(id);
-			if (r == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+			var region = GeoRegionInfo.Find(id);
+			return ReturnRegion(region);
+		}
 
-			var d = MapRegion(r);
+		[HttpGet]
+		public IHttpActionResult FindRegionByPoint(double lat, double lng)
+		{
+			var region = ServiceConfig.GeoLookupService.NearestRegion(new GeoPosition(lat, lng));
+			return ReturnRegion(region);
+		}
+
+		private IHttpActionResult ReturnRegion(GeoRegionInfo region)
+		{
+			if (region == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+			var d = MapRegion(region);
 			return Ok(d);
 		}
-		
+
 		private dynamic MapRegion(GeoRegionInfo r)
 		{
 			dynamic d = new ExpandoObject();

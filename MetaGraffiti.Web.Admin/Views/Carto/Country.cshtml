@@ -57,6 +57,11 @@
 
 		$(".js-view-all").click(function () {
 			fitBounds(_all);
+
+			if (_bounds) _bounds.setMap(null);
+			for (i = 0; i < _places.length; i++) {
+				_places[i].marker.setAnimation(null);
+			}
 		});
 	});
 </script>
@@ -69,11 +74,12 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div class="row">
-			<div class="col-sm-10">
+			<div class="col-sm-8">
 				<div class="h2">@Model.Country.Name Places</div>
 			</div>
-			<div class="col-sm-2 text-right">
-				<a class="btn btn-outline-info js-view-all" href="#">View All</a>
+			<div class="col-sm-4 text-right">
+				<a class="btn btn-secondary" href="@GeoViewModel.GetCountryUrl(Model.Country)">Geo Data</a>
+				<a class="btn btn-outline-info js-view-all" href="#">Reset View</a>
 			</div>
 		</div>
 
@@ -83,8 +89,6 @@
 					<th class="text-center">#</th>
 					<th>Type</th>
 					<th>Name</th>
-					<th>Local Name</th>
-					<th>Display Name</th>
 					<th>Locality</th>
 					<th>Region</th>
 				</tr>
@@ -97,15 +101,17 @@
 						<tr class="js-place-row">
 							<td class="text-center">@(++count)</td>
 							<td>@p.PlaceType</td>
-							<td class="h4"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
-							<td>@p.LocalName</td>
-							<td>@p.DisplayAs</td>
+							<td class="font-weight-bold"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
 							<td>
 								@{
 									var locality = Model.FindLocalityPlace(p);
 									if (locality == null)
 									{
 										<span>@p.Locality</span>
+									}
+									else if (locality.Name == p.Name)
+									{
+										<span></span>
 									}
 									else if (locality.Key == p.Key)
 									{

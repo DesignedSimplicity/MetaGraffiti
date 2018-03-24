@@ -14,8 +14,14 @@ namespace MetaGraffiti.Web.Admin
 		private static System.Object _lock = new System.Object();
 
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
+		private static GeoLookupService _geoLookupService = new GeoLookupService(_googleApiService);
 		private static TripSheetService _tripSheetService;
 		private static CartoPlaceService _cartoPlaceService;
+
+		public static GeoLookupService GeoLookupService
+		{
+			get { return _geoLookupService; }
+		}
 
 		public static TripSheetService TripSheetService
 		{
