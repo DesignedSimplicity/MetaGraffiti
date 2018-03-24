@@ -14,6 +14,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class GeoController : Controller
     {
+		// ==================================================
+		// Initialization
+
 		private GeoLookupService _geoLookupService;
 		private CartoPlaceService _cartoPlaceService;
 
@@ -23,7 +26,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
-		public GeoViewModel InitModel()
+		private GeoViewModel InitModel()
 		{
 			var model = new GeoViewModel()
 			{
@@ -37,36 +40,55 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
+
+		// ==================================================
+		// Actions
+
+		/// <summary>
+		/// Displays all countries with bounds on a map
+		/// </summary>
 		public ActionResult Index()
 		{
 			var model = InitModel();
 			return View(model);
 		}
 
+		/// <summary>
+		/// Displays table of all timezone data
+		/// </summary>
 		public ActionResult Timezones()
 		{
 			var model = InitModel();
 			return View(model);
 		}
 
+		/// <summary>
+		/// Displays table of all country data
+		/// </summary>
 		public ActionResult Countries()
 		{
 			var model = InitModel();
 			return View(model);
 		}
 
+		/// <summary>
+		/// Displays table of all region data grouped by country
+		/// </summary>
+		public ActionResult Regions()
+		{
+			var model = InitModel();
+			return View(model);
+		}
+
+		/// <summary>
+		/// Displays all of a country's regions and their bounds on a map
+		/// </summary>
 		public ActionResult Country(string id)
 		{
 			var model = InitModel();
 
 			model.SelectedCountry = GeoCountryInfo.Find(id);
 
-			return View(model);
-		}
-
-		public ActionResult Regions(string country = null)
-		{
-			var model = InitModel();
 			return View(model);
 		}
 	}

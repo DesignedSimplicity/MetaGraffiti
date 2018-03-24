@@ -25,7 +25,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 		// ==================================================
-		// IS
+		// Helpers
 		public bool IsVisited(GeoCountryInfo country)
 		{
 			return Visited.Any(x => x.CountryID == country.CountryID);
@@ -33,7 +33,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 		// ==================================================
-		// URL
+		// Navigation
 		public static string GetTimezonesUrl() { return "/geo/timezones/"; }
 		public static string GetCountriesUrl() { return "/geo/countries/"; }
 		public static string GetRegionsUrl(GeoCountryInfo country = null) { return "/geo/regions/" + (country == null ? "" : $"#{country.ISO3}"); }

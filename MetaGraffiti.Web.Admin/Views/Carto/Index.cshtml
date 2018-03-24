@@ -23,15 +23,14 @@
 		}
 	</div>
 	<div class="col-sm-2">
-		<div class="h2"><a href="/carto/places/">All Places</a></div>
 		<div class="row">
 			<div class="col">
-				<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist</a>
+				<span class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Places</a></span>	
 			</div>
 			<div class="col text-right">
-				<a class="btn btn-danger js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload</a>
+				<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Save</a>
+				<a class="btn btn-danger js-confirm" href="@CartoViewModel.GetReloadUrl()">Load</a>
 			</div>
 		</div>
-
 	</div>
 </div>

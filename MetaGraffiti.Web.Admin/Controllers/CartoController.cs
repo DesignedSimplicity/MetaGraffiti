@@ -14,6 +14,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class CartoController : Controller
     {
+		// ==================================================
+		// Initialization
+
 		private CartoPlaceService _cartoPlaceService;
 
 		public CartoController()
@@ -33,6 +36,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
+
+		// ==================================================
+		// Actions
+
 		public ActionResult Index()
         {
 			var model = InitModel();
@@ -41,6 +48,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
+		// TODO: make type, country and region columns links
 		public ActionResult Places()
 		{
 			var model = InitModel();
@@ -48,6 +56,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		// TODO: add place type filter navigation
 		public ActionResult Country(string id, string placeType = "")
 		{
 			var model = InitModel();
@@ -109,6 +118,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return new RedirectResult(CartoViewModel.GetCartoUrl());
 		}
 
+		/// <summary>
+		/// Reloads all data from the CartoPlace file
+		/// </summary>
 		public ActionResult Reload()
 		{
 			_cartoPlaceService.Reload();

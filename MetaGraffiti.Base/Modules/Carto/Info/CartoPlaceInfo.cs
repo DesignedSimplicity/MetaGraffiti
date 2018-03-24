@@ -45,10 +45,12 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		public IGeoPerimeter Bounds => new GeoRectangle(_data.NorthLatitude, _data.WestLongitude, _data.SouthLatitude, _data.EastLongitude);
 
 
+		// TODO: move this to extensions or somewhere else
 		public string ToJson()
 		{
 			dynamic json = new JObject();
 			json.name = Name;
+			json.key = Key;
 
 			json.center = new JObject();
 			json.center.lat = _data.CenterLatitude;

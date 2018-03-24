@@ -60,7 +60,7 @@ namespace MetaGraffiti.Web.Admin
 
 					// create and initalize service as needed
 					var service = new CartoPlaceService(_googleApiService);
-					service.Init(AutoConfig.CartoDataUri);
+					service.Init(AutoConfig.CartoPlaceData);
 
 					// update shared static resource
 					_cartoPlaceService = service;

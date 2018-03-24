@@ -11,18 +11,24 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CartoViewModel : AdminViewModel
 	{
+		// ==================================================
+		// Required
 		public List<string> PlaceTypes { get; set; }
 		public List<GeoCountryInfo> Countries { get; set; }
 
 		public List<CartoPlaceInfo> Places { get; set; }
 
+
+		// ==================================================
+		// Optional
 		public List<CartoPlaceInfo> ReportPlaces { get; set; }
 
 		public CartoPlaceInfo Place { get; set; }
 		public GeoCountryInfo Country { get; set; }
 
 
-
+		// ==================================================
+		// Helpers
 		public CartoPlaceInfo FindLocalityPlace(CartoPlaceInfo place)
 		{
 			if (String.IsNullOrWhiteSpace(place.Locality)) return null;
@@ -40,11 +46,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
-		public HtmlString GetPlacesJson()
-		{
-			return JsonHelper.GetJson(Places);
-		}
-
 		public HtmlString GetJson(CartoPlaceInfo place)
 		{
 			if (place == null) return new HtmlString("{}");
@@ -53,20 +54,24 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
+		// ==================================================
+		// Navigation
 		public static string GetCartoUrl() { return $"/carto/"; }
 		public static string GetPersistUrl() { return $"/carto/persist/"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 
-
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }
-		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}"; }
-
+		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
 		
 		public static string GetSaveUrl() { return $"/carto/update/"; }		
-		public static string GetEditUrl(string key) { return $"/carto/place/{key}"; }
-		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}"; }
+		public static string GetEditUrl(string key) { return $"/carto/place/{key}/"; }
+		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}/"; }
 	}
+
+
+
+
 
 	public class CartoPlaceFormModel
 	{

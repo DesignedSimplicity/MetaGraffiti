@@ -124,7 +124,7 @@ function gotoPoint(lat, lng) {
 	_mapGoogle.setZoom(15);
 }
 
-
+// displays a marker on the map
 function markPoint(lat, lng, title, number) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
@@ -136,6 +136,17 @@ function markPoint(lat, lng, title, number) {
 	marker.setMap(_mapGoogle);
 
 	return marker;
+}
+
+// displays a marker for a place on the map, adds click navigation if url is provided which takes the placekey
+function markPlace(place, url) {
+	var marker = markPoint(place.center.lat, place.center.lng, place.name);
+	marker.placeKey = place.key;
+	if (url) {
+		marker.addListener('click', function () {
+			window.location = url.replace('{key}', marker.placeKey);
+		});
+	}
 }
 
 function dragPoint(lat, lng, title, number) {
