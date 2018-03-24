@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.1.1" />
+    <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="ExcelDataReader" Version="3.4.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
