@@ -115,6 +115,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			text = text.Trim();
 
+			var id = TypeConvert.ToInt(text);
+			if (id > 0) return ByID(id);
+
 			if (text.Length == 2 || text.Length == 3) return ByISO(text);
 
 			var c = Cache.FirstOrDefault(x => String.Compare(x.Name, text, true) == 0);

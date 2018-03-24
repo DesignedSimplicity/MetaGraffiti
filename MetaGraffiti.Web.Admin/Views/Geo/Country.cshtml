@@ -3,71 +3,46 @@
 
 @Html.Partial("_Nav")
 @{
-	var c = Model.SelectedCountry;
+	var country = Model.SelectedCountry;
+	var regions = country.Regions.OrderBy(x => x.RegionName);
 }
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
-	var _editor = null;
 	var _popup = null;
-	var _country = {
-		name: "@c.Name",
-		center: {
-			lat: @c.Center.Latitude,
-			lng: @c.Center.Longitude
-		},
-		bounds: {
-			north: @c.Bounds.NorthWest.Latitude,
-			south: @c.Bounds.SouthEast.Latitude,
-			west: @c.Bounds.NorthWest.Longitude,
-			east: @c.Bounds.SouthEast.Longitude,
-		}
-	};
-
-	var _regions = [
-		@foreach (var r in c.Regions.OrderBy(x => x.RegionName))
-		{
-			<text>
-			{
-				region: "@r.RegionName",
-				bounds: {
-					north: @r.Bounds.NorthWest.Latitude,
-					south: @r.Bounds.SouthEast.Latitude,
-					west: @r.Bounds.NorthWest.Longitude,
-					east: @r.Bounds.SouthEast.Longitude,
-				},
-			},</text>
-		}
-	]
+	var _editor = null;
+	var _country = @JsonHelper.GetJson(country);
+	var _regions = @JsonHelper.GetJson(regions);
 
 	$(document).ready(function () {
 		initMap();
 
 		for (i = 0; i < _regions.length; i++) {
-			var color = _mapColors[i % 10];
+			var color = getMapColor(i);
 
-			var region = _regions[i];
-			region.rectangle = showBounds(region.bounds, color);
+			showBounds(_regions[i].bounds, color);
 
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color); // TODO: consoldiate table row color feature
 		}
 
 		showBounds(_country.bounds, null, 0);
 		markPoint(_country.center.lat, _country.center.lng, _country.name)
 
-		$(".js-region-row").click(function () {
+		$(".js-reset-view").click(function (e) {
+			e.preventDefault();
+
 			if (_editor) _editor.setMap(null);
 			if (_popup) _popup.close();
 
-			$(".js-region-row").css("font-weight", "");
-			$(this).css("font-weight", "bold");
-			var i = $(this).data("index");
-			var region = _regions[i];
+			showBounds(_country.bounds, null, 0);
+		});
 
-			_editor = editBounds(region.bounds);
+		$(".js-mappable-row").click(function () {
+			if (_editor) _editor.setMap(null);
+			if (_popup) _popup.close();
+
+			var i = $(this).index();
+			_editor = editBounds(_regions[i].bounds);
 			_editor.addListener('bounds_changed', showWindow);
-
 		});
 
 		function showWindow() {
@@ -94,13 +69,20 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<h2><a href="/geo/countries/">Countries</a> \ @c.Name</h2>
-		<table class="table table-striped table-sm">
+		<div class="row">
+			<div class="col">
+				<div class="h2"><a href="/geo/countries/">Countries</a> \ @country.Name</div>
+			</div>
+			<div class="col text-right">
+				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
+			</div>
+		</div>
+		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
 					<th>Abbr</th>
-					<th>Region</th>
+					<th>Name</th>
 					<th>Center</th>
 					<th>North West</th>
 					<th>South East</th>
@@ -109,15 +91,15 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var r in c.Regions.OrderBy(x => x.RegionName))
+					foreach (var r in regions)
 					{
-						<tr class="js-region-row" data-index="@(count)">
+						<tr class="js-mappable-row">
 							<td class="text-center">@(++count)</td>
 							<td>@r.RegionAbbr</td>
-							<td>@r.RegionName</td>
-							<td>@r.Center.Latitude.ToString("0.000000") x @r.Center.Longitude.ToString("0.000000")</td>
-							<td>@r.Bounds.NorthWest.Latitude.ToString("0.000000") x @r.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-							<td>@r.Bounds.SouthEast.Latitude.ToString("0.000000") x @r.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
+							<td class="font-weight-bold">@r.RegionName</td>
+							<td class="small">@r.Center.Latitude.ToString("0.0000"), @r.Center.Longitude.ToString("0.0000")</td>
+							<td class="small">@r.Bounds.NorthWest.Latitude.ToString("0.0000"), @r.Bounds.NorthWest.Longitude.ToString("0.0000")</td>
+							<td class="small">@r.Bounds.SouthEast.Latitude.ToString("0.0000"), @r.Bounds.SouthEast.Longitude.ToString("0.0000")</td>
 						</tr>
 					}
 				}

@@ -67,7 +67,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public HtmlString GetPlacesJson()
 		{
-			return JsonViewModel.GetJson(SearchResults);
+			return JsonHelper.GetJson(SearchResults);
 		}
 
 

@@ -1,8 +1,7 @@
-﻿.js-point-row:hover,
-.js-region-row:hover,
-.js-location-row:hover {
+﻿.js-mappable-row:hover {
 	cursor: crosshair;
 	color: #900;
+	background-color: #fee !important;
 }
 
 

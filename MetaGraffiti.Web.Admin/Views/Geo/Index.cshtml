@@ -3,41 +3,18 @@
 
 @Html.Partial("_Nav")
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
-
 <script>
-	var _editor = null;
-	var _popup = null;
-
-	var _countries = [
-		@foreach (var c in Model.Countries)
-		{
-			<text>
-			{
-				name: "@c.Name",
-				bounds: {
-					north: @c.Bounds.NorthWest.Latitude,
-					south: @c.Bounds.SouthEast.Latitude,
-					west: @c.Bounds.NorthWest.Longitude,
-					east: @c.Bounds.SouthEast.Longitude,
-				},
-			},</text>
-		}
-	]
+	var _countries = @JsonHelper.GetJson(Model.Countries);
 
 	$(document).ready(function () {
 		initMap();
 
 		for (i = 0; i < _countries.length; i++) {
-			var color = _mapColors[i % 10];
-
-			var country = _countries[i];
-			drawBounds(country.bounds, color);
+			var country = _countries[i].bounds;
+			var bounds = drawBounds(country, getMapColor(i));
 		}
 
-		_mapGoogle.panTo(new google.maps.LatLng(0, 0));
-		_mapGoogle.setZoom(Math.ceil(Math.log2($(_mapDiv).width())) - 8);
+		showWorld();
 	});
 </script>
 
@@ -47,17 +24,17 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-6">
-		<div class="h2"><a href="/geo/timezones/">Timezones</a></div>
-		<div class="h2"><a href="/geo/countries/">Countries</a></div>
-		<div class="h2"><a href="/geo/regions/">Regions</a></div>
-		<br />
-		<hr />
-		<h3>Visited Countries</h3>
-		@foreach (var c in Model.VisitedCountries)
+	<div class="col-sm-3">
+		<div class="h2"><a href="@GeoViewModel.GetTimezonesUrl()">Timezones</a></div>
+		<div class="h2"><a href="@GeoViewModel.GetCountriesUrl()">Countries</a></div>
+		<div class="h2"><a href="@GeoViewModel.GetRegionsUrl()">Regions</a></div>
+	</div>
+	<div class="col-sm-3">
+		<div class="h3">Visited Countries</div>
+		@foreach (var c in Model.Visited)
 		{
 			<div class="h4">
-				<a href="/geo/country/@(c.CountryID)">@c.Name</a>
+				<a href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
 			</div>
 		}
 	</div>

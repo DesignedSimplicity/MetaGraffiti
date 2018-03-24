@@ -23,6 +23,7 @@ var _mapColors = [
 	'#dc3545',
 ];
 
+// initalizes the global google map objects
 function initMap() {
 	_mapDiv = document.getElementById('map');
 	_mapCoder = new google.maps.Geocoder;
@@ -35,9 +36,22 @@ function initMap() {
 	});
 }
 
+// returns a color to use for a given inded
+function getMapColor(index) {
+	if (index === undefined) return '#ff0000';
+	return _mapColors[index % 10];
+}
+
+// attempts to fix the entire world in the view port
+function showWorld() {
+	_mapGoogle.panTo(new google.maps.LatLng(0, 0));
+	_mapGoogle.setZoom(Math.ceil(Math.log2($(_mapDiv).width())) - 8);
+}
+
+// draws a rectangle with the given bounds, color and fill weight
 function drawBounds(bounds, color, fill) {
-	if (color == null) color = '#ff0000';
-	if (fill == null) fill = 0.2;
+	if (color === null) color = '#ff0000';
+	if (fill === null) fill = 0.2;
 	var rectangle = new google.maps.Rectangle({
 		bounds: bounds,
 		geodesic: false,

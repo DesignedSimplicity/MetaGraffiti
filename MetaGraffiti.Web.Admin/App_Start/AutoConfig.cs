@@ -24,18 +24,5 @@ namespace MetaGraffiti.Web.Admin
 				return _googleMapsApiKey;
 			}
 		}
-
-		private static string[] _visitedCountries = null;
-		public static string[] VisitedCountries
-		{
-			get
-			{
-				if (_visitedCountries == null)
-				{
-					_visitedCountries = File.ReadAllText(Path.Combine(_configRoot, "KnE", "VisitedCountries.txt")).Split(',');
-				}
-				return _visitedCountries;
-			}
-		}
 	}
 }

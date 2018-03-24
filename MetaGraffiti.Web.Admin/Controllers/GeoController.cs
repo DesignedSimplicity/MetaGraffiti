@@ -15,10 +15,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
     public class GeoController : Controller
     {
 		private GeoLookupService _geoLookupService;
+		private CartoPlaceService _cartoPlaceService;
 
 		public GeoController()
 		{
-			_geoLookupService = new GeoLookupService(new GoogleApiService(AutoConfig.GoogleMapsApiKey));
+			_geoLookupService = ServiceConfig.GeoLookupService;
+			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
 		public GeoViewModel InitModel()
@@ -29,8 +31,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				Countries = GeoCountryInfo.All,
 				Regions = GeoRegionInfo.All
 			};
-
-			model.VisitedCountries = GeoCountryInfo.All.Where(x => AutoConfig.VisitedCountries.Contains(x.ISO2)).OrderBy(x => x.Name).ToList();
+			
+			model.Visited = _cartoPlaceService.ListCountries();
 
 			return model;
 		}
@@ -47,17 +49,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Countries(string id)
+		public ActionResult Countries()
 		{
 			var model = InitModel();
 			return View(model);
 		}
 
-		public ActionResult Country(int id)
+		public ActionResult Country(string id)
 		{
 			var model = InitModel();
 
-			model.SelectedCountry = GeoCountryInfo.ByID(id);
+			model.SelectedCountry = GeoCountryInfo.Find(id);
 
 			return View(model);
 		}

@@ -109,6 +109,9 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			text = text.Trim();
 
+			var id = TypeConvert.ToInt(text);
+			if (id > 0) return ByID(id);
+
 			var r = ByISO(text);
 			if (r != null) return r;
 
@@ -320,20 +323,20 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 				#region Germany
 				_cache.Add(new GeoRegionData(276, 2101, 1, "DE-BB", "BB", "Brandenburg", @"Brandenburg", 52.412528, 12.531644, 52.541776, 12.361080, 52.311578, 12.725997));
 				_cache.Add(new GeoRegionData(276, 2102, 1, "DE-BE", "BE", "Berlin", @"Berlin", 52.519171, 13.406091, 52.675454, 13.091166, 52.339629, 13.761117));
-				_cache.Add(new GeoRegionData(276, 2103, 1, "DE-BW", "BW", "Baden-Württemberg", @"NULL", 48.661603, 9.350133, 49.791327, 7.511756, 47.532366, 10.495573));
-				_cache.Add(new GeoRegionData(276, 2104, 1, "DE-BY", "BY", "Bavaria", @"NULL", 48.790447, 11.497889, 50.564714, 8.976349, 47.270111, 13.839637));
+				_cache.Add(new GeoRegionData(276, 2103, 1, "DE-BW", "BW", "Baden-Württemberg", @"", 48.661603, 9.350133, 49.791327, 7.511756, 47.532366, 10.495573));
+				_cache.Add(new GeoRegionData(276, 2104, 1, "DE-BY", "BY", "Bavaria", @"", 48.790447, 11.497889, 50.564714, 8.976349, 47.270111, 13.839637));
 				_cache.Add(new GeoRegionData(276, 2105, 1, "DE-HB", "HB", "Bremen", @"Bremen", 53.079296, 8.801693, 53.228910, 8.481758, 53.011698, 8.990813));
-				_cache.Add(new GeoRegionData(276, 2106, 1, "DE-HE", "HE", "Hesse", @"NULL", 50.652051, 9.162437, 51.657506, 7.772467, 49.395261, 10.236320));
+				_cache.Add(new GeoRegionData(276, 2106, 1, "DE-HE", "HE", "Hesse", @"", 50.652051, 9.162437, 51.657506, 7.772467, 49.395261, 10.236320));
 				_cache.Add(new GeoRegionData(276, 2107, 1, "DE-HH", "HH", "Hamburg", @"Hamburg", 53.551084, 9.993681, 53.717145, 9.732151, 53.399999, 10.123492));
-				_cache.Add(new GeoRegionData(276, 2108, 1, "DE-MV", "MV", "Mecklenburg-Western Pomerania", @"NULL", 53.612650, 12.429595, 54.684690, 10.593613, 53.110319, 14.412257));
-				_cache.Add(new GeoRegionData(276, 2109, 1, "DE-NI", "NI", "Lower Saxony", @"NULL", 52.636703, 9.845076, 53.892248, 6.653897, 51.295067, 11.598205));
-				_cache.Add(new GeoRegionData(276, 2110, 1, "DE-NW", "NW", "North Rhine-Westphalia", @"NULL", 51.433236, 7.661593, 52.531469, 5.866342, 50.322701, 9.461634));
-				_cache.Add(new GeoRegionData(276, 2111, 1, "DE-RP", "RP", "Rhineland-Palatinate", @"NULL", 50.118346, 7.308952, 50.942305, 6.112265, 48.966418, 8.508313));
-				_cache.Add(new GeoRegionData(276, 2112, 1, "DE-SH", "SH", "Schleswig-Holstein", @"NULL", 54.219367, 9.696116, 55.058347, 7.864961, 53.359806, 11.312920));
+				_cache.Add(new GeoRegionData(276, 2108, 1, "DE-MV", "MV", "Mecklenburg-Western Pomerania", @"", 53.612650, 12.429595, 54.684690, 10.593613, 53.110319, 14.412257));
+				_cache.Add(new GeoRegionData(276, 2109, 1, "DE-NI", "NI", "Lower Saxony", @"", 52.636703, 9.845076, 53.892248, 6.653897, 51.295067, 11.598205));
+				_cache.Add(new GeoRegionData(276, 2110, 1, "DE-NW", "NW", "North Rhine-Westphalia", @"", 51.433236, 7.661593, 52.531469, 5.866342, 50.322701, 9.461634));
+				_cache.Add(new GeoRegionData(276, 2111, 1, "DE-RP", "RP", "Rhineland-Palatinate", @"", 50.118346, 7.308952, 50.942305, 6.112265, 48.966418, 8.508313));
+				_cache.Add(new GeoRegionData(276, 2112, 1, "DE-SH", "SH", "Schleswig-Holstein", @"", 54.219367, 9.696116, 55.058347, 7.864961, 53.359806, 11.312920));
 				_cache.Add(new GeoRegionData(276, 2113, 1, "DE-SL", "SL", "Saarland", @"Saarland", 49.396423, 7.022960, 49.639408, 6.357608, 49.111945, 7.404583));
-				_cache.Add(new GeoRegionData(276, 2114, 1, "DE-SN", "SN", "Saxony", @"NULL", 51.104540, 13.201738, 51.684871, 11.871435, 50.171363, 15.041896));
+				_cache.Add(new GeoRegionData(276, 2114, 1, "DE-SN", "SN", "Saxony", @"", 51.104540, 13.201738, 51.684871, 11.871435, 50.171363, 15.041896));
 				_cache.Add(new GeoRegionData(276, 2115, 1, "DE-ST", "ST", "Saxony", @"Sachsen-Anhalt", 51.104540, 13.201738, 51.684871, 11.871435, 50.171363, 15.041896));
-				_cache.Add(new GeoRegionData(276, 2116, 1, "DE-TH", "TH", "Thuringia", @"NULL", 51.010989, 10.845346, 51.648935, 9.876984, 50.204346, 12.653932));
+				_cache.Add(new GeoRegionData(276, 2116, 1, "DE-TH", "TH", "Thuringia", @"", 51.010989, 10.845346, 51.648935, 9.876984, 50.204346, 12.653932));
 				#endregion
 
 				#region Spain

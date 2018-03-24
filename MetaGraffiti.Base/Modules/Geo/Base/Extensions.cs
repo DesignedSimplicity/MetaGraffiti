@@ -35,23 +35,51 @@ namespace MetaGraffiti.Base.Modules.Geo
 		}
 
 
-		// TODO: deprecate
-		public static string ToJson(this GeoLocationInfo location)
+
+		public static string ToJson(this GeoRegionInfo region)
 		{
-			if (location == null) return "{}";
+			if (region == null) return "{}";
 
 			dynamic json = new JObject();
-			json.name = location.Name;
+			json.id = region.RegionID;
+			json.iso = region.RegionISO;
+			json.name = region.RegionName;
+			json.abbr = region.RegionAbbr;
+			json.country = region.Country.ISO3;
 
 			json.center = new JObject();
-			json.center.lat = location.Latitude;
-			json.center.lng = location.Longitude;
+			json.center.lat = region.Center.Latitude;
+			json.center.lng = region.Center.Longitude;
 
 			json.bounds = new JObject();
-			json.bounds.north = (location.Bounds?.NorthWest?.Latitude ?? 0);
-			json.bounds.south = (location.Bounds?.SouthEast?.Latitude ?? 0);
-			json.bounds.east = (location.Bounds?.SouthEast?.Longitude ?? 0);
-			json.bounds.west = (location.Bounds?.NorthWest?.Longitude ?? 0);
+			json.bounds.north = (region.Bounds?.NorthWest?.Latitude ?? 0);
+			json.bounds.south = (region.Bounds?.SouthEast?.Latitude ?? 0);
+			json.bounds.east = (region.Bounds?.SouthEast?.Longitude ?? 0);
+			json.bounds.west = (region.Bounds?.NorthWest?.Longitude ?? 0);
+
+			return json.ToString();
+		}
+
+		public static string ToJson(this GeoCountryInfo country)
+		{
+			if (country == null) return "{}";
+
+			dynamic json = new JObject();
+			json.id = country.CountryID;
+			json.iso2 = country.ISO2;
+			json.iso3 = country.ISO3;
+			json.name = country.Name;
+			json.continent = country.Continent;
+
+			json.center = new JObject();
+			json.center.lat = country.Center.Latitude;
+			json.center.lng = country.Center.Longitude;
+
+			json.bounds = new JObject();
+			json.bounds.north = (country.Bounds?.NorthWest?.Latitude ?? 0);
+			json.bounds.south = (country.Bounds?.SouthEast?.Latitude ?? 0);
+			json.bounds.east = (country.Bounds?.SouthEast?.Longitude ?? 0);
+			json.bounds.west = (country.Bounds?.NorthWest?.Longitude ?? 0);
 
 			return json.ToString();
 		}

@@ -42,7 +42,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public HtmlString GetPlacesJson()
 		{
-			return JsonViewModel.GetJson(Places);
+			return JsonHelper.GetJson(Places);
 		}
 
 		public HtmlString GetJson(CartoPlaceInfo place)

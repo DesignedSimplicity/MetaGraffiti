@@ -3,52 +3,62 @@
 
 @Html.Partial("_Nav")
 
-<table class="table table-striped table-sm">
-	<tr>
-		<th>Continent</th>
-		<th>ID</th>
-		<th>Division</th>
-		<th>ISO2</th>
-		<th>ISO3</th>
-		<th>OC</th>
-		<th>Name</th>
-		<th>Name Long</th>
-		<th>Name Local</th>
-		<th>Name Local Long</th>
-		<th>Abbr 10</th>
-		<th>Abbr 15</th>
-		<th>Abbr 30</th>
-		<th>Center</th>
-		<th>North West</th>
-		<th>South East</th>
-		<th>Regions</th>
-	</tr>
-	@foreach (var c in Model.Countries.OrderBy(x => x.Continent).ThenBy(x => x.Name))
-	{
+<table class="table table-sm table-striped">
+	<thead class="thead-dark">
 		<tr>
-			<td>@c.Continent</td>
-			<td>@c.CountryID</td>
-			<td>@c.Division</td>
-			<td>@c.ISO2</td>
-			<td>@c.ISO3</td>
-			<td>@c.OC</td>
-			<td class="mark">
-				<a href="/geo/country/?id=@(c.CountryID)">@c.Name</a>
-			</td>
-			<td>@c.NameLong</td>
-			<td>@c.NameLocal</td>
-			<td>@c.NameLocalLong</td>
-			<td>@c.Abbr10</td>
-			<td>@c.Abbr15</td>
-			<td>@c.Abbr30</td>
-			<td class="small">@c.Center.Latitude.ToString("0.000000") x @c.Center.Longitude.ToString("0.000000")</td>
-			<td class="small">@c.Bounds.NorthWest.Latitude.ToString("0.000000") x @c.Bounds.NorthWest.Longitude.ToString("0.000000")</td>
-			<td class="small">@c.Bounds.SouthEast.Latitude.ToString("0.000000") x @c.Bounds.SouthEast.Longitude.ToString("0.000000")</td>
-			<td>
-				<a href="/geo/regions#@(c.ISO3)">
-					@(c.HasRegions ? c.Regions.Count().ToString() : "")
-				</a>
-			</td>
+			<th>ID</th>
+			<th class="text-center">Continent</th>
+			<th>DIV</th>
+			<th>OC</th>
+			<th>ISO2</th>
+			<th>ISO3</th>
+			<th>Name</th>
+			<th>Long Name</th>
+			<th>Local Name</th>
+			<th>Abbr 10</th>
+			<th>Abbr 15</th>
+			<th>Abbr 30</th>
+			<th>Center</th>
+			<th>NW</th>
+			<th>SE</th>
+			<th>Regions</th>
 		</tr>
-	}
+	</thead>
+	<tbody>
+		@foreach (var c in Model.Countries.OrderBy(x => x.Continent).ThenBy(x => x.Name))
+		{
+			<tr class="@(Model.IsVisited(c) ? "table-success" : "")">
+				<td>@c.CountryID</td>
+				<td class="text-center">
+					<span class="badge badge-@(CssHelper.GetContinentCss(c.Continent))">
+						@c.Continent.ToString().Replace("America", " America")
+					</span>
+				</td>
+				<td class="text-center">@c.Division</td>
+				<td>@c.OC</td>
+				<td>@c.ISO2</td>
+				<td class="font-weight-bold">@c.ISO3</td>
+				<td class="h4">
+					<a href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
+				</td>
+				<td class="small">@c.NameLong</td>
+				<td class="font-italic">
+					@c.NameLocal
+					<div class="small">@c.NameLocalLong</div>
+				</td>
+				<td>@c.Abbr10</td>
+				<td>@c.Abbr15</td>
+				<td>@c.Abbr30</td>
+				<td class="small">@c.Center.Latitude.ToString("0.0000"), @c.Center.Longitude.ToString("0.0000")</td>
+				<td class="small">@c.Bounds.NorthWest.Latitude.ToString("0.0000"), @c.Bounds.NorthWest.Longitude.ToString("0.0000")</td>
+				<td class="small">@c.Bounds.SouthEast.Latitude.ToString("0.0000"), @c.Bounds.SouthEast.Longitude.ToString("0.0000")</td>
+				<td class="text-center h4">
+					@if (c.HasRegions)
+					{
+						<a href="@GeoViewModel.GetRegionsUrl(c)">@c.Regions.Count()</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
