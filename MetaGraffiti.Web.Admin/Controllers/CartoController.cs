@@ -48,17 +48,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Country(string id)
+		public ActionResult Country(string id, string placeType = "")
 		{
 			var model = InitModel();
 
 			model.Country = GeoCountryInfo.Find(id);
-			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.Country.ISO2 });			
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.Country.ISO2, PlaceType = placeType });			
 
 			return View(model);
 		}
-
-
 
 
 		public ActionResult Report(CartoPlaceReportRequest report)

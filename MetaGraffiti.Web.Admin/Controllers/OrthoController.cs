@@ -31,5 +31,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View("Sheet", model);
 		}
+
+		public ActionResult Reset()
+		{
+			_tripSheetService.Reset();
+			_tripSheetService.Init(AutoConfig.PlaceDataUri);
+			return new RedirectResult("/ortho/");
+		}
 	}
 }

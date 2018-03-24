@@ -34,6 +34,10 @@
 			$("#EastLongitude").val(ne.lng());
 		}
 
+		$(".js-google-key").click(function () {
+			$("#GoogleKey").val("");
+			$("#GoogleKeyDisplay").val("");
+		});
 
 		$(".js-region-lookup").click(function () {
 			$("#Region").val("...").addClass("is-invalid").removeClass("is-valid");
@@ -185,8 +189,13 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="GoogleKey">Google Key</label>
-			<input type="hidden" name="GoogleKey" value="@place.GoogleKey">
-			<input type="text" class="form-control" readonly value="@place.GoogleKey">
+			<input type="hidden" name="GoogleKey" id="GoogleKey" value="@place.GoogleKey">
+			<div class="input-group">
+				<input type="text" class="form-control" id="GoogleKeyDisplay" readonly value="@place.GoogleKey">
+				<div class="input-group-append">
+					<button class="btn btn-outline-danger js-google-key" type="button">Remove</button>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="col">
