@@ -147,6 +147,7 @@ function markPlace(place, url) {
 			window.location = url.replace('{key}', marker.placeKey);
 		});
 	}
+	return marker;
 }
 
 function dragPoint(lat, lng, title, number) {

@@ -10,8 +10,8 @@
 			<th class="text-center">#</th>
 			<th>Type</th>
 			<th>Name</th>
+			<th>Display </th>
 			<th>Local Name</th>
-			<th>Display Name</th>
 			<th>Locality</th>
 			<th>Region</th>
 			<th>Country</th>
@@ -25,10 +25,12 @@
 			{
 				<tr data-index="@(count)">
 					<td class="text-center">@(++count)</td>
-					<td>@p.PlaceType</td>
-					<td class="h4"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
-					<td>@p.LocalName</td>
+					<td>
+						<a href="@CartoViewModel.GetReportUrl(p.PlaceType)">@p.PlaceType</a>
+					</td>
+					<td class="h5"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
 					<td>@p.DisplayAs</td>
+					<td class="font-italic">@p.LocalName</td>
 					<td>
 						@{
 							var locality = Model.FindLocalityPlace(p);
@@ -38,7 +40,7 @@
 							}
 							else if (locality.Key == p.Key)
 							{
-								<span class="font-italic">@p.Locality</span>
+								<span class="font-weight-bold">@p.Locality</span>
 							}
 							else
 							{
@@ -47,9 +49,11 @@
 						}
 					</td>
 					<td>@(p.Region == null ? "" : p.Region.RegionName)</td>
-					<td>@p.Country.Name</td>
 					<td>
-						<a class="btn btn-sm btn-info" href="@CartoViewModel.GetEditUrl(p.Key)">Manage</a>
+						<a href="@CartoViewModel.GetCountryUrl(p.Country)">@p.Country.Name</a>
+					</td>
+					<td>
+						<a class="btn btn-sm btn-primary" href="@CartoViewModel.GetEditUrl(p.Key)">Manage</a>
 						<a class="btn btn-sm btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(p.Key)">Delete</a>
 					</td>
 				</tr>

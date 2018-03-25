@@ -56,14 +56,14 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2">Places</div>
+		<div class="h2">All Places</div>
 		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
 					<th>Type</th>
-					<th>Localityu</th>
+					<th>Locality</th>
 					<th>Region</th>
 					<th>Country</th>
 				</tr>
@@ -73,24 +73,20 @@
 					var count = 0;
 					foreach (var p in Model.Places)
 					{
-				<tr class="js-mappable-row">
-					<td class="text-center">@(++count)</td>
-					<td>
-						<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
-						<span class="font-italic">@p.DisplayAs</span>
-					</td>
-					<td>@p.PlaceType</td>
-					<td>@p.Locality</td>
-					<td>@(p.Region?.RegionName ?? "")</td>
-					<td>@p.Country.ISO2</td>
-				</tr>
+						<tr class="js-mappable-row">
+							<td class="text-center">@(++count)</td>
+							<td>
+								<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
+								<span class="font-italic">@p.DisplayAs</span>
+							</td>
+							<td>@p.PlaceType</td>
+							<td>@p.Locality</td>
+							<td>@(p.Region?.RegionName ?? "")</td>
+							<td>@p.Country.ISO2</td>
+						</tr>
 					}
 				}
 			</tbody>
 		</table>
-		<hr />
-		<div>
-			<a class="btn btn-info" href="/xls/export/">Export</a>
-		</div>
 	</div>
 </div>

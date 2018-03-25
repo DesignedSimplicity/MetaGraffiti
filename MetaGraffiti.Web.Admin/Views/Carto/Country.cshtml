@@ -74,10 +74,10 @@
 	<div class="col-sm-6">
 		<div class="row">
 			<div class="col-sm-8">
-				<div class="h2">@Model.Country.Name Places</div>
+				<div class="h2">@Model.SelectedCountry.Name Places</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<a class="btn btn-outline-success" href="@GeoViewModel.GetCountryUrl(Model.Country)">Geo Data</a>
+				<a class="btn btn-outline-success" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">Geo Data</a>
 				<a class="btn btn-secondary js-reset-view" href="#">Reset View</a>
 			</div>
 		</div>

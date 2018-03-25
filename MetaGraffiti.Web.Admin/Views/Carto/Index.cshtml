@@ -5,6 +5,14 @@
 
 <div class="row">
 	<div class="col-sm-2">
+		<div class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Map All</a></div>
+		<div class="h2"><a href="@CartoViewModel.GetReportUrl()">Report</a></div>
+		<br />
+		<div><a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a></div>
+		<br />
+		<div><a class="btn btn-secondary js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload Data</a></div>
+	</div>
+	<div class="col-sm-2">
 		<div class="h3">By Country</div>
 		@foreach (var country in Model.Countries)
 		{
@@ -21,16 +29,5 @@
 				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
 			</div>
 		}
-	</div>
-	<div class="col-sm-2">
-		<div class="row">
-			<div class="col">
-				<span class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Places</a></span>	
-			</div>
-			<div class="col text-right">
-				<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Save</a>
-				<a class="btn btn-danger js-confirm" href="@CartoViewModel.GetReloadUrl()">Load</a>
-			</div>
-		</div>
 	</div>
 </div>

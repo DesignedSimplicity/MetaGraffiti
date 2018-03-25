@@ -4,12 +4,9 @@
 @Html.Partial("_Nav")
 
 @{
-	var place = new CartoPlaceFormModel(Model.Place);
+	var place = Model.SelectedPlace;
+	var placeForm = new CartoPlaceFormModel(place);
 }
-
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
-
 
 <div id="map-container">
 	<div id="map">
@@ -24,28 +21,26 @@
 				@Model.ConfirmMessage
 			</div>
 		}
+		<form method="post" action="@CartoViewModel.GetSaveUrl()">
+			<input type="hidden" name="id" value="@place.Key" />
 			<div class="row">
-				<div class="col-sm-8">
-					<div class="h2">Editing: <span class="h3">@Model.Place.Name</span></div>
+				<div class="col-sm-10">
+					<div class="h2"><a href="@CartoViewModel.GetCountryUrl(place.Country)">@place.Country.Name</a> <span class="h2">: @(place.Name)</span></div>
 				</div>
-				<div class="col-sm-4 text-right">
-					<div class="h3">
-						<a href="@CartoViewModel.GetCountryUrl(Model.Place.Country)">@Model.Place.Country.Name</a>
-					</div>
+				<div class="col-sm-2 text-right">
+					<button class="btn btn-success" type="submit">Save</button>
 				</div>
 			</div>
-		<hr />
-		<form method="post" action="@CartoViewModel.GetSaveUrl()">
-			@Html.Partial("Forms/_Place", place)
+			<hr />
+			@Html.Partial("Forms/_Place", placeForm)
 			<hr />
 			<div class="row">
 				<div class="col">
-					<input type="hidden" name="id" value="@Model.Place.Key" />
-					<button class="btn btn-success" type="submit">Update</button>
+					<button class="btn btn-success" type="submit">Save</button>
 				</div>
 				<div class="col text-right">
-					<a class="btn btn-outline-warning js-confirm" href="@CartoViewModel.GetEditUrl(Model.Place.Key)">Reset</a>
-					<a class="btn btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(Model.Place.Key)">Delete</a>
+					<a class="btn btn-outline-warning js-confirm" href="@CartoViewModel.GetEditUrl(place.Key)">Revert</a>
+					<a class="btn btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(place.Key)">Delete</a>
 				</div>
 			</div>
 		</form>

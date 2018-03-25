@@ -12,6 +12,10 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		// ==================================================
 		// CartoPlaceInfo
+		public static HtmlString GetJson(CartoPlaceInfo place)
+		{
+			return new HtmlString(place.ToJson());
+		}
 		public static HtmlString GetJson(IEnumerable<CartoPlaceInfo> places)
 		{
 			var json = "";
@@ -41,7 +45,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		{
 			return new HtmlString(country.ToJson());
 		}
-
 		public static HtmlString GetJson(IEnumerable<GeoCountryInfo> countries)
 		{
 			var json = "";

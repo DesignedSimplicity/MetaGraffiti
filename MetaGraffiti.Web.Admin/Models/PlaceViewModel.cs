@@ -90,4 +90,17 @@ namespace MetaGraffiti.Web.Admin.Models
 		//public CartoPlaceInfo Locality { get; set; }
 		//public CartoPlaceInfo RegionPlace { get; set; }
 	}
+
+	// TODO: refactor name
+	public class CartoPlaceSearch
+	{
+		public string Name { get; set; }
+
+		public string Region { get; set; }
+
+		public string Country { get; set; }
+
+		public double? Latitude { get; set; }
+		public double? Longitude { get; set; }
+	}
 }

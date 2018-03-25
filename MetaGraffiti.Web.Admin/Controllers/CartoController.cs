@@ -61,8 +61,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.Country = GeoCountryInfo.Find(id);
-			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.Country.ISO2, PlaceType = placeType });			
+			model.SelectedCountry = GeoCountryInfo.Find(id);
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.SelectedCountry.ISO2, PlaceType = placeType });			
 
 			return View(model);
 		}
@@ -84,7 +84,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			var model = InitModel();
 
-			model.Place = _cartoPlaceService.GetPlace(key);
+			model.SelectedPlace = _cartoPlaceService.GetPlace(key);
 
 			return View("Place", model);
 		}
@@ -93,12 +93,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.Place = _cartoPlaceService.UpdatePlace(request);
+			model.SelectedPlace = _cartoPlaceService.UpdatePlace(request);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			return View("Place", model);
 		}
 
+		// TODO: make this a post only or get with confirmation
 		public ActionResult Delete(string id)
 		{
 			var key = id.ToUpperInvariant();
@@ -109,7 +110,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-
 		public ActionResult Persist()
 		{
 			_cartoPlaceService.Save();
@@ -118,9 +118,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return new RedirectResult(CartoViewModel.GetCartoUrl());
 		}
 
-		/// <summary>
-		/// Reloads all data from the CartoPlace file
-		/// </summary>
 		public ActionResult Reload()
 		{
 			_cartoPlaceService.Reload();
