@@ -1,45 +1,41 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Data;
-using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo.Info;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+using MetaGraffiti.Base.Modules.Carto.Data;
+using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
 	public class PlaceViewModel : AdminViewModel
 	{
+		// ==================================================
+		// Required
 		public List<int> Years { get; set; }
 		public List<GeoCountryInfo> Countries { get; set; }
 
+		// ==================================================
+		// Optional
 		public int? SelectedYear { get; set; }
 		public GeoCountryInfo SelectedCountry { get; set; }
 
-
-
-		public List<CartoPlaceInfo> ExistingPlaces { get; set; }
-
 		public List<CartoPlaceData> ImportPlaces { get; set; }
+		public List<PlaceReportModel> ReportPlaces { get; set; }
 
-		public List<PlaceModel> FilteredPlaces { get; set; }
-
-
-		public CartoPlaceInfo Place { get; set; }
-		public CartoPlaceSearch SearchCriteria { get; set; }
+		public CartoPlaceInfo SelectedPlace { get; set; }
+		public PlaceSearchModel SearchCriteria { get; set; }
 		public List<CartoPlaceInfo> SearchResults { get; set; }
 
 
 
-
-		public IEnumerable<PlaceModel> ListPlaces()
+		// ==================================================
+		// Helpers
+		public IEnumerable<PlaceReportModel> ListReportedPlaces()
 		{
-			return FilteredPlaces.OrderBy(x => x.Data.Country).ThenBy(x => x.Data.Name);
+			return ReportPlaces.OrderBy(x => x.Data.Country).ThenBy(x => x.Data.Name);
 		}
-
-
-
-
 
 		public bool IsSelected(int year)
 		{
@@ -54,7 +50,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
-		public string GetStatusCss(PlaceModel model)
+		public string GetStatusCss(PlaceReportModel model)
 		{
 			if (String.IsNullOrWhiteSpace(model.Data.Country))
 				return "table-danger";
@@ -65,34 +61,26 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
-		public HtmlString GetPlacesJson()
-		{
-			return JsonHelper.GetJson(SearchResults);
-		}
-
-
+		// ==================================================
+		// Navigation
 		public static string GetReportUrl(int year) { return $"/place/report/?year={year}"; }
 		public static string GetReportUrl(string country) { return $"/place/report/?country={country}"; }
 
 		public static string GetSearchUrl() { return "/place/search/"; }
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
 
-		public static string GetPreviewUrl(string id) { return $"/place/preview/{id}"; }
+		public static string GetPreviewUrl(string googlePlaceID, string text = "") { return $"/place/preview/{googlePlaceID}/?search={text}"; }
 
 		public static string GetCreateUrl() { return "/place/create/"; }
 	}
 
-	public class PlaceModel
+	public class PlaceReportModel
 	{
 		public CartoPlaceData Data { get; set; }
 		public CartoPlaceInfo Place { get; set; }
-
-		//public CartoPlaceInfo Locality { get; set; }
-		//public CartoPlaceInfo RegionPlace { get; set; }
 	}
 
-	// TODO: refactor name
-	public class CartoPlaceSearch
+	public class PlaceSearchModel
 	{
 		public string Name { get; set; }
 

@@ -5,14 +5,6 @@
 
 <div class="row">
 	<div class="col-sm-2">
-		<div class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Map All</a></div>
-		<div class="h2"><a href="@CartoViewModel.GetReportUrl()">Report</a></div>
-		<br />
-		<div><a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a></div>
-		<br />
-		<div><a class="btn btn-secondary js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload Data</a></div>
-	</div>
-	<div class="col-sm-2">
 		<div class="h3">By Country</div>
 		@foreach (var country in Model.Countries)
 		{
@@ -29,5 +21,26 @@
 				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
 			</div>
 		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Map All</a></div>
+		<div class="h2"><a href="@CartoViewModel.GetReportUrl()">Report</a></div>
+		<br />
+		@if (Model.HasChanges)
+		{
+			<div class="alert alert-warning">
+				There are unsaved changes
+			</div>
+		}
+		else if (Model.LastSaved.HasValue)
+		{
+			<div class="alert alert-success">
+				Saved at @Model.LastSaved.ToString()
+			</div>
+		}
+		<div><a class="btn btn-@(Model.HasChanges ? "" : "outline-")success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a></div>
+		<br />
+		<div><a class="btn btn-secondary js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload Data</a></div>
+		<br />
 	</div>
 </div>

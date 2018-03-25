@@ -1,11 +1,9 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Geo.Info;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Helpers;
+
+using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -17,6 +15,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GeoCountryInfo> Countries { get; set; }
 
 		public List<CartoPlaceInfo> Places { get; set; }
+
+		public bool HasChanges { get; set; }
+
+		public DateTime? LastSaved { get; set; }
 
 
 		// ==================================================

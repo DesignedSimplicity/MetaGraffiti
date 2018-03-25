@@ -1,0 +1,13 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+
+<form method="get" action="@PlaceViewModel.GetSearchUrl()">
+	<div class="form-group">
+		<input type="text" class="form-control" name="name" placeholder="Name" />
+	</div>
+	<div class="form-group">
+		<input type="text" class="form-control" name="country" placeholder="Country" />
+	</div>
+	<div class="form-group">
+		<button type="submit" class="btn btn-success">Search</button>
+	</div>
+</form>

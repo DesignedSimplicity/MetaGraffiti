@@ -14,6 +14,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class PlaceController : Controller
     {
+		// ==================================================
+		// Initialization
+
 		private CartoPlaceService _cartoPlaceService;
 		private TripSheetService _tripSheetService;
 		private GeoLookupService _geoLookupService;
@@ -22,9 +25,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_tripSheetService = ServiceConfig.TripSheetService;
+			_geoLookupService = ServiceConfig.GeoLookupService;
 		}
 
-		public PlaceViewModel InitModel()
+		private PlaceViewModel InitModel()
 		{
 			var model = new PlaceViewModel();
 
@@ -34,11 +38,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
+
+		// ==================================================
+		// Actions
+
 		public ActionResult Index()
         {
 			var model = InitModel();
-
-			// client side search: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
 
 			return View(model);
         }
@@ -50,11 +56,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedYear = year;
 			model.SelectedCountry = GeoCountryInfo.Find(country);
 
-			var places = new List<PlaceModel>();
+			var places = new List<PlaceReportModel>();
 			var import = _tripSheetService.ListPlaces(year, country);
 			foreach(var data in import)
 			{
-				var place = new PlaceModel();
+				var place = new PlaceReportModel();
 				place.Data = data;
 				places.Add(place);
 
@@ -67,7 +73,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					if (c != null) place.Place = _cartoPlaceService.FindPlace(c, data.Name, true);
 				}				
 			}
-			model.FilteredPlaces = places;
+			model.ReportPlaces = places;
 			model.ImportPlaces = import;
 
 			return View(model);
@@ -76,11 +82,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Searches google for places by name
 		/// </summary>
-		public ActionResult Search(CartoPlaceSearch search)
+		public ActionResult Search(PlaceSearchModel search)
 		{
 			var model = InitModel();
 
-			model.SearchCriteria = (search == null ? new CartoPlaceSearch() : search);
+			model.SearchCriteria = (search == null ? new PlaceSearchModel() : search);
 			model.SearchResults = new List<CartoPlaceInfo>();
 
 			var text = search.Name + " " + search.Country;
@@ -101,20 +107,23 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Displays a google location for import
 		/// </summary>
 		[HttpGet]
-		public ActionResult Preview(string id)
+		public ActionResult Preview(string id, string search = "")
 		{
 			var model = InitModel();
+
+			model.SearchCriteria = new PlaceSearchModel();
+			model.SearchCriteria.Name = search;
 
 			var place = _cartoPlaceService.FindByGooglePlaceID(id);
 			if (place != null)
 			{
-				model.Place = place;
+				model.SelectedPlace = place;
 				model.ConfirmMessage = "Place already exists!";
 			}
 			else
 			{
-				model.Place = _cartoPlaceService.LookupByPlaceID(id);
 				// TODO: backfill country and region if they are not set
+				model.SelectedPlace = _cartoPlaceService.LookupByPlaceID(id);
 			}
 
 			return View(model);

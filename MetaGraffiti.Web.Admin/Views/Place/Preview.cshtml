@@ -4,13 +4,9 @@
 @Html.Partial("_Nav")
 
 @{
-	var place = new CartoPlaceFormModel(Model.Place);
+	var place = Model.SelectedPlace;
+	var placeForm = new CartoPlaceFormModel(place);
 }
-
-
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
-
 
 <div id="map-container">
 	<div id="map">
@@ -20,25 +16,33 @@
 <div class="row">
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
-		{
-			<div class="alert alert-warning">
-				<span class="h4">@Model.ConfirmMessage</span>
-				<a href="@CartoViewModel.GetEditUrl(Model.Place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
+	{
+		<div class="alert alert-warning">
+			<span class="h4">@Model.ConfirmMessage</span>
+			<a href="@CartoViewModel.GetEditUrl(place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
+		</div>
+}
+		<div class="row">
+			<div class="col-sm-10">
+				<div class="h2"><a href="@PlaceViewModel.GetSearchUrl(Model.SearchCriteria.Name)">Search</a> <span class="h2">: @Model.SearchCriteria.Name</span></div>
 			</div>
-		}
+			<div class="col-sm-2 text-right">
+				<button class="btn btn-primary" type="submit">Create</button>
+			</div>
+		</div>
 		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
-			@Html.Partial("Forms/_Place", place)
+			@Html.Partial("Forms/_Place", placeForm)
 			<hr />
 			<div class="row">
 				<div class="col">
 					<button class="btn btn-primary" type="submit">Create</button>
 				</div>
 				<div class="col text-right">
-					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(Model.Place.GoogleKey)">Reset</a>
+					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(place.GoogleKey, Model.SearchCriteria.Name)">Revert</a>
 				</div>
 			</div>
 		</form>
 		<hr />
-		<textarea rows="10" class="w-100">@Model.Place.GetRawData()</textarea>
+		<textarea rows="10" class="w-100">@place.GetRawData()</textarea>
 	</div>
 </div>

@@ -24,9 +24,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
-		public CartoViewModel InitModel()
+		private CartoViewModel InitModel()
 		{
 			var model = new CartoViewModel();
+
+			model.LastSaved = _cartoPlaceService.LastSaved;
+			model.HasChanges = _cartoPlaceService.HasChanges;
 
 			model.Places = _cartoPlaceService.ListPlaces();
 

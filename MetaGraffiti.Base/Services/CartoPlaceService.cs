@@ -21,6 +21,8 @@ namespace MetaGraffiti.Base.Services
 		// Internals
 		private static string _uri = "";
 		private static bool _cached = false;
+		private static bool _dirty = false;
+		private static DateTime? _saved;
 		private static BasicCacheService<CartoPlaceInfo> _cache = new BasicCacheService<CartoPlaceInfo>();
 		private GoogleApiService _google = null;
 
@@ -35,9 +37,13 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Methods
 
+		public bool HasChanges => _dirty;
+		public DateTime? LastSaved => _saved;
+
 		public void Reload()
 		{
 			_cached = false;
+			_dirty = false;
 			_cache = new BasicCacheService<CartoPlaceInfo>();
 
 			Init(_uri);
@@ -64,6 +70,7 @@ namespace MetaGraffiti.Base.Services
 				}				
 				
 				_cached = true;
+				_dirty = false;
 			}
 		}
 
@@ -79,6 +86,9 @@ namespace MetaGraffiti.Base.Services
 
 				// write updated file
 				File.WriteAllBytes(_uri, data);
+
+				// update save timestamp
+				_saved = DateTime.Now;
 			}
 		}
 
@@ -248,6 +258,7 @@ namespace MetaGraffiti.Base.Services
 
 			_cache.Add(place);
 
+			_dirty = true;
 			return place;
 		}
 
@@ -257,6 +268,7 @@ namespace MetaGraffiti.Base.Services
 
 			_cache.Update(place.Key, place);
 
+			_dirty = true;
 			return place;
 		}
 

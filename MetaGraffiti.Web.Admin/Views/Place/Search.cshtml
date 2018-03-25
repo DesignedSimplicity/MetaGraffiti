@@ -6,9 +6,8 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
 <script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
+	var _places = @JsonHelper.GetJson(Model.SearchResults);
 	var _bounds = null;
-
-	var _places = @Model.GetPlacesJson();
 
 	$(document).ready(function () {
 		initMap();
@@ -19,18 +18,21 @@
 
 			var place = _places[i];
 			place.marker = markPoint(place.center.lat, place.center.lng, place.name, number);
+
+			var color = getMapColor(i);
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
 		}
 
 		if (_places.length > 0) fitBounds(_places[0].bounds);
 
-
-		$(".js-search-result").hover(function () {
+		$(".js-mappable-row").hover(function () {
 			if (_bounds) _bounds.setMap(null);
 
 			var index = $(this).index();
 			var place = _places[index];
 
-			_bounds = drawBounds(place.bounds);
+			var color = getMapColor(index);
+			_bounds = drawBounds(place.bounds, color);
 
 			for (i = 0; i < _places.length; i++) {
 				if (i == index) {
@@ -41,10 +43,7 @@
 			}
 		});
 
-		$(".js-search-result").click(function () {
-			$(".js-search-result").css("font-weight", "");
-			$(this).css("font-weight", "bold");
-
+		$(".js-mappable-row").click(function () {
 			var index = $(this).index();
 			var place = _places[index];
 			place.marker.setAnimation(null);
@@ -109,10 +108,11 @@
 					<th class="text-center">#</th>
 					<th>Name</th>
 					<th>Local Name</th>
-					<th>Display Name</th>
-					<th>Source Type</th>
+					<th>Display</th>
+					<th>Type</th>
 					<th>Locality</th>
 					<th>Region</th>
+					<th>Country</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -121,7 +121,7 @@
 					foreach (var p in Model.SearchResults)
 					{
 						var existing = (p.Key != p.GoogleKey);
-						<tr class="js-search-result @(existing ? " table-success" : "" )">
+						<tr class="js-mappable-row @(existing ? " table-success" : "" )">
 							<td class="text-center">@(++count)</td>
 							<td>
 								@if (existing)
@@ -130,14 +130,15 @@
 								}
 								else
 								{
-									<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey)">@p.Name</a>
+									<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
 								}
 							</td>
 							<td>@p.LocalName</td>
 							<td>@p.DisplayAs</td>
 							<td>@p.PlaceType</td>
 							<td>@p.Locality</td>
-							<td>@(p.Region == null ? "" : p.Region.RegionName) @(p.Country == null ? "" : p.Country.ISO2)</td>
+							<td>@(p.Region?.RegionName ?? "")</td>
+							<td>@p.Country.ISO2</td>
 						</tr>
 					}
 				}

@@ -23,7 +23,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		public string GoogleKey => _data.GoogleKey;
 		public string PlaceType => _data.PlaceType;
 
-		public string Name => _data.Name;
+		public string Name { get { return _data.Name; } set { _data.Name = value; } }
 		public string LocalName => _data.LocalName;
 		public string DisplayAs => _data.DisplayAs;
 		public string Description => _data.Description;
@@ -35,14 +35,15 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		public string Postcode => _data.Postcode;
 
 
-		public GeoCountryInfo Country => GeoCountryInfo.Find(_data.Country);
-		public GeoRegionInfo Region => GeoRegionInfo.Find(_data.Region);
+		public GeoCountryInfo Country { get { return GeoCountryInfo.Find(_data.Country); } set { _data.Country = (value == null ? "" : value.ISO2); } }
+		public GeoRegionInfo Region { get { return GeoRegionInfo.Find(_data.Region); } set { _data.Region = (value == null ? "" : value.RegionISO); } }
 
 		public GeoTimezoneInfo Timezone => null; // TODO: fix timezone
 
 
 		public IGeoLatLon Center => new GeoPosition(_data.CenterLatitude, _data.CenterLongitude);
 		public IGeoPerimeter Bounds => new GeoRectangle(_data.NorthLatitude, _data.WestLongitude, _data.SouthLatitude, _data.EastLongitude);
+
 
 
 		// TODO: move this to extensions or somewhere else
