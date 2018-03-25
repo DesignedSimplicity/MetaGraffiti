@@ -331,7 +331,7 @@
     <Content Include="Views\Place\Report.cshtml" />
     <Content Include="Views\Place\Index.cshtml" />
     <Content Include="Views\Place\Search.cshtml" />
-    <Content Include="Views\Place\Preview.cshtml" />
+    <Content Include="Views\Place\Create.cshtml" />
     <Content Include="Views\Shared\Forms\_Place.cshtml" />
     <Content Include="Views\Carto\Report.cshtml" />
     <Content Include="Views\Carto\Country.cshtml" />

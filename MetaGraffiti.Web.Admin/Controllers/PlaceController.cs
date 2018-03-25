@@ -126,7 +126,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				model.SelectedPlace = _cartoPlaceService.LookupByPlaceID(id);
 			}
 
-			return View(model);
+			return View("Create", model);
+		}
+
+		[HttpGet]
+		public ActionResult Create()
+		{
+			var model = InitModel();
+
+			model.SelectedPlace = new CartoPlaceInfo(new CartoPlaceData());
+
+			return View("Create", model);
 		}
 
 		[HttpPost]
@@ -139,7 +149,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			// show validation error messages
 			var model = InitModel();
 
-			return View(model);
+			return View("Create", model);
 		}
 	}
 }

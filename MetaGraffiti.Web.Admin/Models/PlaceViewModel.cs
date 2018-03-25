@@ -63,8 +63,9 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Navigation
+		public static string GetPlacesUrl() { return "/place/"; }
 		public static string GetReportUrl(int year) { return $"/place/report/?year={year}"; }
-		public static string GetReportUrl(string country) { return $"/place/report/?country={country}"; }
+		public static string GetReportUrl(string country = "") { return $"/place/report/?country={country}"; }
 
 		public static string GetSearchUrl() { return "/place/search/"; }
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
