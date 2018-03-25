@@ -36,8 +36,8 @@
 			</div>
 		}
 		<div class="btn-group">
-			<a class="btn btn-@(Model.HasChanges ? "" : "outline-")success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a>
-			<a class="btn btn-outline-secondary js-confirm" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
+			<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a>
+			<a class="btn btn-secondary" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
 		</div>
 		<br />
 		<br />
@@ -46,7 +46,6 @@
 		<br />
 		<div class="h3">Places</div>
 		<div class="h4"><a href="@PlaceViewModel.GetReportUrl()">Import...</a></div>
-		<div class="h4"><a href="@PlaceViewModel.GetSearchUrl()">Search...</a></div>
-		<div class="h4"><a href="@PlaceViewModel.GetCreateUrl()">Create...</a></div>
+		<div class="h4"><a href="@PlaceViewModel.GetSearchUrl()">Create...</a></div>
 	</div>
 </div>

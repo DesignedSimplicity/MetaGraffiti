@@ -129,16 +129,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View("Create", model);
 		}
 
-		[HttpGet]
-		public ActionResult Create()
-		{
-			var model = InitModel();
-
-			model.SelectedPlace = new CartoPlaceInfo(new CartoPlaceData());
-
-			return View("Create", model);
-		}
-
 		[HttpPost]
 		public ActionResult Create(CartoPlaceCreateRequest request)
 		{

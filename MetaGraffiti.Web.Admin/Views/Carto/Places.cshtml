@@ -46,6 +46,10 @@
 
 			fitBounds(place.bounds);
 		});
+
+		$(".js-reset-view").click(function (e) {
+			showWorld();
+		});
 	});
 </script>
 
@@ -56,7 +60,15 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2">All Places</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="h2">All Places</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<a class="btn btn-secondary js-reset-view" href="#">Reset View</a>
+			</div>
+		</div>
+
 		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
 				<tr>
@@ -70,21 +82,21 @@
 			</thead>
 			<tbody>
 				@{
-					var count = 0;
-					foreach (var p in Model.Places)
-					{
-						<tr class="js-mappable-row">
-							<td class="text-center">@(++count)</td>
-							<td>
-								<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
-								<span class="font-italic">@p.DisplayAs</span>
-							</td>
-							<td>@p.PlaceType</td>
-							<td>@p.Locality</td>
-							<td>@(p.Region?.RegionName ?? "")</td>
-							<td>@p.Country.ISO2</td>
-						</tr>
-					}
+				var count = 0;
+				foreach (var p in Model.Places)
+				{
+					<tr class="js-mappable-row">
+						<td class="text-center">@(++count)</td>
+						<td>
+							<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
+							<span class="font-italic">@p.DisplayAs</span>
+						</td>
+						<td>@p.PlaceType</td>
+						<td>@p.Locality</td>
+						<td>@(p.Region?.RegionName ?? "")</td>
+						<td>@p.Country.ISO2</td>
+					</tr>
+			}
 				}
 			</tbody>
 		</table>
