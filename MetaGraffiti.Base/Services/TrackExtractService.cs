@@ -17,22 +17,27 @@ namespace MetaGraffiti.Base.Services
 		// Internals
 		private static GeoLookupService _lookupService = new GeoLookupService(null);
 		private static BasicCacheService<TrackExtractData> _extracts = new BasicCacheService<TrackExtractData>();
-		private static TrackData _track = new TrackData();
+		private static TrackGroupData _trackGroup = new TrackGroupData();
+
 
 		// ==================================================
 		// Properties
-		public TrackData Track { get { return _track; } }
+		//public TrackData Track { get { return _track; } }
 
 
 		// ==================================================
 		// Methods
+		public TrackGroupData GetTrackGroup()
+		{
+			return _trackGroup;
+		}
 
 		/// <summary>
 		/// Resets current edit session
 		/// </summary>
 		public void ResetSession()
 		{
-			_track = new TrackData();
+			_trackGroup = new TrackGroupData();
 			_extracts = new BasicCacheService<TrackExtractData>();
 		}
 
@@ -66,9 +71,9 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Reads track level data from file
 		/// </summary>
-		public TrackData ReadTrack(string uri)
+		public TrackGroupData ReadTrack(string uri)
 		{
-			var track = new TrackData();
+			var track = new TrackGroupData();
 
 			var reader = new GpxFileReader(uri);
 
@@ -96,10 +101,10 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public void EditTrack(string uri)
 		{
-			_track = ReadTrack(uri);
+			_trackGroup = ReadTrack(uri);
 
 			// extract each track into edit session
-			foreach (var track in _track.Data.Tracks)
+			foreach (var track in _trackGroup.Data.Tracks)
 			{
 				var request = new TrackExtractCreateRequest();
 
@@ -116,23 +121,23 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Updates the track file level metadata
 		/// </summary>
-		public TrackData UpdateTrack(TrackUpdateRequest update)
+		public TrackGroupData UpdateTrack(TrackUpdateRequest update)
 		{
-			_track.Name = update.Name;
-			_track.Description = update.Description;
-			_track.Keywords = update.Keywords;
+			_trackGroup.Name = update.Name;
+			_trackGroup.Description = update.Description;
+			_trackGroup.Keywords = update.Keywords;
 
-			_track.Url = update.Url; // TODO: make sure url is prefixed with http/s
-			_track.UrlName = update.UrlName;
+			_trackGroup.Url = update.Url; // TODO: make sure url is prefixed with http/s
+			_trackGroup.UrlName = update.UrlName;
 
-			_track.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
-			_track.Region = _lookupService.SearchRegions(update.Region, _track.Country).FirstOrDefault();
-			_track.Location = update.Location;
+			_trackGroup.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
+			_trackGroup.Region = _lookupService.SearchRegions(update.Region, _trackGroup.Country).FirstOrDefault();
+			_trackGroup.Location = update.Location;
 
-			_track.Timezone = GeoTimezoneInfo.Find(update.Timezone);
-			if (_track.Timezone == null && _track.Country != null) _track.Timezone = _lookupService.GuessTimezone(_track.Country);
+			_trackGroup.Timezone = GeoTimezoneInfo.Find(update.Timezone);
+			if (_trackGroup.Timezone == null && _trackGroup.Country != null) _trackGroup.Timezone = _lookupService.GuessTimezone(_trackGroup.Country);
 
-			return _track;
+			return _trackGroup;
 		}
 
 		/// <summary>
@@ -269,11 +274,11 @@ namespace MetaGraffiti.Base.Services
 			var writer = new GpxFileWriter();
 
 			writer.SetVersion(version);
-			writer.WriteHeader(_track);
+			writer.WriteHeader(_trackGroup);
 
 			if (version == GpxSchemaVersion.Version1_1)
 			{
-				writer.WriteMetadata(_track.Timezone.TZID, _track.Country.Name, _track.Region?.RegionName ?? "");
+				writer.WriteMetadata(_trackGroup.Timezone.TZID, _trackGroup.Country.Name, _trackGroup.Region?.RegionName ?? "");
 			}
 
 			foreach (var track in ListExtracts())
@@ -287,7 +292,7 @@ namespace MetaGraffiti.Base.Services
 		private byte[] GenerateKML()
 		{
 			var writer = new KmlFileWriter();
-			writer.WriteHeader(_track.Name, _track.Description);
+			writer.WriteHeader(_trackGroup.Name, _trackGroup.Description);
 
 			foreach (var track in ListExtracts())
 			{
@@ -311,34 +316,34 @@ namespace MetaGraffiti.Base.Services
 		private void InitTrackMetadata(TrackExtractData extract)
 		{
 			// set initial name to source track
-			if (String.IsNullOrWhiteSpace(_track.Name)) _track.Name = extract.Name;
+			if (String.IsNullOrWhiteSpace(_trackGroup.Name)) _trackGroup.Name = extract.Name;
 
 			// set initial timestamp in UTC_track.Timestamp
 			var point = extract.Points.FirstOrDefault();
-			if (_track.Timestamp == null) _track.Timestamp = point.Timestamp;
+			if (_trackGroup.Timestamp == null) _trackGroup.Timestamp = point.Timestamp;
 
 			// auto select country and region if identifiable
-			if (_track.Country == null)
+			if (_trackGroup.Country == null)
 			{
 				var countries = GeoCountryInfo.ListByLocation(point);
-				if (countries.Count() == 1) _track.Country = countries.First();
+				if (countries.Count() == 1) _trackGroup.Country = countries.First();
 			}
-			if (_track.Region == null)
+			if (_trackGroup.Region == null)
 			{
 				var regions = GeoRegionInfo.ListByLocation(point);
 				if (regions.Count() == 1)
 				{
 					var region = regions.First();
-					if (_track.Country == null || _track.Country.IsSame(region.Country))
+					if (_trackGroup.Country == null || _trackGroup.Country.IsSame(region.Country))
 					{
-						_track.Region = region;
-						_track.Country = region.Country;
+						_trackGroup.Region = region;
+						_trackGroup.Country = region.Country;
 					}
 				}
 			}
 
 			// set default for countries with single timezone
-			if (_track.Timezone == null && _track.Country != null) _track.Timezone = new GeoLookupService(null).GuessTimezone(_track.Country);
+			if (_trackGroup.Timezone == null && _trackGroup.Country != null) _trackGroup.Timezone = new GeoLookupService(null).GuessTimezone(_trackGroup.Country);
 		}
 
 		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackFilterBase filter)
@@ -356,7 +361,7 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
-	public class TrackData : IGpxFileHeader
+	public class TrackGroupData : IGpxFileHeader
 	{
 		public GpxFileData Data { get; set; }
 

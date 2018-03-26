@@ -138,7 +138,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			// TODO: move this into TrailDataService
-			var track = _trackExtractService.Track;
+			var track = _trackExtractService.GetTrackGroup();
 			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
 			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
 			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");

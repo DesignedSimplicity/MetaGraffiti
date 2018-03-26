@@ -14,12 +14,54 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TrackViewModel : AdminViewModel
 	{
-		public DirectoryInfo Directory { get; set; }
+		// ==================================================
+		// Required
+		public DirectoryInfo TrackSourceRoot { get; set; }
+		public DirectoryInfo SelectedDirectory { get; set; }
+
+		public TrackGroupData TrackGroup { get; set; }
+		public List<TrackExtractData> TrackExtracts { get; set; }
+
+
+		// ==================================================
+		// Optional
 		public List<TrackFileModel> Sources { get; set; }
 
-		public TrackData Track { get; set; }
 
-		public List<TrackExtractData> Extracts { get; set; }
+		// ==================================================
+		// Helpers
+		public bool IsSelected(DirectoryInfo dir)
+		{
+			if (SelectedDirectory == null || dir == null) return false;
+
+			return (String.Compare(SelectedDirectory.FullName.TrimEnd('\\'), dir.FullName.TrimEnd('\\'), true) == 0);
+		}
+		public bool IsAncestor(DirectoryInfo dir)
+		{
+			if (SelectedDirectory == null || dir == null) return false;
+
+			var uri = SelectedDirectory.FullName.TrimEnd('\\') + '\\';
+			return uri.StartsWith(dir.FullName.TrimEnd('\\') + '\\', StringComparison.InvariantCultureIgnoreCase);
+		}
+
+
+		// ==================================================
+		// Navigation
+
+
+
+		// ==================================================
+		// ==================================================
+		// ==================================================
+		// ==================================================
+
+		public DirectoryInfo Directory { get { return SelectedDirectory; } }
+
+		
+
+		
+
+		
 
 		public TrackExtractData SelectedExtract { get; set; }
 		public TrackFileModel SelectedSource { get; set; }
@@ -29,14 +71,14 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public DateTime StartTime(TrackExtractData track)
 		{
-			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
+			var timezone = TrackGroup.Timezone ?? GeoTimezoneInfo.UTC;
 			var time = track.Points.FirstOrDefault()?.Timestamp.Value ?? DateTime.MinValue;
 			return timezone.FromUTC(time);
 		}
 
 		public DateTime FinishTime(TrackExtractData track)
 		{
-			var timezone = Track.Timezone ?? GeoTimezoneInfo.UTC;
+			var timezone = TrackGroup.Timezone ?? GeoTimezoneInfo.UTC;
 			var time = track.Points.LastOrDefault()?.Timestamp.Value ?? DateTime.MaxValue;
 			return timezone.FromUTC(time);
 		}
@@ -100,9 +142,9 @@ namespace MetaGraffiti.Web.Admin.Models
 				return "danger";
 		}
 
-		public bool IsTimezoneValid { get { return Track.Timezone != null && Track.Timezone.Key != "UTC;"; } }
-		public bool IsCountryValid { get { return Track.Country != null; } }
-		public bool IsRegionValid { get { return IsCountryValid && Track.Country.HasRegions && Track.Region != null; } }
+		public bool IsTimezoneValid { get { return TrackGroup.Timezone != null && TrackGroup.Timezone.Key != "UTC;"; } }
+		public bool IsCountryValid { get { return TrackGroup.Country != null; } }
+		public bool IsRegionValid { get { return IsCountryValid && TrackGroup.Country.HasRegions && TrackGroup.Region != null; } }
 
 
 		// TODO: consolidate JSON
@@ -127,10 +169,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		// TODO: consolidate JSON
 		public HtmlString GetTrackJson()
 		{
-			if (Extracts == null || Extracts.Count == 0) new HtmlString("[]");
+			if (TrackExtracts == null || TrackExtracts.Count == 0) new HtmlString("[]");
 
 			JArray list = new JArray();
-			foreach (var track in Extracts)
+			foreach (var track in TrackExtracts)
 			{
 				dynamic t = new JObject();
 				t.id = track.ID;
@@ -175,7 +217,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public string FileName { get; set; }
 		public string Directory { get; set; }
 
-		public TrackData Metadata { get; set; }
+		public TrackGroupData Metadata { get; set; }
 
 		public TimeSpan Elapsed { get; set; }
 		public double Distance { get; set; }
@@ -197,7 +239,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			if (distance < 1)
 				return "danger";
 			else if (distance > 50)
-				return "warning";
+				return "primary";
 			else
 				return "success";
 		}

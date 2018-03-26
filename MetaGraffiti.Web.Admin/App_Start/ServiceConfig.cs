@@ -15,12 +15,36 @@ namespace MetaGraffiti.Web.Admin
 
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 		private static GeoLookupService _geoLookupService = new GeoLookupService(_googleApiService);
-		private static TripSheetService _tripSheetService;
 		private static CartoPlaceService _cartoPlaceService;
+		private static TripSheetService _tripSheetService;
+		private static TrailDataService _trailDataService;
 
 		public static GeoLookupService GeoLookupService
 		{
 			get { return _geoLookupService; }
+		}
+
+		public static TrailDataService TrailDataService
+		{
+			get
+			{
+				// unlocked check again current cache
+				if (_trailDataService != null) return _trailDataService;
+
+				lock (_lock)
+				{
+					// recheck after lock expires
+					if (_trailDataService != null) return _trailDataService;
+
+					// create and initalize service as needed
+					var service = new TrailDataService();
+					service.Init(AutoConfig.TrailSourceUri);
+
+					// update shared static resource
+					_trailDataService = service;
+					return _trailDataService;
+				}
+			}
 		}
 
 		public static TripSheetService TripSheetService

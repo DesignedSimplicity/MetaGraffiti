@@ -26,7 +26,7 @@
 	</form>
 </div>
 <div class="clearfix"></div>
-<br />
+<hr />
 <div>
 	@if ((Model.Sources?.Count ?? 0) > 0)
 	{
@@ -74,6 +74,7 @@
 								{
 									<span class="badge badge-pill badge-success">Loop</span>
 								}
+
 								@if (source.IsBike)
 								{
 									<span class="badge badge-pill badge-info">Bike</span>
@@ -91,9 +92,9 @@
 									<span class="badge badge-pill badge-danger">Bad</span>
 								}
 							</td>
-							<td class="font-weight-bold">@source.Elapsed.TotalHours.ToString("0.0")</td>
-							<td class="font-weight-bold text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
-							<td class="@(source.Metadata.Country == null ? "table-danger" : "")">@(source.Metadata.Country?.Name ?? "")</td>
+							<td>@source.Elapsed.TotalHours.ToString("0.0")</td>
+							<td class="text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
+							<td>@source.Metadata.Country.Name</td>
 							<td>
 								@foreach (var region in source.Regions)
 								{

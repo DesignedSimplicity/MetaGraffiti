@@ -13,6 +13,7 @@ using MetaGraffiti.Base.Services.External;
 namespace MetaGraffiti.Base.Services
 {
 	// TODO: refactor this into a general GeoGraffiti service layer
+	// TODO: seperate out the base lookup from the calls that require google api
 	public class GeoLookupService
 	{
 		// ==================================================

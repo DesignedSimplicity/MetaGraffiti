@@ -22,7 +22,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
-		private TrackExtractService _trackExtractService;
+		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
 		private GeoLookupService _geoLookupService;
 		private TrailDataService _trailDataService;
@@ -31,18 +31,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_geoLookupService = ServiceConfig.GeoLookupService;
-
-			_trackExtractService = new TrackExtractService();
-			_trailDataService = new TrailDataService();
-			_trailDataService.Init(AutoConfig.TrailSourceUri);
+			_trailDataService = ServiceConfig.TrailDataService;
 		}
 
 		private TrackViewModel InitModel()
 		{
 			var model = new TrackViewModel();
 
-			model.Track = _trackExtractService.Track;
-			model.Extracts = _trackExtractService.ListExtracts();
+			model.TrackSourceRoot = new DirectoryInfo(AutoConfig.TrackSourceUri);
+
+			model.TrackGroup = _trackExtractService.GetTrackGroup();
+			model.TrackExtracts = _trackExtractService.ListExtracts();
 
 			return model;
 		}
@@ -53,35 +52,28 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Index()
 		{
-			// TODO: create landing page
-			return Browse(AutoConfig.TrackSourceUri);
+			var model = InitModel();
+
+			return Browse(model.TrackSourceRoot.FullName);
 		}
 
-		/// <summary>
-		/// Lists any GPX files that had an error loading
-		/// </summary>
-		public ActionResult Debug()
-		{
-			// TODO: create GPX debug process
-			var model = InitModel();
-			return View(model);
-		}
+
 
 		/// <summary>
 		/// Displays a list of GPX files in referenced directory path
 		/// </summary>
 		public ActionResult Browse(string uri)
 		{
-			// TODO: move this into a (new?) service
 			var model = InitModel();
-			
-			var dir = new DirectoryInfo(uri);
-			model.Directory = dir;
-			if (!dir.Exists)
-			{
-				model.ErrorMessages.Add($"Directory does not exist! {uri}");
-				return View(model);
-			}
+
+			var path = uri.TrimEnd('\\') + '\\';
+			var dir = new DirectoryInfo(path);
+			if (!dir.Exists) throw new Exception($"Path {path} does not exist");
+
+			var root = model.TrackSourceRoot.FullName.TrimEnd('\\') + '\\';
+			if (!path.StartsWith(root)) throw new Exception($"Path {path} is not in root {root}");
+
+			model.SelectedDirectory = dir;
 
 			model.Sources = new List<TrackFileModel>();
 			foreach (var file in dir.GetFiles("*.gpx"))
@@ -243,7 +235,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Export(string format)
 		{
 			var data = _trackExtractService.CreateTrackFile(format);
-			var name = _trackExtractService.Track.Name;
+			var name = _trackExtractService.GetTrackGroup().Name;
 
 			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}

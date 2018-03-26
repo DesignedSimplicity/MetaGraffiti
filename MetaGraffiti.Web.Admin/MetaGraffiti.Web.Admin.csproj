@@ -337,6 +337,8 @@
     <Content Include="Views\Carto\Country.cshtml" />
     <Content Include="Views\Shared\Widgets\GooglePlaces.cshtml" />
     <Content Include="Views\Shared\Widgets\SearchPlaces.cshtml" />
+    <Content Include="Views\Track\Index.cshtml" />
+    <Content Include="Views\Track\_Dir.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
