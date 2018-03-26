@@ -57,8 +57,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return Browse(model.TrackSourceRoot.FullName);
 		}
 
-
-
 		/// <summary>
 		/// Displays a list of GPX files in referenced directory path
 		/// </summary>
@@ -128,8 +126,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var extract = _trackExtractService.PrepareExtract(uri);
 			model.SelectedExtract = extract;
 
-			var source = InitTrackFileModel(new FileInfo(uri));
+			var file = new FileInfo(uri);
+			var source = InitTrackFileModel(file);
 			model.SelectedSource = source;
+
+			model.SelectedDirectory = file.Directory;
 
 			return View(model);
 		}
@@ -261,6 +262,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackFileModel InitTrackFileModel(FileInfo file)
 		{
+			// TODO: show all possible countries
+			// TODO: use track bounds to find places
+
 			var source = new TrackFileModel();
 			source.Uri = file.FullName;
 			source.FileName = file.Name;

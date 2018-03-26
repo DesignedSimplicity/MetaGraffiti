@@ -28,7 +28,7 @@
 					<div class="h2"><a href="@CartoViewModel.GetCountryUrl(place.Country)">@place.Country.Name</a> <span class="h2">: @(place.Name)</span></div>
 				</div>
 				<div class="col-sm-2 text-right">
-					<button class="btn btn-success" type="submit">Save</button>
+					<button class="btn btn-success" type="submit">Update</button>
 				</div>
 			</div>
 			<hr />
@@ -36,13 +36,20 @@
 			<hr />
 			<div class="row">
 				<div class="col">
-					<button class="btn btn-success" type="submit">Save</button>
+					<button class="btn btn-success" type="submit">Update</button>
 				</div>
 				<div class="col text-right">
 					<a class="btn btn-outline-warning js-confirm" href="@CartoViewModel.GetEditUrl(place.Key)">Revert</a>
 					<a class="btn btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(place.Key)">Delete</a>
 				</div>
 			</div>
+			<hr />
+			@if (Model.HasChanges)
+			{
+				<div class="alert alert-info font-weight-bold">
+					<span class="h4">There are unsaved changes!</span> <a class="float-right btn btn-sm btn-info" href="@CartoViewModel.GetPersistUrl()">Persist Places</a>
+				</div>
+			}
 		</form>
 	</div>
 </div>

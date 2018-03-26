@@ -62,17 +62,6 @@
 						</div>
 					</div>
 				</form>
-				<div>
-					<div class="h4">
-						Places:
-						@foreach (var place in Model.SelectedSource.Places)
-						{
-							<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-						}
-						<a class="btn btn-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.First())">Lookup Start</a>
-						<a class="btn btn-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.Last())">Lookup Finish</a>
-					</div>
-				</div>
 			</div>
 			<div class="col-sm-6">
 				<div class="h4">
@@ -89,7 +78,19 @@
 			</div>
 		</div>
 		<hr />
-		<table class="table table-striped table-bordered table-sm">
+		<div class="h5">Source: <a href="@TrackViewModel.GetBrowseUrl(Model.SelectedDirectory.FullName)">@Model.SelectedDirectory.FullName</a></div>
+		<hr />
+		<div class="h4">
+			Places:
+			@foreach (var place in Model.SelectedSource.Places)
+			{
+				<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+			}
+			<a class="btn btn-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.First())">Lookup Start</a>
+			<a class="btn btn-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.Last())">Lookup Finish</a>
+		</div>
+		<hr />
+		<table class="table table-sm table-striped table-bordered small">
 			<thead>
 				<tr class="thead-dark">
 					<th>Point #</th>
@@ -112,7 +113,11 @@
 						<tr class="js-point-row">
 							<td>@((index + 1).ToString("0000"))</td>
 							<td>@p.Timestamp.Value.ToString("yyyy-MM-dd") @p.Timestamp.Value.ToString("hh:mm:ss tt")</td>
-							<td>@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")</td>
+							<td>
+								<a href="@PlaceViewModel.GetSearchUrl(p)">
+									@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")
+								</a>
+							</td>
 							<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
 							<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
 							<td class="text-center table-@Model.GetSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>

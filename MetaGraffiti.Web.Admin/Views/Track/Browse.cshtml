@@ -5,7 +5,35 @@
 
 <div>
 	<div class="float-left">
-		@Html.Partial("_Dir", Model)
+		<span class="h2">
+			@if (Model.IsSelected(Model.TrackSourceRoot))
+			{
+				<span>Tracks</span>
+			}
+			else
+			{
+				<a href="@TrackViewModel.GetTrackUrl()">Tracks</a>
+			}
+		</span>
+		<span>
+			@foreach (var year in Model.TrackSourceRoot.GetDirectories())
+			{
+				<span class="h3">
+					\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-success" : "")" href="@TrackViewModel.GetBrowseUrl(year.FullName)">@year.Name</a>
+					@if (Model.IsSelected(year) || Model.IsAncestor(year))
+					{
+						var months = (Model.IsSelected(year) ? Model.SelectedDirectory.GetDirectories() : Model.SelectedDirectory.Parent.GetDirectories());
+						<span class="h4">
+							@foreach (var month in months)
+							{
+								<span>\<a class="@(Model.IsSelected(month) ? "text-success" : "")" href="@TrackViewModel.GetBrowseUrl(month.FullName)">@month.Name</a></span>
+							}
+						</span>
+						<span>&nbsp;</span>
+					}
+				</span>
+			}
+		</span>
 	</div>
 	<form class="form-inline float-right" method="get" action="@TrackViewModel.GetBrowseUrl("")">
 		<div class="input-group">
@@ -39,8 +67,9 @@
 					<td class="text-center">Date</td>
 					<td class="text-center">Time</td>
 					<td>Labels</td>
-					<td>Time (hours)</td>
 					<td>Distance (KM)</td>
+					<td>Time (hours)</td>
+					<td>Speed (KM/H)</td>
 					<td>Country</td>
 					<td>Regions</td>
 					<td>Places</td>
@@ -52,72 +81,73 @@
 					var index = 0;
 					foreach (var source in Model.Sources.OrderBy(x => x.LocalTime))
 					{
-						<tr>
-							<td>@(index + 1)</td>
-							<td>
-								<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
-							</td>
-							<td>
-								@if (source.Trail != null)
-								{
-									<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
-								}
-							</td>
-							<td class="text-center">@source.LocalTime.ToString("yyyy-MM-dd")</td>
-							<td class="text-center">@source.LocalTime.ToShortTimeString()</td>
-							<td>
-								@if (source.IsShort)
-								{
-									<span class="badge badge-pill badge-secondary">Short</span>
-								}
-								@if (source.IsLoop)
-								{
-									<span class="badge badge-pill badge-success">Loop</span>
-								}
-								@if (source.IsBike)
-								{
-									<span class="badge badge-pill badge-info">Bike</span>
-								}
-								@if (source.IsWalk)
-								{
-									<span class="badge badge-pill badge-primary">Walk</span>
-								}
-								@if (source.IsFast)
-								{
-									<span class="badge badge-pill badge-warning">Fast</span>
-								}
-								@if (source.IsBad)
-								{
-									<span class="badge badge-pill badge-danger">Bad</span>
-								}
-							</td>
-							<td class="font-weight-bold">@source.Elapsed.TotalHours.ToString("0.0")</td>
-							<td class="font-weight-bold text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
-							<td class="@(source.Metadata.Country == null ? "table-danger" : "")">@(source.Metadata.Country?.Name ?? "")</td>
-							<td>
-								@foreach (var region in source.Regions)
-								{
-									<div>@region.RegionName</div>
-								}
-							</td>
-							<td class="small">
-								@foreach (var place in source.Places)
-								{
-									<div>@place.Name</div>
-								}
-							</td>
-							<td>
-								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.Uri)">Preview</a>
-								@if (source.Trail != null)
-								{
-									<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
-								}
-								else
-								{
-									<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.Uri)">Import</a>
-								}
-							</td>
-						</tr>
+				<tr>
+					<td>@(index + 1)</td>
+					<td>
+						<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
+					</td>
+					<td>
+						@if (source.Trail != null)
+		{
+				<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
+}
+					</td>
+					<td class="text-center">@source.LocalTime.ToString("yyyy-MM-dd")</td>
+					<td class="text-center">@source.LocalTime.ToShortTimeString()</td>
+					<td>
+						@if (source.IsShort)
+		{
+				<span class="badge badge-pill badge-secondary">Short</span>
+}
+						@if (source.IsLoop)
+		{
+				<span class="badge badge-pill badge-success">Loop</span>
+}
+						@if (source.IsBike)
+		{
+				<span class="badge badge-pill badge-info">Bike</span>
+}
+						@if (source.IsWalk)
+		{
+				<span class="badge badge-pill badge-primary">Walk</span>
+}
+						@if (source.IsFast)
+		{
+				<span class="badge badge-pill badge-warning">Fast</span>
+}
+						@if (source.IsBad)
+		{
+				<span class="badge badge-pill badge-danger">Bad</span>
+}
+					</td>
+					<td class="font-weight-bold text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
+					<td class="font-weight-bold">@source.Elapsed.TotalHours.ToString("0.0")</td>
+					<td></td>
+					<td class="@(source.Metadata.Country == null ? "table-danger" : "")">@(source.Metadata.Country?.Name ?? "")</td>
+					<td>
+						@foreach (var region in source.Regions)
+		{
+				<div>@region.RegionName</div>
+}
+					</td>
+					<td class="small">
+						@foreach (var place in source.Places)
+		{
+				<div>@place.Name</div>
+}
+					</td>
+					<td>
+						<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.Uri)">Preview</a>
+						@if (source.Trail != null)
+		{
+				<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
+}
+else
+{
+				<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.Uri)">Import</a>
+}
+					</td>
+				</tr>
 						index++;
 					}
 				}

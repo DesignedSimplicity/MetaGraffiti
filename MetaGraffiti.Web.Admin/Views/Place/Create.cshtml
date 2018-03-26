@@ -16,21 +16,21 @@
 <div class="row">
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
-	{
-		<div class="alert alert-warning">
-			<span class="h4">@Model.ConfirmMessage</span>
-			<a href="@CartoViewModel.GetEditUrl(place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
-		</div>
-}
-		<div class="row">
-			<div class="col-sm-10">
-				<div class="h2"><a href="@PlaceViewModel.GetSearchUrl(Model.SearchCriteria.Name)">Search</a> <span class="h2">: @Model.SearchCriteria.Name</span></div>
+		{
+			<div class="alert alert-warning">
+				<span class="h4">@Model.ConfirmMessage</span>
+				<a href="@CartoViewModel.GetEditUrl(place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
 			</div>
-			<div class="col-sm-2 text-right">
-				<button class="btn btn-primary" type="submit">Create</button>
-			</div>
-		</div>
+		}
 		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
+			<div class="row">
+				<div class="col-sm-10">
+					<div class="h2"><a href="@PlaceViewModel.GetSearchUrl(Model.SearchCriteria.Name)">Search</a> <span class="h2">: @Model.SearchCriteria.Name</span></div>
+				</div>
+				<div class="col-sm-2 text-right">
+					<button class="btn btn-primary" type="submit">Create</button>
+				</div>
+			</div>
 			@Html.Partial("Forms/_Place", placeForm)
 			<hr />
 			<div class="row">

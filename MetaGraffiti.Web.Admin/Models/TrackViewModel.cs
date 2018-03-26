@@ -111,8 +111,10 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public string GetDOPCss(decimal? dop)
 		{
-			var d = dop ?? 99;
-			if (d < 3)
+			var d = dop ?? 0;
+			if (d == 0)
+				return "secondary";
+			else if (d < 3)
 				return "success";
 			else if (d < 5)
 				return "warning";
@@ -122,19 +124,23 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public string GetSpeedCss(decimal? speed)
 		{
-			var s = speed ?? 9;
-			if (s < 1)
+			var s = speed ?? 0;
+			if (s == 0)
+				return "danger";
+			if (s <= 2)
 				return "success";
-			else if (s < 2)
+			else if (s <= 4)
 				return "warning";
 			else
-				return "danger";
+				return "primary";
 		}
 
 		public string GetSatsCss(int? sats)
 		{
 			var s = sats ?? 0;
-			if (s > 10)
+			if (s == 0)
+				return "secondary";
+			else if (s > 10)
 				return "success";
 			else if (s > 5)
 				return "warning";

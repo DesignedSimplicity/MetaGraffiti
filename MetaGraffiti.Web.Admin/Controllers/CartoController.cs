@@ -99,6 +99,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedPlace = _cartoPlaceService.UpdatePlace(request);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
+			model.HasChanges = true;
+
 			return View("Place", model);
 		}
 
