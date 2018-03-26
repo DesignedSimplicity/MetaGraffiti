@@ -2,16 +2,28 @@
 @model AdminViewModel
 <div class="jumbotron">
 	<div class="container">
-		<h1 class="display-1"><span class="font-weight-bold">Meta</span>Graffiti</h1>
-		<div>
-			@foreach (var area in Model.Areas)
-			{
-				if (area != AdminAreas.Home)
-				{
-					<a class="h1" href="/@(area.ToString())">@area.ToString()</a>
-					<span>&nbsp;</span>
-				}
-			}
+		<div class="row">
+			<div class="col-md-8">
+				<h1 class="display-1"><span class="font-weight-bold">Meta</span>Graffiti</h1>
+				<div>
+					@foreach (var area in Model.Areas)
+					{
+						if (area != AdminAreas.Home)
+						{
+							<a class="h1" href="/@(area.ToString())">@area.ToString()</a>
+							<span>&nbsp;</span>
+						}
+					}
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="mt-3">
+					<a href="/place/" class="text-primary"><span class="display-4">Create Place</span></a>
+				</div>
+				<div class="mt-3">
+					<a href="/track/" class="text-success"><span class="display-4">Import Track</span></a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -26,10 +38,13 @@
 			<div><a href="/geo/" class="text-info"><div class="display-1"><span class="font-weight-bold">Geo</span>Graffiti</div> <div class="h1">Manage Core</div></a></div>
 		</div>
 		<div class="col-md-4">
-			<div><a href="/ortho/" class="text-secondary"><div class="display-3"><span class="font-weight-bold">Ortho</span>Graffiti</div></a></div>
-			<div><a href="/travel/" class="text-primary"><span class="display-4">Record Trip</span></a></div>
-			<div><a href="/track/" class="text-success"><span class="display-4">Import Track</span></a></div>
-			<div><a href="/place/" class="text-info"><span class="display-4">Create Place</span></a></div>
+			<div><a href="/ortho/" class="text-secondary"><div class="display-3"><span class="font-weight-bold">Ortho</span>Graffiti</div><div class="h3">Persist Information</div></a></div>
+			<hr />
+			<div><a href="/chrono/" class="text-secondary"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Assemble Timeline</div></a></div>
+			<hr />
+			<div><a href="/choro/" class="text-secondary"><div class="display-3"><span class="font-weight-bold">Choro</span>Graffiti</div><div class="h3">Describe Regions</div></a></div>
+			<hr />
+			<div><a href="/bio/" class="text-secondary"><div class="display-3"><span class="font-weight-bold">Bio</span>Graffiti</div><div class="h3">Document History</div></a></div>
 		</div>
 	</div>
 </div>

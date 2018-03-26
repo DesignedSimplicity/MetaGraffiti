@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
@@ -22,6 +22,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<TrackExtractData> Extracts { get; set; }
 
 		public TrackExtractData SelectedExtract { get; set; }
+		public TrackFileModel SelectedSource { get; set; }
 
 
 
@@ -189,7 +190,18 @@ namespace MetaGraffiti.Web.Admin.Models
 		public TopoTrailInfo Trail { get; set; }
 
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
-		public List<GeoLocationInfo> Locations { get; set; } = new List<GeoLocationInfo>();
+		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();
+
+		public string GetDistanceCss(double distance)
+		{
+			if (distance < 1)
+				return "danger";
+			else if (distance > 50)
+				return "warning";
+			else
+				return "success";
+		}
+
 
 		public string LocationText
 		{

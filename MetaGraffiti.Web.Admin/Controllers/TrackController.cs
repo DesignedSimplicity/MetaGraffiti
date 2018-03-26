@@ -10,6 +10,7 @@ using MetaGraffiti.Web.Admin.Models;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Carto.Info;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -18,9 +19,23 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	/// </summary>
 	public class TrackController : Controller
 	{
-		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private GeoLookupService _geoLookupService = new GeoLookupService(null);
-		private TrailDataService _trailDataService = new TrailDataService();
+		// ==================================================
+		// Initialization
+
+		private TrackExtractService _trackExtractService;
+		private CartoPlaceService _cartoPlaceService;
+		private GeoLookupService _geoLookupService;
+		private TrailDataService _trailDataService;
+
+		public TrackController()
+		{
+			_cartoPlaceService = ServiceConfig.CartoPlaceService;
+			_geoLookupService = ServiceConfig.GeoLookupService;
+
+			_trackExtractService = new TrackExtractService();
+			_trailDataService = new TrailDataService();
+			_trailDataService.Init(AutoConfig.TrailSourceUri);
+		}
 
 		private TrackViewModel InitModel()
 		{
@@ -31,6 +46,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return model;
 		}
+
+
+		// ==================================================
+		// Actions
 
 		public ActionResult Index()
 		{
@@ -54,12 +73,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Browse(string uri)
 		{
 			// TODO: move this into a (new?) service
-
 			var model = InitModel();
-
-			_trailDataService.Init(AutoConfig.TrailSourceUri);
-			var trails = _trailDataService.ListTrails();
-
+			
 			var dir = new DirectoryInfo(uri);
 			model.Directory = dir;
 			if (!dir.Exists)
@@ -71,53 +86,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Sources = new List<TrackFileModel>();
 			foreach (var file in dir.GetFiles("*.gpx"))
 			{
-				var source = new TrackFileModel();
-				source.Uri = file.FullName;
-				source.FileName = file.Name;
-				source.Directory = dir.FullName;
-
-				var existing = trails.SelectMany(x => x.Tracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(file.Name));
-				source.Trail = existing?.Trail;
-
-				source.Metadata = _trackExtractService.ReadTrack(file.FullName);
-				var data = source.Metadata.Data;
-
-				var points = data.Tracks.SelectMany(x => x.Points);
-				var start = points.First();
-				var finish = points.Last();
-				source.Elapsed = finish.Timestamp.Value.Subtract(start.Timestamp.Value);
-
-				source.Distance = GeoDistance.BetweenPoints(points).KM;
-
-				if (!source.Metadata.Timestamp.HasValue) source.Metadata.Timestamp = start.Timestamp;
-
-				source.Metadata.Country = _geoLookupService.NearestCountry(start);
-				source.Metadata.Region = _geoLookupService.NearestRegion(start);
-				source.Metadata.Timezone = _geoLookupService.GuessTimezone(source.Metadata.Country);
-
-				source.Regions = _geoLookupService.NearbyRegions(start);
-				foreach(var region in _geoLookupService.NearbyRegions(finish))
-				{
-					if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
-				}
-
-				var speed = source.Distance / source.Elapsed.TotalHours;
-				source.IsWalk = speed <= 5; // km/h
-				source.IsBike = speed > 5 && speed < 15; // km/h
-
-				var max = points.Max(x => x.Speed ?? 0);
-				source.IsFast = max > 5; // m/s
-
-				var loop = GeoDistance.BetweenPoints(start, finish).Meters;
-				source.IsLoop = loop < 200;
-
-				var bad = max > 33; // m/s
-				if (!bad) bad = points.Average(x => (x.Sats ?? 0)) < 5;
-				if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20; // TODO: fix this threshold for old files without DOP data
-				source.IsBad = bad;
-
-				source.IsShort = points.Count() < 30;
-
+				var source = InitTrackFileModel(file);
 				model.Sources.Add(source);
 			}
 
@@ -167,6 +136,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var extract = _trackExtractService.PrepareExtract(uri);
 			model.SelectedExtract = extract;
 
+			var source = InitTrackFileModel(new FileInfo(uri));
+			model.SelectedSource = source;
+
 			return View(model);
 		}
 
@@ -189,7 +161,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.SelectedExtract = _trackExtractService.GetExtract(id);
+			var extract = _trackExtractService.GetExtract(id);
+			UpdateTrackPlaces(extract);
+			model.SelectedExtract = extract;
 
 			return View(model);
 		}
@@ -235,6 +209,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Revert(string ID)
 		{
 			var filtered = _trackExtractService.RevertFilter(ID);
+			UpdateTrackPlaces(filtered);
 
 			return Redirect(TrackViewModel.GetEditUrl(ID));
 		}
@@ -281,6 +256,71 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_trackExtractService.ResetSession();
 
 			return Redirect(TrackViewModel.GetManageUrl());
+		}
+
+
+		private void UpdateTrackPlaces(TrackExtractData extract)
+		{
+			var startPlaces = _cartoPlaceService.ListPlacesByBounds(extract.Points.First());
+			var finishPlaces = _cartoPlaceService.ListPlacesByBounds(extract.Points.Last());
+			extract.Places = startPlaces.Union(finishPlaces).ToList();
+		}
+
+
+		private TrackFileModel InitTrackFileModel(FileInfo file)
+		{
+			var source = new TrackFileModel();
+			source.Uri = file.FullName;
+			source.FileName = file.Name;
+			source.Directory = file.Directory.FullName;
+
+			var existing = _trailDataService.FindTrackSource(file.Name);
+			source.Trail = existing?.Trail;
+
+			source.Metadata = _trackExtractService.ReadTrack(file.FullName);
+			var data = source.Metadata.Data;
+
+			var points = data.Tracks.SelectMany(x => x.Points);
+			var start = points.First();
+			var finish = points.Last();
+			source.Elapsed = finish.Timestamp.Value.Subtract(start.Timestamp.Value);
+
+			source.Distance = GeoDistance.BetweenPoints(points).KM;
+
+			if (!source.Metadata.Timestamp.HasValue) source.Metadata.Timestamp = start.Timestamp;
+
+			source.Metadata.Country = _geoLookupService.NearestCountry(start);
+			source.Metadata.Region = _geoLookupService.NearestRegion(start);
+			source.Metadata.Timezone = _geoLookupService.GuessTimezone(source.Metadata.Country);
+
+			source.Regions = _geoLookupService.NearbyRegions(start);
+			foreach (var region in _geoLookupService.NearbyRegions(finish))
+			{
+				if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
+			}
+
+			var startPlaces = _cartoPlaceService.ListPlacesByBounds(start);
+			var finishPlaces = _cartoPlaceService.ListPlacesByBounds(finish);
+			source.Places = startPlaces.Union(finishPlaces).ToList();
+
+			var speed = source.Distance / source.Elapsed.TotalHours;
+			source.IsWalk = speed <= 5; // km/h
+			source.IsBike = speed > 5 && speed < 15; // km/h
+
+			var max = points.Max(x => x.Speed ?? 0);
+			source.IsFast = max > 5; // m/s
+
+			var loop = GeoDistance.BetweenPoints(start, finish).Meters;
+			source.IsLoop = loop < 200;
+
+			var bad = max > 33; // m/s
+			if (!bad) bad = points.Average(x => (x.Sats ?? 0)) < 5;
+			if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20; // TODO: fix this threshold for old files without DOP data
+			source.IsBad = bad;
+
+			source.IsShort = points.Count() < 30;
+
+			return source;
 		}
 	}
 }

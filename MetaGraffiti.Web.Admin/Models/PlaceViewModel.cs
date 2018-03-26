@@ -5,6 +5,7 @@ using System.Web;
 
 using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
@@ -68,6 +69,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetReportUrl(string country = "") { return $"/place/report/?country={country}"; }
 
 		public static string GetSearchUrl() { return "/place/search/"; }
+		public static string GetSearchUrl(IGeoLatLon point) { return $"/place/search/?latitude={point.Latitude}&longitude={point.Longitude}"; }
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
 
 		public static string GetPreviewUrl(string googlePlaceID, string text = "") { return $"/place/preview/{googlePlaceID}/?search={text}"; }

@@ -91,8 +91,8 @@ else
 						<td>Time (hours)</td>
 						<td>Distance (KM)</td>
 						<td>Country</td>
-						<td>Region</td>
-						<td>Locations</td>
+						<td>Regions</td>
+						<td>Places</td>
 						<td>Actions</td>
 					</tr>
 				</thead>
@@ -142,13 +142,18 @@ else
 									}
 								</td>
 								<td>@source.Elapsed.TotalHours.ToString("0.0")</td>
-								<td>@source.Distance.ToString("#,##0.0")</td>
+								<td class="text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
 								<td>@source.Metadata.Country.Name</td>
-								<td>@(source.Metadata.Region?.RegionName ?? "")</td>
-								<td class="small">
+								<td>
 									@foreach (var region in source.Regions)
 									{
 										<div>@region.RegionName</div>
+									}
+								</td>
+								<td class="small">
+									@foreach (var place in source.Places)
+									{
+										<div>@place.Name</div>
 									}
 								</td>
 								<td>

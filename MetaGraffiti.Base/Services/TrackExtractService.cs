@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Modules.Crypto;
+﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Crypto;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
@@ -17,7 +18,6 @@ namespace MetaGraffiti.Base.Services
 		private static GeoLookupService _lookupService = new GeoLookupService(null);
 		private static BasicCacheService<TrackExtractData> _extracts = new BasicCacheService<TrackExtractData>();
 		private static TrackData _track = new TrackData();
-
 
 		// ==================================================
 		// Properties
@@ -176,7 +176,7 @@ namespace MetaGraffiti.Base.Services
 			extract.Points = FilterPoints(extract.SourcePoints, request);
 
 			// initialize track metadata if required
-			InitMetadata(extract);
+			InitTrackMetadata(extract);
 
 			// add to edits ession and return
 			_extracts.Add(extract.ID, extract);
@@ -307,7 +307,8 @@ namespace MetaGraffiti.Base.Services
 			return t;
 		}
 
-		private void InitMetadata(TrackExtractData extract)
+		
+		private void InitTrackMetadata(TrackExtractData extract)
 		{
 			// set initial name to source track
 			if (String.IsNullOrWhiteSpace(_track.Name)) _track.Name = extract.Name;
@@ -389,6 +390,8 @@ namespace MetaGraffiti.Base.Services
 		public List<GpxPointData> Points { get; set; }
 
 		public List<GpxPointData> SourcePoints { get; set; }
+
+		public List<CartoPlaceInfo> Places { get; set; }
 	}
 
 	public class TrackUpdateRequest

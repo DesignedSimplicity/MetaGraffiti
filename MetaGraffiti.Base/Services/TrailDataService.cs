@@ -76,6 +76,11 @@ namespace MetaGraffiti.Base.Services
 			return _trails[id.ToUpperInvariant()];
 		}
 
+		public TopoTrackInfo FindTrackSource(string uri)
+		{
+			return _trails.All.SelectMany(x => x.Tracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
+		}
+
 		public List<TopoTrailInfo> ListByDate(int year, int? month = null, int? day = null)
 		{
 			return Report(new TrailReportRequest() { Year = year, Month = month, Day = day });
