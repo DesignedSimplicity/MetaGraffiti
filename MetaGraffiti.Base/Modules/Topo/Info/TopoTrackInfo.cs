@@ -29,8 +29,8 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public string Description => _track.Description;
 
 
-		public DateTime StartTime { get { return Points.First().Timestamp; } }
-		public DateTime FinishTime { get { return Points.Last().Timestamp; } }
+		public DateTime StartTime { get { return Points.First().LocalTime; } }
+		public DateTime FinishTime { get { return Points.Last().LocalTime; } }
 
 		public DateTime FirstTimestamp { get { return Points.First().Timestamp; } }
 		public DateTime LastTimestamp { get { return Points.Last().Timestamp; } }

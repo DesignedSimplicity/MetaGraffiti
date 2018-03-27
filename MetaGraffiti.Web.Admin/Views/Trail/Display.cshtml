@@ -83,6 +83,14 @@
 		<div class="row">
 			<div class="col-sm-8">
 				<div class="h2">@Model.Trail.Name</div>
+				<div>@Model.Trail.Description</div>
+				<div class="h6">@Model.Trail.Keywords</div>
+				<div class="h6">
+					<a href="@Model.Trail.Url">@Model.Trail.UrlName</a>
+				</div>
+				<div class="small">
+					@Model.Trail.Uri
+				</div>
 			</div>
 			<div class="col-sm-4 text-right">
 				<form method="post" action="@TrailViewModel.GetModifyUrl()">
@@ -90,17 +98,12 @@
 					<button type="submit" class="btn btn-outline-secondary">Edit Tracks</button>
 					<button type="button" class="btn btn-outline-success js-reset-view">Reset View</button>
 				</form>
+				<div class="h4 mt-2">
+					<div class="badge badge-info">@Model.Trail.ElapsedTimeText</div>
+					<div class="badge badge-success">@Model.Trail.TotalKilometers.ToString("0.0") km</div>
+				</div>
 			</div>
 		</div>
-		<div>@Model.Trail.Description</div>
-		<div class="h6">@Model.Trail.Keywords</div>
-		<div class="h6">
-			<a href="@Model.Trail.Url">@Model.Trail.UrlName</a>
-		</div>
-		<div class="small">
-			@Model.Trail.Uri
-		</div>
-
 		<hr />
 
 		<div class="row">
@@ -113,10 +116,10 @@
 					<a href="@TrailViewModel.GetCountryUrl(Model.Trail.Country.Name)">@Model.Trail.Country.Name</a>
 				</div>
 				<div class="h5">
-					@foreach (var place in Model.Trail.ViaPlaces)
+					@foreach (var place in Model.Trail.ViaPlaces.OrderBy(x => x.Bounds.Area))
 					{
 						<div class="mt-2">
-							<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+							<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a> <span class="h6"><span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span></span>
 						</div>
 					}
 				</div>

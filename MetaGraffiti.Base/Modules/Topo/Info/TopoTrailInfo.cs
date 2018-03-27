@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
@@ -39,6 +40,12 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public List<CartoPlaceInfo> ViaPlaces { get; set; }
 
 
+
+
+		public TimeSpan ElapsedTime { get { return TimeSpan.FromHours(Tracks.Sum(x => x.ElapsedTime.TotalHours)); } }
+		public string ElapsedTimeText { get { return String.Format("{0:0} h {1:00} m", Math.Floor(ElapsedTime.TotalHours), ElapsedTime.Minutes); } }
+
+		public double TotalKilometers { get { return Tracks.Sum(x => x.EstimatedDistance.KM); } }
 
 		public string[] AutoTags
 		{

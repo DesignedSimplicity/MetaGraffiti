@@ -43,7 +43,7 @@
 			_start = markStart(points[0].lat, points[0].lng);
 
 			if (_stop != null) _stop.setMap(null);
-			_stop = markStop(points[last].lat, points[last].lng);
+			_stop = markFinish(points[last].lat, points[last].lng);
 		});
 
 		$(".js-track-row").click(function () {

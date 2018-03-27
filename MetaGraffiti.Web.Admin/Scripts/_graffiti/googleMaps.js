@@ -5,29 +5,16 @@ var _mapGoogle = null;
 var _mapColors = [
 	'#007bff',
 	'#28a745',
-	'#17a2b8',
 	'#ffc107',
-	'#dc3545',
-
-	/*
-	'#b8daff',
-	'#c3e6cb',
-	'#bee5eb',
-	'#ffeeba',
-	'#f5c6cb',
-	*/
-	'#007bff',
-	'#28a745',
 	'#17a2b8',
-	'#ffc107',
 	'#dc3545',
 ];
 
 var _infoColors = [
 	'#b8daff',
 	'#c3e6cb',
-	'#bee5eb',
 	'#ffeeba',
+	'#bee5eb',
 	'#f5c6cb',
 ];
 
@@ -47,7 +34,7 @@ function initMap() {
 // returns a color to use for a given inded
 function getMapColor(index) {
 	if (index === undefined) return '#ff0000';
-	return _mapColors[index % 10];
+	return _mapColors[index % 5];
 }
 
 function getInfoColor(index) {
@@ -192,7 +179,8 @@ function markStart(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
-		icon: 'http://maps.google.com/mapfiles/marker_greenA.png'
+		//icon: 'http://maps.google.com/mapfiles/marker_greenA.png'
+		icon: 'https://maps.gstatic.com/intl/en_ALL/mapfiles/dd-start.png'
 	});
 
 	return marker;
@@ -202,7 +190,8 @@ function markFinish(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
-		icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
+		//icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
+		icon: 'https://maps.gstatic.com/intl/en_ALL/mapfiles/dd-end.png'
 	});
 
 	return marker;
@@ -214,6 +203,7 @@ function markStop(lat, lng) {
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
 		icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
+		//icon: 'https://maps.gstatic.com/intl/en_ALL/mapfiles/dd-stop.png'
 	});
 
 	return marker;
