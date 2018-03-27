@@ -126,9 +126,19 @@ namespace MetaGraffiti.Base.Services
 			_cache.RemoveOrIgnore(key.ToUpperInvariant());
 		}
 
-		public List<CartoPlaceInfo> ListPlacesByBounds(IGeoLatLon point)
+		public List<CartoPlaceInfo> ListPlacesByContainingPoint(IGeoLatLon point)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(point)).ToList();
+		}
+
+		public List<CartoPlaceInfo> ListPlacesContainingBounds(IGeoPerimeter bounds)
+		{
+			return _cache.All.Where(x => x.Bounds.Contains(bounds)).ToList();
+		}
+
+		public List<CartoPlaceInfo> ListPlacesContainedInBounds(IGeoPerimeter bounds)
+		{
+			return _cache.All.Where(x => bounds.Contains(x.Bounds)).ToList();
 		}
 
 		public CartoPlaceInfo FindPlace(GeoCountryInfo country, string name, bool deep = false)

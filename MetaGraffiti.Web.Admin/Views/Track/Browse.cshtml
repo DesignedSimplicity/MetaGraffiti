@@ -81,73 +81,84 @@
 					var index = 0;
 					foreach (var source in Model.Sources.OrderBy(x => x.LocalTime))
 					{
-				<tr>
-					<td>@(index + 1)</td>
-					<td>
-						<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
-					</td>
-					<td>
-						@if (source.Trail != null)
-		{
-				<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
-}
-					</td>
-					<td class="text-center">@source.LocalTime.ToString("yyyy-MM-dd")</td>
-					<td class="text-center">@source.LocalTime.ToShortTimeString()</td>
-					<td>
-						@if (source.IsShort)
-		{
-				<span class="badge badge-pill badge-secondary">Short</span>
-}
-						@if (source.IsLoop)
-		{
-				<span class="badge badge-pill badge-success">Loop</span>
-}
-						@if (source.IsBike)
-		{
-				<span class="badge badge-pill badge-info">Bike</span>
-}
-						@if (source.IsWalk)
-		{
-				<span class="badge badge-pill badge-primary">Walk</span>
-}
-						@if (source.IsFast)
-		{
-				<span class="badge badge-pill badge-warning">Fast</span>
-}
-						@if (source.IsBad)
-		{
-				<span class="badge badge-pill badge-danger">Bad</span>
-}
-					</td>
-					<td class="font-weight-bold text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
-					<td class="font-weight-bold">@source.Elapsed.TotalHours.ToString("0.0")</td>
-					<td></td>
-					<td class="@(source.Metadata.Country == null ? "table-danger" : "")">@(source.Metadata.Country?.Name ?? "")</td>
-					<td>
-						@foreach (var region in source.Regions)
-		{
-				<div>@region.RegionName</div>
-}
-					</td>
-					<td class="small">
-						@foreach (var place in source.Places)
-		{
-				<div>@place.Name</div>
-}
-					</td>
-					<td>
-						<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.Uri)">Preview</a>
-						@if (source.Trail != null)
-		{
-				<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
-}
-else
-{
-				<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.Uri)">Import</a>
-}
-					</td>
-				</tr>
+						<tr>
+							<td>@(index + 1)</td>
+							<td>
+								<a href="@TrackViewModel.GetPreviewUrl(source.Uri)">@source.FileName</a>
+							</td>
+							<td>
+								@if (source.Trail != null)
+								{
+									<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
+								}
+							</td>
+							<td class="text-center">@source.LocalTime.ToString("yyyy-MM-dd")</td>
+							<td class="text-center">@source.LocalTime.ToShortTimeString()</td>
+							<td>
+								@if (source.IsShort)
+								{
+									<span class="badge badge-pill badge-secondary">Short</span>
+								}
+								@if (source.IsLoop)
+								{
+									<span class="badge badge-pill badge-success">Loop</span>
+								}
+								@if (source.IsBike)
+								{
+									<span class="badge badge-pill badge-info">Bike</span>
+								}
+								@if (source.IsWalk)
+								{
+									<span class="badge badge-pill badge-primary">Walk</span>
+								}
+								@if (source.IsFast)
+								{
+									<span class="badge badge-pill badge-warning">Fast</span>
+								}
+								@if (source.IsBad)
+								{
+									<span class="badge badge-pill badge-danger">Bad</span>
+								}
+							</td>
+							<td class="font-weight-bold text-@(source.GetDistanceCss(source.Distance))">@source.Distance.ToString("#,##0.0")</td>
+							<td class="font-weight-bold">@source.Elapsed.TotalHours.ToString("0.0")</td>
+							<td></td>
+							<td class="@(source.Metadata.Country == null ? "table-danger" : "")">@(source.Metadata.Country?.Name ?? "")</td>
+							<td>
+								@foreach (var region in source.Regions)
+								{
+									<div>@region.RegionName</div>
+								}
+							</td>
+							<td class="small">
+								<div class="font-weight-bold">
+									@foreach (var place in source.Places)
+									{
+										<div class="@(source.IsStart(place) ? "text-success" : (source.IsFinish(place) ? "text-primary" : ""))">@place.Name</div>
+									}
+								</div>
+								<div>
+									@foreach (var place in source.NearbyPlaces)
+									{
+										if (!source.ContainsPlace(place))
+										{
+											<div class="@(source.IsStart(place) ? "text-success" : (source.IsFinish(place) ? "text-primary" : ""))">@place.Name</div>
+										}
+									}
+								</div>
+							</td>
+							<td>
+								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.Uri)">Preview</a>
+								@if (source.Trail != null)
+								{
+									<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
+								}
+								else
+								{
+									<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.Uri)">Import</a>
+								}
+							</td>
+						</tr>
 						index++;
 					}
 				}

@@ -43,10 +43,12 @@ namespace MetaGraffiti.Base.Modules.Geo
 	// --------------------------------------------------
 	public interface IGeoPerimeter
 	{
+		double Area { get; }
 		IGeoLatLon Center { get; }
 		IGeoLatLon NorthWest { get; }
 		IGeoLatLon SouthEast { get; }
-		IList<IGeoLatLon> Points { get; }
+		IEnumerable<IGeoLatLon> Points { get; }
 		bool Contains(IGeoLatLon point);
+		bool Contains(IGeoPerimeter point);
 	}
 }

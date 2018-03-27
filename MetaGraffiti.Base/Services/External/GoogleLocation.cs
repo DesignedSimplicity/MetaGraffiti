@@ -102,7 +102,7 @@ namespace MetaGraffiti.Base.Services.External
 				this.LongName = firstComponent.long_name;
 				this.TypedName = firstComponent.short_name;
 				this.TypedNameSource = "Political";
-				isCountry = firstComponent.types[0].Value == "country" && _data.address_components.Count == 1;
+				if (firstComponent.types != null && firstComponent.types.Count > 0) isCountry = (firstComponent.types[0]?.Value ?? "") == "country" && _data.address_components.Count == 1;
 			}
 
 			#region Address Components

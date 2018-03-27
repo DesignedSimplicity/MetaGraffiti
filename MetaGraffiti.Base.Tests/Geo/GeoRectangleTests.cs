@@ -13,10 +13,10 @@ namespace MetaGraffiti.Base.Tests.Geo
 		public void GeoRectangle_Points()
 		{
 			var r = new GeoRectangle(10.0, 20.0, 20.0, 40.0);
-			Assert.AreEqual(10.0, r.Points[0].Latitude);
-			Assert.AreEqual(20.0, r.Points[0].Longitude);
-			Assert.AreEqual(20.0, r.Points[1].Latitude);
-			Assert.AreEqual(40.0, r.Points[1].Longitude);
+			Assert.AreEqual(10.0, r.Points.First().Latitude);
+			Assert.AreEqual(20.0, r.Points.First().Longitude);
+			Assert.AreEqual(20.0, r.Points.Last().Latitude);
+			Assert.AreEqual(40.0, r.Points.Last().Longitude);
 		}
 
 		[TestMethod]

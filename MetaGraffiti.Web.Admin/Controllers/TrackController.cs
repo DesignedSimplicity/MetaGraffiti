@@ -110,7 +110,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Displays the track on a map before extraction
 		/// </summary>
-		public ActionResult Preview(string uri)
+		public ActionResult Preview(string uri, DateTime? start, DateTime? finish)
 		{
 			var model = InitModel();
 
@@ -131,6 +131,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedSource = source;
 
 			model.SelectedDirectory = file.Directory;
+
+			model.SelectedStart = start;
+			model.SelectedFinish = finish;
+
+			if (start.HasValue) extract.Points = extract.Points.Where(x => x.Timestamp.HasValue && x.Timestamp.Value >= start.Value).ToList();
+			if (finish.HasValue) extract.Points = extract.Points.Where(x => x.Timestamp.HasValue && x.Timestamp.Value <= finish.Value).ToList();
+
+			UpdateTrackPlaces(extract, source);
 
 			return View(model);
 		}
@@ -155,7 +163,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var extract = _trackExtractService.GetExtract(id);
-			UpdateTrackPlaces(extract);
+			//UpdateTrackPlaces(extract);
 			model.SelectedExtract = extract;
 
 			return View(model);
@@ -202,7 +210,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Revert(string ID)
 		{
 			var filtered = _trackExtractService.RevertFilter(ID);
-			UpdateTrackPlaces(filtered);
+			//UpdateTrackPlaces(filtered);
 
 			return Redirect(TrackViewModel.GetEditUrl(ID));
 		}
@@ -252,11 +260,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-		private void UpdateTrackPlaces(TrackExtractData extract)
+		private void UpdateTrackPlaces(TrackExtractData extract, TrackFileModel source)
 		{
-			var startPlaces = _cartoPlaceService.ListPlacesByBounds(extract.Points.First());
-			var finishPlaces = _cartoPlaceService.ListPlacesByBounds(extract.Points.Last());
-			extract.Places = startPlaces.Union(finishPlaces).ToList();
+			// TODO: update this
+			// *********************************************
+			var points = extract.Points;
+			var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
+			source.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+			source.NearbyPlaces = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+			source.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(points.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			source.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(points.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 		}
 
 
@@ -295,9 +308,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
 			}
 
-			var startPlaces = _cartoPlaceService.ListPlacesByBounds(start);
-			var finishPlaces = _cartoPlaceService.ListPlacesByBounds(finish);
-			source.Places = startPlaces.Union(finishPlaces).ToList();
+			//var startPlaces = _cartoPlaceService.ListPlacesByBounds(start);
+			//var finishPlaces = _cartoPlaceService.ListPlacesByBounds(finish);			
+			//source.Places = startPlaces.Union(finishPlaces).ToList();
+			var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
+			source.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+			source.NearbyPlaces = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+			source.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			source.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+
 
 			var speed = source.Distance / source.Elapsed.TotalHours;
 			source.IsWalk = speed <= 5; // km/h

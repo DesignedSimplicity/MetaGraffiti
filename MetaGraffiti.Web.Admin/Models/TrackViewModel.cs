@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+
+using Newtonsoft.Json.Linq;
+
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
-using Newtonsoft.Json.Linq;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -36,6 +38,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 			return (String.Compare(SelectedDirectory.FullName.TrimEnd('\\'), dir.FullName.TrimEnd('\\'), true) == 0);
 		}
+
 		public bool IsAncestor(DirectoryInfo dir)
 		{
 			if (SelectedDirectory == null || dir == null) return false;
@@ -44,9 +47,53 @@ namespace MetaGraffiti.Web.Admin.Models
 			return uri.StartsWith(dir.FullName.TrimEnd('\\') + '\\', StringComparison.InvariantCultureIgnoreCase);
 		}
 
+		public string GetDOPCss(decimal? dop)
+		{
+			var d = dop ?? 0;
+			if (d == 0)
+				return "secondary";
+			else if (d < 3)
+				return "success";
+			else if (d < 5)
+				return "warning";
+			else
+				return "danger";
+		}
+
+		public string GetSpeedCss(decimal? speed)
+		{
+			var s = speed ?? 0;
+			if (s == 0)
+				return "danger";
+			if (s <= 2)
+				return "success";
+			else if (s <= 4)
+				return "warning";
+			else
+				return "primary";
+		}
+
+		public string GetSatsCss(int? sats)
+		{
+			var s = sats ?? 0;
+			if (s == 0)
+				return "secondary";
+			else if (s > 10)
+				return "success";
+			else if (s > 5)
+				return "warning";
+			else
+				return "danger";
+		}
+
 
 		// ==================================================
 		// Navigation
+
+		public static string GetPreviewUrl(string uri) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
+		public static string GetPreviewUrl(string uri, DateTime? start, DateTime? finish) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}&start={start}&finish={finish}"; }
+
+
 
 
 
@@ -65,6 +112,9 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public TrackExtractData SelectedExtract { get; set; }
 		public TrackFileModel SelectedSource { get; set; }
+
+		public DateTime? SelectedStart { get; set; }
+		public DateTime? SelectedFinish { get; set; }
 
 
 
@@ -109,44 +159,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			return String.Format("{0:0} hr{1} {2:0} min{3}", Math.Floor(ts.TotalHours), (Math.Floor(ts.TotalHours) == 1 ? "" : "s"), ts.Minutes, (ts.Minutes == 1 ? "" : "s"));
 		}
 
-		public string GetDOPCss(decimal? dop)
-		{
-			var d = dop ?? 0;
-			if (d == 0)
-				return "secondary";
-			else if (d < 3)
-				return "success";
-			else if (d < 5)
-				return "warning";
-			else
-				return "danger";
-		}
-
-		public string GetSpeedCss(decimal? speed)
-		{
-			var s = speed ?? 0;
-			if (s == 0)
-				return "danger";
-			if (s <= 2)
-				return "success";
-			else if (s <= 4)
-				return "warning";
-			else
-				return "primary";
-		}
-
-		public string GetSatsCss(int? sats)
-		{
-			var s = sats ?? 0;
-			if (s == 0)
-				return "secondary";
-			else if (s > 10)
-				return "success";
-			else if (s > 5)
-				return "warning";
-			else
-				return "danger";
-		}
+		
 
 		public bool IsTimezoneValid { get { return TrackGroup.Timezone != null && TrackGroup.Timezone.Key != "UTC;"; } }
 		public bool IsCountryValid { get { return TrackGroup.Country != null; } }
@@ -207,7 +220,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetUpdateUrl() { return "/track/update/"; }
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
-		public static string GetPreviewUrl(string uri) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetExtractUrl(string uri) { return $"/track/extract/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetDeleteUrl(string ID) { return $"/track/delete/{ID}"; }
 		public static string GetEditUrl(string ID) { return $"/track/edit/{ID}"; }
@@ -239,6 +251,26 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
 		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();
+		public List<CartoPlaceInfo> NearbyPlaces { get; set; } = new List<CartoPlaceInfo>();
+		public CartoPlaceInfo StartPlace;
+		public CartoPlaceInfo FinishPlace;
+
+
+
+		public bool ContainsPlace(CartoPlaceInfo place)
+		{
+			return Places.Any(x => x.Key == place.Key);
+		}
+		public bool IsStart(CartoPlaceInfo place)
+		{
+			return StartPlace != null && place.Key == StartPlace.Key;
+		}
+		public bool IsFinish(CartoPlaceInfo place)
+		{
+			return StartPlace != null && place.Key == StartPlace.Key;
+		}
+
+
 
 		public string GetDistanceCss(double distance)
 		{

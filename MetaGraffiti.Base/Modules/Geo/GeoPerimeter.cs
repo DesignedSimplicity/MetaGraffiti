@@ -8,7 +8,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 	{
 		// ==================================================
 		// Constructors
-		public GeoPerimeter(IList<IGeoLatLon> points)
+		public GeoPerimeter(IEnumerable<IGeoLatLon> points)
 		{
 			var minLat = points.Min(x => x.Latitude);
 			var maxLat = points.Max(x => x.Latitude);
@@ -19,14 +19,18 @@ namespace MetaGraffiti.Base.Modules.Geo
 			NorthWest = new GeoPosition(minLat, minLon);
 			SouthEast = new GeoPosition(maxLat, maxLon);
 			Center = new GeoPosition((minLat + maxLat) / 2, (minLon + maxLon) / 2);
+
+			// TODO: HACK: fix this calculation - https://www.pmel.noaa.gov/maillists/tmap/ferret_users/fu_2004/msg00023.html
+			Area = Math.Abs(maxLat - minLat) * Math.Abs(maxLon - minLon);
 		}
 
 		// ==================================================
 		// Properties
-		public IList<IGeoLatLon> Points { get; private set; }
+		public IEnumerable<IGeoLatLon> Points { get; private set; }
 		public IGeoLatLon Center { get; private set; }
 		public IGeoLatLon NorthWest { get; private set; }
 		public IGeoLatLon SouthEast { get; private set; }
+		public double Area { get; private set; }
 
 		// ==================================================
 		// Methods
@@ -36,6 +40,21 @@ namespace MetaGraffiti.Base.Modules.Geo
 					&& point.Latitude <= SouthEast.Latitude
 					&& point.Longitude >= NorthWest.Longitude
 					&& point.Longitude <= SouthEast.Longitude;
+		}
+		public bool Contains(IGeoPerimeter bounds)
+		{
+			if (Contains(bounds.Center))
+				return true;
+			else if (Contains(bounds.NorthWest))
+				return true;
+			else if (Contains(bounds.SouthEast))
+				return true;
+			else if (Contains(new GeoPosition(bounds.NorthWest.Latitude, bounds.SouthEast.Longitude)))
+				return true;
+			else if (Contains(new GeoPosition(bounds.SouthEast.Latitude, bounds.NorthWest.Longitude)))
+				return true;
+			else
+				return false;
 		}
 	}
 }
