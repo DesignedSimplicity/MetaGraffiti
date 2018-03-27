@@ -59,7 +59,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public CartoPlaceInfo StartPlace { get; set; }
 		public CartoPlaceInfo FinishPlace { get; set; }
-		public List<CartoPlaceInfo> ViaPlaces { get; set; }
+		//public List<CartoPlaceInfo> ViaPlaces { get; set; }
 
 
 

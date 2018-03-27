@@ -198,6 +198,17 @@ function markStart(lat, lng) {
 	return marker;
 }
 
+function markFinish(lat, lng) {
+	var marker = new google.maps.Marker({
+		position: new google.maps.LatLng(lat, lng),
+		map: _mapGoogle,
+		icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
+	});
+
+	return marker;
+}
+
+
 function markStop(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),

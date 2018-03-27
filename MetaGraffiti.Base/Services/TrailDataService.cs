@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Topo.Info;
@@ -187,24 +188,23 @@ namespace MetaGraffiti.Base.Services
 
 			// create track data
 			trail.Tracks = new List<TopoTrackInfo>();
-			foreach (var track in data.Tracks)
+			var places = new List<CartoPlaceInfo>();
+			foreach (var track in data.Tracks.OrderBy(x => x.Points.First().Timestamp.Value))
 			{
 				var tt = new TopoTrackInfo(trail, track);
 
 				var f = track.Points.First();
 				var l = track.Points.Last();
 				tt.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(f).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				if (tt.StartPlace != null && !places.Any(x => x.Key == tt.StartPlace.Key)) places.Add(tt.StartPlace);
 				tt.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(l).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				if (tt.FinishPlace != null && !places.Any(x => x.Key == tt.FinishPlace.Key)) places.Add(tt.FinishPlace);
 
 				trail.Tracks.Add(tt);
 			}
 
-			// TODO: only read these from the file metadata and lookup if in metadata
-			// load carto place information
-			var first = data.Tracks.First().Points.First();
-			var last = data.Tracks.Last().Points.Last();
-			trail.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(first).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-			trail.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(last).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			// consolidate carto place information
+			trail.ViaPlaces = places;
 
 			return trail;
 		}

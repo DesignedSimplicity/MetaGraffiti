@@ -36,6 +36,8 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public TimeSpan OffsetDST => _data.OffsetDST;
 		public TimeZoneInfo TimeZone => _data.TimeZone;
 
+		public string DisplayOffsetUTC => $"UTC{(_data.OffsetUTC.TotalHours > 0 ? "+" : "-")}{_data.OffsetUTC.TotalHours}";
+
 		// --------------------------------------------------
 		// Derived
 		public GeoTimezoneInfo BaseTimezone => GeoTimezoneInfo.BySystem(WinTZ);

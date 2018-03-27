@@ -3,8 +3,10 @@
 
 @Html.Partial("_Nav")
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
+@{ 
+	var trackGroup = Model.TrackGroup;
+}
+
 <script>
 	var _tracks = @Model.GetTrackJson();
 	var _bounds = null;
@@ -148,7 +150,7 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var track in Model.Extracts)
+					foreach (var track in Model.TrackExtracts)
 					{
 						<tr class="js-track-row">
 							<td class="text-center">@(++count)</td>
@@ -176,13 +178,13 @@
 				<div class="col">
 					<div class="form-group">
 						<label for="Name">Name</label>
-						<input type="text" class="form-control" name="Name" value="@Model.Track.Name">
+						<input type="text" class="form-control" name="Name" value="@trackGroup.Name">
 					</div>
 				</div>
 				<div class="col">
 					<label for="Timezone">Timezone</label>
 					<div class="input-group">
-						<input type="text" class="form-control @(Model.IsTimezoneValid ? "is-valid" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(Model.Track.Timezone?.Name ?? "")">
+						<input type="text" class="form-control @(Model.IsTimezoneValid ? "is-valid" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(Model.TrackGroup.Timezone?.Name ?? "")">
 						<div class="input-group-append">
 							<a href="#" class="btn btn-outline-secondary" id="lookupTimezone">Lookup</a>
 						</div>
@@ -191,30 +193,30 @@
 			</div>
 			<div class="form-group">
 				<label for="Description">Description</label>
-				<textarea class="form-control" rows="3" name="Description">@Model.Track.Description</textarea>
+				<textarea class="form-control" rows="3" name="Description">@trackGroup.Description</textarea>
 			</div>
 			<div class="form-group">
 				<label for="Keywords">Keywords</label>
-				<input type="text" class="form-control" name="Keywords" value="@Model.Track.Keywords">
+				<input type="text" class="form-control" name="Keywords" value="@trackGroup.Keywords">
 			</div>
 			<!--
 			<div class="form-group">
 				<label for="Url">Website</label>
 				<div class="input-group">
-					<input type="text" class="form-control" name="Url" placeholder="http://" value="@Model.Track.Url">
-					<input type="text" class="form-control" name="UrlName" value="@Model.Track.UrlName" />
+					<input type="text" class="form-control" name="Url" placeholder="http://" value="@trackGroup.Url">
+					<input type="text" class="form-control" name="UrlName" value="@trackGroup.UrlName" />
 				</div>
 			</div>
 			-->
 			<div class="form-group">
 				<label for="Country">Location</label>
 				<div class="input-group">
-					<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" placeholder="Country" value="@(Model.Track.Country?.Name ?? "")">
-					@if (Model.IsCountryValid && Model.Track.Country.HasRegions)
+					<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" placeholder="Country" value="@(Model.TrackGroup.Country?.Name ?? "")">
+					@if (Model.IsCountryValid && Model.TrackGroup.Country.HasRegions)
 					{
-						<input type="text" class="form-control @(Model.IsRegionValid ? " is-valid" : "is-invalid" )" name="Region" id="RegionField" placeholder="Region" value="@(Model.Track.Region?.RegionName ?? "")">
+						<input type="text" class="form-control @(Model.IsRegionValid ? " is-valid" : "is-invalid" )" name="Region" id="RegionField" placeholder="Region" value="@(Model.TrackGroup.Region?.RegionName ?? "")">
 					}
-					<input type="text" class="form-control" name="Location" id="LocationField" placeholder="Location" value="@Model.Track.Location">
+					<input type="text" class="form-control" name="Location" id="LocationField" placeholder="Location" value="@trackGroup.Location">
 					<div class="input-group-append">
 						<a href="#" class="btn btn-outline-secondary" id="lookupCountry">Lookup</a>
 					</div>
