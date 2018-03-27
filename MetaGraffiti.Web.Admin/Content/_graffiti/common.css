@@ -19,3 +19,49 @@
 	width: 100%;
 	height: 100%;
 }
+
+
+
+.text-geo {
+	color: #6c757d;
+}
+.text-bio {
+	color: #17a2b8;
+}
+
+.text-carto {
+	color: #007bff;
+}
+
+.text-choro {
+	color: #17a2b8;
+}
+
+.text-topo {
+	color: #28a745;
+}
+
+.text-chrono {
+	color: #28a745;
+}
+
+.text-ortho {
+	color: #6c757d;
+}
+
+
+/*
+var _mapColors = [
+	'#',
+	'#ffc107',
+	'#',
+	'#dc3545',
+];
+
+var _infoColors = [
+	'#',
+	'#ffeeba',
+	'#bee5eb',
+	'#f5c6cb',
+];
+*/
