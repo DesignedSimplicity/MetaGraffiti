@@ -16,6 +16,14 @@ namespace MetaGraffiti.Base.Services
 		// Internals
 		private static object _init = false;
 		private static BasicCacheService<TopoTrailInfo> _trails;
+		private CartoPlaceService _cartoPlaceService;
+
+
+		public TrailDataService(CartoPlaceService cartoPlaceService)
+		{
+			_cartoPlaceService = cartoPlaceService;
+		}
+
 
 		// ==================================================
 		// Methods
@@ -176,12 +184,27 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(custom.Region)) trail.Region = GeoRegionInfo.Find(custom.Region);
 			// TODO: read location + ID
 
+
 			// create track data
 			trail.Tracks = new List<TopoTrackInfo>();
 			foreach (var track in data.Tracks)
 			{
-				trail.Tracks.Add(new TopoTrackInfo(trail, track));
+				var tt = new TopoTrackInfo(trail, track);
+
+				var f = track.Points.First();
+				var l = track.Points.Last();
+				tt.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(f).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				tt.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(l).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+
+				trail.Tracks.Add(tt);
 			}
+
+			// TODO: only read these from the file metadata and lookup if in metadata
+			// load carto place information
+			var first = data.Tracks.First().Points.First();
+			var last = data.Tracks.Last().Points.Last();
+			trail.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(first).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			trail.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(last).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 
 			return trail;
 		}

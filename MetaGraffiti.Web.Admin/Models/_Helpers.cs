@@ -81,5 +81,23 @@ namespace MetaGraffiti.Web.Admin.Models
 					return "danger";
 			}
 		}
+
+
+		public static string GetTagCss(string tag)
+		{
+			if (String.IsNullOrWhiteSpace(tag)) return "";
+
+			switch (tag.ToUpperInvariant())
+			{
+				case "WALK": return "primary";
+				case "BIKE": return "info";
+				case "FAST": return "warning";
+				case "STOPS": return "dark";
+				case "LOOP": return "success";
+				case "BAD": return "danger";
+				case "SHORT": return "secondary";
+				default: return "";
+			}
+		}
 	}
 }

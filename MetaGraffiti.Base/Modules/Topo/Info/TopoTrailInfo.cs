@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Carto.Info;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
@@ -31,5 +33,21 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 
 		public List<TopoTrackInfo> Tracks { get; set; }
+
+
+
+		public CartoPlaceInfo StartPlace { get; set; }
+		public CartoPlaceInfo FinishPlace { get; set; }
+		public List<CartoPlaceInfo> ViaPlaces { get; set; }
+
+
+
+		public string[] AutoTags
+		{
+			get
+			{
+				return Tracks.SelectMany(x => x.AutoTags).Distinct().ToArray();
+			}
+		}
 	}
 }

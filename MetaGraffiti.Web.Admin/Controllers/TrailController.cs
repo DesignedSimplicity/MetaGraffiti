@@ -21,11 +21,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 	public class TrailController : Controller
     {
 		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private TrailDataService _trailDataService = new TrailDataService();
+		private TrailDataService _trailDataService;
 
 		public TrailController()
 		{
-			_trailDataService.Init(AutoConfig.TrailSourceUri);
+			_trailDataService = ServiceConfig.TrailDataService;
 		}
 
 		private TrailViewModel InitModel()

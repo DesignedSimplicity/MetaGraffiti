@@ -23,6 +23,14 @@ var _mapColors = [
 	'#dc3545',
 ];
 
+var _infoColors = [
+	'#b8daff',
+	'#c3e6cb',
+	'#bee5eb',
+	'#ffeeba',
+	'#f5c6cb',
+];
+
 // initalizes the global google map objects
 function initMap() {
 	_mapDiv = document.getElementById('map');
@@ -40,6 +48,11 @@ function initMap() {
 function getMapColor(index) {
 	if (index === undefined) return '#ff0000';
 	return _mapColors[index % 10];
+}
+
+function getInfoColor(index) {
+	if (index === undefined) return _infoColors[0];
+	return _infoColors[index % 5];
 }
 
 // attempts to fix the entire world in the view port

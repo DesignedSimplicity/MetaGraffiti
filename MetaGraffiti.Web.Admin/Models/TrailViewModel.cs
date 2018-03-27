@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -85,10 +86,32 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetReportUrl() { return "/trail/report/"; }
 
-		public static string GetReportUrl(int year, int? month = null) { return $"/trail/report/?year={year}" + (month.HasValue ? $"&month={month}" :""); }
+		public static string GetReportUrl(int year, int? month = null) { return $"/trail/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 
 		public static string GetCountryUrl(string country, string region = "") { return $"/trail/country/{country}/" + (String.IsNullOrWhiteSpace(region) ? "" : $"?region={region}"); }
 
 		public static string GetDisplayUrl(string id) { return $"/trail/display/{id}/"; }
+	}
+
+
+	public class TopoTrailModel
+	{
+		public TopoTrailInfo Trail { get; set; }
+
+
+		public CartoPlaceInfo StartPlace { get; set; }
+		public CartoPlaceInfo FinishPlace { get; set; }
+		public List<CartoPlaceInfo> ViaPlaces { get; set; }
+
+
+		/// <summary>
+		/// Places partially contained within the trail bounds
+		/// </summary>
+		public List<CartoPlaceInfo> NearbyPlaces { get; set; }
+
+		/// <summary>
+		/// Places which contain part of the trail bounds
+		/// </summary>
+		public List<CartoPlaceInfo> ContaingPlaces { get; set; }
 	}
 }
