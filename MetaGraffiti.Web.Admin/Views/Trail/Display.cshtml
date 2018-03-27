@@ -83,12 +83,9 @@
 		<div class="row">
 			<div class="col-sm-8">
 				<div class="h2">@Model.Trail.Name</div>
+				<div class="h4">@Model.Trail.Keywords</div>
 				<div>@Model.Trail.Description</div>
-				<div class="h6">@Model.Trail.Keywords</div>
-				<div class="h6">
-					<a href="@Model.Trail.Url">@Model.Trail.UrlName</a>
-				</div>
-				<div class="small">
+				<div class="small mt-1">
 					@Model.Trail.Uri
 				</div>
 			</div>
@@ -101,6 +98,9 @@
 				<div class="h4 mt-2">
 					<div class="badge badge-info">@Model.Trail.ElapsedTimeText</div>
 					<div class="badge badge-success">@Model.Trail.TotalKilometers.ToString("0.0") km</div>
+					<div class="h6">
+						<a href="@Model.Trail.Url">@Model.Trail.UrlName</a>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -157,13 +157,13 @@
 						<tr class="js-mappable-row">
 							<td rowspan="3" class="text-center">@(++count)</td>
 							<td colspan="3">
-								<span class="font-weight-bold">@track.Name</span>
+								<span class="h4">@track.Name</span>
 								<span class="small">@track.Description</span>
 							</td>
-							<td class="text-right font-weight-bold text-nowrap">
+							<td class="text-right h5 text-nowrap">
 								@track.ElapsedTimeText
 							</td>
-							<td class="text-right font-weight-bold">
+							<td class="text-right h5">
 								@track.EstimatedDistance.KM.ToString("0.0") km
 							</td>
 						</tr>
@@ -182,7 +182,7 @@
 									}
 								</div>
 							</td>
-							<td>
+							<td class="h5">
 								<div class="text-nowrap">
 									@track.StartTime.ToString("hh:mm:ss tt") <small>@track.StartTime.ToString("yyyy-MM-dd")</small>
 								</div>
@@ -193,21 +193,21 @@
 									}
 								</div>
 							</td>
-							<td>
+							<td class="h5">
 								<div class="text-nowrap">
 									@track.FinishTime.ToString("hh:mm:ss tt") <small>@track.FinishTime.ToString("yyyy-MM-dd")</small>
 								</div>
 								<div class="mt-2">
 									@if (track.FinishPlace != null)
-									{
-										<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
-									}
+		{
+							<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
+}
 								</div>
 							</td>
-							<td class="text-right">
+							<td class="text-right font-weight-bold">
 								@track.EstimatedKmh.ToString("0.0") <small>km/h</small>
 							</td>
-							<td class="text-right">
+							<td class="text-right font-weight-bold">
 								<div class="text-success">@track.EstimatedAscent.ToString("#,##0") m</div>
 								<div class="mt-2"></div>
 								<div class="text-danger">@track.EstimatedDescent.ToString("#,##0") m</div>

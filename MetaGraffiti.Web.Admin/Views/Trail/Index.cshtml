@@ -4,7 +4,20 @@
 @Html.Partial("_Nav")
 
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-sm-2">
+		<h2>Countries</h2>
+		@foreach (var country in Model.Countries)
+	{
+		<div class="h3">
+			<a href="@TrailViewModel.GetCountryUrl(country.Name)">@country.Name</a>
+		</div>
+}
+		<br />
+		<hr />
+		<a href="@TrailViewModel.GetRefreshUrl()" class="btn btn-outline-secondary">Refresh Cache</a>
+		<a href="@TrackViewModel.GetBrowseCurrentUrl()" class="btn btn-outline-success">Import Tracks</a>
+	</div>
+	<div class="col-sm-4">
 		<h2>Calendar</h2>
 		<table class="table table-bordered">
 			<thead class="thead-dark">
@@ -40,16 +53,4 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="col-sm-6">
-		<h2>Countries</h2>
-		@foreach (var country in Model.Countries)
-		{
-			<div class="h3">
-				<a href="@TrailViewModel.GetCountryUrl(country.Name)">@country.Name</a>
-			</div>
-		}
-	</div>
 </div>
-<br />
-<a href="@TrailViewModel.GetRefreshUrl()" class="btn btn-warning">Refresh Cache</a>
-<a href="@TrackViewModel.GetBrowseCurrentUrl()" class="btn btn-outline-success">Import New Tracks</a>

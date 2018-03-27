@@ -77,7 +77,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetReportUrl(int year, int? month = null) { return $"/trail/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 
-		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/trail/country/{country}/" + (String.IsNullOrWhiteSpace(region) ? "" : $"?region={region}") + (String.IsNullOrWhiteSpace(sort) ? "" : $"?sort={sort}"); }
+		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/trail/country/{country}/?region={region}&sort={sort}".Replace("?region=&", "?"); }
 
 		public static string GetDisplayUrl(string id) { return $"/trail/display/{id}/"; }
 	}

@@ -40,8 +40,8 @@
 			var start = points[0];
 			var finish = points[points.length - 1];
 
-			_start = markStart(start.lat, start.lng);
 			_finish = markFinish(finish.lat, finish.lng);
+			_start = markStart(start.lat, start.lng);
 		});
 
 		$(".js-mappable-row").click(function () {
@@ -69,23 +69,24 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<h2>@Model.Country.Name @(Model.Region == null ? "" : @" \ " + Model.Region.RegionName) Trails</h2>
+		<h2><a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2)">@Model.Country.Name</a> @(Model.Region == null ? "" : @" \ " + Model.Region.RegionName) Trails</h2>
 		<table class="table table-sm table-striped">
 			<thead class="table-dark">
 				<tr>
 					<th class="text-center">#</th>
 					<th>
 						Region&nbsp;
-						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionAbbr??""), "Region")" class="badge badge-@(Model.IsSortSelected("Region") ? "success" : "light")">Region</a>
+						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Region")" class="badge badge-@(Model.IsSortSelected("Region") ? "success" : "light")">Region</a>
 					</th>
 					<th>
 						Trail&nbsp;
-						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionAbbr??""), "Name")" class="badge badge-@(Model.IsSortSelected("Name") ? "success" : "light")">Name</a>
+						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Name")" class="badge badge-@(Model.IsSortSelected("Name") ? "success" : "light")">Name</a>
 					</th>
-					<th>
+					<th>Tags</th>
+					<th class="text-right">
 						Date&nbsp;
-						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionAbbr??""), "Newest")" class="badge badge-@(Model.IsSortSelected("Newest") ? "success" : "light")">Newest</a>
-						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionAbbr??""), "Oldest")" class="badge badge-@(Model.IsSortSelected("Oldest") ? "success" : "light")">Oldest</a>
+						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Newest")" class="badge badge-@(Model.IsSortSelected("Newest") ? "success" : "light")">Newest</a>
+						<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Oldest")" class="badge badge-@(Model.IsSortSelected("Oldest") ? "success" : "light")">Oldest</a>
 					</th>
 				</tr>
 			</thead>
@@ -94,15 +95,20 @@
 					var index = 0;
 					foreach (var trail in Model.Trails)
 					{
-				<tr class="js-mappable-row">
-					<td class="text-center">@(index + 1)</td>
-					<td>@(trail.Region?.RegionName ?? "")</td>
-					<td>
-						<div class="h6"><a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a></div>
-						<div class="small">@trail.Description</div>
-					</td>
-					<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
-				</tr>
+						<tr class="js-mappable-row">
+							<td class="text-center">@(index + 1)</td>
+							<td>
+								<a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2, (trail.Region?.RegionISO??""), "Name")">@(trail.Region?.RegionName ?? "")</a>
+							</td>
+							<td>
+								<span class="h6"><a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a></span>
+								<div class="small">@trail.Description</div>
+							</td>
+							<td>
+								<span class="small">@Html.Raw((trail.Keywords??"").Replace(",", "<br />"))</span>
+							</td>
+							<td class="text-right">@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+						</tr>
 						index++;
 					}
 				}

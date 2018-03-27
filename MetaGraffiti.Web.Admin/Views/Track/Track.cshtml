@@ -20,7 +20,7 @@
 
 		_bounds = new google.maps.LatLngBounds();
 		for (index = 0; index < _tracks.length; index++) {
-			var color = _mapColors[index % 10];
+			var color = getMapColor(index);
 			showTrack(_tracks[index].points, color);
 			$("table > tbody > tr").eq(index).children().eq(0).css('background-color', color);
 
