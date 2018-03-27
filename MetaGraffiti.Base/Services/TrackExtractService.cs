@@ -46,7 +46,7 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public List<TrackExtractData> ListExtracts()
 		{
-			return _extracts.All; // TODO: NOW: order by first point timestamp
+			return _extracts.All.OrderBy(x => x.Points.First().Timestamp).ToList();
 		}
 
 		/// <summary>
@@ -96,10 +96,11 @@ namespace MetaGraffiti.Base.Services
 			return track;
 		}
 
+
 		/// <summary>
 		/// Creates an edit session for an existing trail file
 		/// </summary>
-		public void EditTrack(string uri)
+		public void EditTrail(string uri)
 		{
 			_trackGroup = ReadTrack(uri);
 
@@ -114,7 +115,8 @@ namespace MetaGraffiti.Base.Services
 				request.StartTimestamp = track.Points.First().Timestamp;
 				request.FinishTimestamp = track.Points.Last().Timestamp;
 
-				CreateExtract(request);
+				var extract = CreateExtract(request);
+				extract.SourceUri = track.Source;
 			}
 		}
 

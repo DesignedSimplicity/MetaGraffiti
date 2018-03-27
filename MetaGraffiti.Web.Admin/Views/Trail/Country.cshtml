@@ -19,9 +19,10 @@
 			<thead class="table-dark">
 				<tr>
 					<th>#</th>
-					<th>Location</th>
-					<th>Date</th>
+					<th>Region</th>
+					<th>Places</th>
 					<th>Trail</th>
+					<th>Date</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -31,12 +32,18 @@
 					{
 						<tr>
 							<td>@(index + 1)</td>
-							<td>@trail.Country.Name</td>
-							<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+							<td>@(trail.Region?.RegionName ?? "")</td>
 							<td>
-								<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
+								@foreach (var place in trail.ViaPlaces)
+								{
+									<div><a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a></div>
+								}
+							</td>
+							<td>
+								<div class="h4"><a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a></div>
 								<div class="small">@trail.Description</div>
 							</td>
+							<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
 						</tr>
 						index++;
 					}

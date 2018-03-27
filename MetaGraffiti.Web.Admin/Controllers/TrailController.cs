@@ -125,7 +125,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var trail = _trailDataService.GetTrail(id);
 
-			_trackExtractService.EditTrack(trail.Uri);
+			_trackExtractService.EditTrail(trail.Uri);
 
 			return Redirect(TrackViewModel.GetManageUrl());
 		}
@@ -170,7 +170,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_trackExtractService.ResetSession();
 
 			// reload trails data before redirect
-			_trailDataService.ResetCache();
+			ServiceConfig.ResetTrailDataService(); //_trailDataService.ResetCache();
 
 			// redirect to new trail page
 			return Redirect(TrailViewModel.GetDisplayUrl(filename));
@@ -181,7 +181,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Refresh()
 		{
-			_trailDataService.ResetCache();
+			ServiceConfig.ResetTrailDataService();
 
 			return Redirect(TrailViewModel.GetTrailUrl());
 		}

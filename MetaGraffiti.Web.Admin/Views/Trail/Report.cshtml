@@ -48,38 +48,41 @@
 	<thead class="table-dark">
 		<tr>
 			<th>Country</th>
+			<th>Region</th>
 			<th>Date</th>
-			<th>Name</th>
+			<th>Track</th>
 			<th>Tags</th>
-			<th>Description</th>
-			<th>Distance</th>
-			<th>Time</th>
-			<th>Tracks</th>
-			<th>Points</th>
+			<th class="text-center">Distance</th>
+			<th class="text-center">Time</th>
+			<th class="text-center">Tracks</th>
+			<th class="text-center">Points</th>
 
 		</tr>
 	</thead>
 	<tbody>
 		@foreach (var trail in Model.Trails)
 		{
-		<tr>
-			<td>@trail.Country.Name</td>
-			<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
-			<td>
-				<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
-			</td>
-			<td>
-				@foreach (var tag in trail.AutoTags)
-		{
-			<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
-}
-			</td>
-			<td>@trail.Description</td>
-			<td></td>
-			<td></td>
-			<td>@trail.Tracks.Count</td>
-			<td>@trail.Tracks.SelectMany(x => x.Points).Count()</td>
-		</tr>
+			<tr>
+				<td>@trail.Country.Name</td>
+				<td>@(trail.Region?.RegionName ?? "")</td>
+				<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+				<td>
+					<div class="h4">
+						<a href="@TrailViewModel.GetDisplayUrl(trail.ID)">@trail.Name</a>
+					</div>
+					<div class="small">@trail.Description</div>
+				</td>
+				<td>
+					@foreach (var tag in trail.AutoTags)
+					{
+						<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
+					}
+				</td>
+				<td class="text-center">@trail.TotalKilometers.ToString("0.0") km</td>
+				<td class="text-center">@trail.ElapsedTimeText</td>
+				<td class="text-center">@trail.Tracks.Count</td>
+				<td class="text-center">@trail.Tracks.SelectMany(x => x.Points).Count().ToString("#,##0")</td>
+			</tr>
 		}
 	</tbody>
 </table>

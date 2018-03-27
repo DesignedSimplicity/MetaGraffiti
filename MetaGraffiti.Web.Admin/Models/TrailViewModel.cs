@@ -93,7 +93,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetDisplayUrl(string id) { return $"/trail/display/{id}/"; }
 	}
 
-
+	/*
 	public class TopoTrailModel
 	{
 		public TopoTrailInfo Trail { get; set; }
@@ -114,4 +114,5 @@ namespace MetaGraffiti.Web.Admin.Models
 		/// </summary>
 		public List<CartoPlaceInfo> ContaingPlaces { get; set; }
 	}
+	*/
 }

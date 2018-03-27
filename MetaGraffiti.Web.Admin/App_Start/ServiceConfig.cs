@@ -30,6 +30,19 @@ namespace MetaGraffiti.Web.Admin
 			get { return _geoLookupService; }
 		}
 
+		public static void ResetTrailDataService()
+		{
+			// clear out existing cache if necessary
+			if (_trailDataService != null) _trailDataService.ResetCache();
+
+			// create and initalize service as needed
+			var service = new TrailDataService(CartoPlaceService);
+			service.Init(AutoConfig.TrailSourceUri);
+
+			// update shared static resource
+			_trailDataService = service;
+		}
+
 		public static TrailDataService TrailDataService
 		{
 			get
@@ -42,12 +55,8 @@ namespace MetaGraffiti.Web.Admin
 					// recheck after lock expires
 					if (_trailDataService != null) return _trailDataService;
 
-					// create and initalize service as needed
-					var service = new TrailDataService(CartoPlaceService);
-					service.Init(AutoConfig.TrailSourceUri);
+					ResetTrailDataService();
 
-					// update shared static resource
-					_trailDataService = service;
 					return _trailDataService;
 				}
 			}
