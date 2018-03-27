@@ -18,10 +18,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// Initialization
 
 		private CartoPlaceService _cartoPlaceService;
+		private TripSheetService _tripSheetService;
 
 		public CartoController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
+			_tripSheetService = ServiceConfig.TripSheetService;
 		}
 
 		private CartoViewModel InitModel()
@@ -35,6 +37,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			model.Countries = _cartoPlaceService.ListCountries();
 			model.PlaceTypes = _cartoPlaceService.ListPlaceTypes();
+
+			model.SourceCountries = _tripSheetService.ListCountries();
+			model.SourceYears = _tripSheetService.ListYears();
 
 			return model;
 		}

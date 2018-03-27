@@ -12,45 +12,31 @@
 </script>
 
 <form>
-	<div class="row">
-		<div class="col-sm-1">
-			<div class="h2">When:&nbsp;</div>
+	<div class="form-group h2">
+		<div class="form-check form-check-inline h1">
+			<input class="form-check-input" type="radio" name="year" id="YearAll" value="" @(!Model.SelectedYear.HasValue ? "checked" : "")>
+			<label class="form-check-label" for="YearAll">Any Year</label>
 		</div>
-		<div class="col-sm-11">
-			<div class="form-group h4">
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="year" id="YearAll" value="" @(!Model.SelectedYear.HasValue ? "checked" : "")>
-					<label class="form-check-label" for="YearAll">All</label>
-				</div>
-				@foreach (var year in Model.Years)
-				{
-					<div class="form-check form-check-inline @(Model.IsSelected(year) ? "text-primary font-underline" : "")">
-						<input class="form-check-input" type="radio" name="year" id="Year@(year)" value="@year" @(Model.IsSelected(year) ? "checked" : "")>
-						<label class="form-check-label" for="Year@(year)">@year</label>
-					</div>
-				}
-			</div>
+		@foreach (var year in Model.Years.OrderByDescending(x => x))
+	{
+		<div class="form-check form-check-inline @(Model.IsSelected(year) ? "text-primary font-underline" : "")">
+			<input class="form-check-input" type="radio" name="year" id="Year@(year)" value="@year" @(Model.IsSelected(year) ? "checked" : "")>
+			<label class="form-check-label" for="Year@(year)">@year</label>
 		</div>
+}
 	</div>
-	<div class="row">
-		<div class="col-sm-1">
-			<div class="h2">Where:&nbsp;</div>
+	<div class="form-group h4">
+		<div class="form-check form-check-inline h3">
+			<input class="form-check-input" type="radio" name="country" id="CountryAll" value="" @(Model.SelectedCountry == null ? "checked" : "")>
+			<label class="form-check-label" for="CountryAll">Any Country</label>
 		</div>
-		<div class="col-sm-11">
-			<div class="form-group h5">
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="country" id="CountryAll" value="" @(Model.SelectedCountry == null ? "checked" : "")>
-					<label class="form-check-label" for="CountryAll">All</label>
-				</div>
-				@foreach (var country in Model.Countries)
-				{
-					<div class="form-check form-check-inline @(Model.IsSelected(country) ? "text-info" : "")">
-						<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
-						<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
-					</div>
-				}
-			</div>
+		@foreach (var country in Model.Countries)
+	{
+		<div class="form-check form-check-inline @(Model.IsSelected(country) ? "text-info" : "")">
+			<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
+			<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
 		</div>
+}
 	</div>
 
 </form>

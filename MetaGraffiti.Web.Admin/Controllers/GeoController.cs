@@ -34,8 +34,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				Countries = GeoCountryInfo.All,
 				Regions = GeoRegionInfo.All
 			};
-			
-			model.Visited = _cartoPlaceService.ListCountries();
+
+			model.Visited = ServiceConfig.TripSheetService.ListCountries(); //_cartoPlaceService.ListCountries();
 
 			return model;
 		}

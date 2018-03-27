@@ -10,11 +10,12 @@
 		<div class="h1"><a href="@CartoViewModel.GetReportUrl()">Full Report</a></div>
 		<hr />
 		<br />
-		<div>
-			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetSearchUrl()">Search...</a>
-			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetSearchUrl()">Create...</a>
-			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetReportUrl()">Import...</a>
-		</div>
+		<h2>Google</h2>
+		@Html.Partial("Widgets/GooglePlaces")
+		<hr />
+		<br />
+		<h2>Search</h2>
+		@Html.Partial("Widgets/SearchPlaces")
 		<hr />
 		<br />
 		@if (Model.HasChanges)
@@ -29,13 +30,13 @@
 				Saved at @Model.LastSaved.ToString()
 			</div>
 		}
-		<div class="form-group">
-			<a class="btn btn-outline-info" href="@CartoViewModel.GetPersistUrl()">Persist Changes</a>
-			<a class="btn btn-outline-secondary" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
+		<div class="btn-group d-flex w-100">
+			<a class="btn w-100 btn-outline-info" href="@CartoViewModel.GetPersistUrl()">Persist Changes</a>
+			<a class="btn w-100 btn-outline-secondary" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
 		</div>
 	</div>
 	<div class="col-sm-2">
-		<div class="h3">Countries</div>
+		<div class="h3">Country Display</div>
 		@foreach (var country in Model.Countries)
 		{
 			<div class="h4">
@@ -44,11 +45,29 @@
 		}
 	</div>
 	<div class="col-sm-2">
-		<div class="h3">Types</div>
+		<div class="h3">Type Report</div>
 		@foreach (var placeType in Model.PlaceTypes)
 		{
 			<div class="h4">
 				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
+			</div>
+		}
+	</div>
+	<div class="col-sm-1">
+		<div class="h5">Import From</div>
+		@foreach (var country in Model.SourceCountries)
+		{
+			<div class="h6">
+				<a href="@PlaceViewModel.GetReportUrl(country.ISO2)">@country.Name</a>
+			</div>
+		}
+	</div>
+	<div class="col-sm-1">
+		<div class="h5">Year</div>
+		@foreach (var year in Model.SourceYears.OrderByDescending(x => x))
+		{
+			<div class="h6">
+				<a href="@PlaceViewModel.GetReportUrl(year)">@year</a>
 			</div>
 		}
 	</div>
