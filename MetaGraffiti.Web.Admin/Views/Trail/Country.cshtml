@@ -69,7 +69,20 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<h2><a href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2)">@Model.Country.Name</a> @(Model.Region == null ? "" : @" \ " + Model.Region.RegionName) Trails</h2>
+		<div>
+			<span class="h2"><a class="text-@Model.AreaCss" href="/trail/">Trails</a></span>
+			<span class="h3 text-@Model.AreaCss">
+				\
+				<a class="text-@Model.AreaCss" href="@TrailViewModel.GetCountryUrl(Model.Country.ISO2)">@Model.Country.Name</a>
+				@(Model.Region == null ? "" : @" \ " + Model.Region.RegionName)
+			</span>
+			<div class="float-right">
+				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.Country)">Geo</a>
+				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(Model.Country)">Carto</a>
+				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
+			</div>
+		</div>
+		<br />
 		<table class="table table-sm table-striped">
 			<thead class="table-dark">
 				<tr>

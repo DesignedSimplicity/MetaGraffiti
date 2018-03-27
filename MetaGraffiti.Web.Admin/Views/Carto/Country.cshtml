@@ -72,16 +72,19 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="row">
-			<div class="col-sm-8">
-				<div class="h2">@Model.SelectedCountry.Name Places</div>
-			</div>
-			<div class="col-sm-4 text-right">
-				<a class="btn btn-outline-success" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">Geo Data</a>
-				<a class="btn btn-secondary js-reset-view" href="#">Reset View</a>
+		<div>
+			<span class="h2"><a class="text-@Model.AreaCss" href="/Carto/">Carto</a></span>
+			<span class="h3 text-@Model.AreaCss">
+				\
+				<a href="@TrailViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@Model.SelectedCountry.Name</a>
+			</span>
+			<div class="float-right">
+				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">Geo</a>
+				<a class="btn btn-outline-success" href="@TrailViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">Topo</a>
+				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
 			</div>
 		</div>
-
+		<br />
 		<table class="table table-sm table-striped table-hover">
 			<thead class="thead-dark">
 				<tr>

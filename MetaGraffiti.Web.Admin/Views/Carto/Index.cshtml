@@ -5,27 +5,21 @@
 
 <div class="row">
 	<div class="col-sm-2">
-		<div class="h3">By Country</div>
-		@foreach (var country in Model.Countries)
-		{
-			<div class="h4">
-				<a href="@CartoViewModel.GetCountryUrl(country)">@country.Name</a>
-			</div>
-		}
-	</div>
-	<div class="col-sm-2">
-		<div class="h3">By Type</div>
-		@foreach (var placeType in Model.PlaceTypes)
-		{
-			<div class="h4">
-				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
-			</div>
-		}
-	</div>
-	<div class="col-sm-2">
+		<div class="h1"><a href="@CartoViewModel.GetPlacesUrl()">Global Map</a></div>
+		<hr />
+		<div class="h1"><a href="@CartoViewModel.GetReportUrl()">Full Report</a></div>
+		<hr />
+		<br />
+		<div>
+			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetSearchUrl()">Search...</a>
+			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetSearchUrl()">Create...</a>
+			<a class="btn btn-@Model.AreaCss" href="@PlaceViewModel.GetReportUrl()">Import...</a>
+		</div>
+		<hr />
+		<br />
 		@if (Model.HasChanges)
 		{
-			<div class="alert alert-danger font-weight-bold">
+			<div class="alert alert-info font-weight-bold">
 				There are unsaved changes!
 			</div>
 		}
@@ -35,17 +29,27 @@
 				Saved at @Model.LastSaved.ToString()
 			</div>
 		}
-		<div class="btn-group">
-			<a class="btn btn-success js-confirm" href="@CartoViewModel.GetPersistUrl()">Persist Places</a>
-			<a class="btn btn-secondary" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
+		<div class="form-group">
+			<a class="btn btn-outline-info" href="@CartoViewModel.GetPersistUrl()">Persist Changes</a>
+			<a class="btn btn-outline-secondary" href="@CartoViewModel.GetReloadUrl()">Reload Data</a>
 		</div>
-		<br />
-		<br />
-		<div class="h2"><a href="@CartoViewModel.GetPlacesUrl()">Map All</a></div>
-		<div class="h2"><a href="@CartoViewModel.GetReportUrl()">Report</a></div>
-		<br />
-		<div class="h3">Places</div>
-		<div class="h4"><a href="@PlaceViewModel.GetReportUrl()">Import...</a></div>
-		<div class="h4"><a href="@PlaceViewModel.GetSearchUrl()">Create...</a></div>
+	</div>
+	<div class="col-sm-2">
+		<div class="h3">Countries</div>
+		@foreach (var country in Model.Countries)
+		{
+			<div class="h4">
+				<a href="@CartoViewModel.GetCountryUrl(country)">@country.Name</a>
+			</div>
+		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h3">Types</div>
+		@foreach (var placeType in Model.PlaceTypes)
+		{
+			<div class="h4">
+				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
+			</div>
+		}
 	</div>
 </div>

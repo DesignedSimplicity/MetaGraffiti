@@ -105,6 +105,20 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class CssHelper
 	{
+		public static string GetAreaCss(AdminAreas area)
+		{
+			switch (area)
+			{
+				case AdminAreas.Geo: return "info";
+				case AdminAreas.Trail: return "success";
+				case AdminAreas.Track: return "success";
+				case AdminAreas.Carto: return "primary";
+				case AdminAreas.Place: return "primary";
+				case AdminAreas.Ortho: return "secondary";
+				default: return "danger";
+			}
+		}
+
 		public static string GetContinentCss(GeoContinents continent)
 		{
 			switch (continent)

@@ -22,19 +22,21 @@
 	<div id="map">
 	</div>
 </div>
-
 <div class="row">
 	<div class="col-sm-3">
-		<div class="h2"><a href="@GeoViewModel.GetTimezonesUrl()">Timezones</a></div>
-		<div class="h2"><a href="@GeoViewModel.GetCountriesUrl()">Countries</a></div>
-		<div class="h2"><a href="@GeoViewModel.GetRegionsUrl()">Regions</a></div>
+		<div class="h2"><a class="text-@Model.AreaCss" href="@GeoViewModel.GetTimezonesUrl()">Timezones</a></div>
+		<hr />
+		<div class="h2"><a class="text-@Model.AreaCss" href="@GeoViewModel.GetCountriesUrl()">Countries</a></div>
+		<hr />
+		<div class="h2"><a class="text-@Model.AreaCss" href="@GeoViewModel.GetRegionsUrl()">Regions</a></div>
+		<hr />
 	</div>
 	<div class="col-sm-3">
 		<div class="h3">Visited Countries</div>
 		@foreach (var c in Model.Visited)
 		{
 			<div class="h4">
-				<a href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
+				<a class="text-@Model.AreaCss" href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
 			</div>
 		}
 	</div>

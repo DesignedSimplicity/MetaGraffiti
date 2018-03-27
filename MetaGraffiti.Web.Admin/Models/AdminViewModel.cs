@@ -9,6 +9,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class AdminViewModel
 	{
+		public string AreaCss { get { return CssHelper.GetAreaCss(Area); } }
+
 		public string ConfirmMessage { get; set; }
 		public bool HasConfirmation { get { return !String.IsNullOrWhiteSpace(ConfirmMessage); } }
 
