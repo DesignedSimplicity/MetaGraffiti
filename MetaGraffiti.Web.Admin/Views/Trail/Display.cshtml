@@ -4,7 +4,7 @@
 @Html.Partial("_Nav")
 
 <script>
-	var _tracks = @Model.GetTrackJson();
+	var _tracks = @JsonHelper.GetJson(Model.Trail);
 	var _bounds = null;
 	var _start = null;
 	var _finish = null;

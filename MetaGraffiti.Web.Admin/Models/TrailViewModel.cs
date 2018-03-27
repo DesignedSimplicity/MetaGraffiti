@@ -22,6 +22,15 @@ namespace MetaGraffiti.Web.Admin.Models
 		public int? SelectedYear { get; set; }
 		public int? SelectedMonth { get; set; }
 
+		public string SelectedSort { get; set; }
+
+		public bool IsSortSelected(string sort)
+		{
+			if (String.IsNullOrWhiteSpace(sort) || String.IsNullOrWhiteSpace(SelectedSort)) return false;
+
+			return (String.Compare(sort, SelectedSort, true) == 0);
+		}
+
 
 		public TopoTrailInfo Trail { get; set; }
 
@@ -51,29 +60,9 @@ namespace MetaGraffiti.Web.Admin.Models
 					: CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Value);
 		}
 
-		// TODO: consolidate JSON
-		public HtmlString GetTrackJson()
-		{
-			if (Trail == null || Trail.Tracks.Count == 0) new HtmlString("[]");
 
-			JArray list = new JArray();
-			foreach (var track in Trail.Tracks)
-			{
-				dynamic t = new JObject();
-				//t.id = track.ID;
-				t.track = track.Name;
-				t.points = new JArray();
-				foreach (var point in track.Points)
-				{
-					dynamic p = new JObject();
-					p.lat = point.Latitude;
-					p.lng = point.Longitude;
-					t.points.Add(p);
-				}
-				list.Add(t);
-			}
-			return new HtmlString(list.ToString());
-		}
+
+
 
 
 		public static string GetTrailUrl() { return "/trail/"; }
@@ -88,7 +77,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetReportUrl(int year, int? month = null) { return $"/trail/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 
-		public static string GetCountryUrl(string country, string region = "") { return $"/trail/country/{country}/" + (String.IsNullOrWhiteSpace(region) ? "" : $"?region={region}"); }
+		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/trail/country/{country}/" + (String.IsNullOrWhiteSpace(region) ? "" : $"?region={region}") + (String.IsNullOrWhiteSpace(sort) ? "" : $"?sort={sort}"); }
 
 		public static string GetDisplayUrl(string id) { return $"/trail/display/{id}/"; }
 	}

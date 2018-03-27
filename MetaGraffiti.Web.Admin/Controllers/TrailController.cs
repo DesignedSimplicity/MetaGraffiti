@@ -69,7 +69,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Displays all of the tracks in a list and on a map for a given country with optional region filter
 		/// </summary>
-		public ActionResult Country(string id, string region)
+		public ActionResult Country(string id, string region, string sort)
 		{
 			var model = InitModel();
 
@@ -96,6 +96,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					model.Trails = _trailDataService.ListByCountry(c);
 				}
 			}
+
+			model.SelectedSort = sort;
+			if (String.IsNullOrWhiteSpace(sort) || (sort.ToUpperInvariant() == "REGION"))
+				model.Trails = model.Trails.OrderBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
+			else if (sort.ToUpperInvariant() == "NAME")
+				model.Trails = model.Trails.OrderBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
+			else if (sort.ToUpperInvariant() == "NEWEST")
+				model.Trails = model.Trails.OrderByDescending(x => x.LocalDate).ThenBy(x => x.Name).ToList();
+			else if (sort.ToUpperInvariant() == "OLDEST")
+				model.Trails = model.Trails.OrderBy(x => x.LocalDate).ThenBy(x => x.Name).ToList();
 
 			return View(model);
 
