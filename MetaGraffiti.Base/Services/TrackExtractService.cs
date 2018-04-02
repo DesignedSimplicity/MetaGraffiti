@@ -398,7 +398,7 @@ namespace MetaGraffiti.Base.Services
 
 		public List<GpxPointData> SourcePoints { get; set; }
 
-		public List<CartoPlaceInfo> Places { get; set; }
+		//public List<CartoPlaceInfo> Places { get; set; }
 	}
 
 	public class TrackUpdateRequest

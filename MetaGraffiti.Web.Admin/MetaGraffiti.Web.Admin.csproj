@@ -292,6 +292,7 @@
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\OrthoPlacesViewModel.cs" />
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
+    <Compile Include="Models\OrthoTracksViewModel.cs" />
     <Compile Include="Models\_Helpers.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
@@ -345,6 +346,7 @@
     <Content Include="Views\Shared\Widgets\SearchPlaces.cshtml" />
     <Content Include="Views\Ortho\Places.cshtml" />
     <Content Include="Views\Ortho\Index.cshtml" />
+    <Content Include="Views\Ortho\Tracks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

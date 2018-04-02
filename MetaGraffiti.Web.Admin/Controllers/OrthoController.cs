@@ -1,8 +1,13 @@
-﻿using MetaGraffiti.Base.Modules.Geo.Info;
+﻿using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Info;
+using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -17,9 +22,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		private TripSheetService _tripSheetService;
 		private CartoPlaceService _cartoPlaceService;
 
+		private TrackExtractService _trackExtractService = new TrackExtractService();
+		private GeoLookupService _geoLookupService;
+		private TrailDataService _trailDataService;
+
+
 		public OrthoController()
 		{
 			_tripSheetService = ServiceConfig.TripSheetService;
+			_trailDataService = ServiceConfig.TrailDataService;
+			_geoLookupService = ServiceConfig.GeoLookupService;
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
@@ -32,7 +44,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		public ActionResult Sheets(string id)
+		{
+			var model = new OrthoSheetsViewModel();
 
+			model.Sheets = _tripSheetService.ListSheets();
+			model.SelectedSheet = id;
+
+			return View(model);
+		}
 
 		public ActionResult Places(int? year, string country = "")
 		{
@@ -68,12 +88,26 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Sheets(string id)
+		public ActionResult Tracks(string path = "")
 		{
-			var model = new OrthoSheetsViewModel();
+			var model = new OrthoTracksViewModel();
 
-			model.Sheets = _tripSheetService.ListSheets();
-			model.SelectedSheet = id;
+			model.TrackSourceRoot = new DirectoryInfo(AutoConfig.TrackSourceUri);
+
+			var dir = new DirectoryInfo(Path.Combine(AutoConfig.TrackSourceUri, path));
+			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
+
+			var root = model.TrackSourceRoot.FullName.TrimEnd('\\') + '\\';
+			if (!dir.FullName.StartsWith(root)) throw new Exception($"Path {dir.FullName} is not in root {root}");
+
+			model.SelectedDirectory = dir;
+
+			model.Sources = new List<OrthoTrackImportModel>();
+			foreach (var file in dir.GetFiles("*.gpx"))
+			{
+				var source = InitOrthoTrackImportModel(file);
+				model.Sources.Add(source);
+			}
 
 			return View(model);
 		}
@@ -83,6 +117,68 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			ServiceConfig.ResetTripSheetService();
 
 			return new RedirectResult(OrthoViewModel.GetOrthoUrl());
+		}
+
+
+		private OrthoTrackImportModel InitOrthoTrackImportModel(FileInfo file)
+		{
+			var model = new OrthoTrackImportModel();
+
+			// init model
+			model.File = file;
+
+			// load raw file data
+			model.Data = new GpxFileInfo(file.FullName);
+
+			// match with existing trail
+			var existing = _trailDataService.FindTrackSource(file.Name);
+			model.Trail = existing?.Trail;
+
+			// build trail preview
+			var trail = new TopoTrailInfo();
+			model.Preview = trail;
+
+			// find intersecting places
+			var points = model.Data.Tracks?.SelectMany(x => x.Points);
+			if (points != null)
+			{
+				var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
+				model.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+				model.Nearby = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+			}
+			
+			// set trail information
+			var first = points?.FirstOrDefault();
+			if (first != null)
+			{
+				trail.Country = _geoLookupService.NearestCountry(first);
+				trail.Region = _geoLookupService.NearestRegion(first);
+				trail.Timezone = _geoLookupService.GuessTimezone(trail.Country);
+				trail.LocalDate = trail.Timezone.FromUTC(first.Timestamp.Value);
+
+				// discover all regions
+				model.Regions = _geoLookupService.NearbyRegions(first);
+				foreach (var region in _geoLookupService.NearbyRegions(points.Last()))
+				{
+					if (!model.Regions.Any(x => x.RegionID == region.RegionID)) model.Regions.Add(region);
+				}
+			}
+
+			// build track previews
+			foreach (var t in model.Data.Tracks)
+			{
+				var track = new TopoTrackInfo(trail, t);
+
+				var start = t.Points.First();
+				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+
+				var finish = t.Points.Last();
+				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();				
+
+				trail.Tracks.Add(track);
+			}
+
+			return model;
 		}
 	}
 }

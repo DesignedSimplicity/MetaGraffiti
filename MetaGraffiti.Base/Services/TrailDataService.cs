@@ -2,6 +2,7 @@
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using System;
 using System.Collections.Generic;
@@ -187,7 +188,6 @@ namespace MetaGraffiti.Base.Services
 
 
 			// create track data
-			trail.Tracks = new List<TopoTrackInfo>();
 			var places = new List<CartoPlaceInfo>();
 			foreach (var track in data.Tracks.OrderBy(x => x.Points.First().Timestamp.Value))
 			{

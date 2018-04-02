@@ -1,0 +1,131 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model OrthoTracksViewModel
+
+@Html.Partial("_Nav")
+
+<div>
+	<span class="h2">
+		@if (Model.IsSelected(Model.TrackSourceRoot))
+		{
+			<span>Tracks</span>
+		}
+		else
+		{
+			<a class="ortho-color" href="@OrthoViewModel.GetTracksUrl()">Tracks</a>
+		}
+	</span>
+	<span>
+		@foreach (var year in Model.TrackSourceRoot.GetDirectories())
+		{
+			<span class="h3">
+				\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetTracksUrl(year.Name)">@year.Name</a>
+				@if (Model.IsSelected(year) || Model.IsAncestor(year))
+				{
+					var months = (Model.IsSelected(year) ? Model.SelectedDirectory.GetDirectories() : Model.SelectedDirectory.Parent.GetDirectories());
+					<span class="h4">
+						@foreach (var month in months)
+						{
+							<span>\<a class="@(Model.IsSelected(month) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetTracksUrl(year.Name + "/" + month.Name)">@month.Name</a></span>
+						}
+					</span>
+					<span>&nbsp;</span>
+				}
+			</span>
+		}
+	</span>
+</div>
+<div class="clearfix"></div>
+<br />
+<div>
+	@if (Model.HasSources)
+	{
+		<table class="table table-sm table-striped table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<td>#</td>
+					<td>File</td>
+					<td>Trail</td>
+					<td class="text-center">Date</td>
+					<td class="text-center">Time</td>
+					<td>Labels</td>
+					<td>Distance (KM)</td>
+					<td>Time (hours)</td>
+					<td>Speed (KM/H)</td>
+					<td>Country</td>
+					<td>Regions</td>
+					<td>Places</td>
+					<td>Actions</td>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var index = 0;
+					foreach (var source in Model.Sources.OrderBy(x => x.Preview.LocalDate))
+					{
+						<tr>
+							<td>@(index + 1)</td>
+							<td>
+								<a href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">@source.File.Name</a>
+							</td>
+							<td>
+								@if (source.Trail != null)
+								{
+									<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
+								}
+							</td>
+							<td class="text-center">@source.Preview.LocalDate.ToString("yyyy-MM-dd")</td>
+							<td class="text-center">@source.Preview.LocalDate.ToShortTimeString()</td>
+							<td>
+								@foreach (var tag in source.Preview.AutoTags)
+	{
+							<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
+}
+							</td>
+							<td class="text-center font-weight-bold">@source.Preview.TotalKilometers.ToString("#,##0.0")</td>
+							<td class="text-center font-weight-bold">@source.Preview.ElapsedTimeText</td>
+							<td class="text-center">
+								@((source.Preview.TotalKilometers / source.Preview.ElapsedTime.TotalHours).ToString("0.0"))
+							</td>
+							<td class="@(source.Preview.Country == null ? "table-danger" : "")">@(source.Preview.Country?.Name ?? "")</td>
+							<td>
+								@foreach (var region in source.Regions)
+								{
+									<div>@region.RegionName</div>
+								}
+							</td>
+							<td class="small">
+								<div class="font-weight-bold">
+									@foreach (var place in source.Places)
+									{
+										<div class="@(source.IsStart(place) ? "text-success" : (source.IsFinish(place) ? "text-primary" : ""))">@place.Name</div>
+									}
+								</div>
+								<div>
+									@foreach (var place in source.Nearby)
+									{
+										if (!source.ContainsPlace(place))
+										{
+											<div class="@(source.IsStart(place) ? "text-success" : (source.IsFinish(place) ? "text-primary" : ""))">@place.Name</div>
+										}
+									}
+								</div>
+							</td>
+							<td>
+								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">Preview</a>
+								@if (source.Trail != null)
+								{
+									<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
+								}
+								else
+								{
+									<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.File.FullName)">Import</a>
+								}
+							</td>
+						</tr>
+						index++;
+					}
+				}
+			</tbody>
+		</table>
+	}
+</div>

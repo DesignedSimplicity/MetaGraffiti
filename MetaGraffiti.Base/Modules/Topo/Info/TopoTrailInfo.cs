@@ -33,7 +33,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public GeoTimezoneInfo Timezone { get; set; }
 
 
-		public List<TopoTrackInfo> Tracks { get; set; }
+		public List<TopoTrackInfo> Tracks { get; private set; } = new List<TopoTrackInfo>();
 
 
 
