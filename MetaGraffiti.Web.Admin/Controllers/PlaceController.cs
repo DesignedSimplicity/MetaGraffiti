@@ -18,22 +18,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// Initialization
 
 		private CartoPlaceService _cartoPlaceService;
-		private TripSheetService _tripSheetService;
 		private GeoLookupService _geoLookupService;
 
 		public PlaceController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_tripSheetService = ServiceConfig.TripSheetService;
 			_geoLookupService = ServiceConfig.GeoLookupService;
 		}
 
 		private PlaceViewModel InitModel()
 		{
 			var model = new PlaceViewModel();
-
-			model.Countries = _tripSheetService.ListCountries();
-			model.Years = _tripSheetService.ListYears();
 
 			return model;
 		}
@@ -48,36 +43,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View(model);
         }
-
-		public ActionResult Report(int? year, string country)
-		{
-			var model = InitModel();
-
-			model.SelectedYear = year;
-			model.SelectedCountry = GeoCountryInfo.Find(country);
-
-			var places = new List<PlaceReportModel>();
-			var import = _tripSheetService.ListPlaces(year, country);
-			foreach(var data in import)
-			{
-				var place = new PlaceReportModel();
-				place.Data = data;
-				places.Add(place);
-
-				var r = GeoRegionInfo.Find(data.Region);
-				if (r != null) place.Place = _cartoPlaceService.FindPlace(r, data.Name, true);
-
-				if (place.Place == null)
-				{
-					var c = GeoCountryInfo.Find(data.Country);
-					if (c != null) place.Place = _cartoPlaceService.FindPlace(c, data.Name, true);
-				}				
-			}
-			model.ReportPlaces = places;
-			model.ImportPlaces = import;
-
-			return View(model);
-		}
 
 		/// <summary>
 		/// Searches google for places by name

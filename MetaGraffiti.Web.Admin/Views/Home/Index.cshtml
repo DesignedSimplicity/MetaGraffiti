@@ -2,29 +2,7 @@
 @model AdminViewModel
 <div class="jumbotron">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-8">
-				<h1 class="meta-title display-1">@SvgHelper.GetIcon("Meta")<span class="font-weight-bold">Meta</span><span>Graffiti</span></h1>
-				<div>
-					@foreach (var area in Model.Areas)
-					{
-						if (area != AdminAreas.Home)
-						{
-							<a class="h1" href="/@(area.ToString())">@area.ToString()</a>
-							<span>&nbsp;</span>
-						}
-					}
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="mt-2">
-					<a href="/place/" class="carto-color meta-title h1">@SvgHelper.GetIcon("types/place")<span>Find Place</span></a>
-				</div>
-				<div class="mt-2">
-					<a href="/track/" class="topo-color meta-title h1">@SvgHelper.GetIcon("types/track")<span>Load Track</span></a>
-				</div>
-			</div>
-		</div>
+		<h1 class="icon-link display-1">@SvgHelper.GetIcon("Meta")<span class="font-weight-bold">Meta</span><span>Graffiti</span></h1>
 	</div>
 </div>
 
@@ -32,38 +10,48 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div>
-				<a href="/carto/" class="carto-color">
-					<div class="meta-title display-1">@SvgHelper.GetIcon("Carto")<span class="font-weight-bold">Carto</span><span>Graffiti</span></div>
-					<div class="h1">Create Maps</div>
+				<a href="/trail/" class="topo-color">
+					<div class="icon-link display-2">@SvgHelper.GetIcon("Topo")<span class="font-weight-bold">Topo</span><span>Graffiti</span> </div>
+					<div class="h2">Make Trails</div>
 				</a>
 			</div>
 			<hr />
 			<div>
-				<a href="/trail/" class="topo-color">
-					<div class="meta-title display-1">@SvgHelper.GetIcon("Topo")<span class="font-weight-bold">Topo</span><span>Graffiti</span> </div>
-					<div class="h1">Make Trails</div>
+				<a href="/carto/" class="carto-color">
+					<div class="icon-link display-2">@SvgHelper.GetIcon("Carto")<span class="font-weight-bold">Carto</span><span>Graffiti</span></div>
+					<div class="h2">Create Maps</div>
+				</a>
+			</div>
+			<hr />
+			<div>
+				<a href="@OrthoViewModel.GetOrthoUrl()" class="ortho-color">
+					<div class="icon-link display-2">@SvgHelper.GetIcon("Ortho")<span class="font-weight-bold">Ortho</span><span>Graffiti</span> </div>
+					<div class="h2">Import Data</div>
 				</a>
 			</div>
 			<hr />
 			<div>
 				<a href="/geo/" class="geo-color">
-					<div class="meta-title display-1">@SvgHelper.GetIcon("Geo")<span class="font-weight-bold">Geo</span><span>Graffiti</span> </div>
-					<div class="h1">Manage Core</div>
+					<div class="icon-link display-2">@SvgHelper.GetIcon("Geo")<span class="font-weight-bold">Geo</span><span>Graffiti</span> </div>
+					<div class="h2">Manage Core</div>
 				</a>
 			</div>
 		</div>
 		<div class="col-md-4">
+			<div class="mt-2">
+				<a href="@OrthoViewModel.GetTracksUrl()" class="topo-color icon-link h1">@SvgHelper.GetIcon("types/track")<span>Load Track</span></a>
+			</div>
+			<hr />
+			<div class="mt-2">
+				<a href="@OrthoViewModel.GetPlacesUrl()" class="carto-color icon-link h1">@SvgHelper.GetIcon("types/place")<span>Find Place</span></a>
+			</div>
 			<!--
 			<div><a href="/chrono/" class="text-danger"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Build Timelines<small></small></div></a></div>
 			<hr />
 			<div><a href="/choro/" class="text-info"><div class="display-3"><span class="font-weight-bold">Choro</span>Graffiti</div><div class="h3">Describe Places <small></small></div></a></div>
 			<hr />
-				-->
-			<div><a href="/ortho/" class="text-warning"><div class="display-3"><span class="font-weight-bold">Ortho</span>Graffiti</div><div class="h3">Import Export <small></small></div></a></div>
-			<hr />
 			<div><a href="/bio/" class="text-dark"><div class="display-3"><span class="font-weight-bold">Bio</span>Graffiti</div><div class="h3">Document History <small></small></div></a></div>
+			-->
 		</div>
 	</div>
 </div>
-
-

@@ -15,12 +15,29 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public static HtmlString GetIcon(string name)
 		{
-			string path = Path.Combine(HttpContext.Current.Server.MapPath(@"\Images\Icons"), name + ".svg");
+			var root = HttpContext.Current.Server.MapPath(@"\Images\Icons");
+			if (name.Contains("/")) root = @"C:\Code\KnE\Icons\";
+			string path = Path.Combine(root, name + ".svg");
 			if (File.Exists(path))
 				return new HtmlString(File.ReadAllText(path));
 			else
 				return new HtmlString("");
 		}
+	}
+
+
+	public class HrefHelper
+	{
+		public static string OrthoUrl() { return $"/ortho/"; }
+		public static string OrthoPlacesUrl() { return $"/ortho/places/"; }
+		public static string OrthoTracksUrl() { return $"/ortho/tracks/"; }
+		public static string OrthoSheetsUrl(string sheet = "") { return $"/ortho/sheets/{sheet}/".Replace("//", "/"); }
+		public static string OrthoResetUrl() { return $"/ortho/reset/"; }
+
+
+
+		public static string GetPlaceUrl(CartoPlaceInfo place) { return $"/carto/place/{place.Key}/"; }
+		public static string GetImportPlaceUrl(string name, string country) { return $"/place/search/?name={name}&country={country}"; }
 	}
 
 

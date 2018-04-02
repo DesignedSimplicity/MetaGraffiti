@@ -62,6 +62,19 @@ namespace MetaGraffiti.Web.Admin
 			}
 		}
 
+		public static void ResetTripSheetService()
+		{
+			// clear out existing cache if necessary
+			if (_tripSheetService != null) _tripSheetService.ResetCache();
+
+			// create and initalize service as needed
+			var service = new TripSheetService();
+			service.Init(AutoConfig.PlaceDataUri);
+
+			// update shared static resource
+			_tripSheetService = service;
+		}
+
 		public static TripSheetService TripSheetService
 		{
 			get
@@ -74,12 +87,8 @@ namespace MetaGraffiti.Web.Admin
 					// recheck after lock expires
 					if (_tripSheetService != null) return _tripSheetService;
 
-					// create and initalize service as needed
-					var service = new TripSheetService();
-					service.Init(AutoConfig.PlaceDataUri);
+					ResetTripSheetService();
 
-					// update shared static resource
-					_tripSheetService = service;
 					return _tripSheetService;
 				}
 			}

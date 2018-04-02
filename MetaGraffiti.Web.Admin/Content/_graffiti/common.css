@@ -1,11 +1,4 @@
-﻿.js-mappable-row:hover {
-	cursor: crosshair;
-	color: #900;
-	background-color: #fee !important;
-}
-
-
-#map-container {
+﻿#map-container {
 	position: fixed;
 	top: 0;
 	left: 50%;
@@ -22,27 +15,43 @@
 
 
 
-.meta-title > * {
+
+
+.js-mappable-row:hover {
+	cursor: crosshair;
+	color: #900;
+	background-color: #fee !important;
+}
+
+
+
+
+
+/****************************************/
+/* svg icon links */
+
+.icon-link > * {
 	display: inline-block;
 	vertical-align: bottom;
 }
 
-.meta-title > svg {
+.icon-link > svg {
 	width: 1em;
 	height: 1em;
 	margin-right: 0.1em;
 }
 
-.svg-fill svg {
-	width: 1em;
-	height: 1em;
-}
 
+
+
+/****************************************/
+/* module color selection */
 
 .carto-color {
 	color: #0b7efb;
 	fill: #0b7efb;
 }
+
 	.carto-color:hover {
 		color: #0859af;
 		fill: #0859af;
@@ -52,6 +61,7 @@
 	color: #2da44c;
 	fill: #2da44c;
 }
+
 	.topo-color:hover {
 		color: #247c3b;
 		fill: #247c3b;
@@ -61,52 +71,18 @@
 	color: #1fa1c6;
 	fill: #1fa1c6;
 }
+
 	.geo-color:hover {
 		color: #1a7989;
 		fill: #1a7989;
 	}
 
-
-
-
-
-.text-bio {
-	color: #17a2b8;
-}
-
-.text-carto {
-	color: #007bff;
-}
-
-.text-choro {
-	color: #17a2b8;
-}
-
-.text-topo {
-	color: #28a745;
-}
-
-.text-chrono {
-	color: #28a745;
-}
-
-.text-ortho {
+.ortho-color {
 	color: #6c757d;
+	fill: #6c757d;
 }
 
-
-/*
-var _mapColors = [
-	'#',
-	'#ffc107',
-	'#',
-	'#dc3545',
-];
-
-var _infoColors = [
-	'#',
-	'#ffeeba',
-	'#bee5eb',
-	'#f5c6cb',
-];
-*/
+	.ortho-color:hover {
+		color: #555c62;
+		fill: #555c62;
+	}

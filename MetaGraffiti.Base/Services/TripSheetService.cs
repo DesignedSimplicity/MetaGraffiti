@@ -16,7 +16,7 @@ namespace MetaGraffiti.Base.Services
 		private object _lock = true;
 		private XlsFileData _source;
 
-		public void Reset()
+		public void ResetCache()
 		{
 			_source = null;
 		}

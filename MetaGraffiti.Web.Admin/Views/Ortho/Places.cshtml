@@ -1,5 +1,5 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model PlaceViewModel
+@model OrthoPlacesViewModel
 
 @Html.Partial("_Nav")
 
@@ -13,30 +13,30 @@
 
 <form>
 	<div class="form-group h2">
-		<div class="form-check form-check-inline h1">
+		<div class="form-check form-check-inline h1 ortho-color">
 			<input class="form-check-input" type="radio" name="year" id="YearAll" value="" @(!Model.SelectedYear.HasValue ? "checked" : "")>
 			<label class="form-check-label" for="YearAll">Any Year</label>
 		</div>
 		@foreach (var year in Model.Years.OrderByDescending(x => x))
-	{
-		<div class="form-check form-check-inline @(Model.IsSelected(year) ? "text-primary font-underline" : "")">
-			<input class="form-check-input" type="radio" name="year" id="Year@(year)" value="@year" @(Model.IsSelected(year) ? "checked" : "")>
-			<label class="form-check-label" for="Year@(year)">@year</label>
-		</div>
-}
+		{
+			<div class="form-check form-check-inline @(Model.IsSelected(year) ? "" : "ortho-color")">
+				<input class="form-check-input" type="radio" name="year" id="Year@(year)" value="@year" @(Model.IsSelected(year) ? "checked" : "")>
+				<label class="form-check-label" for="Year@(year)">@year</label>
+			</div>
+		}
 	</div>
 	<div class="form-group h4">
-		<div class="form-check form-check-inline h3">
+		<div class="form-check form-check-inline h3 ortho-color">
 			<input class="form-check-input" type="radio" name="country" id="CountryAll" value="" @(Model.SelectedCountry == null ? "checked" : "")>
 			<label class="form-check-label" for="CountryAll">Any Country</label>
 		</div>
 		@foreach (var country in Model.Countries)
-	{
-		<div class="form-check form-check-inline @(Model.IsSelected(country) ? "text-info" : "")">
-			<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
-			<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
-		</div>
-}
+		{
+			<div class="form-check form-check-inline @(Model.IsSelected(country) ? "" : "ortho-color")">
+				<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
+				<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
+			</div>
+		}
 	</div>
 
 </form>
@@ -46,7 +46,6 @@
 		<tr>
 			<th class="table-primary text-center">#</th>
 			<th>Name</th>
-			<th>Locality</th>
 			<th>Region</th>
 			<th>Country</th>
 			<th>Place</th>
@@ -55,18 +54,17 @@
 	<tbody>
 		@{
 			var count = 0;
-			foreach (var row in Model.ListReportedPlaces())
+			foreach (var row in Model.ListPlaces())
 			{
 				<tr class="@Model.GetStatusCss(row)">
 					<td class="text-center">@(++count)</td>
-					<td><a href="@PlaceViewModel.GetSearchUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
-					<td>@row.Data.Locality</td>
+					<td><a href="@HrefHelper.GetImportPlaceUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
 					<td>@row.Data.Region</td>
 					<td>@row.Data.Country</td>
 					<td>
 						@if (row.Place != null)
 						{
-							<a href="@CartoViewModel.GetEditUrl(row.Place.Key)">@row.Place.Name</a>
+							<a href="@HrefHelper.GetPlaceUrl(row.Place)">@row.Place.Name</a>
 							<span>@row.Place.Locality <b>@(row.Place.Region?.RegionName ?? "")</b></span>
 						}
 					</td>

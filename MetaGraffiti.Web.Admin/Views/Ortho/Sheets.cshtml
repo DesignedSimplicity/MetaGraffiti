@@ -1,17 +1,15 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model OrthoViewModel
+@model OrthoSheetsViewModel
 
 @Html.Partial("_Nav")
 
 <div>
-	<span class="h1">Sheets</span>
 	<span class="h2">
-		:
-		<a href="/ortho/sheet/">All</a>
+		<a class="h1 ortho-color" href="@OrthoViewModel.GetSheetsUrl()">All Sheets</a>
 		@foreach (var sheet in Model.Sheets.OrderBy(x => x.SheetName))
 		{
 			<span> | </span>
-			<a class="@(Model.IsSelected(sheet) ? "font-italic" : "")" href="/ortho/sheet/@(sheet.SheetName)">@sheet.SheetName</a>
+			<a class="ortho-color @(Model.IsSelected(sheet) ? "font-italic" : "")" href="@OrthoViewModel.GetSheetsUrl(sheet.SheetName)">@sheet.SheetName</a>
 		}
 	</span>
 </div>

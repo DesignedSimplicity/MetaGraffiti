@@ -13,10 +13,29 @@ A framework to process geographic and topographic data for map building and visu
 
 ### Beta
 
+\carto
+\carto\map
+\carto\country\ID
 
-## TODO
-1. Import GPX to write v1.1 files
-2. Add Country/Region/Timezone to imported GPX files
+\carto\report\?type=&country=&region=
+\carto\import\?country=&year=
+
+\carto\search\?name=&country=
+\carto\search\?latitude=&longtitude=
+
+
+\carto\place\index\ID
+\carto\place\create\
+\carto\place\update\
+\carto\place\delete\
+
+\carto\place\google\?googlePlaceID=
+
+
+
+
+
+
 
 
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo.Data;
 using MetaGraffiti.Base.Modules.Geo.Info;
@@ -12,12 +13,30 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class OrthoViewModel : AdminViewModel
 	{
-		public List<XlsSheetData> Sheets { get; set; }
-		public string SelectedSheet { get; set; }
+		// ==================================================
+		// Required
+		public List<int> Years { get; set; }
 
-		public bool IsSelected(XlsSheetData sheet)
+
+		// ==================================================
+		// Optional
+		public int? SelectedYear { get; set; }
+
+
+		// ==================================================
+		// Helpers
+		public bool IsSelected(int year)
 		{
-			return (String.Compare(sheet.SheetName, SelectedSheet, true) == 0);
+			return (SelectedYear ?? -1) == year;
 		}
+
+
+		// ==================================================
+		// Navigation
+		public static string GetOrthoUrl() { return $"/ortho/"; }
+		public static string GetResetUrl() { return $"/ortho/reset/"; }
+		public static string GetPlacesUrl(int? year = null) { return $"/ortho/places/?year={year}"; }
+		public static string GetTracksUrl(string path = "") { return $"/ortho/tracks/?path={path}"; }
+		public static string GetSheetsUrl(string sheet = "") { return $"/ortho/sheets/{sheet}/".Replace("//", "/"); }
 	}
 }

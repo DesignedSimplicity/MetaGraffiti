@@ -1,0 +1,28 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model OrthoViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-sm-2">
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetPlacesUrl()">@SvgHelper.GetIcon("types/place")Places</a></div>
+		<hr />
+		@foreach (var year in Model.Years.OrderByDescending(x => x))
+		{
+			<div class="h4"><a class="ortho-color" href="@OrthoViewModel.GetPlacesUrl(year)">@year</a></div>
+		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetTracksUrl()">@SvgHelper.GetIcon("types/track")Tracks</a></div>
+		<hr />
+		@foreach (var year in Model.Years.OrderByDescending(x => x))
+		{
+			<div class="h4"><a class="ortho-color" href="@OrthoViewModel.GetTracksUrl(year.ToString())">@year</a></div>
+		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetSheetsUrl()">@SvgHelper.GetIcon("Ortho")Sheets</a></div>
+		<hr />
+		<a class="btn btn-outline-warning" href="@OrthoViewModel.GetResetUrl()">Reload Source Data</a>
+	</div>
+</div>
