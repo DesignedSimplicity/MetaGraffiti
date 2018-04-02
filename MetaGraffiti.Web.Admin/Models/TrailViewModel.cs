@@ -36,7 +36,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<TopoTrailInfo> Trails { get; set; }
 
-		public TrailReportRequest Filters { get; set; }
+		public TopoTrailReportRequest Filters { get; set; }
 
 		public GeoCountryInfo Country { get; set; }
 
@@ -81,27 +81,4 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetDisplayUrl(string id) { return $"/trail/display/{id}/"; }
 	}
-
-	/*
-	public class TopoTrailModel
-	{
-		public TopoTrailInfo Trail { get; set; }
-
-
-		public CartoPlaceInfo StartPlace { get; set; }
-		public CartoPlaceInfo FinishPlace { get; set; }
-		public List<CartoPlaceInfo> ViaPlaces { get; set; }
-
-
-		/// <summary>
-		/// Places partially contained within the trail bounds
-		/// </summary>
-		public List<CartoPlaceInfo> NearbyPlaces { get; set; }
-
-		/// <summary>
-		/// Places which contain part of the trail bounds
-		/// </summary>
-		public List<CartoPlaceInfo> ContaingPlaces { get; set; }
-	}
-	*/
 }

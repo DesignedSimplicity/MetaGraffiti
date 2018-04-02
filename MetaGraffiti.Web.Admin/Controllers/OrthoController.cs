@@ -24,13 +24,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private GeoLookupService _geoLookupService;
-		private TrailDataService _trailDataService;
+		private TopoTrailService _trailDataService;
 
 
 		public OrthoController()
 		{
 			_tripSheetService = ServiceConfig.TripSheetService;
-			_trailDataService = ServiceConfig.TrailDataService;
+			_trailDataService = ServiceConfig.TopoTrailService;
 			_geoLookupService = ServiceConfig.GeoLookupService;
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
@@ -114,7 +114,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Reset()
 		{
-			ServiceConfig.ResetTripSheetService();
+			ServiceConfig.ResetTripSheet();
 
 			return new RedirectResult(OrthoViewModel.GetOrthoUrl());
 		}

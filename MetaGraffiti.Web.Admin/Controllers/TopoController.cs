@@ -20,19 +20,22 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
-		private TrailDataService _trailDataService;
+		private TopoTrailService _trailDataService;
 
 		public TopoController()
 		{
-			_trailDataService = ServiceConfig.TrailDataService;
+			_trailDataService = ServiceConfig.TopoTrailService;
 		}
 
 		private TopoViewModel InitModel()
 		{
 			var model = new TopoViewModel();
 
-			model.Trails = _trailDataService.ListTrails();
 			model.Countries = _trailDataService.ListCountries().OrderBy(x => x.Name);
+			model.Trails = _trailDataService.ListTrails();
+
+			model.FirstDate = model.Trails.Min(x => x.LocalDate);
+			model.LastDate = model.Trails.Max(x => x.LocalDate);
 
 			return model;
 		}
@@ -58,6 +61,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
+			model.SelectedSort = sort;
+
 			if (!String.IsNullOrWhiteSpace(region))
 			{
 				var r = GeoRegionInfo.Find(region);
@@ -65,8 +70,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					model.ErrorMessages.Add($"Invalid region: {region}");
 				else
 				{
-					model.Region = r;
-					model.Country = r.Country;
+					model.SelectedRegion = r;
+					model.SelectedCountry = r.Country;
 					model.Trails = _trailDataService.ListByRegion(r);
 				}
 			}
@@ -77,36 +82,28 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					model.ErrorMessages.Add($"Invalid country: {id}");
 				else
 				{
-					model.Country = c;
+					model.SelectedCountry = c;
 					model.Trails = _trailDataService.ListByCountry(c);
 				}
 			}
 
-			model.SelectedSort = (String.IsNullOrWhiteSpace(sort) ? "Newest" : sort);
-			if (model.IsSortSelected("Region"))
-				model.Trails = model.Trails.OrderBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
-			else if (model.IsSortSelected("Name"))
-				model.Trails = model.Trails.OrderBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
-			else if (model.IsSortSelected("Newest"))
-				model.Trails = model.Trails.OrderByDescending(x => x.LocalDate).ThenBy(x => x.Name).ToList();
-			else if (model.IsSortSelected("Oldest"))
-				model.Trails = model.Trails.OrderBy(x => x.LocalDate).ThenBy(x => x.Name).ToList();
-
 			return View(model);
 		}
 
-		public ActionResult Map(TopoReportModel filters)
+		/// <summary>
+		/// Displays a list of TopoTrailInfo GPX data files filtered by report criteria
+		/// </summary>
+		public ActionResult Report(TopoTrailReportRequest report)
 		{
 			var model = InitModel();
 
-			return View();
-		}
+			model.SelectedSort = "Oldest";
+			model.SelectedYear = report.Year;
+			model.SelectedMonth = report.Month;
 
-		public ActionResult List(TopoReportModel filters)
-		{
-			var model = InitModel();
+			model.Trails = _trailDataService.Report(report);
 
-			return View();
+			return View(model);
 		}
 
 		/// <summary>
@@ -130,23 +127,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Refresh()
 		{
-			ServiceConfig.ResetTrailDataService();
+			ServiceConfig.ResetTopoTrail();
 
 			return Redirect(TopoViewModel.GetTopoUrl());
 		}
-	}
-
-
-
-	public class TopoReportModel
-	{
-		public string Country { get; set; }
-		public string Region { get; set; }
-
-		public int? Year { get; set; }
-		public int? Month { get; set; }
-
-		public string Tags { get; set; }
-		public string Sort { get; set; }
 	}
 }

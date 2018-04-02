@@ -17,8 +17,8 @@ namespace MetaGraffiti.Web.Admin
 		private static System.Object _lockTrip = new System.Object();
 		private static TripSheetService _tripSheetService;
 
-		private static System.Object _lockTrail = new System.Object();
-		private static TrailDataService _trailDataService;
+		private static System.Object _lockTopo = new System.Object();
+		private static TopoTrailService _topoTrailService;
 
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 		private static GeoLookupService _geoLookupService = new GeoLookupService(_googleApiService);
@@ -30,39 +30,39 @@ namespace MetaGraffiti.Web.Admin
 			get { return _geoLookupService; }
 		}
 
-		public static void ResetTrailDataService()
+		public static void ResetTopoTrail()
 		{
 			// clear out existing cache if necessary
-			if (_trailDataService != null) _trailDataService.ResetCache();
+			if (_topoTrailService != null) _topoTrailService.ResetCache();
 
 			// create and initalize service as needed
-			var service = new TrailDataService(CartoPlaceService);
+			var service = new TopoTrailService(CartoPlaceService);
 			service.Init(AutoConfig.TrailSourceUri);
 
 			// update shared static resource
-			_trailDataService = service;
+			_topoTrailService = service;
 		}
 
-		public static TrailDataService TrailDataService
+		public static TopoTrailService TopoTrailService
 		{
 			get
 			{
 				// unlocked check again current cache
-				if (_trailDataService != null) return _trailDataService;
+				if (_topoTrailService != null) return _topoTrailService;
 
 				lock (_lockTrip)
 				{
 					// recheck after lock expires
-					if (_trailDataService != null) return _trailDataService;
+					if (_topoTrailService != null) return _topoTrailService;
 
-					ResetTrailDataService();
+					ResetTopoTrail();
 
-					return _trailDataService;
+					return _topoTrailService;
 				}
 			}
 		}
 
-		public static void ResetTripSheetService()
+		public static void ResetTripSheet()
 		{
 			// clear out existing cache if necessary
 			if (_tripSheetService != null) _tripSheetService.ResetCache();
@@ -87,7 +87,7 @@ namespace MetaGraffiti.Web.Admin
 					// recheck after lock expires
 					if (_tripSheetService != null) return _tripSheetService;
 
-					ResetTripSheetService();
+					ResetTripSheet();
 
 					return _tripSheetService;
 				}

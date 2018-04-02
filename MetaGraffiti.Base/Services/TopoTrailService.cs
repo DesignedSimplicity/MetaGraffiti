@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace MetaGraffiti.Base.Services
 {
-    public class TrailDataService
+    public class TopoTrailService
     {
 		// ==================================================
 		// Internals
@@ -21,7 +21,7 @@ namespace MetaGraffiti.Base.Services
 		private CartoPlaceService _cartoPlaceService;
 
 
-		public TrailDataService(CartoPlaceService cartoPlaceService)
+		public TopoTrailService(CartoPlaceService cartoPlaceService)
 		{
 			_cartoPlaceService = cartoPlaceService;
 		}
@@ -94,17 +94,17 @@ namespace MetaGraffiti.Base.Services
 
 		public List<TopoTrailInfo> ListByDate(int year, int? month = null, int? day = null)
 		{
-			return Report(new TrailReportRequest() { Year = year, Month = month, Day = day });
+			return Report(new TopoTrailReportRequest() { Year = year, Month = month, Day = day });
 		}
 
 		public List<TopoTrailInfo> ListByCountry(GeoCountryInfo country)
 		{
-			return Report(new TrailReportRequest() { Country = country.ISO3 });
+			return Report(new TopoTrailReportRequest() { Country = country.ISO3 });
 		}
 
 		public List<TopoTrailInfo> ListByRegion(GeoRegionInfo region)
 		{
-			return Report(new TrailReportRequest() { Region = region.RegionISO });
+			return Report(new TopoTrailReportRequest() { Region = region.RegionISO });
 		}
 
 		/*
@@ -114,7 +114,7 @@ namespace MetaGraffiti.Base.Services
 		}
 		*/
 
-		public List<TopoTrailInfo> Report(TrailReportRequest request)
+		public List<TopoTrailInfo> Report(TopoTrailReportRequest request)
 		{
 			var query = _trails.All.AsQueryable();
 
@@ -211,7 +211,7 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
-	public class TrailReportRequest
+	public class TopoTrailReportRequest
 	{
 		public string Country { get; set; }
 		public string Region { get; set; }

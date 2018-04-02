@@ -3,8 +3,14 @@
 
 @Html.Partial("_Nav")
 
+@{
+	var trails = Model.ListTrailsSorted();
+	var country = Model.SelectedCountry;
+	var region = Model.SelectedRegion;
+}
+
 <script>
-	var _trails = @JsonHelper.GetJson(Model.Trails);
+	var _trails = @JsonHelper.GetJson(trails);
 	var _bounds = null;
 	var _start = null;
 	var _finish = null;
@@ -48,7 +54,7 @@
 			var index = $(this).index();
 
 			var bounds = new google.maps.LatLngBounds();
-			var tracks = _trails[index].tracks;			
+			var tracks = _trails[index].tracks;
 			for (var j = 0; j < tracks.length; j++) {
 				var points = tracks[j].points;
 				for (var i = 0; i < points.length; i++) {
@@ -74,13 +80,19 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div>
-			<span class="h2">
-				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(Model.Country)">@Model.Country.Name</a>
-				@(Model.Region == null ? "" : @" \ " + Model.Region.RegionName)
-			</span>
+			@if (region == null)
+			{
+				<span class="h2">@country.Name</span>
+			}
+			else
+			{
+				<span class="h2">
+					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country)">@country.Name</a><span class="h3"> \ @region.RegionName</span>
+				</span>
+			}
 			<div class="float-right">
-				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.Country)">Geo</a>
-				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(Model.Country)">Carto</a>
+				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(country)">Geo</a>
+				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">Carto</a>
 				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
 			</div>
 		</div>
@@ -91,29 +103,29 @@
 					<th class="text-center">#</th>
 					<th>
 						Region&nbsp;
-						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Region")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Region"))"><i class="fas fa-sort-alpha-down"></i></a>
+						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Region")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Region"))"><i class="fas fa-sort-alpha-down"></i></a>
 					</th>
 					<th>
 						Trail&nbsp;
-						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Name")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Name"))"><i class="fas fa-sort-alpha-down"></i></a>
+						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Name")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Name"))"><i class="fas fa-sort-alpha-down"></i></a>
 					</th>
-					<th>Tags</th>
+					<th>Keywords</th>
 					<th class="text-right text-nowrap">
 						Date&nbsp;
-						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Newest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Newest"))"><i class="fas fa-sort-amount-down"></i></a>
-						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Oldest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Oldest"))"><i class="fas fa-sort-amount-up"></i></a>
+						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Newest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Newest"))"><i class="fas fa-sort-amount-down"></i></a>
+						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Oldest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Oldest"))"><i class="fas fa-sort-amount-up"></i></a>
 					</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
 					var index = 0;
-					foreach (var trail in Model.Trails)
+					foreach (var trail in trails)
 					{
 						<tr class="js-mappable-row">
 							<td class="text-center font-weight-bold">@(index + 1)</td>
 							<td>
-								<a class="topo-color" href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (trail.Region?.RegionISO??""), "Name")">@(trail.Region?.RegionName ?? "")</a>
+								<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.ISO2, (trail.Region?.RegionISO??""), "Name")">@(trail.Region?.RegionName ?? "")</a>
 							</td>
 							<td>
 								<span class="h6"><a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a></span>

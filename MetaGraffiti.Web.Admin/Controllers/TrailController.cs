@@ -8,24 +8,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-// TODO: rename to TopoController
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-	// trail/						GET Displays a calendar and a list of countries with their respective GPX imported track data
-	// trail/report/?				GET Displays a list of GPX track files filtered by report criteria
-	// trail/country/{id}/?region=	GET Displays all of the tracks in a list and on a map for a given country with optional region filter
-	// trail/display/{id}			GET Dispalys a single GPX track data file on a map
-	// trail/update/				POST Updates the metadata in an existing GPX track data file (name, description, keywords, but NOT track/point data)
-	// trail/refresh/				GET Resets the current GPX track data file cache and reloads from disk
-
 	public class TrailController : Controller
     {
 		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private TrailDataService _trailDataService;
+		private TopoTrailService _trailDataService;
 
 		public TrailController()
 		{
-			_trailDataService = ServiceConfig.TrailDataService;
+			_trailDataService = ServiceConfig.TopoTrailService;
 		}
 
 		private TrailViewModel InitModel()
@@ -39,92 +31,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Countries = _trailDataService.ListCountries().OrderBy(x => x.Name);
 
 			return model;
-		}
-
-		/// <summary>
-		/// Displays a calendar and a list of countries with their respective GPX imported track data
-		/// </summary>
-		public ActionResult Index()
-		{
-			var model = InitModel();
-
-			return View(model);
-		}
-
-		/// <summary>
-		/// Displays a list of GPX track files filtered by report criteria
-		/// </summary>
-		public ActionResult Report(TrailReportRequest report)
-		{
-			var model = InitModel();
-
-			model.SelectedYear = report.Year;
-			model.SelectedMonth = report.Month;
-
-			model.Trails = _trailDataService.Report(report);
-
-			return View(model);
-		}
-
-		/// <summary>
-		/// Displays all of the tracks in a list and on a map for a given country with optional region filter
-		/// </summary>
-		public ActionResult Country(string id, string region, string sort)
-		{
-			var model = InitModel();
-
-			if (!String.IsNullOrWhiteSpace(region))
-			{
-				var r = GeoRegionInfo.Find(region);
-				if (r == null)
-					model.ErrorMessages.Add($"Invalid region: {region}");
-				else
-				{
-					model.Region = r;
-					model.Country = r.Country;
-					model.Trails = _trailDataService.ListByRegion(r);
-				}
-			}
-			else
-			{
-				var c = GeoCountryInfo.Find(id);
-				if (c == null)
-					model.ErrorMessages.Add($"Invalid country: {id}");
-				else
-				{
-					model.Country = c;
-					model.Trails = _trailDataService.ListByCountry(c);
-				}
-			}
-
-			model.SelectedSort = sort;
-			if (String.IsNullOrWhiteSpace(sort) || (sort.ToUpperInvariant() == "REGION"))
-				model.Trails = model.Trails.OrderBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
-			else if (sort.ToUpperInvariant() == "NAME")
-				model.Trails = model.Trails.OrderBy(x => x.Name).ThenByDescending(x => x.LocalDate).ToList();
-			else if (sort.ToUpperInvariant() == "NEWEST")
-				model.Trails = model.Trails.OrderByDescending(x => x.LocalDate).ThenBy(x => x.Name).ToList();
-			else if (sort.ToUpperInvariant() == "OLDEST")
-				model.Trails = model.Trails.OrderBy(x => x.LocalDate).ThenBy(x => x.Name).ToList();
-
-			return View(model);
-
-		}
-
-		/// <summary>
-		/// Dispalys a single GPX track data file on a map
-		/// </summary>
-		public ActionResult Display(string id)
-		{
-			var model = InitModel();
-
-			var trail =_trailDataService.GetTrail(id);
-
-			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
-
-			model.Trail = trail;
-
-			return View(model);
 		}
 
 		/// <summary>
@@ -180,20 +86,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_trackExtractService.ResetSession();
 
 			// reload trails data before redirect
-			ServiceConfig.ResetTrailDataService(); //_trailDataService.ResetCache();
+			ServiceConfig.ResetTopoTrail(); //_trailDataService.ResetCache();
 
 			// redirect to new trail page
 			return Redirect(TrailViewModel.GetDisplayUrl(filename));
-		}
-
-		/// <summary>
-		/// Resets the current GPX track data file cache and reloads from disk
-		/// </summary>
-		public ActionResult Refresh()
-		{
-			ServiceConfig.ResetTrailDataService();
-
-			return Redirect(TrailViewModel.GetTrailUrl());
 		}
 	}
 }

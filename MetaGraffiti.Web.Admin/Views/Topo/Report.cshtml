@@ -1,0 +1,122 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TopoViewModel
+
+@Html.Partial("_Nav")
+
+@{
+	var trails = Model.ListTrailsSorted();
+}
+
+<div class="row">
+	<div class="col-sm-4">
+		<div class="h2">
+			@if (Model.SelectedMonth.HasValue)
+			{
+				<a class="topo-color" href="@TopoViewModel.GetReportUrl(Model.SelectedYear.Value)">@Model.SelectedYear</a>
+				<span> \ </span>
+				@TextHelper.GetMonth(Model.SelectedMonth)
+			}
+			else
+			{
+				@Model.SelectedYear
+			}
+		</div>
+	</div>
+	<div class="col-sm-8 text-right">
+		@if (Model.SelectedMonth.HasValue)
+		{
+			<div class="h4">
+				@for (int month = 1; month <= 12; month++)
+				{
+					<a class="topo-color @(Model.SelectedMonth == month ? "font-italic" : "")" href="@TopoViewModel.GetReportUrl(Model.SelectedYear.Value, month)">@TextHelper.GetMonth(month)</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+		else
+		{
+			<div class="h5">
+				@for (var year = Model.FirstDate.Year; year <= Model.LastDate.Year; year++)
+				{
+					<a class="topo-color @(Model.SelectedYear == year ? "font-italic" : "")" href="@TopoViewModel.GetReportUrl(year)">@year</a>
+					<span>&nbsp;</span>
+				}
+			</div>
+		}
+	</div>
+</div>
+<br />
+<table class="table table-striped table-bordered">
+	<thead class="table-dark">
+		<tr>
+			<th>Date</th>
+			<th class="w-25">Trail</th>
+			<th>Country</th>
+			<th>Region</th>
+			<th>Places</th>
+			<th>Keywords</th>
+			<th>Tags</th>
+			<th class="text-center">Distance</th>
+			<th class="text-center">Time</th>
+			<th class="text-center">Tracks</th>
+			<th class="text-center">Points</th>
+
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var yearMonth = 0;
+			foreach (var trail in trails)
+			{
+				if (!Model.SelectedMonth.HasValue && yearMonth != trail.LocalDate.Month)
+				{
+					yearMonth = trail.LocalDate.Month;
+					<tr class="table-secondary">
+						<td colspan="11" class="h5">
+							<a class="topo-color" href="@TopoViewModel.GetReportUrl(Model.SelectedYear.Value, yearMonth)">@TextHelper.GetMonth(yearMonth)</a>
+						</td>
+					</tr>
+				}
+				<tr>
+					<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+					<td>
+						<div class="h4">
+							<a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a>
+						</div>
+						<div>@trail.Description</div>
+					</td>
+					<td class="h5">
+						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
+					</td>
+					<td class="h6">
+						@if (trail.Region != null)
+						{
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
+						}
+					</td>
+					<td>
+						@foreach (var place in trail.ViaPlaces)
+						{
+							<div>
+								<a class="carto-color" href="#">@place.Name</a>
+							</div>
+						}
+					</td>
+					<td>
+						@trail.Keywords
+					</td>
+					<td>
+						@foreach (var tag in trail.AutoTags)
+						{
+							<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
+						}
+					</td>
+					<td class="text-center">@trail.TotalKilometers.ToString("0.0") km</td>
+					<td class="text-center text-nowrap">@trail.ElapsedTimeText</td>
+					<td class="text-center">@trail.Tracks.Count</td>
+					<td class="text-center">@trail.Tracks.SelectMany(x => x.Points).Count().ToString("#,##0")</td>
+				</tr>
+			}
+		}
+	</tbody>
+</table>

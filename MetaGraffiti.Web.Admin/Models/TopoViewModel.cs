@@ -13,26 +13,43 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Required
 		public IEnumerable<GeoCountryInfo> Countries { get; set; }
 		public List<TopoTrailInfo> Trails { get; set; }
+		public DateTime FirstDate { get; set; }
+		public DateTime LastDate { get; set; }
 
 
 		// ==================================================
 		// Optional
 		public TopoTrailInfo SelectedTrail { get; set; }
-		public GeoCountryInfo Country { get; set; }
-		public GeoRegionInfo Region { get; set; }
+		public GeoCountryInfo SelectedCountry { get; set; }
+		public GeoRegionInfo SelectedRegion { get; set; }
 		public string SelectedSort { get; set; }
+		public int? SelectedYear { get; set; }
+		public int? SelectedMonth { get; set; }
+
 
 
 		// ==================================================
 		// Helpers
-		public DateTime FirstDate { get { return Trails.Min(x => x.LocalDate); } }
-		public DateTime LastDate { get { return Trails.Max(x => x.LocalDate); } }
 		public int GetTrailCount(GeoCountryInfo country) { return Trails.Count(x => x.Country.CountryID == country.CountryID); }
 		public int GetTrailCount(int year, int month) { return Trails.Count(x => x.LocalDate.Year == year && x.LocalDate.Month == month); }
 		public bool IsSortSelected(string sort)
 		{
 			if (String.IsNullOrWhiteSpace(sort) || String.IsNullOrWhiteSpace(SelectedSort)) return false;
 			return (String.Compare(sort, SelectedSort, true) == 0);
+		}
+		public IEnumerable<TopoTrailInfo> ListTrailsSorted()
+		{
+			if (String.IsNullOrWhiteSpace(SelectedSort)) SelectedSort = "Newest";
+			if (IsSortSelected("Region"))
+				return Trails.OrderBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name).ThenByDescending(x => x.LocalDate);
+			else if (IsSortSelected("Name"))
+				return Trails.OrderBy(x => x.Name).ThenByDescending(x => x.LocalDate);
+			else if (IsSortSelected("Newest"))
+				return Trails.OrderByDescending(x => x.LocalDate).ThenBy(x => x.Name);
+			else if (IsSortSelected("Oldest"))
+				return Trails.OrderBy(x => x.LocalDate).ThenBy(x => x.Name);
+			else
+				return Trails;
 		}
 
 

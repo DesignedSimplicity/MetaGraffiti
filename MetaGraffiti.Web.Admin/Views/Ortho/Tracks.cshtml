@@ -65,12 +65,12 @@
 						<tr>
 							<td>@(index + 1)</td>
 							<td>
-								<a href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">@source.File.Name</a>
+								<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">@source.File.Name</a>
 							</td>
 							<td>
 								@if (source.Trail != null)
 								{
-									<a class="font-weight-bold" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">@source.Trail.Name</a>
+									<a class="topo-color font-weight-bold" href="@TopoViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
 								}
 							</td>
 							<td class="text-center">@source.Preview.LocalDate.ToString("yyyy-MM-dd")</td>
@@ -111,14 +111,14 @@
 								</div>
 							</td>
 							<td>
-								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">Preview</a>
+								<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">Preview</a>
 								@if (source.Trail != null)
 								{
-									<a class="btn btn-sm btn-primary" href="@TrailViewModel.GetDisplayUrl(source.Trail.ID)">Display</a>
+									<a class="btn btn-sm btn-success" href="@TopoViewModel.GetTrailUrl(source.Trail)">Display</a>
 								}
 								else
 								{
-									<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetExtractUrl(source.File.FullName)">Import</a>
+									<a class="btn btn-sm btn-outline-warning" href="@TrackViewModel.GetExtractUrl(source.File.FullName)">Import</a>
 								}
 							</td>
 						</tr>

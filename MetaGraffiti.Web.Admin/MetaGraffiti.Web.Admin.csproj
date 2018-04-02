@@ -362,6 +362,7 @@
     <Content Include="Views\Topo\Trail.cshtml" />
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
+    <Content Include="Views\Topo\Report.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
