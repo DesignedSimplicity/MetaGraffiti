@@ -22,9 +22,54 @@
 
 
 
-.text-geo {
-	color: #6c757d;
+.meta-title > * {
+	display: inline-block;
+	vertical-align: bottom;
 }
+
+.meta-title > svg {
+	width: 1em;
+	height: 1em;
+	margin-right: 0.1em;
+}
+
+.svg-fill svg {
+	width: 1em;
+	height: 1em;
+}
+
+
+.carto-color {
+	color: #0b7efb;
+	fill: #0b7efb;
+}
+	.carto-color:hover {
+		color: #0859af;
+		fill: #0859af;
+	}
+
+.topo-color {
+	color: #2da44c;
+	fill: #2da44c;
+}
+	.topo-color:hover {
+		color: #247c3b;
+		fill: #247c3b;
+	}
+
+.geo-color {
+	color: #1fa1c6;
+	fill: #1fa1c6;
+}
+	.geo-color:hover {
+		color: #1a7989;
+		fill: #1a7989;
+	}
+
+
+
+
+
 .text-bio {
 	color: #17a2b8;
 }

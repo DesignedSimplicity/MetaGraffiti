@@ -3,6 +3,7 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Geo;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using MetaGraffiti.Base.Modules.Topo.Info;
@@ -10,6 +11,19 @@ using Newtonsoft.Json.Linq;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
+	public class SvgHelper
+	{
+		public static HtmlString GetIcon(string name)
+		{
+			string path = Path.Combine(HttpContext.Current.Server.MapPath(@"\Images\Icons"), name + ".svg");
+			if (File.Exists(path))
+				return new HtmlString(File.ReadAllText(path));
+			else
+				return new HtmlString("");
+		}
+	}
+
+
 	public class JsonHelper
 	{
 		// ==================================================

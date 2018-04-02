@@ -49,7 +49,7 @@
 		@foreach (var placeType in Model.PlaceTypes)
 		{
 			<div class="h4">
-				<a href="@CartoViewModel.GetReportUrl(placeType)">@placeType</a>
+				<a href="@CartoViewModel.GetReportUrl(placeType)">@SvgHelper.GetIcon("places/" + placeType)@placeType</a>
 			</div>
 		}
 	</div>
