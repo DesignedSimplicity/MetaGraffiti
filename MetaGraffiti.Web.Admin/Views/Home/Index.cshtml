@@ -39,11 +39,11 @@
 		</div>
 		<div class="col-md-4">
 			<div class="mt-2">
-				<a href="@OrthoViewModel.GetTracksUrl()" class="topo-color icon-link h1">@SvgHelper.GetIcon("types/track")<span>Load Track</span></a>
+				<a href="@OrthoViewModel.GetTracksUrl(DateTime.Now.Year.ToString())" class="topo-color icon-link h1">@SvgHelper.GetIcon("types/track")<span>Load Track</span></a>
 			</div>
 			<hr />
 			<div class="mt-2">
-				<a href="@OrthoViewModel.GetPlacesUrl()" class="carto-color icon-link h1">@SvgHelper.GetIcon("types/place")<span>Find Place</span></a>
+				<a href="@OrthoViewModel.GetPlacesUrl(DateTime.Now.Year)" class="carto-color icon-link h1">@SvgHelper.GetIcon("types/place")<span>Find Place</span></a>
 			</div>
 			<!--
 			<div><a href="/chrono/" class="text-danger"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Build Timelines<small></small></div></a></div>

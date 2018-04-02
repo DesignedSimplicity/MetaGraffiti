@@ -222,7 +222,10 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\_graffiti\common.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\Icons\carto.svg" />
     <Content Include="Images\Icons\geo.svg" />
@@ -251,6 +254,11 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -281,6 +289,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OrthoController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
+    <Compile Include="Controllers\TopoController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Controllers\TrailController.cs" />
     <Compile Include="Global.asax.cs">
@@ -290,9 +299,13 @@
     <Compile Include="Models\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
+    <Compile Include="Models\Helpers\CssHelper.cs" />
+    <Compile Include="Models\Helpers\JsonHelper.cs" />
+    <Compile Include="Models\Helpers\TextHelper.cs" />
     <Compile Include="Models\OrthoPlacesViewModel.cs" />
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
+    <Compile Include="Models\TopoViewModel.cs" />
     <Compile Include="Models\_Helpers.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
@@ -331,7 +344,6 @@
     <Content Include="Views\Trail\Display.cshtml" />
     <Content Include="Views\Track\Preview.cshtml" />
     <Content Include="Views\Trail\Import.cshtml" />
-    <Content Include="Views\Track\Browse.cshtml" />
     <Content Include="Views\Carto\Place.cshtml" />
     <Content Include="Views\Carto\Index.cshtml" />
     <Content Include="Views\Carto\Places.cshtml" />
@@ -347,6 +359,9 @@
     <Content Include="Views\Ortho\Places.cshtml" />
     <Content Include="Views\Ortho\Index.cshtml" />
     <Content Include="Views\Ortho\Tracks.cshtml" />
+    <Content Include="Views\Topo\Trail.cshtml" />
+    <Content Include="Views\Topo\Index.cshtml" />
+    <Content Include="Views\Topo\Country.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

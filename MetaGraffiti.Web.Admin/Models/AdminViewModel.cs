@@ -5,7 +5,7 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public enum AdminAreas { Home, Carto, Place, Trail, Track, Ortho, Geo }
+	public enum AdminAreas { Home, Topo, Carto, Ortho, Geo, Place, Trail, Track }
 
 	public class AdminViewModel
 	{

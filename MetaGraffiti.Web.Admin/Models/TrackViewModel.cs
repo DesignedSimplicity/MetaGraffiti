@@ -18,35 +18,16 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		// ==================================================
 		// Required
-		public DirectoryInfo TrackSourceRoot { get; set; }
-		public DirectoryInfo SelectedDirectory { get; set; }
-
 		public TrackGroupData TrackGroup { get; set; }
 		public List<TrackExtractData> TrackExtracts { get; set; }
 
 
 		// ==================================================
 		// Optional
-		public List<TrackFileModel> Sources { get; set; }
 
 
 		// ==================================================
 		// Helpers
-		public bool IsSelected(DirectoryInfo dir)
-		{
-			if (SelectedDirectory == null || dir == null) return false;
-
-			return (String.Compare(SelectedDirectory.FullName.TrimEnd('\\'), dir.FullName.TrimEnd('\\'), true) == 0);
-		}
-
-		public bool IsAncestor(DirectoryInfo dir)
-		{
-			if (SelectedDirectory == null || dir == null) return false;
-
-			var uri = SelectedDirectory.FullName.TrimEnd('\\') + '\\';
-			return uri.StartsWith(dir.FullName.TrimEnd('\\') + '\\', StringComparison.InvariantCultureIgnoreCase);
-		}
-
 		public string GetDOPCss(decimal? dop)
 		{
 			var d = dop ?? 0;
@@ -102,9 +83,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// ==================================================
 
-		public DirectoryInfo Directory { get { return SelectedDirectory; } }
-
-		
+	
 
 		
 
@@ -210,10 +189,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 		public static string GetTrackUrl() { return "/track/"; }
-
-		public static string GetBrowseUrl(string uri) { return $"/track/browse/?uri={uri}"; }
-		public static string GetBrowseRootUrl() { return GetBrowseUrl(AutoConfig.TrackSourceUri); }
-		public static string GetBrowseCurrentUrl() { return GetBrowseUrl(Path.Combine(AutoConfig.TrackSourceUri, DateTime.Now.Year.ToString(), DateTime.Now.Month.ToString("00"))); }
 
 		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }

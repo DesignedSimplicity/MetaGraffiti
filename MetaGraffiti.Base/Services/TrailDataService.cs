@@ -57,6 +57,7 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
+
 		/// <summary>
 		/// Lists all loaded GPX files
 		/// </summary>
@@ -130,7 +131,7 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(request.Region))
 			{
 				var region = GeoRegionInfo.Find(request.Region);
-				if (region != null) query = query.Where(x => x.Region.RegionID == region.RegionID);
+				if (region != null) query = query.Where(x => x.Region != null && x.Region.RegionID == region.RegionID);
 			}
 
 			return query.ToList();

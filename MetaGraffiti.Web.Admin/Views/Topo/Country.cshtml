@@ -1,0 +1,133 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TopoViewModel
+
+@Html.Partial("_Nav")
+
+<script>
+	var _trails = @JsonHelper.GetJson(Model.Trails);
+	var _bounds = null;
+	var _start = null;
+	var _finish = null;
+
+	$(document).ready(function () {
+		initMap();
+
+		_bounds = new google.maps.LatLngBounds();
+		for (index = 0; index < _trails.length; index++) {
+			var color = getMapColor(index);
+
+			var tracks = _trails[index].tracks;
+			for (var j = 0; j < tracks.length; j++) {
+				var points = tracks[j].points;
+				showTrack(points, color);
+
+				for (var i = 0; i < points.length; i++) {
+					_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+				}
+			}
+
+			$("table > tbody > tr").eq(index).children().eq(0).css('background-color', color);
+		}
+		if (_trails.length > 0) _mapGoogle.fitBounds(_bounds);
+
+		$(".js-mappable-row").hover(function () {
+			if (_start) _start.setMap(null);
+			if (_finish) _finish.setMap(null);
+
+			var index = $(this).index();
+
+			var points = _trails[index].tracks[0].points;
+			var start = points[0];
+			var finish = points[points.length - 1];
+
+			_finish = markFinish(finish.lat, finish.lng);
+			_start = markStart(start.lat, start.lng);
+		});
+
+		$(".js-mappable-row").click(function () {
+			var index = $(this).index();
+
+			var bounds = new google.maps.LatLngBounds();
+			var tracks = _trails[index].tracks;			
+			for (var j = 0; j < tracks.length; j++) {
+				var points = tracks[j].points;
+				for (var i = 0; i < points.length; i++) {
+					bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+				}
+			}
+			_mapGoogle.fitBounds(bounds);
+		});
+
+		$(".js-reset-view").click(function () {
+			if (_trails.length > 0) _mapGoogle.fitBounds(_bounds);
+			if (_start) _start.setMap(null);
+			if (_finish) _finish.setMap(null);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div>
+			<span class="h2">
+				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(Model.Country)">@Model.Country.Name</a>
+				@(Model.Region == null ? "" : @" \ " + Model.Region.RegionName)
+			</span>
+			<div class="float-right">
+				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.Country)">Geo</a>
+				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(Model.Country)">Carto</a>
+				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
+			</div>
+		</div>
+		<br />
+		<table class="table table-sm table-striped">
+			<thead class="table-dark thead-sort">
+				<tr>
+					<th class="text-center">#</th>
+					<th>
+						Region&nbsp;
+						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Region")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Region"))"><i class="fas fa-sort-alpha-down"></i></a>
+					</th>
+					<th>
+						Trail&nbsp;
+						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Name")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Name"))"><i class="fas fa-sort-alpha-down"></i></a>
+					</th>
+					<th>Tags</th>
+					<th class="text-right text-nowrap">
+						Date&nbsp;
+						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Newest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Newest"))"><i class="fas fa-sort-amount-down"></i></a>
+						<a href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (Model.Region?.RegionISO??""), "Oldest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Oldest"))"><i class="fas fa-sort-amount-up"></i></a>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var index = 0;
+					foreach (var trail in Model.Trails)
+					{
+						<tr class="js-mappable-row">
+							<td class="text-center font-weight-bold">@(index + 1)</td>
+							<td>
+								<a class="topo-color" href="@TopoViewModel.GetCountryUrl(Model.Country.ISO2, (trail.Region?.RegionISO??""), "Name")">@(trail.Region?.RegionName ?? "")</a>
+							</td>
+							<td>
+								<span class="h6"><a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a></span>
+								<div class="small">@trail.Description</div>
+							</td>
+							<td>
+								<span class="small">@trail.Keywords</span>
+							</td>
+							<td class="text-right text-nowrap">@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+						</tr>
+						index++;
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

@@ -3,6 +3,7 @@ using MetaGraffiti.Base.Modules.Crypto;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
+using MetaGraffiti.Base.Modules.Topo.Info;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -397,8 +398,6 @@ namespace MetaGraffiti.Base.Services
 		public List<GpxPointData> Points { get; set; }
 
 		public List<GpxPointData> SourcePoints { get; set; }
-
-		//public List<CartoPlaceInfo> Places { get; set; }
 	}
 
 	public class TrackUpdateRequest

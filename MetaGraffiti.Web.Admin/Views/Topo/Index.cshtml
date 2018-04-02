@@ -1,30 +1,38 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model TrailViewModel
+@model TopoViewModel
 
 @Html.Partial("_Nav")
 
 <div class="row">
 	<div class="col-sm-2">
-		<div class="h1">Countries</div>
+		<div class="h2">Countries</div>
+		<hr />
+
 		@foreach (var country in Model.Countries)
 		{
 			<div class="h2">
-				<a href="@TrailViewModel.GetCountryUrl(country.Name)">@country.Name</a>
+				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.Name)">
+					@country.Name
+				</a>
+				<div class="h4 float-right">
+					<span class="badge badge-secondary">@Model.GetTrailCount(country)</span>
+				</div>				
 			</div>
+
 		}
 		<br />
 		<hr />
-		<a href="@TrailViewModel.GetRefreshUrl()" class="btn btn-outline-secondary">Refresh Cache</a>
+		<a href="@TopoViewModel.GetRefreshUrl()" class="btn btn-outline-success">Refresh Cache</a>
 	</div>
 	<div class="col-sm-4">
-		<div class="h1">Calendar</div>
+		<div class="h2">Calendar</div>
 		<table class="table table-bordered">
 			<thead class="thead-dark">
 				<tr>
 					<th>Year</th>
 					@for (var month = 1; month <= 12; month++)
 					{
-						<th class="text-center">@Model.GetMonth(month, true)</th>
+						<th class="text-center">@TextHelper.GetMonth(month, true)</th>
 					}
 				</tr>
 			</thead>
@@ -33,17 +41,17 @@
 				{
 					<tr>
 						<td class="table-secondary">
-							<a class="h4" href="@TrailViewModel.GetReportUrl(year)">
+							<a class="h4" href="@TopoViewModel.GetReportUrl(year)">
 								@year
 							</a>
 						</td>
 						@for (var month = 1; month <= 12; month++)
 						{
-							var count = Model.GetCount(year, month);
-							<td class="text-center @(count > 0 ? "table-info" : "")">
+							var count = Model.GetTrailCount(year, month);
+							<td class="text-center @(count > 0 ? "table-success" : "")">
 								@if (count > 0)
 								{
-									<a class="h5" href="@TrailViewModel.GetReportUrl(year, month)">@count</a>
+									<a class="h5" href="@TopoViewModel.GetReportUrl(year, month)">@count</a>
 								}
 							</td>
 						}

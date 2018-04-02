@@ -38,8 +38,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new TrackViewModel();
 
-			model.TrackSourceRoot = new DirectoryInfo(AutoConfig.TrackSourceUri);
-
 			model.TrackGroup = _trackExtractService.GetTrackGroup();
 			model.TrackExtracts = _trackExtractService.ListExtracts();
 
@@ -49,39 +47,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		// ==================================================
 		// Actions
-
-		public ActionResult Index()
-		{
-			var model = InitModel();
-
-			return Browse(model.TrackSourceRoot.FullName);
-		}
-
-		/// <summary>
-		/// Displays a list of GPX files in referenced directory path
-		/// </summary>
-		public ActionResult Browse(string uri)
-		{
-			var model = InitModel();
-
-			var path = uri.TrimEnd('\\') + '\\';
-			var dir = new DirectoryInfo(path);
-			if (!dir.Exists) throw new Exception($"Path {path} does not exist");
-
-			var root = model.TrackSourceRoot.FullName.TrimEnd('\\') + '\\';
-			if (!path.StartsWith(root)) throw new Exception($"Path {path} is not in root {root}");
-
-			model.SelectedDirectory = dir;
-
-			model.Sources = new List<TrackFileModel>();
-			foreach (var file in dir.GetFiles("*.gpx"))
-			{
-				var source = InitTrackFileModel(file);
-				model.Sources.Add(source);
-			}
-
-			return View("Browse", model);
-		}
 
 		/// <summary>
 		/// Displays all segments in current edit session
@@ -129,8 +94,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var file = new FileInfo(uri);
 			var source = InitTrackFileModel(file);
 			model.SelectedSource = source;
-
-			model.SelectedDirectory = file.Directory;
 
 			model.SelectedStart = start;
 			model.SelectedFinish = finish;

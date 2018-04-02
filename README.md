@@ -1,5 +1,5 @@
 # MetaGraffiti
-A framework to process geographic and topographic data for map building and visualizations
+A 4 dimensional space time framework to process geographic and topographic data for map building and visualizations
 
 ## Releases
 
@@ -13,29 +13,64 @@ A framework to process geographic and topographic data for map building and visu
 
 ### Beta
 
-\carto
-\carto\map
+
+\ortho\tracks\?path=2018/04
+
+\track\preview\?uri=
+
+\track\extract\
+\track\display\ID
+
+\track\manage\
+\track\import\
+
+\track\delete\
+\track\modify\
+\track\export\
+
+
+
+\topo\
+
+\topo\country\ID
+
+\topo\trail\ID
+
+\topo\map\?
+\topo\list\?
+\topo\report\?year=&month=&day=&country=&region=&place=		shows map, list and/or grid with optional filters
+
+
+\topo\track\display\ID
+\topo\track\preview\?uri=
+\topo\track\extract\
+\topo\track\update\
+\topo\track\create\
+
+
+
+\carto\
 \carto\country\ID
 
-\carto\report\?type=&country=&region=
-\carto\import\?country=&year=
+\carto\place\ID
 
-\carto\search\?name=&country=
-\carto\search\?latitude=&longtitude=
+\carto\map\?type=&country=&region=&place=
+\carto\report\?type=&country=&region=&place=
 
 
-\carto\place\index\ID
 \carto\place\create\
 \carto\place\update\
 \carto\place\delete\
 
-\carto\place\google\?googlePlaceID=
 
 
 
 
-
-
+\meta\who\
+\meta\what\{type}
+\meta\where\{country}\{region}\{locality}\{place}
+\meta\when\{year}\{month}\{day}
+\meta\why\
 
 
 
