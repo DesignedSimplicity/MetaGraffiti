@@ -56,11 +56,18 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Navigation
 		public static string GetTopoUrl() { return "/topo/"; }
-		public static string GetTrailUrl(TopoTrailInfo trail) { return $"/topo/trail/{trail.ID}"; }
+
+		public static string GetTrailUrl(string id) { return $"/topo/trail/{id}"; }
+		public static string GetTrailUrl(TopoTrailInfo trail) { return GetTrailUrl(trail.ID); }
 		public static string GetRefreshUrl() { return "/topo/refresh/"; }
 		public static string GetReportUrl() { return "/topo/report/"; }
 		public static string GetReportUrl(int year, int? month = null) { return $"/topo/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/topo/country/{country.ISO2}/"; }
 		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/topo/country/{country}/?region={region}&sort={sort}".Replace("?region=&", "?"); }
+
+
+		public static string GetModifyUrl() { return $"/track/modify/"; }
+		public static string GetImportUrl() { return $"/track/import/"; }
+		public static string GetPreviewUrl(string source) { return $"/track/preview/{source}/"; }
 	}
 }

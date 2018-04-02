@@ -76,12 +76,12 @@
 			<span class="h2"><a class="text-@Model.AreaCss" href="/Carto/">Carto</a></span>
 			<span class="h3 text-@Model.AreaCss">
 				\
-				<a href="@TrailViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@Model.SelectedCountry.Name</a>
+				<a href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@Model.SelectedCountry.Name</a>
 			</span>
 			<div class="float-right">
 				<a class="btn btn-outline-warning" href="@PlaceViewModel.GetReportUrl(Model.SelectedCountry.Name)">Add</a>
 				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">Geo</a>
-				<a class="btn btn-outline-success" href="@TrailViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">Topo</a>
+				<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">Topo</a>
 				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
 			</div>
 		</div>

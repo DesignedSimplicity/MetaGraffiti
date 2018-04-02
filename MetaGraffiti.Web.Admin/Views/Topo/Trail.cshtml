@@ -94,7 +94,7 @@
 				</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<form method="post" action="@TrailViewModel.GetModifyUrl()">
+				<form method="post" action="@TopoViewModel.GetModifyUrl()">
 					<input type="hidden" name="ID" value="@trail.ID" />
 					<button type="submit" class="btn btn-outline-success">Edit Tracks</button>
 					<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
@@ -182,7 +182,7 @@
 								<div class="mt-2">
 									@if (!String.IsNullOrWhiteSpace(track.Source))
 									{
-										<a class="badge badge-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+										<a class="badge badge-info" href="@TopoViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
 									}
 								</div>
 							</td>
