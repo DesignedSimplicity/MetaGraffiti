@@ -168,25 +168,24 @@ namespace MetaGraffiti.Base.Services
 			var data = reader.ReadFile();
 
 			// load primary information
-			trail.Name = data.Name; //filename.Substring(9).Trim();
+			trail.Name = data.Name;
 			trail.Description = data.Description;
 
 			// load secondary information
-			trail.Keywords = data.Keywords;
 			trail.Url = data.Url;
 			trail.UrlName = data.UrlName;
+			trail.Keywords = data.Keywords;
 
-			// populate info classes
+			// populate defaults
 			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
 			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
 
-			// process custom data
-			var custom = reader.ReadExtension();
-			if (!String.IsNullOrWhiteSpace(custom.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(custom.Timezone);
-			if (!String.IsNullOrWhiteSpace(custom.Country)) trail.Country = GeoCountryInfo.Find(custom.Country);
-			if (!String.IsNullOrWhiteSpace(custom.Region)) trail.Region = GeoRegionInfo.Find(custom.Region);
-			// TODO: read location + ID
-
+			// process custom info
+			var extensions = reader.ReadExtension();
+			if (!String.IsNullOrWhiteSpace(extensions.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(extensions.Timezone);
+			if (!String.IsNullOrWhiteSpace(extensions.Country)) trail.Country = GeoCountryInfo.Find(extensions.Country);
+			if (!String.IsNullOrWhiteSpace(extensions.Region)) trail.Region = GeoRegionInfo.Find(extensions.Region);
+			trail.Location = extensions.Location;
 
 			// create track data
 			var places = new List<CartoPlaceInfo>();
@@ -195,9 +194,10 @@ namespace MetaGraffiti.Base.Services
 				var tt = new TopoTrackInfo(trail, track);
 
 				var f = track.Points.First();
-				var l = track.Points.Last();
 				tt.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(f).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 				if (tt.StartPlace != null && !places.Any(x => x.Key == tt.StartPlace.Key)) places.Add(tt.StartPlace);
+
+				var l = track.Points.Last();
 				tt.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(l).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 				if (tt.FinishPlace != null && !places.Any(x => x.Key == tt.FinishPlace.Key)) places.Add(tt.FinishPlace);
 
@@ -207,6 +207,7 @@ namespace MetaGraffiti.Base.Services
 			// consolidate carto place information
 			trail.ViaPlaces = places;
 
+			// built trail
 			return trail;
 		}
 	}
