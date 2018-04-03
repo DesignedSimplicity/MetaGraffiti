@@ -8,7 +8,27 @@ using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoTrailInfo
+	public interface ITrailInfo
+	{
+		string Uri { get; }
+		string Name { get; }
+		string Description { get; }
+		string Keywords { get; }
+		string Url { get; }
+		string UrlName { get; }
+
+		string Location { get; }
+		GeoRegionInfo Region { get; }
+		GeoCountryInfo Country { get; }
+		GeoTimezoneInfo Timezone { get; }
+
+		/*
+		TimeSpan ElapsedTime { get; }
+		GeoDistance Distance { get; }
+		*/
+	}
+
+	public class TopoTrailInfo : ITrailInfo
 	{
 		public string ID { get; set; }
 
@@ -26,11 +46,10 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public DateTime LocalDate { get; set; }
 
-		public GeoCountryInfo Country { get; set; }
-
-		public GeoRegionInfo Region { get; set; }
-
 		public GeoTimezoneInfo Timezone { get; set; }
+		public GeoCountryInfo Country { get; set; }
+		public GeoRegionInfo Region { get; set; }
+		public string Location { get; set; }
 
 
 		public List<TopoTrackInfo> Tracks { get; private set; } = new List<TopoTrackInfo>();
@@ -45,14 +64,9 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public TimeSpan ElapsedTime { get { return TimeSpan.FromHours(Tracks.Sum(x => x.ElapsedTime.TotalHours)); } }
 		public string ElapsedTimeText { get { return String.Format("{0:0} h {1:00} m", Math.Floor(ElapsedTime.TotalHours), ElapsedTime.Minutes); } }
 
+		public GeoDistance Distance { get { return GeoDistance.FromKM(TotalKilometers); } }
 		public double TotalKilometers { get { return Tracks.Sum(x => x.EstimatedDistance.KM); } }
 
-		public string[] AutoTags
-		{
-			get
-			{
-				return Tracks.SelectMany(x => x.AutoTags).Distinct().ToArray();
-			}
-		}
+		public string[] AutoTags { get { return Tracks.SelectMany(x => x.AutoTags).Distinct().ToArray(); } }
 	}
 }

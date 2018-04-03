@@ -7,7 +7,22 @@ using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoTrackInfo
+	public interface ITrackInfo
+	{
+		string ID { get; }
+		string Name { get; }
+		string Source { get; }
+		string Description { get; }
+
+		IEnumerable<IGeoPoint> GeoPoints { get; }
+
+		/*
+		TimeSpan ElapsedTime { get; }
+		GeoDistance EstimatedDistance { get; }
+		*/
+	}
+
+	public class TopoTrackInfo : ITrackInfo
 	{
 		private GpxTrackData _track;
 
@@ -22,7 +37,10 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		private List<TopoPointInfo> _points;
 		public List<TopoPointInfo> Points { get { return ListPoints(); } }
+		public IEnumerable<IGeoPoint> GeoPoints { get { return Points.AsEnumerable<IGeoPoint>(); } }
 
+
+		public string ID => ""; // TODO: need to implement this in save and load!
 
 		public string Name => _track.Name;
 		public string Source => _track.Source;
@@ -32,8 +50,8 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public DateTime StartTime { get { return Points.First().LocalTime; } }
 		public DateTime FinishTime { get { return Points.Last().LocalTime; } }
 
-		public DateTime FirstTimestamp { get { return Points.First().Timestamp; } }
-		public DateTime LastTimestamp { get { return Points.Last().Timestamp; } }
+		public DateTime FirstTimestamp { get { return Points.First().Timestamp.Value; } }
+		public DateTime LastTimestamp { get { return Points.Last().Timestamp.Value; } }
 
 
 		public TimeSpan ElapsedTime { get { return FinishTime.Subtract(StartTime); } }

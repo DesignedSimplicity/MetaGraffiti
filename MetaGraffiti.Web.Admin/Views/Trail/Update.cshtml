@@ -1,14 +1,15 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model TrackViewModel
+@model TrailViewModel
 
 @Html.Partial("_Nav")
 
-@{ 
-	var trackGroup = Model.TrackGroup;
+@{
+	var trail = Model.Trail;
+	var extracts = Model.Tracks;
 }
 
 <script>
-	var _tracks = @Model.GetTrackJson();
+	var _tracks = @JsonHelper.GetJson(extracts);
 	var _bounds = null;
 	var _start = null;
 	var _stop = null;
@@ -135,13 +136,19 @@
 		{
 			<div class="alert alert-success">@Model.ConfirmMessage</div>
 		}
+		<div>
+			<span class="h2">Trail</span>
+			@if (!String.IsNullOrWhiteSpace(trail.Uri))
+			{
+				<span class="h3"> \ @trail.Uri</span>
+			}
+		</div>
+		<br />
 		<table class="table table-striped table-hover table-b">
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
 					<th class="w-50">Track</th>
-					<th>KM</th>
-					<th>Time</th>
 					<th>Start</th>
 					<th>Finish</th>
 					<th>Actions</th>
@@ -150,18 +157,18 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var track in Model.TrackExtracts)
+					foreach (var track in extracts)
 					{
+						var start = trail.Timezone.FromUTC(track.GeoPoints.First().Timestamp.Value);
+						var finish = trail.Timezone.FromUTC(track.GeoPoints.Last().Timestamp.Value);
 						<tr class="js-track-row">
 							<td class="text-center">@(++count)</td>
 							<td>
 								<div class="font-weight-bold">@track.Name</div>
 								<div class="small">@track.Description</div>
 							</td>
-							<td>@Model.TotalDistance(track).ToString("#,##0.0")</td>
-							<td class="text-nowrap">@Model.ElapsedTime(track)</td>
-							<td class="text-nowrap">@Model.StartTime(track).ToString("yyyy-MM-dd")<br />@Model.StartTime(track).ToString("hh:mm:ss tt")</td>
-							<td class="text-nowrap">@Model.FinishTime(track).ToString("yyyy-MM-dd")<br />@Model.FinishTime(track).ToString("hh:mm:ss tt")</td>
+							<td class="text-nowrap">@start.ToString("yyyy-MM-dd")<br />@start.ToString("hh:mm:ss tt")</td>
+							<td class="text-nowrap">@finish.ToString("yyyy-MM-dd")<br />@finish.ToString("hh:mm:ss tt")</td>
 							<td class="text-nowrap">
 								<a class="btn btn-sm btn-primary" href="@TrackViewModel.GetEditUrl(track.ID)">Edit</a>
 								<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">Source</a>
@@ -173,18 +180,18 @@
 			</tbody>
 		</table>
 		<hr />
-		<form method="post" action="@TrackViewModel.GetUpdateUrl()">
+		<form method="post">
 			<div class="row">
 				<div class="col">
 					<div class="form-group">
 						<label for="Name">Name</label>
-						<input type="text" class="form-control" name="Name" value="@trackGroup.Name">
+						<input type="text" class="form-control" name="Name" value="@trail.Name">
 					</div>
 				</div>
 				<div class="col">
 					<label for="Timezone">Timezone</label>
 					<div class="input-group">
-						<input type="text" class="form-control @(Model.IsTimezoneValid ? "is-valid" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(Model.TrackGroup.Timezone?.Name ?? "")">
+						<input type="text" class="form-control @(Model.IsTimezoneValid ? "is-valid" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(trail.Timezone?.Name ?? "")">
 						<div class="input-group-append">
 							<a href="#" class="btn btn-outline-secondary" id="lookupTimezone">Lookup</a>
 						</div>
@@ -193,30 +200,21 @@
 			</div>
 			<div class="form-group">
 				<label for="Description">Description</label>
-				<textarea class="form-control" rows="3" name="Description">@trackGroup.Description</textarea>
+				<textarea class="form-control" rows="3" name="Description">@trail.Description</textarea>
 			</div>
 			<div class="form-group">
 				<label for="Keywords">Keywords</label>
-				<input type="text" class="form-control" name="Keywords" value="@trackGroup.Keywords">
+				<input type="text" class="form-control" name="Keywords" value="@trail.Keywords">
 			</div>
-			<!--
-			<div class="form-group">
-				<label for="Url">Website</label>
-				<div class="input-group">
-					<input type="text" class="form-control" name="Url" placeholder="http://" value="@trackGroup.Url">
-					<input type="text" class="form-control" name="UrlName" value="@trackGroup.UrlName" />
-				</div>
-			</div>
-			-->
 			<div class="form-group">
 				<label for="Country">Location</label>
 				<div class="input-group">
-					<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" placeholder="Country" value="@(Model.TrackGroup.Country?.Name ?? "")">
-					@if (Model.IsCountryValid && Model.TrackGroup.Country.HasRegions)
+					<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" placeholder="Country" value="@(trail.Country?.Name ?? "")">
+					@if (Model.IsCountryValid && trail.Country.HasRegions)
 					{
-						<input type="text" class="form-control @(Model.IsRegionValid ? " is-valid" : "is-invalid" )" name="Region" id="RegionField" placeholder="Region" value="@(Model.TrackGroup.Region?.RegionName ?? "")">
+						<input type="text" class="form-control @(Model.IsRegionValid ? " is-valid" : "is-invalid" )" name="Region" id="RegionField" placeholder="Region" value="@(trail.Region?.RegionName ?? "")">
 					}
-					<input type="text" class="form-control" name="Location" id="LocationField" placeholder="Location" value="@trackGroup.Location">
+					<input type="text" class="form-control" name="Location" id="LocationField" placeholder="Location" value="@trail.Location">
 					<div class="input-group-append">
 						<a href="#" class="btn btn-outline-secondary" id="lookupCountry">Lookup</a>
 					</div>

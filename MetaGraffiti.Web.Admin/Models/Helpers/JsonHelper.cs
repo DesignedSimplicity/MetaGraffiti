@@ -2,6 +2,7 @@
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Services;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,31 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class JsonHelper
 	{
+		// ==================================================
+		// ITrackInfo
+		public static HtmlString GetJson(IEnumerable<ITrackInfo> extracts)
+		{
+			if (extracts == null || extracts.Count() == 0) new HtmlString("[]");
+
+			JArray list = new JArray();
+			foreach (var track in extracts)
+			{
+				dynamic t = new JObject();
+				t.id = track.ID;
+				t.track = track.Name;
+				t.points = new JArray();
+				foreach (var point in track.GeoPoints)
+				{
+					dynamic p = new JObject();
+					p.lat = point.Latitude;
+					p.lng = point.Longitude;
+					t.points.Add(p);
+				}
+				list.Add(t);
+			}
+			return new HtmlString(list.ToString());
+		}
+
 		// ==================================================
 		// TopoTrailInfo
 		public static HtmlString GetJson(TopoTrailInfo trail)

@@ -291,6 +291,7 @@
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\TopoController.cs" />
     <Compile Include="Controllers\TrackController.cs" />
+    <Compile Include="Controllers\TrailController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -305,6 +306,7 @@
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
+    <Compile Include="Models\TrailViewModel.cs" />
     <Compile Include="Models\_Helpers.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
@@ -357,6 +359,8 @@
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
     <Content Include="Views\Track\Import.cshtml" />
+    <Content Include="Views\Trail\Import.cshtml" />
+    <Content Include="Views\Trail\Update.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

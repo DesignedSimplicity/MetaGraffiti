@@ -1,10 +1,10 @@
 ﻿using System;
-
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoPointInfo
+	public class TopoPointInfo : IGeoPoint
 	{
 		private GpxPointData _point;
 
@@ -22,7 +22,9 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public double Longitude => _point.Longitude;
 
-		public DateTime Timestamp => _point.Timestamp.Value;
+		public double? Elevation => _point.Elevation;
+
+		public DateTime? Timestamp => _point.Timestamp;
 
 		public DateTime LocalTime => Track.Trail.Timezone.FromUTC(_point.Timestamp.Value);
 	}

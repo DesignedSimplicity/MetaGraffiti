@@ -58,13 +58,13 @@
 			{
 				<tr class="@Model.GetStatusCss(row)">
 					<td class="text-center">@(++count)</td>
-					<td><a href="@HrefHelper.GetImportPlaceUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
+					<td><a href="@CartoViewModel.GetImportUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
 					<td>@row.Data.Region</td>
 					<td>@row.Data.Country</td>
 					<td>
 						@if (row.Place != null)
 						{
-							<a href="@HrefHelper.GetPlaceUrl(row.Place)">@row.Place.Name</a>
+							<a href="@CartoViewModel.GetPlaceUrl(row.Place)">@row.Place.Name</a>
 							<span>@row.Place.Locality <b>@(row.Place.Region?.RegionName ?? "")</b></span>
 						}
 					</td>

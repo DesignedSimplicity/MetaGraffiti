@@ -13,10 +13,10 @@ namespace MetaGraffiti.Web.Admin.Models
 			switch (area)
 			{
 				//case AdminAreas.Geo: return "info";
-				case AdminAreas.Trail: return "topo-color";
-				case AdminAreas.Track: return "topo-color";
+				//case AdminAreas.Trail: return "topo-color";
+				//case AdminAreas.Track: return "topo-color";
 				//case AdminAreas.Carto: return "primary";
-				case AdminAreas.Place: return "carto-color";
+				//case AdminAreas.Place: return "carto-color";
 				//case AdminAreas.Ortho: return "secondary";
 				default: return area.ToString().ToLowerInvariant() + "-color";
 			}

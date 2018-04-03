@@ -66,8 +66,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/topo/country/{country}/?region={region}&sort={sort}".Replace("?region=&", "?"); }
 
 
-		public static string GetModifyUrl() { return $"/track/modify/"; }
-		public static string GetImportUrl() { return $"/track/import/"; }
+		public static string GetUpdateUrl() { return $"/trail/update/"; }
+		public static string GetModifyUrl() { return $"/trail/modify/"; }
+		public static string GetImportUrl() { return $"/trail/import/"; }
 		public static string GetPreviewUrl(string source) { return $"/track/preview/{source}/"; }
 	}
 }

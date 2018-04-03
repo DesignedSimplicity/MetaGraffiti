@@ -10,14 +10,14 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div>
-				<a href="/trail/" class="topo-color">
+				<a href="@TopoViewModel.GetTopoUrl()" class="topo-color">
 					<div class="icon-link display-2">@SvgHelper.GetIcon("Topo")<span class="font-weight-bold">Topo</span><span>Graffiti</span> </div>
 					<div class="h2">Make Trails</div>
 				</a>
 			</div>
 			<hr />
 			<div>
-				<a href="/carto/" class="carto-color">
+				<a href="@CartoViewModel.GetCartoUrl()" class="carto-color">
 					<div class="icon-link display-2">@SvgHelper.GetIcon("Carto")<span class="font-weight-bold">Carto</span><span>Graffiti</span></div>
 					<div class="h2">Create Maps</div>
 				</a>
@@ -31,7 +31,7 @@
 			</div>
 			<hr />
 			<div>
-				<a href="/geo/" class="geo-color">
+				<a href="@GeoViewModel.GetGeoUrl()" class="geo-color">
 					<div class="icon-link display-2">@SvgHelper.GetIcon("Geo")<span class="font-weight-bold">Geo</span><span>Graffiti</span> </div>
 					<div class="h2">Manage Core</div>
 				</a>

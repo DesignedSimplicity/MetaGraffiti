@@ -34,6 +34,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Navigation
+		public static string GetGeoUrl() { return "/geo/"; }
 		public static string GetTimezonesUrl() { return "/geo/timezones/"; }
 		public static string GetCountriesUrl() { return "/geo/countries/"; }
 		public static string GetRegionsUrl(GeoCountryInfo country = null) { return "/geo/regions/" + (country == null ? "" : $"#{country.ISO3}"); }
