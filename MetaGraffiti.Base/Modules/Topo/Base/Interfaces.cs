@@ -68,7 +68,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 		//CartoPlaceInfo StartPlace { get; }
 		//CartoPlaceInfo FinishPlace { get; }
 
-		IEnumerable<ITopoPointInfo> Points { get; }
+		IEnumerable<ITopoPointInfo> TopoPoints { get; }
 	}
 
 

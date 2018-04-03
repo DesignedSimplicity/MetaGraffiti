@@ -1,15 +1,12 @@
-﻿using MetaGraffiti.Base.Modules;
-using MetaGraffiti.Base.Modules.Ortho;
-using MetaGraffiti.Base.Modules.Ortho.Data;
-using MetaGraffiti.Base.Modules.Topo;
-using MetaGraffiti.Base.Modules.Topo.Info;
-using MetaGraffiti.Base.Services.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+using MetaGraffiti.Base.Modules;
+using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Data;
+using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -23,11 +20,11 @@ namespace MetaGraffiti.Base.Services
 
 		// ==================================================
 		// Methods
-		
+
 		/// <summary>
 		/// Removes all current track edits from session
 		/// </summary>
-		public void Reset()
+		public void RemoveAll()
 		{
 			_tracks = new BasicCacheService<TrackEdit>();
 		}
@@ -132,7 +129,7 @@ namespace MetaGraffiti.Base.Services
 			List<IGpxPoint> points = new List<IGpxPoint>();
 			for (var index = 0; index < track.Points.Count; index++)
 			{
-				if (!request.Indexes.Contains(index)) points.Add(track.Points[index]);
+				if (!request.Points.Contains(index)) points.Add(track.Points[index]);
 			}
 
 			track.Points = points;
@@ -170,7 +167,7 @@ namespace MetaGraffiti.Base.Services
 
 	public class TrackEdit : ICacheEntity, IGpxTrack
 	{
-		// Temporary key for edit session
+		// Track ID for edit session
 		public string Key { get; set; }
 
 		// Source file identifier
@@ -183,7 +180,7 @@ namespace MetaGraffiti.Base.Services
 		public string Description { get; set; }
 		
 		// Current set of edited points
-		public List<IGpxPoint> Points { get; set; }
+		public IList<IGpxPoint> Points { get; set; }
 
 		// Origional set of raw data points
 		public List<GpxPointData> SourcePoints { get; set; }
@@ -203,7 +200,7 @@ namespace MetaGraffiti.Base.Services
 
 	public class TrackEditFilterRequest : TrackEditFilter
 	{
-		// ID for existing track extract
+		// Track ID for edit session
 		public string Key { get; set; }
 	}
 
@@ -223,7 +220,10 @@ namespace MetaGraffiti.Base.Services
 
 	public class TrackEditRemovePointsRequest
 	{
+		// Track ID for edit session
 		public string Key { get; set; }
-		public List<int> Indexes { get; set; }
+
+		// List of points to remove by index
+		public List<int> Points { get; set; }
 	}
 }

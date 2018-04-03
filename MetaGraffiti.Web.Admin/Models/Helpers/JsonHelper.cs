@@ -45,7 +45,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				//t.id = track.ID;
 				t.track = track.Name;
 				t.points = new JArray();
-				foreach (var point in track.Points)
+				foreach (var point in track.TopoPoints)
 				{
 					dynamic p = new JObject();
 					p.lat = point.Latitude;

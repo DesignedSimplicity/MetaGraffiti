@@ -25,7 +25,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		string Name { get; }
 		string Description { get; }
 
-		List<IGpxPoint> Points { get; }
+		IList<IGpxPoint> Points { get; }
 	}
 
 	public interface IGpxPoint : IGeoPoint

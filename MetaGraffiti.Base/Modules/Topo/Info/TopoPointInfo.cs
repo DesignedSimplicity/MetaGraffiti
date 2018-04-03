@@ -1,14 +1,15 @@
 ﻿using System;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Ortho;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
 	public class TopoPointInfo : ITopoPointInfo
 	{
 		private ITopoTrackInfo _track;
-		private IGeoPoint _point;
+		private IGpxPoint _point;
 
-		public TopoPointInfo(ITopoTrackInfo track, IGeoPoint point)
+		public TopoPointInfo(ITopoTrackInfo track, IGpxPoint point)
 		{
 			_track = track;
 			_point = point;

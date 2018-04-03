@@ -1,15 +1,12 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Ortho;
-using MetaGraffiti.Base.Modules.Ortho.Data;
-using MetaGraffiti.Base.Modules.Topo.Info;
-using MetaGraffiti.Base.Services.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+
+using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -26,6 +23,7 @@ namespace MetaGraffiti.Base.Services
 			_cartoPlaceService = cartoPlaceService;
 		}
 
+
 		// ==================================================
 		// Methods
 
@@ -34,7 +32,7 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public void Init(string uri)
 		{
-			lock (_init)
+			lock (_init) // TODO: use internal init for basic cache
 			{
 				if (Convert.ToBoolean(_init)) return;
 
@@ -136,8 +134,6 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
-		
-
 		/// <summary>
 		/// Clears the GPX file cache
 		/// </summary>
@@ -165,8 +161,8 @@ namespace MetaGraffiti.Base.Services
 			// discover places for each track
 			foreach (var track in trail.TopoTracks)
 			{
-				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.Points.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.Points.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 			}
 
 			return trail;

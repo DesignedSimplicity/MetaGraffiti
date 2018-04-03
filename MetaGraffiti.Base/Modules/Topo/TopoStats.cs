@@ -19,10 +19,10 @@ namespace MetaGraffiti.Base.Modules.Topo
 			foreach (var track in trail.Tracks)
 			{
 				hours += track.FinishUTC.Subtract(track.StartUTC).TotalHours;
-				ascent += GeoDistance.ElevationBetweenPoints(track.Points, 1).Meters;
-				descent += GeoDistance.ElevationBetweenPoints(track.Points, -1).Meters;
-				distance += GeoDistance.BetweenPoints(track.Points, true).Meters;
-				distanceWithElevation += GeoDistance.BetweenPoints(track.Points, true).Meters;
+				ascent += GeoDistance.ElevationBetweenPoints(track.TopoPoints, 1).Meters;
+				descent += GeoDistance.ElevationBetweenPoints(track.TopoPoints, -1).Meters;
+				distance += GeoDistance.BetweenPoints(track.TopoPoints, true).Meters;
+				distanceWithElevation += GeoDistance.BetweenPoints(track.TopoPoints, true).Meters;
 			}
 			stats.ElapsedTime = TimeSpan.FromHours(hours);
 			stats.Distance = GeoDistance.FromMeters(distance);
@@ -38,10 +38,10 @@ namespace MetaGraffiti.Base.Modules.Topo
 			var stats = new TopoStats();
 
 			stats.ElapsedTime = track.FinishUTC.Subtract(track.StartUTC);
-			stats.Distance = GeoDistance.BetweenPoints(track.Points, true);
-			stats.DistanceWithElevation = GeoDistance.BetweenPoints(track.Points, true);
-			stats.EstimatedMetersAscent = GeoDistance.ElevationBetweenPoints(track.Points, 1).Meters;
-			stats.EstimatedMetersDescent = GeoDistance.ElevationBetweenPoints(track.Points, -1).Meters;
+			stats.Distance = GeoDistance.BetweenPoints(track.TopoPoints, true);
+			stats.DistanceWithElevation = GeoDistance.BetweenPoints(track.TopoPoints, true);
+			stats.EstimatedMetersAscent = GeoDistance.ElevationBetweenPoints(track.TopoPoints, 1).Meters;
+			stats.EstimatedMetersDescent = GeoDistance.ElevationBetweenPoints(track.TopoPoints, -1).Meters;
 
 			return stats;
 		}
