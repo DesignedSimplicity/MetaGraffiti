@@ -122,11 +122,11 @@
 							</div>
 							<div class="col">
 								<label for="MaximumVelocity">Max Velocity</label>
-								<input type="text" class="form-control" name="MaximumVelocity" value="@filters.MaximumVelocity">
+								<input type="text" class="form-control" name="MaximumVelocity" value="@(filters.MaximumVelocity.HasValue ? filters.MaximumVelocity.Value.ToString("0.0000") : "" )">
 							</div>
 							<div class="col">
 								<label for="MaximumDilution">Max Dilution</label>
-								<input type="text" class="form-control" name="MaximumDilution" value="@filters.MaximumDilution">
+								<input type="text" class="form-control" name="MaximumDilution" value="@(filters.MaximumDilution.HasValue ? filters.MaximumDilution.Value.ToString("0.0") : "" )">
 							</div>
 							<div class="col">
 								<div>

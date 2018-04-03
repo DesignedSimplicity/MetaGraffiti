@@ -63,6 +63,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			var topoTrail = new TopoTrailInfo();
 			var country = Graffiti.Geo.NearestCountry(track.Points.First());
+			topoTrail.Country = country;
 			topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
 
 			// start and finish places
@@ -132,6 +133,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedTrack = InitModel(track);
 
 			var filters = new TrackEditFilter();
+			filters.MaximumVelocity = track.Points.Max(x => x.Speed ?? 0);
+			filters.MaximumDilution = track.Points.Max(x => _trackEditService.GetMaxDOP(x));
+			filters.MinimumSatellite = track.Points.Where(x => x.Sats.HasValue).Min(x => x.Sats.Value);			
 			model.SelectedTrack.Filters = filters;
 
 			return View(model);

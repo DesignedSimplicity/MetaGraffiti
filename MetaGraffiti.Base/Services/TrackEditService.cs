@@ -146,6 +146,22 @@ namespace MetaGraffiti.Base.Services
 			return track;
 		}
 
+
+		// ==================================================
+		// Helpers
+
+		public decimal GetMaxDOP(IGpxPoint point)
+		{
+			var h = point.HDOP ?? 0;
+			var v = point.VDOP ?? 0;
+			var p = point.PDOP ?? 0;
+			var dop = h;
+			if (v > dop) dop = v;
+			if (p > dop) dop = p;
+			return dop;
+		}
+
+
 		// ==================================================
 		// Internals
 
@@ -161,17 +177,6 @@ namespace MetaGraffiti.Base.Services
 			if (filter.MaximumDilution.HasValue) query = query.Where(x => GetMaxDOP(x) <= filter.MaximumDilution.Value);
 			if (filter.MissingDilution) query = query.Where(x => x.HDOP.HasValue && x.VDOP.HasValue && x.PDOP.HasValue);
 			return query.OrderBy(x => x.Timestamp).ToList();
-		}
-
-		private decimal GetMaxDOP(IGpxPoint point)
-		{
-			var h = point.HDOP ?? 0;
-			var v = point.VDOP ?? 0;
-			var p = point.PDOP ?? 0;
-			var dop = h;
-			if (v > dop) dop = v;
-			if (p > dop) dop = p;
-			return dop;
 		}
 	}
 
@@ -222,9 +227,9 @@ namespace MetaGraffiti.Base.Services
 
 		// Data quality filters
 		public int? MinimumSatellite { get; set; }
-		public int? MaximumVelocity { get; set; }
+		public decimal? MaximumVelocity { get; set; }
 
-		public int? MaximumDilution { get; set; }
+		public decimal? MaximumDilution { get; set; }
 		public bool MissingDilution { get; set; }
 	}
 
