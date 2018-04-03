@@ -51,7 +51,6 @@ namespace MetaGraffiti.Base.Modules.Topo
 	{
 		ITopoTrailInfo Trail { get; }
 
-		//string Key { get; }
 		string Source { get; }
 
 		string Name { get; }
@@ -66,8 +65,8 @@ namespace MetaGraffiti.Base.Modules.Topo
 		TimeSpan ElapsedTime { get; }
 
 
-		CartoPlaceInfo StartPlace { get; }
-		CartoPlaceInfo FinishPlace { get; }
+		//CartoPlaceInfo StartPlace { get; }
+		//CartoPlaceInfo FinishPlace { get; }
 
 		IEnumerable<ITopoPointInfo> Points { get; }
 	}

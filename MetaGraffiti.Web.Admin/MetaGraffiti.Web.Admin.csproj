@@ -307,7 +307,7 @@
     <Compile Include="Models\OrthoTracksViewModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
-    <Compile Include="Models\_Helpers.cs" />
+    <Compile Include="Models\Helpers\IconHelpers.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\OrthoViewModel.cs" />

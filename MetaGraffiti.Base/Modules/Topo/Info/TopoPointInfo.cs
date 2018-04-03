@@ -3,12 +3,12 @@ using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoPointInfo2 : ITopoPointInfo
+	public class TopoPointInfo : ITopoPointInfo
 	{
 		private ITopoTrackInfo _track;
 		private IGeoPoint _point;
 
-		public TopoPointInfo2(ITopoTrackInfo track, IGeoPoint point)
+		public TopoPointInfo(ITopoTrackInfo track, IGeoPoint point)
 		{
 			_track = track;
 			_point = point;

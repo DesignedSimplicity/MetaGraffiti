@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MetaGraffiti.Base.Modules
 {
-    public class CryptoGraffiti
+    public class CryptoCore
     {
 		public string GetNewHash() { return Guid.NewGuid().ToString("N").ToUpper(); }
 	}

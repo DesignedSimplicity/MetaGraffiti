@@ -54,7 +54,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public ITopoTrailInfo Trail { get; set; }
 
-		public TopoTrailInfo2 Preview { get; set; }
+		public TopoTrailInfo Preview { get; set; }
 
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
 		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();
@@ -66,7 +66,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 		public bool IsStart(CartoPlaceInfo place)
 		{
-			foreach(var track in Preview.Tracks)
+			foreach(var track in Preview.TopoTracks)
 			{
 				if (track.StartPlace?.Key == place.Key) return true;
 			}
@@ -74,7 +74,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 		public bool IsFinish(CartoPlaceInfo place)
 		{
-			foreach (var track in Preview.Tracks)
+			foreach (var track in Preview.TopoTracks)
 			{
 				if (track.FinishPlace?.Key == place.Key) return true;
 			}

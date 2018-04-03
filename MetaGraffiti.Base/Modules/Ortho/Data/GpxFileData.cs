@@ -4,27 +4,19 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
-	public interface IGpxFileHeader
-	{
-		string Name { get; }
-		string Description { get; }
-		DateTime? Timestamp { get; }
-
-		string UrlLink { get; }
-		string UrlText { get; }
-		string Keywords { get; }
-	}
-
 	public class GpxFileData : IGpxFileHeader
 	{
 		public string Name { get; set; }
-		public string Description { get; set; }
-		public DateTime? Timestamp { get; set; }
 
-		// additional attributes
+		public string Keywords { get; set; }
+		public string Description { get; set; }
+
 		public string UrlLink { get; set; }
 		public string UrlText { get; set; }
-		public string Keywords { get; set; }
+
+		public DateTime? Timestamp { get; set; }
+
+		// TODO: add additional attributes
 		/*
 		public string Author { get; set; }
 		public string Email { get; set; }

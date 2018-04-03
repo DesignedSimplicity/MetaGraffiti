@@ -2,8 +2,8 @@
 {
 	public class Graffiti
 	{
-		public static GeoGraffiti Geo = new GeoGraffiti();
+		public static GeoCore Geo = new GeoCore();
 
-		public static CryptoGraffiti Crypto = new CryptoGraffiti();
+		public static CryptoCore Crypto = new CryptoCore();
 	}
 }

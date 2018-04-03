@@ -8,8 +8,8 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TrailViewModel : AdminViewModel
 	{
-		public TopoTrailInfo2 Trail { get; set; }
-		public List<TopoTrackInfo2> Tracks { get; set; }
+		public TopoTrailInfo Trail { get; set; }
+		public List<TopoTrackInfo> Tracks { get; set; }
 
 		public bool IsTimezoneValid { get { return Trail.Timezone != null && Trail.Timezone.Key != "UTC;"; } }
 		public bool IsCountryValid { get { return Trail.Country != null; } }

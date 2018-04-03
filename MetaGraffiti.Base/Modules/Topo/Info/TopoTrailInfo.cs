@@ -11,13 +11,13 @@ using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoTrailInfo2 : ITopoTrailInfo, ICacheEntity
+	public class TopoTrailInfo : ITopoTrailInfo, ICacheEntity
 	{
-		public TopoTrailInfo2()
+		public TopoTrailInfo()
 		{
 		}
 
-		public TopoTrailInfo2(GpxFileData data)
+		public TopoTrailInfo(GpxFileData data)
 		{
 			Name = data.Name;
 			Description = data.Description;
@@ -35,12 +35,12 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 			foreach (var track in data.Tracks)
 			{
-				var t = new TopoTrackInfo2(this, track);
+				var t = new TopoTrackInfo(this, track);
 				_tracks.Add(t);
 			}
 		}
 
-		public TopoTrailInfo2(ITopoTrailData data, List<GpxTrackData> tracks)
+		public TopoTrailInfo(ITopoTrailData data, List<GpxTrackData> tracks)
 		{
 			Name = data.Name;
 			Description = data.Description;
@@ -58,7 +58,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 			foreach (var track in tracks)
 			{
-				var t = new TopoTrackInfo2(this, track);
+				var t = new TopoTrackInfo(this, track);
 				_tracks.Add(t);
 			}
 		}
@@ -86,14 +86,14 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public DateTime FinishLocal => Timezone.FromUTC(FinishUTC);
 
 
-		private List<TopoTrackInfo2> _tracks = new List<TopoTrackInfo2>();
-		public IEnumerable<ITopoTrackInfo> Tracks => _tracks.OrderBy(x => x.StartUTC);
-		public IEnumerable<TopoTrackInfo2> TopoTracks => _tracks;
+		private List<TopoTrackInfo> _tracks = new List<TopoTrackInfo>();
+		public IEnumerable<TopoTrackInfo> TopoTracks => _tracks.OrderBy(x => x.StartUTC);
+		public IEnumerable<ITopoTrackInfo> Tracks => TopoTracks;
 
 		public TopoStats Stats { get { return TopoStats.FromTrail(this); } }
 
 
-		public void AddTrack_TO_DEPRECATE(TopoTrackInfo2 track)
+		public void AddTrack_TO_DEPRECATE(TopoTrackInfo track)
 		{
 			_tracks.Add(track);
 		}

@@ -14,14 +14,14 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Required
 		public IEnumerable<GeoCountryInfo> Countries { get; set; }
-		public List<TopoTrailInfo2> Trails { get; set; }
+		public List<TopoTrailInfo> Trails { get; set; }
 		public DateTime FirstDate { get; set; }
 		public DateTime LastDate { get; set; }
 
 
 		// ==================================================
 		// Optional
-		public TopoTrailInfo2 SelectedTrail { get; set; }
+		public TopoTrailInfo SelectedTrail { get; set; }
 		public GeoCountryInfo SelectedCountry { get; set; }
 		public GeoRegionInfo SelectedRegion { get; set; }
 		public string SelectedSort { get; set; }
@@ -39,7 +39,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			if (String.IsNullOrWhiteSpace(sort) || String.IsNullOrWhiteSpace(SelectedSort)) return false;
 			return (String.Compare(sort, SelectedSort, true) == 0);
 		}
-		public IEnumerable<TopoTrailInfo2> ListTrailsSorted()
+		public IEnumerable<TopoTrailInfo> ListTrailsSorted()
 		{
 			if (String.IsNullOrWhiteSpace(SelectedSort)) SelectedSort = "Newest";
 			if (IsSortSelected("Region"))
@@ -53,7 +53,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			else
 				return Trails;
 		}
-		public IEnumerable<CartoPlaceInfo> ConsolidatePlaces(TopoTrailInfo2 trail)
+		public IEnumerable<CartoPlaceInfo> ConsolidatePlaces(TopoTrailInfo trail)
 		{
 			var places = new List<CartoPlaceInfo>();
 			foreach(var track in trail.TopoTracks)

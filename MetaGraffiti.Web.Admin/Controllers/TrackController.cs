@@ -208,7 +208,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Filters an existing extract track specified by the ID
 		/// </summary>
 		[HttpPost]
-		public ActionResult Filter(TrackFilterPointsRequest filter)
+		public ActionResult Filter(TrackEditFilterRequest filter)
 		{
 			var filtered = _trackExtractService.ApplyFilter(filter);
 
@@ -216,7 +216,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var model = InitModel();
 
-				model.SelectedExtract = _trackExtractService.GetExtract(filter.ID);
+				model.SelectedExtract = _trackExtractService.GetExtract(filter.Key);
 				model.ErrorMessages.Add("Filter contains no points and was not applied.");
 
 				return View("Edit", model);

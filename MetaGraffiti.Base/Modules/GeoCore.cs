@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MetaGraffiti.Base.Modules
 {
-    public class GeoGraffiti
+    public class GeoCore
     {
 		// ==================================================
 		// Methods

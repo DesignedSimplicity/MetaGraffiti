@@ -129,11 +129,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
-			var existing = _trailDataService.FindTrackSource(file.Name);
+			var existing = _trailDataService.FindTrackSource_TODO(file.Name);
 			model.Trail = existing?.Trail;
 
 			// build trail preview
-			var trail = new TopoTrailInfo2();
+			var trail = new TopoTrailInfo();
 			model.Preview = trail;
 
 			// find intersecting places
@@ -165,7 +165,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			// build track previews
 			foreach (var t in model.Data.Tracks)
 			{
-				var track = new TopoTrackInfo2(trail, t);
+				var track = new TopoTrackInfo(trail, t);
 
 				var start = t.Points.First();
 				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();

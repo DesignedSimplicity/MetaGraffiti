@@ -18,7 +18,7 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Internals
 		private static object _init = false;
-		private static BasicCacheService<TopoTrailInfo2> _trails;
+		private static BasicCacheService<TopoTrailInfo> _trails;
 		private CartoPlaceService _cartoPlaceService;
 
 		public TopoTrailService(CartoPlaceService cartoPlaceService)
@@ -38,7 +38,7 @@ namespace MetaGraffiti.Base.Services
 			{
 				if (Convert.ToBoolean(_init)) return;
 
-				_trails = new BasicCacheService<TopoTrailInfo2>();
+				_trails = new BasicCacheService<TopoTrailInfo>();
 				var root = new DirectoryInfo(uri);
 				foreach (var dir in root.EnumerateDirectories())
 				{
@@ -60,7 +60,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Lists all loaded GPX files
 		/// </summary>
-		public List<TopoTrailInfo2> ListTrails()
+		public List<TopoTrailInfo> ListTrails()
 		{
 			return _trails.All;
 		}
@@ -81,27 +81,39 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Retrieves a specific GPX file from the cache
 		/// </summary>
-		public TopoTrailInfo2 GetTrail(string key)
+		public TopoTrailInfo GetTrail(string key)
 		{
 			return _trails[key.ToUpperInvariant()];
 		}
 
-		public TopoTrackInfo2 FindTrackSource(string uri)
+		/// <summary>
+		/// Locates the track with the given file as the source
+		/// </summary>
+		public TopoTrackInfo FindTrackSource_TODO(string uri)
 		{
 			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
 		}
 
-		public List<TopoTrailInfo2> ListByCountry(GeoCountryInfo country)
+		/// <summary>
+		/// Lists all trails in a country
+		/// </summary>
+		public List<TopoTrailInfo> ListByCountry(GeoCountryInfo country)
 		{
 			return Report(new TopoTrailReportRequest() { Country = country.ISO3 });
 		}
 
-		public List<TopoTrailInfo2> ListByRegion(GeoRegionInfo region)
+		/// <summary>
+		/// Lists all trals in a region
+		/// </summary>
+		public List<TopoTrailInfo> ListByRegion(GeoRegionInfo region)
 		{
 			return Report(new TopoTrailReportRequest() { Region = region.RegionISO });
 		}
 
-		public List<TopoTrailInfo2> Report(TopoTrailReportRequest request)
+		/// <summary>
+		/// Lists all trails meeting the report request
+		/// </summary>
+		public List<TopoTrailInfo> Report(TopoTrailReportRequest request)
 		{
 			var query = _trails.All.AsQueryable();
 
@@ -138,12 +150,12 @@ namespace MetaGraffiti.Base.Services
 
 		// ==================================================
 		// Helpers
-		private TopoTrailInfo2 LoadTrail(FileInfo file)
+		private TopoTrailInfo LoadTrail(FileInfo file)
 		{
 			// load gpx data into trail
 			var reader = new GpxFileReader(file.FullName);
 			var data = reader.ReadFile();
-			var trail = new TopoTrailInfo2(data);
+			var trail = new TopoTrailInfo(data);
 
 			// setup trail details
 			var filename = Path.GetFileNameWithoutExtension(file.Name);

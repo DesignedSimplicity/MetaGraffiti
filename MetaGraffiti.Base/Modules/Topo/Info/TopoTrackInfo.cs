@@ -7,23 +7,21 @@ using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoTrackInfo2 : ITopoTrackInfo
+	public class TopoTrackInfo : ITopoTrackInfo
 	{
 		private GpxTrackData _track;
-		private TopoTrailInfo2 _trail;
-		private List<TopoPointInfo2> _points;
+		private TopoTrailInfo _trail;
+		private List<TopoPointInfo> _points;
 
-		public TopoTrackInfo2(TopoTrailInfo2 trail, GpxTrackData track)
+		public TopoTrackInfo(TopoTrailInfo trail, GpxTrackData track)
 		{
 			_trail = trail;
 			_track = track;
-			_points = track.Points.Select(x => new TopoPointInfo2(this, x)).ToList();
+			_points = track.Points.Select(x => new TopoPointInfo(this, x)).ToList();
 		}
 
 		public ITopoTrailInfo Trail => _trail;
-		public GpxTrackData TrackData => _track;
 
-		//public string Key => _track.Key;
 		public string Source => _track.Source;
 
 		public string Name => _track.Name;

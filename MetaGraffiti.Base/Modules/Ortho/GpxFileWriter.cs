@@ -12,15 +12,26 @@ namespace MetaGraffiti.Base.Modules.Ortho
 {
 	public class GpxFileWriter
 	{
+		// ==================================================
+		// Internal
+
 		private const string _gpxTemplateV1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
 		private const string _gpxTemplateV1_1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.1"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/1"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd""></gpx>";
 
 		private XmlDocument _xml = null;
 		private XmlNode _root = null;
 
+
+		// ==================================================
+		// Properties
+
 		public GpxSchemaVersion Version { get; private set; } = GpxSchemaVersion.Version1;
 		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
-		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? Gpx.XmlNamespaceV1 : Gpx.XmlNamespaceV1_1; } }
+		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? OrthoConstants.GpxNamespaceV1 : OrthoConstants.GpxNamespaceV1_1; } }
+
+
+		// ==================================================
+		// Methods
 
 		public void SetVersion(GpxSchemaVersion version)
 		{
@@ -179,45 +190,8 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		}
 
 
-
-		/*
-		public void WriteTrack(GpxTrackData track)
-		{
-		}
-
-		public void WriteRoute(GpxRouteData route)
-		{
-		}
-
-		public void WritePoint(GpxPointData point)
-		{
-		}
-
-		public void WritePoint(IGeoLocation point)
-		{
-		}
-
-		public void WritePoint(double latitude, double longitude, double? elevation, DateTime? timestamp)
-		{
-		}
-
-		public void WritePoints(IEnumerable<GpxPointData> points)
-		{
-		}
-
-		public void WritePoints(IEnumerable<IGeoLocation> points)
-		{
-		}
-
-		public void WriteWaypoint(GpxPointData waypoint)
-		{
-		}
-
-		public void WriteWaypoints(IEnumerable<GpxPointData> waypoints)
-		{
-		}
-		*/
-
+		// ==================================================
+		// Internal
 
 		private void SetPoint(XmlNode node, GpxPointData p)
 		{

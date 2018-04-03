@@ -110,8 +110,8 @@ namespace MetaGraffiti.Base.Services
 				request.Uri = uri;
 				request.Name = track.Name;
 				request.Description = track.Description;
-				request.StartTimestamp = track.Points.First().Timestamp;
-				request.FinishTimestamp = track.Points.Last().Timestamp;
+				request.StartUTC = track.Points.First().Timestamp;
+				request.FinishUTC = track.Points.Last().Timestamp;
 
 				var extract = CreateExtract(request);
 				extract.Source = track.Source;
@@ -228,9 +228,9 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Filters tracks points with given criteria
 		/// </summary>
-		public TrackExtractData ApplyFilter(TrackFilterPointsRequest request)
+		public TrackExtractData ApplyFilter(TrackEditFilterRequest request)
 		{
-			var extract = GetExtract(request.ID);
+			var extract = GetExtract(request.Key);
 			var points = FilterPoints(extract.Points, request);
 
 			// TODO: need better way to address when filter excludes everything
@@ -370,13 +370,13 @@ namespace MetaGraffiti.Base.Services
 			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = Graffiti.Geo.GuessTimezone(_trackGroupData.Country);
 		}
 
-		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackFilterBase filter)
+		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackEditFilter filter)
 		{
 			if (filter == null) return points.OrderBy(x => x.Timestamp).ToList();
 
 			var query = points.AsQueryable();
-			if (filter.StartTimestamp.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MinValue) >= filter.StartTimestamp.Value);
-			if (filter.FinishTimestamp.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MaxValue) <= filter.FinishTimestamp.Value);
+			if (filter.StartUTC.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MinValue) >= filter.StartUTC.Value);
+			if (filter.FinishUTC.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MaxValue) <= filter.FinishUTC.Value);
 			if (filter.MinimumSatellite.HasValue) query = query.Where(x => (x.Sats ?? 0) >= filter.MinimumSatellite.Value);
 			if (filter.MaximumVelocity.HasValue) query = query.Where(x => (x.Speed ?? 0) <= filter.MaximumVelocity.Value);
 			if (filter.MaximumDilution.HasValue) query = query.Where(x => x.MaxDOP <= filter.MaximumDilution.Value);
@@ -470,7 +470,7 @@ namespace MetaGraffiti.Base.Services
 		public List<int> Points { get; set; }
 	}
 
-	public class TrackExtractCreateRequest : TrackFilterBase
+	public class TrackExtractCreateRequest : TrackEditFilter
 	{
 		// Pointer to Gpx source file
 		public string Uri { get; set; }
@@ -480,32 +480,5 @@ namespace MetaGraffiti.Base.Services
 
 		// Description to give extract
 		public string Description { get; set; }
-	}
-
-	public class TrackFilterPointsRequest : TrackFilterBase
-	{
-		/// <summary>
-		/// ID for existing track extract
-		/// </summary>
-		public string ID { get; set; }
-
-		/// <summary>
-		/// Array of point indexes to remove
-		/// </summary>
-		public string Points { get; set; }
-	}
-
-	public abstract class TrackFilterBase
-	{
-		// Time range filters
-		public DateTime? StartTimestamp { get; set; }
-		public DateTime? FinishTimestamp { get; set; }
-
-		// Data quality filters
-		public int? MinimumSatellite { get; set; }
-		public int? MaximumVelocity { get; set; }
-
-		public int? MaximumDilution { get; set; }
-		public bool MissingDilution { get; set; }
 	}
 }
