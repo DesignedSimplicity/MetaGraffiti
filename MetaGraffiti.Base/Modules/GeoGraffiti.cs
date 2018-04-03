@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetaGraffiti.Base.Services.Modules
+namespace MetaGraffiti.Base.Modules
 {
-    public class GeoGraffitiService
+    public class GeoGraffiti
     {
 		// ==================================================
 		// Methods

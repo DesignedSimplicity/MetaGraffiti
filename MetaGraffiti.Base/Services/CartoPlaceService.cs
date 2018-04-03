@@ -5,9 +5,10 @@ using System.Linq;
 
 using OfficeOpenXml;
 
+using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Crypto;
+
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
@@ -268,7 +269,7 @@ namespace MetaGraffiti.Base.Services
 
 		public CartoPlaceInfo CreatePlace(CartoPlaceCreateRequest create)
 		{
-			create.PlaceKey = CryptoGraffiti.NewHashID();
+			create.PlaceKey = Graffiti.Crypto.GetNewHash();
 			var place = new CartoPlaceInfo(create);
 
 			_cache.Add(place);

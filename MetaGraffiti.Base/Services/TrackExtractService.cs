@@ -1,5 +1,5 @@
 ﻿using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Crypto;
+using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
@@ -176,7 +176,7 @@ namespace MetaGraffiti.Base.Services
 
 			// create new extract entity
 			var extract = new TrackExtractData();
-			extract.ID = CryptoGraffiti.NewHashID();
+			extract.ID = Graffiti.Crypto.GetNewHash();
 			extract.Source = uri;
 
 			// set default name value

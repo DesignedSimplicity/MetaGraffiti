@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MetaGraffiti.Base.Modules.Crypto;
+
 using MetaGraffiti.Base.Modules.Geo.Data;
 
 namespace MetaGraffiti.Base.Modules.Geo.Info
@@ -23,7 +23,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 		public GeoLocationInfo()
 		{
 			_data = new GeoLocationData();
-			ID = CryptoGraffiti.NewHashID();
+			ID = Graffiti.Crypto.GetNewHash();
 		}
 		public GeoLocationInfo(GeoLocationData data)
 		{
@@ -33,7 +33,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			Country = GeoCountryInfo.Find(data.Country);
 
 			ID = (String.IsNullOrWhiteSpace(data.PlaceKey)
-					? CryptoGraffiti.NewHashID().ToUpperInvariant()
+					? Graffiti.Crypto.GetNewHash().ToUpperInvariant()
 					: data.PlaceKey.ToUpperInvariant()
 					);
 

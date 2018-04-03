@@ -1,6 +1,6 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -149,14 +149,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var first = points?.FirstOrDefault();
 			if (first != null)
 			{
-				trail.Country = Base.Modules.Geo.Graffiti.Geo.NearestCountry(first);
-				trail.Region = Base.Modules.Geo.Graffiti.Geo.NearestRegion(first);
-				trail.Timezone = Base.Modules.Geo.Graffiti.Geo.GuessTimezone(trail.Country);
+				trail.Country = Graffiti.Geo.NearestCountry(first);
+				trail.Region = Graffiti.Geo.NearestRegion(first);
+				trail.Timezone = Graffiti.Geo.GuessTimezone(trail.Country);
 				//trail.StartLocal = trail.Timezone.FromUTC(first.Timestamp.Value);
 
 				// discover all regions
-				model.Regions = Base.Modules.Geo.Graffiti.Geo.NearbyRegions(first);
-				foreach (var region in Base.Modules.Geo.Graffiti.Geo.NearbyRegions(points.Last()))
+				model.Regions = Graffiti.Geo.NearbyRegions(first);
+				foreach (var region in Graffiti.Geo.NearbyRegions(points.Last()))
 				{
 					if (!model.Regions.Any(x => x.RegionID == region.RegionID)) model.Regions.Add(region);
 				}
