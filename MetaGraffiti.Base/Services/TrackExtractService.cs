@@ -5,6 +5,7 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Services.Internal;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +18,6 @@ namespace MetaGraffiti.Base.Services
 	{
 		// ==================================================
 		// Internals
-		private static GeoLookupService _lookupService = new GeoLookupService(null); // TODO: inject this or remove need
 		private static BasicCacheService<TrackExtractData> _extracts = new BasicCacheService<TrackExtractData>();
 		private static TrackGroupData _trackGroupData = new TrackGroupData();
 
@@ -25,10 +25,6 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Methods
 		public TrackGroupData GetTrackGroup()
-		{
-			return _trackGroupData;
-		}
-		public ITrailInfo GetTrail()
 		{
 			return _trackGroupData;
 		}
@@ -89,12 +85,11 @@ namespace MetaGraffiti.Base.Services
 			track.UrlText = source.UrlText;
 
 			// load custom properties
-			var data = reader.ReadExtension();
+			var data = source.Extensions;
 			track.Timezone = GeoTimezoneInfo.Find(data.Timezone);
 			track.Country = GeoCountryInfo.Find(data.Country);
 			track.Region = GeoRegionInfo.Find(data.Region);
 			track.Location = data.Location;
-			// TODO: read ID
 
 			return track;
 		}
@@ -137,12 +132,12 @@ namespace MetaGraffiti.Base.Services
 			_trackGroupData.UrlLink = update.Url;
 			_trackGroupData.UrlText = update.UrlName;
 
-			_trackGroupData.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
-			_trackGroupData.Region = _lookupService.SearchRegions(update.Region, _trackGroupData.Country).FirstOrDefault();
+			_trackGroupData.Country = Graffiti.Geo.SearchCountry(update.Country);
+			_trackGroupData.Region = Graffiti.Geo.SearchRegion(update.Region, _trackGroupData.Country);
 			_trackGroupData.Location = update.Location;
 
 			_trackGroupData.Timezone = GeoTimezoneInfo.Find(update.Timezone);
-			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = _lookupService.GuessTimezone(_trackGroupData.Country);
+			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = Graffiti.Geo.GuessTimezone(_trackGroupData.Country);
 
 			return _trackGroupData;
 		}
@@ -159,12 +154,12 @@ namespace MetaGraffiti.Base.Services
 			_trackGroupData.UrlLink = update.Url; // TODO: make sure url is prefixed with http/s
 			_trackGroupData.UrlText = update.UrlName;
 
-			_trackGroupData.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
-			_trackGroupData.Region = _lookupService.SearchRegions(update.Region, _trackGroupData.Country).FirstOrDefault();
+			_trackGroupData.Country = Graffiti.Geo.SearchCountry(update.Country);
+			_trackGroupData.Region = Graffiti.Geo.SearchRegion(update.Region, _trackGroupData.Country);
 			_trackGroupData.Location = update.Location;
 
 			_trackGroupData.Timezone = GeoTimezoneInfo.Find(update.Timezone);
-			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = _lookupService.GuessTimezone(_trackGroupData.Country);
+			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = Graffiti.Geo.GuessTimezone(_trackGroupData.Country);
 
 			return _trackGroupData;
 		}
@@ -372,7 +367,7 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			// set default for countries with single timezone
-			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = new GeoLookupService(null).GuessTimezone(_trackGroupData.Country);
+			if (_trackGroupData.Timezone == null && _trackGroupData.Country != null) _trackGroupData.Timezone = Graffiti.Geo.GuessTimezone(_trackGroupData.Country);
 		}
 
 		private List<GpxPointData> FilterPoints(IEnumerable<GpxPointData> points, TrackFilterBase filter)
@@ -407,7 +402,7 @@ namespace MetaGraffiti.Base.Services
 		public string Location { get; set; }
 	}
 
-	public class TrackGroupData : IGpxFileHeader, ITrailInfo
+	public class TrackGroupData : IGpxFileHeader
 	{
 		public string Uri { get; set; }
 

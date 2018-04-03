@@ -222,8 +222,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public bool IsShort { get; set; }
 		public bool IsBad { get; set; }
 
-		public TopoTrailInfo Trail { get; set; }
-
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
 		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();
 		public List<CartoPlaceInfo> NearbyPlaces { get; set; } = new List<CartoPlaceInfo>();

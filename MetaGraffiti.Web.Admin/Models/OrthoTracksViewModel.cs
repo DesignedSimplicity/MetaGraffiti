@@ -54,7 +54,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public ITopoTrailInfo Trail { get; set; }
 
-		public TopoTrailInfo Preview { get; set; }
+		public TopoTrailInfo2 Preview { get; set; }
 
 		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
 		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();

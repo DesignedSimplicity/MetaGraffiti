@@ -74,7 +74,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTopoUrl() { return "/topo/"; }
 
 		public static string GetTrailUrl(string key) { return $"/topo/trail/{key}"; }
-		public static string GetTrailUrl(TopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 		public static string GetRefreshUrl() { return "/topo/refresh/"; }
 		public static string GetReportUrl() { return "/topo/report/"; }

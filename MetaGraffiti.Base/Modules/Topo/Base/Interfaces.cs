@@ -7,22 +7,28 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Topo
 {
-	public interface ITopoTrailInfo
+	public interface ITopoTrailBase
 	{
-		string Key { get; }
-		string Source { get; }
-
 		string Name { get; }
 		string Description { get; }
 
 		string Keywords { get; }
 		string UrlLink { get; }
 		string UrlText { get; }
+	}
 
+	public interface ITopoTrailData : ITopoTrailBase
+	{
 		string Location { get; }
 		GeoRegionInfo Region { get; }
 		GeoCountryInfo Country { get; }
 		GeoTimezoneInfo Timezone { get; }
+	}
+
+	public interface ITopoTrailInfo : ITopoTrailData
+	{
+		string Key { get; }
+		string Source { get; }
 
 		DateTime StartUTC { get; }
 		DateTime FinishUTC { get; }

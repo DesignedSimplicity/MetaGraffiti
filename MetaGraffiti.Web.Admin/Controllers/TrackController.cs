@@ -24,13 +24,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
-		private GeoLookupService _geoLookupService;
 		private TopoTrailService _trailDataService;
 
 		public TrackController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_geoLookupService = ServiceConfig.GeoLookupService;
 			_trailDataService = ServiceConfig.TopoTrailService;
 		}
 
@@ -320,12 +318,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (!source.Metadata.Timestamp.HasValue) source.Metadata.Timestamp = start.Timestamp;
 
-			source.Metadata.Country = _geoLookupService.NearestCountry(start);
-			source.Metadata.Region = _geoLookupService.NearestRegion(start);
-			source.Metadata.Timezone = _geoLookupService.GuessTimezone(source.Metadata.Country);
+			source.Metadata.Country = Base.Modules.Geo.Graffiti.Geo.NearestCountry(start);
+			source.Metadata.Region = Base.Modules.Geo.Graffiti.Geo.NearestRegion(start);
+			source.Metadata.Timezone = Base.Modules.Geo.Graffiti.Geo.GuessTimezone(source.Metadata.Country);
 
-			source.Regions = _geoLookupService.NearbyRegions(start);
-			foreach (var region in _geoLookupService.NearbyRegions(finish))
+			source.Regions = Base.Modules.Geo.Graffiti.Geo.NearbyRegions(start);
+			foreach (var region in Base.Modules.Geo.Graffiti.Geo.NearbyRegions(finish))
 			{
 				if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
 			}

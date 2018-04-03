@@ -19,8 +19,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 			var t = GeoTimezoneInfo.Find(id);
 			if (t == null)
 			{
-				var service = new GeoLookupService(null);
-				t = service.FindTimezone(id);
+				t = Graffiti.Geo.FindTimezone(id);
 			}
 			if (t == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 

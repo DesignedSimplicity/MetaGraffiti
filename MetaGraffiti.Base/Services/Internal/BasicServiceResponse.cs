@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetaGraffiti.Base.Services
+namespace MetaGraffiti.Base.Services.Internal
 {
 	public class BasicServiceResponse<T>
 	{

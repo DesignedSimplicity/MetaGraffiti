@@ -60,7 +60,7 @@
 			<tbody>
 				@{
 					var index = 0;
-					foreach (var source in Model.Sources.OrderBy(x => x.Preview.Date))
+					foreach (var source in Model.Sources.OrderBy(x => x.Preview.StartUTC))
 					{
 						<tr>
 							<td>@(index + 1)</td>
@@ -73,18 +73,18 @@
 									<a class="topo-color font-weight-bold" href="@TopoViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
 								}
 							</td>
-							<td class="text-center">@source.Preview.Date.ToString("yyyy-MM-dd")</td>
-							<td class="text-center">@source.Preview.Date.ToShortTimeString()</td>
+							<td class="text-center">@source.Preview.StartUTC.ToString("yyyy-MM-dd")</td>
+							<td class="text-center">@source.Preview.StartUTC.ToShortTimeString()</td>
 							<td>
-								@foreach (var tag in source.Preview.AutoTags)
-	{
-							<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
-}
+								@foreach (var tag in source.Preview.TopoTracks.SelectMany(x => x.Tags).Distinct())
+								{
+									<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
+								}
 							</td>
-							<td class="text-center font-weight-bold">@source.Preview.TotalKilometers.ToString("#,##0.0")</td>
-							<td class="text-center font-weight-bold">@source.Preview.ElapsedTimeText</td>
+							<td class="text-center font-weight-bold">@source.Preview.Stats.EstimatedKM.ToString("#,##0.0")</td>
+							<td class="text-center font-weight-bold">@TextHelper.GetElapsedTime(source.Preview.Stats.ElapsedTime)</td>
 							<td class="text-center">
-								@((source.Preview.TotalKilometers / source.Preview.ElapsedTime.TotalHours).ToString("0.0"))
+								@source.Preview.Stats.EstimatedKPH.ToString("0.0")
 							</td>
 							<td class="@(source.Preview.Country == null ? "table-danger" : "")">@(source.Preview.Country?.Name ?? "")</td>
 							<td>

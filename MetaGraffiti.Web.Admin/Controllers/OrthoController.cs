@@ -23,7 +23,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		private CartoPlaceService _cartoPlaceService;
 
 		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private GeoLookupService _geoLookupService;
 		private TopoTrailService _trailDataService;
 
 
@@ -31,7 +30,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_tripSheetService = ServiceConfig.TripSheetService;
 			_trailDataService = ServiceConfig.TopoTrailService;
-			_geoLookupService = ServiceConfig.GeoLookupService;
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
@@ -135,7 +133,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Trail = existing?.Trail;
 
 			// build trail preview
-			var trail = new TopoTrailInfo();
+			var trail = new TopoTrailInfo2();
 			model.Preview = trail;
 
 			// find intersecting places
@@ -151,14 +149,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var first = points?.FirstOrDefault();
 			if (first != null)
 			{
-				trail.Country = _geoLookupService.NearestCountry(first);
-				trail.Region = _geoLookupService.NearestRegion(first);
-				trail.Timezone = _geoLookupService.GuessTimezone(trail.Country);
-				trail.Date = trail.Timezone.FromUTC(first.Timestamp.Value);
+				trail.Country = Base.Modules.Geo.Graffiti.Geo.NearestCountry(first);
+				trail.Region = Base.Modules.Geo.Graffiti.Geo.NearestRegion(first);
+				trail.Timezone = Base.Modules.Geo.Graffiti.Geo.GuessTimezone(trail.Country);
+				//trail.StartLocal = trail.Timezone.FromUTC(first.Timestamp.Value);
 
 				// discover all regions
-				model.Regions = _geoLookupService.NearbyRegions(first);
-				foreach (var region in _geoLookupService.NearbyRegions(points.Last()))
+				model.Regions = Base.Modules.Geo.Graffiti.Geo.NearbyRegions(first);
+				foreach (var region in Base.Modules.Geo.Graffiti.Geo.NearbyRegions(points.Last()))
 				{
 					if (!model.Regions.Any(x => x.RegionID == region.RegionID)) model.Regions.Add(region);
 				}
@@ -167,7 +165,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			// build track previews
 			foreach (var t in model.Data.Tracks)
 			{
-				var track = new TopoTrackInfo(trail, t);
+				var track = new TopoTrackInfo2(trail, t);
 
 				var start = t.Points.First();
 				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
@@ -175,7 +173,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				var finish = t.Points.Last();
 				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();				
 
-				trail.Tracks.Add(track);
+				trail.AddTrack_TO_DEPRECATE(track);
 			}
 
 			return model;

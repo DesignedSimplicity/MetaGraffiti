@@ -59,50 +59,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 		// ==================================================
-		// TopoTrailInfo
-		public static HtmlString GetJson(TopoTrailInfo trail)
-		{
-			if (trail == null || trail.Tracks.Count == 0) new HtmlString("[]");
-			return new HtmlString(GetTrailJson(trail).ToString());
-		}
-		public static HtmlString GetJson(IEnumerable<TopoTrailInfo> trails)
-		{
-			if (trails == null || trails.Count() == 0) new HtmlString("[]");
-
-			JArray all = new JArray();
-			foreach (var trail in trails)
-			{
-				dynamic t = new JObject();
-				t.id = trail.Key;
-				t.name = trail.Name;
-				t.tracks = GetTrailJson(trail);
-				all.Add(t);
-			}
-			return new HtmlString(all.ToString());
-		}
-		private static JArray GetTrailJson(TopoTrailInfo trail)
-		{
-			JArray list = new JArray();
-			foreach (var track in trail.Tracks)
-			{
-				dynamic t = new JObject();
-				//t.id = track.ID;
-				t.track = track.Name;
-				t.points = new JArray();
-				foreach (var point in track.Points)
-				{
-					dynamic p = new JObject();
-					p.lat = point.Latitude;
-					p.lng = point.Longitude;
-					t.points.Add(p);
-				}
-				list.Add(t);
-			}
-			return list;
-		}
-
-
-		// ==================================================
 		// CartoPlaceInfo
 		public static HtmlString GetJson(CartoPlaceInfo place)
 		{

@@ -16,13 +16,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
-		private GeoLookupService _geoLookupService;
 		private TopoTrailService _trailDataService;
 
 		public TrailController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_geoLookupService = ServiceConfig.GeoLookupService;
 			_trailDataService = ServiceConfig.TopoTrailService;
 		}
 
@@ -30,7 +28,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new TrailViewModel();
 
-			model.Trail = _trackExtractService.GetTrail();
+			//model.Trail = _trackExtractService.GetTrail();
 			//model.Tracks = _trackExtractService.ListTracks();
 
 			return model;

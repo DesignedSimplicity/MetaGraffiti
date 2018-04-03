@@ -21,13 +21,13 @@ namespace MetaGraffiti.Web.Admin
 		private static TopoTrailService _topoTrailService;
 
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
-		private static GeoLookupService _geoLookupService = new GeoLookupService(_googleApiService);
+		private static GoogleLookupService _googleLookupService = new GoogleLookupService(_googleApiService);
 		
 	
 
-		public static GeoLookupService GeoLookupService
+		public static GoogleLookupService GoogleLookupService
 		{
-			get { return _geoLookupService; }
+			get { return _googleLookupService; }
 		}
 
 		public static void ResetTopoTrail()

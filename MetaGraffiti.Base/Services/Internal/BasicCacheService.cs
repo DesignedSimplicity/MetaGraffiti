@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MetaGraffiti.Base.Services
+namespace MetaGraffiti.Base.Services.Internal
 {
 	public interface ICacheEntity
 	{

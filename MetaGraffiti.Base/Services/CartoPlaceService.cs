@@ -12,6 +12,7 @@ using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
+using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
 {

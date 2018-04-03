@@ -18,12 +18,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// Initialization
 
 		private CartoPlaceService _cartoPlaceService;
-		private GeoLookupService _geoLookupService;
 
 		public PlaceController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_geoLookupService = ServiceConfig.GeoLookupService;
 		}
 
 		private PlaceViewModel InitModel()

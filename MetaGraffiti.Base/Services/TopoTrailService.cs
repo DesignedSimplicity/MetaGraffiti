@@ -4,6 +4,7 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Services.Internal;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -80,19 +81,14 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Retrieves a specific GPX file from the cache
 		/// </summary>
-		public TopoTrailInfo2 GetTrail(string id)
+		public TopoTrailInfo2 GetTrail(string key)
 		{
-			return _trails[id.ToUpperInvariant()];
+			return _trails[key.ToUpperInvariant()];
 		}
 
 		public TopoTrackInfo2 FindTrackSource(string uri)
 		{
 			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
-		}
-
-		public List<TopoTrailInfo2> ListByDate(int year, int? month = null, int? day = null)
-		{
-			return Report(new TopoTrailReportRequest() { Year = year, Month = month, Day = day });
 		}
 
 		public List<TopoTrailInfo2> ListByCountry(GeoCountryInfo country)
@@ -104,13 +100,6 @@ namespace MetaGraffiti.Base.Services
 		{
 			return Report(new TopoTrailReportRequest() { Region = region.RegionISO });
 		}
-
-		/*
-		public List<TopoTrailInfo> ListByPerimeter(IGeoPerimeter perimeter)
-		{
-			return null;
-		}
-		*/
 
 		public List<TopoTrailInfo2> Report(TopoTrailReportRequest request)
 		{
@@ -135,7 +124,7 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
-
+		
 
 		/// <summary>
 		/// Clears the GPX file cache
@@ -159,7 +148,7 @@ namespace MetaGraffiti.Base.Services
 			// setup trail details
 			var filename = Path.GetFileNameWithoutExtension(file.Name);
 			trail.Key = filename.ToUpperInvariant();
-			trail.Source = file.FullName;			
+			trail.Source = file.FullName;
 
 			// discover places for each track
 			foreach (var track in trail.TopoTracks)
@@ -172,6 +161,7 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
+	// TODO: refactor this to use an interface
 	public class TopoTrailReportRequest
 	{
 		public string Country { get; set; }

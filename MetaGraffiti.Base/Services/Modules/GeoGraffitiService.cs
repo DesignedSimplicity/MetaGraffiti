@@ -1,52 +1,20 @@
-﻿using System;
+﻿using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Info;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
-using MetaGraffiti.Base.Common;
-using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Geo.Data;
-using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Services.External;
-
-namespace MetaGraffiti.Base.Services
+namespace MetaGraffiti.Base.Services.Modules
 {
-	// TODO: refactor this into a general GeoGraffiti service layer
-	// TODO: seperate out the base lookup from the calls that require google api
-	public class GeoLookupService
-	{
-		// ==================================================
-		// Internals
-		private GoogleApiService _google = null;
-
-
-		// ==================================================
-		// Constructors
-		public GeoLookupService(GoogleApiService google)
-		{
-			_google = google;
-		}
-
-
+    public class GeoGraffitiService
+    {
 		// ==================================================
 		// Methods
 
 		// --------------------------------------------------
-		// Elevation
-		public double LookupElevation(IGeoLatLon point)
-		{
-			return _google.RequestElevation(point).Elevation;
-		}
-
-		// --------------------------------------------------
 		// Timezone
-		public GeoTimezoneInfo LookupTimezone(IGeoLatLon point)
-		{
-			var response = _google.RequestTimezone(point);
-			return GeoTimezoneInfo.ByTZID(response.TimeZoneId);
-		}
-
 		public GeoTimezoneInfo FindTimezone(string name)
 		{
 			return GeoTimezoneInfo.All.Where(x => x.TZID.EndsWith(name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
@@ -76,22 +44,6 @@ namespace MetaGraffiti.Base.Services
 			var regionCountries = regions.Select(x => x.Country).Distinct().Count();
 			if (regionCountries == 1) // 1 country with multiple regions
 				country = regions.First().Country;
-			/*
-			else if (countries.Count() == 1) // 1 country without regions
-				country = countries.First();
-			else // multiple countries
-			{
-				foreach(var c in countryOrder)
-				{
-					// pick first visited country
-					if (countries.Any(x => x.ISO2 == c))
-					{
-						country = GeoCountryInfo.ByISO(c);
-						break;
-					}
-				}
-			}
-			*/
 
 			// now pick timezone
 			if (country == null)
@@ -137,6 +89,7 @@ namespace MetaGraffiti.Base.Services
 			return countries.FirstOrDefault();
 		}
 
+		public GeoCountryInfo SearchCountry(string name) { return SearchCountries(name).FirstOrDefault(); }
 		public List<GeoCountryInfo> SearchCountries(string name)
 		{
 			var list = new List<GeoCountryInfo>();
@@ -164,6 +117,7 @@ namespace MetaGraffiti.Base.Services
 			return NearbyRegions(point).FirstOrDefault();
 		}
 
+		public GeoRegionInfo SearchRegion(string name, GeoCountryInfo country) { return SearchRegions(name, country).FirstOrDefault(); }
 		public List<GeoRegionInfo> SearchRegions(string name, GeoCountryInfo country)
 		{
 			var list = new List<GeoRegionInfo>();
