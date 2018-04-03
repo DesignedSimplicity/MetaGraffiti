@@ -60,7 +60,7 @@
 			<tbody>
 				@{
 					var index = 0;
-					foreach (var source in Model.Sources.OrderBy(x => x.Preview.LocalDate))
+					foreach (var source in Model.Sources.OrderBy(x => x.Preview.Date))
 					{
 						<tr>
 							<td>@(index + 1)</td>
@@ -73,8 +73,8 @@
 									<a class="topo-color font-weight-bold" href="@TopoViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
 								}
 							</td>
-							<td class="text-center">@source.Preview.LocalDate.ToString("yyyy-MM-dd")</td>
-							<td class="text-center">@source.Preview.LocalDate.ToShortTimeString()</td>
+							<td class="text-center">@source.Preview.Date.ToString("yyyy-MM-dd")</td>
+							<td class="text-center">@source.Preview.Date.ToShortTimeString()</td>
 							<td>
 								@foreach (var tag in source.Preview.AutoTags)
 	{

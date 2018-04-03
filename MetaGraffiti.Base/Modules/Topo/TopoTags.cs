@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace MetaGraffiti.Base.Modules.Topo
 {
-    public class TopoAutoTags
+    public class TopoTags
     {
 		public static string[] FromPoints(IEnumerable<GpxPointData> points)
 		{

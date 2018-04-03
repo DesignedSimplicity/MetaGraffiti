@@ -100,9 +100,9 @@
 					<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
 				</form>
 				<div class="h4 mt-2">
-					<div class="badge badge-secondary">@TextHelper.GetTotalDays(trail.StartLocal, trail.FinishLocal)</div>
-					<div class="badge badge-info">@TextHelper.GetElapsedTime(trail.Stats.ElapsedTime)</div>
-					<div class="badge badge-success">@trail.Stats.EstimatedKM.ToString("0.0") km</div>
+					<div class="badge badge-pill badge-secondary">@TextHelper.GetTotalDays(trail.StartLocal, trail.FinishLocal)</div>
+					<div class="badge badge-pill badge-info">@TextHelper.GetElapsedTime(trail.Stats.ElapsedTime)</div>
+					<div class="badge badge-pill badge-success">@trail.Stats.EstimatedKM.ToString("0.0") km</div>
 					<div class="h6">
 						<a href="@trail.UrlLink">@trail.UrlText</a>
 					</div>
@@ -178,7 +178,13 @@
 								<div>
 									@if (!String.IsNullOrWhiteSpace(track.Source))
 									{
-										<a class="badge badge-info" href="@TopoViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+										<a class="btn btn-sm btn-outline-info" href="@TopoViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+									}
+								</div>
+								<div class="mt-2">
+									@foreach (var tag in track.Tags)
+									{
+										<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
 									}
 								</div>
 							</td>

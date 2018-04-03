@@ -2,6 +2,7 @@
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Ortho.Info;
+using MetaGraffiti.Base.Modules.Topo;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public FileInfo File { get; set; }
 		public GpxFileInfo Data { get; set; }
 
-		public TopoTrailInfo Trail { get; set; }
+		public ITopoTrailInfo Trail { get; set; }
 
 		public TopoTrailInfo Preview { get; set; }
 

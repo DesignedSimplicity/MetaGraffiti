@@ -131,8 +131,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
-			//TODO: fix var existing = _trailDataService.FindTrackSource(file.Name);
-			//TODO: fix model.Trail = existing?.Trail;
+			var existing = _trailDataService.FindTrackSource(file.Name);
+			model.Trail = existing?.Trail;
 
 			// build trail preview
 			var trail = new TopoTrailInfo();

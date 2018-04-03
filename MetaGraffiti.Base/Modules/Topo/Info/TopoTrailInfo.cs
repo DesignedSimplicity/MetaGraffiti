@@ -102,6 +102,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public IEnumerable<ITopoPointInfo> Points => _points;
 
 		public TopoStats Stats { get { return TopoStats.FromTrack(this); } }
+		public string[] Tags { get { return TopoTags.FromPoints(_track.Points); } }
 	}
 
 	public class TopoPointInfo2 : ITopoPointInfo
