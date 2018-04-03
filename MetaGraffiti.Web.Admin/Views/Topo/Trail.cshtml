@@ -90,20 +90,21 @@
 				<div class="h4">@trail.Keywords</div>
 				<div>@trail.Description</div>
 				<div class="small mt-1">
-					@trail.Uri
+					@trail.Source
 				</div>
 			</div>
 			<div class="col-sm-4 text-right">
 				<form method="post" action="@TopoViewModel.GetModifyUrl()">
-					<input type="hidden" name="ID" value="@trail.ID" />
+					<input type="hidden" name="ID" value="@trail.Key" />
 					<button type="submit" class="btn btn-outline-success">Edit Tracks</button>
 					<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
 				</form>
 				<div class="h4 mt-2">
-					<div class="badge badge-info">@trail.ElapsedTimeText</div>
-					<div class="badge badge-success">@trail.TotalKilometers.ToString("0.0") km</div>
+					<div class="badge badge-secondary">@TextHelper.GetTotalDays(trail.StartLocal, trail.FinishLocal)</div>
+					<div class="badge badge-info">@TextHelper.GetElapsedTime(trail.Stats.ElapsedTime)</div>
+					<div class="badge badge-success">@trail.Stats.EstimatedKM.ToString("0.0") km</div>
 					<div class="h6">
-						<a href="@trail.Url">@trail.UrlName</a>
+						<a href="@trail.UrlLink">@trail.UrlText</a>
 					</div>
 				</div>
 			</div>
@@ -120,7 +121,7 @@
 					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name)">@trail.Country.Name</a>
 				</div>
 				<div class="h5">
-					@foreach (var place in trail.ViaPlaces.OrderBy(x => x.Bounds.Area))
+					@foreach (var place in Model.ConsolidatePlaces(trail))
 					{
 						<div class="mt-2">
 							<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a> <span class="h6"><span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span></span>
@@ -130,11 +131,11 @@
 			</div>
 			<div class="col-sm-4 text-right">
 				<div class="h5">
-					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.LocalDate.Year, trail.LocalDate.Month)">@trail.LocalDate.ToString("MMMM")</a>
-					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.LocalDate.Year)">@trail.LocalDate.Year</a>
+					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.StartLocal.Year, trail.StartLocal.Month)">@trail.StartLocal.ToString("MMMM")</a>
+					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.StartLocal.Year)">@trail.StartLocal.Year</a>
 				</div>
 				<div class="h5">
-					<span>@trail.LocalDate.ToString("dd") @trail.LocalDate.ToString("dddd")</span><br />
+					<span>@trail.StartLocal.ToString("dd") @trail.StartLocal.ToString("dddd")</span><br />
 				</div>
 				<div>
 					@trail.Timezone.Name<br /><small>(@trail.Timezone.DisplayOffsetUTC)</small>
@@ -156,8 +157,9 @@
 			<tbody>
 				@{
 					var count = 0;
-					foreach (var track in trail.Tracks)
+					foreach (var track in trail.TopoTracks)
 					{
+						var stats = track.Stats;
 						<tr class="js-mappable-row">
 							<td rowspan="3" class="text-center font-weight-bold h3">@(++count)</td>
 							<td colspan="3">
@@ -165,21 +167,15 @@
 								<span class="small">@track.Description</span>
 							</td>
 							<td class="text-right h5 text-nowrap">
-								@track.ElapsedTimeText
+								@TextHelper.GetElapsedTime(stats.ElapsedTime)
 							</td>
 							<td class="text-right h5">
-								@track.EstimatedDistance.KM.ToString("0.0") km
+								@stats.DistanceWithElevation.KM.ToString("0.0") km
 							</td>
 						</tr>
 						<tr>
 							<td>
 								<div>
-									@foreach (var tag in track.AutoTags)
-									{
-										<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
-									}
-								</div>
-								<div class="mt-2">
 									@if (!String.IsNullOrWhiteSpace(track.Source))
 									{
 										<a class="badge badge-info" href="@TopoViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
@@ -188,7 +184,7 @@
 							</td>
 							<td class="h5">
 								<div class="text-nowrap">
-									@track.StartTime.ToString("hh:mm:ss tt") <small>@track.StartTime.ToString("yyyy-MM-dd")</small>
+									@track.StartLocal.ToString("hh:mm:ss tt") <small>@track.StartLocal.ToString("yyyy-MM-dd")</small>
 								</div>
 								<div class="mt-2">
 									@if (track.StartPlace != null)
@@ -199,7 +195,7 @@
 							</td>
 							<td class="h5">
 								<div class="text-nowrap">
-									@track.FinishTime.ToString("hh:mm:ss tt") <small>@track.FinishTime.ToString("yyyy-MM-dd")</small>
+									@track.FinishLocal.ToString("hh:mm:ss tt") <small>@track.FinishLocal.ToString("yyyy-MM-dd")</small>
 								</div>
 								<div class="mt-2">
 									@if (track.FinishPlace != null)
@@ -209,12 +205,12 @@
 								</div>
 							</td>
 							<td class="text-right font-weight-bold">
-								@track.EstimatedKmh.ToString("0.0") <small>km/h</small>
+								@stats.EstimatedKPH.ToString("0.0") <small>km/h</small>
 							</td>
 							<td class="text-right font-weight-bold">
-								<div class="text-success">@track.EstimatedAscent.ToString("#,##0") m</div>
+								<div class="text-success">@stats.EstimatedMetersAscent.ToString("#,##0") m</div>
 								<div class="mt-2"></div>
-								<div class="text-danger">@track.EstimatedDescent.ToString("#,##0") m</div>
+								<div class="text-danger">@stats.EstimatedMetersDescent.ToString("#,##0") m</div>
 							</td>
 						</tr>
 						<tr>

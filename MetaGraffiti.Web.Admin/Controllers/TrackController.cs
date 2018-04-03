@@ -66,7 +66,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var trail = _trailDataService.GetTrail(id);
 
-			_trackExtractService.ModifyTrail(trail.Uri);
+			_trackExtractService.ModifyTrail(trail.Source);
 
 			return Redirect(TrackViewModel.GetManageUrl());
 		}
@@ -305,8 +305,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			source.FileName = file.Name;
 			source.Directory = file.Directory.FullName;
 
-			var existing = _trailDataService.FindTrackSource(file.Name);
-			source.Trail = existing?.Trail;
+			//TODO: fix var existing = _trailDataService.FindTrackSource(file.Name);
+			//TODO: fix source.Trail = existing?.Trail;
 
 			source.Metadata = _trackExtractService.ReadTrail(file.FullName);
 			var data = source.Metadata.Data;

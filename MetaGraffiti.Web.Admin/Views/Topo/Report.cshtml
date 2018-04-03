@@ -55,30 +55,29 @@
 			<th>Region</th>
 			<th>Places</th>
 			<th>Keywords</th>
-			<th>Tags</th>
 			<th class="text-center">Distance</th>
 			<th class="text-center">Time</th>
 			<th class="text-center">Tracks</th>
 			<th class="text-center">Points</th>
-
 		</tr>
 	</thead>
 	<tbody>
 		@{
-			var yearMonth = 0;
-			foreach (var trail in trails)
-			{
-				if (!Model.SelectedMonth.HasValue && yearMonth != trail.LocalDate.Month)
+				var yearMonth = 0;
+				foreach (var trail in trails)
 				{
-					yearMonth = trail.LocalDate.Month;
+					var stats = trail.Stats;
+					if (!Model.SelectedMonth.HasValue && yearMonth != trail.StartLocal.Month)
+					{
+						yearMonth = trail.StartLocal.Month;
 					<tr class="table-secondary">
-						<td colspan="11" class="h5">
+						<td colspan="10" class="h5">
 							<a class="topo-color" href="@TopoViewModel.GetReportUrl(Model.SelectedYear.Value, yearMonth)">@TextHelper.GetMonth(yearMonth)</a>
 						</td>
 					</tr>
 				}
 				<tr>
-					<td>@trail.LocalDate.ToString("yyyy-MM-dd")</td>
+					<td>@trail.StartLocal.ToString("yyyy-MM-dd")</td>
 					<td>
 						<div class="h4">
 							<a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a>
@@ -95,7 +94,7 @@
 						}
 					</td>
 					<td>
-						@foreach (var place in trail.ViaPlaces)
+						@foreach (var place in Model.ConsolidatePlaces(trail))
 						{
 							<div>
 								<a class="carto-color" href="#">@place.Name</a>
@@ -105,15 +104,9 @@
 					<td>
 						@trail.Keywords
 					</td>
-					<td>
-						@foreach (var tag in trail.AutoTags)
-						{
-							<span class="badge badge-pill badge-@CssHelper.GetTagCss(tag)">@tag</span>
-						}
-					</td>
-					<td class="text-center">@trail.TotalKilometers.ToString("0.0") km</td>
-					<td class="text-center text-nowrap">@trail.ElapsedTimeText</td>
-					<td class="text-center">@trail.Tracks.Count</td>
+					<td class="text-center">@stats.EstimatedKM.ToString("0.0") km</td>
+					<td class="text-center text-nowrap">@TextHelper.GetElapsedTime(stats.ElapsedTime)</td>
+					<td class="text-center">@trail.Tracks.Count()</td>
 					<td class="text-center">@trail.Tracks.SelectMany(x => x.Points).Count().ToString("#,##0")</td>
 				</tr>
 			}

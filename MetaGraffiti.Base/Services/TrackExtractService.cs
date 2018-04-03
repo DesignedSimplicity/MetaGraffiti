@@ -49,10 +49,6 @@ namespace MetaGraffiti.Base.Services
 		{
 			return _extracts.All.OrderBy(x => x.Points.First().Timestamp).ToList();
 		}
-		public List<ITrackInfo> ListTracks()
-		{
-			return ListExtracts().ToList<ITrackInfo>();
-		}
 
 		/// <summary>
 		/// Gets a specific extract from edit session
@@ -89,8 +85,8 @@ namespace MetaGraffiti.Base.Services
 			track.Name = source.Name;
 			track.Description = source.Description;
 			track.Keywords = source.Keywords;
-			track.Url = source.Url;
-			track.UrlName = source.UrlName;
+			track.UrlLink = source.UrlLink;
+			track.UrlText = source.UrlText;
 
 			// load custom properties
 			var data = reader.ReadExtension();
@@ -138,8 +134,8 @@ namespace MetaGraffiti.Base.Services
 			_trackGroupData.Keywords = update.Keywords;
 
 			// TODO: make sure url is prefixed with http/s
-			_trackGroupData.Url = update.Url;
-			_trackGroupData.UrlName = update.UrlName;
+			_trackGroupData.UrlLink = update.Url;
+			_trackGroupData.UrlText = update.UrlName;
 
 			_trackGroupData.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
 			_trackGroupData.Region = _lookupService.SearchRegions(update.Region, _trackGroupData.Country).FirstOrDefault();
@@ -160,8 +156,8 @@ namespace MetaGraffiti.Base.Services
 			_trackGroupData.Description = update.Description;
 			_trackGroupData.Keywords = update.Keywords;
 
-			_trackGroupData.Url = update.Url; // TODO: make sure url is prefixed with http/s
-			_trackGroupData.UrlName = update.UrlName;
+			_trackGroupData.UrlLink = update.Url; // TODO: make sure url is prefixed with http/s
+			_trackGroupData.UrlText = update.UrlName;
 
 			_trackGroupData.Country = _lookupService.SearchCountries(update.Country).FirstOrDefault();
 			_trackGroupData.Region = _lookupService.SearchRegions(update.Region, _trackGroupData.Country).FirstOrDefault();
@@ -424,8 +420,8 @@ namespace MetaGraffiti.Base.Services
 
 		public string Keywords { get; set; }
 
-		public string Url { get; set; }
-		public string UrlName { get; set; }
+		public string UrlLink { get; set; }
+		public string UrlText { get; set; }
 
 
 		// Custom extension values
@@ -435,7 +431,7 @@ namespace MetaGraffiti.Base.Services
 		public string Location { get; set; }
 	}
 
-	public class TrackExtractData : ITrackInfo
+	public class TrackExtractData
 	{
 		public string ID { get; set; }
 		public string Name { get; set; }

@@ -45,6 +45,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			data.Tracks = ReadTracks();
 			data.Routes = ReadRoutes();
 			data.Waypoints = ReadWaypoints();
+			data.Extensions = ReadExtension();
 			return data;
 		}
 
@@ -79,8 +80,8 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			data.Timestamp = ReadDateTime(MetadataNode, "time");
 
 			// optional top elements
-			data.Url = ReadString(MetadataNode, "url");
-			data.UrlName = ReadString(MetadataNode, "urlname");
+			data.UrlLink = ReadString(MetadataNode, "url");
+			data.UrlText = ReadString(MetadataNode, "urlname");
 			data.Keywords = ReadString(MetadataNode, "keywords");
 
 			// TODO: support other optional elements
@@ -94,7 +95,6 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		public GpxExtensionData ReadExtension()
 		{
 			var data = new GpxExtensionData();
-			data.ID = ReadExtension("id");
 			data.Timezone = ReadExtension("timezone");
 			data.Country = ReadExtension("country");
 			data.Region = ReadExtension("region");

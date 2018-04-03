@@ -17,15 +17,13 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Internals
 		private static object _init = false;
-		private static BasicCacheService<TopoTrailInfo> _trails;
+		private static BasicCacheService<TopoTrailInfo2> _trails;
 		private CartoPlaceService _cartoPlaceService;
-
 
 		public TopoTrailService(CartoPlaceService cartoPlaceService)
 		{
 			_cartoPlaceService = cartoPlaceService;
 		}
-
 
 		// ==================================================
 		// Methods
@@ -39,7 +37,7 @@ namespace MetaGraffiti.Base.Services
 			{
 				if (Convert.ToBoolean(_init)) return;
 
-				_trails = new BasicCacheService<TopoTrailInfo>();
+				_trails = new BasicCacheService<TopoTrailInfo2>();
 				var root = new DirectoryInfo(uri);
 				foreach (var dir in root.EnumerateDirectories())
 				{
@@ -49,7 +47,7 @@ namespace MetaGraffiti.Base.Services
 						foreach (var file in dir.EnumerateFiles("*.gpx"))
 						{
 							var trail = LoadTrail(file);
-							_trails.Add(trail.ID.ToUpperInvariant(), trail);
+							_trails.Add(trail);
 						}
 					}
 				}
@@ -61,7 +59,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Lists all loaded GPX files
 		/// </summary>
-		public List<TopoTrailInfo> ListTrails()
+		public List<TopoTrailInfo2> ListTrails()
 		{
 			return _trails.All;
 		}
@@ -82,27 +80,27 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Retrieves a specific GPX file from the cache
 		/// </summary>
-		public TopoTrailInfo GetTrail(string id)
+		public TopoTrailInfo2 GetTrail(string id)
 		{
 			return _trails[id.ToUpperInvariant()];
 		}
 
-		public TopoTrackInfo FindTrackSource(string uri)
+		public TopoTrackInfo2 FindTrackSource(string uri)
 		{
-			return _trails.All.SelectMany(x => x.Tracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
+			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
 		}
 
-		public List<TopoTrailInfo> ListByDate(int year, int? month = null, int? day = null)
+		public List<TopoTrailInfo2> ListByDate(int year, int? month = null, int? day = null)
 		{
 			return Report(new TopoTrailReportRequest() { Year = year, Month = month, Day = day });
 		}
 
-		public List<TopoTrailInfo> ListByCountry(GeoCountryInfo country)
+		public List<TopoTrailInfo2> ListByCountry(GeoCountryInfo country)
 		{
 			return Report(new TopoTrailReportRequest() { Country = country.ISO3 });
 		}
 
-		public List<TopoTrailInfo> ListByRegion(GeoRegionInfo region)
+		public List<TopoTrailInfo2> ListByRegion(GeoRegionInfo region)
 		{
 			return Report(new TopoTrailReportRequest() { Region = region.RegionISO });
 		}
@@ -114,13 +112,13 @@ namespace MetaGraffiti.Base.Services
 		}
 		*/
 
-		public List<TopoTrailInfo> Report(TopoTrailReportRequest request)
+		public List<TopoTrailInfo2> Report(TopoTrailReportRequest request)
 		{
 			var query = _trails.All.AsQueryable();
 
-			if (request.Year.HasValue) query = query.Where(x => x.LocalDate.Year == request.Year);
-			if (request.Month.HasValue) query = query.Where(x => x.LocalDate.Month == request.Month);
-			if (request.Day.HasValue) query = query.Where(x => x.LocalDate.Day == request.Day);
+			if (request.Year.HasValue) query = query.Where(x => x.StartLocal.Year == request.Year);
+			if (request.Month.HasValue) query = query.Where(x => x.StartLocal.Month == request.Month);
+			if (request.Day.HasValue) query = query.Where(x => x.StartLocal.Day == request.Day);
 
 			if (!String.IsNullOrWhiteSpace(request.Country))
 			{
@@ -148,66 +146,28 @@ namespace MetaGraffiti.Base.Services
 			_init = false;
 		}
 
+
 		// ==================================================
 		// Helpers
-		private TopoTrailInfo LoadTrail(FileInfo file)
+		private TopoTrailInfo2 LoadTrail(FileInfo file)
 		{
-			// initial topo trail setup
-			var trail = new TopoTrailInfo();
-			var filename = Path.GetFileNameWithoutExtension(file.Name);
-			trail.ID = filename.ToUpperInvariant();
-			trail.Uri = file.FullName;
-
-			// setup local timestamps
-			var datetime = filename.Substring(0, 8);
-			var timestamp = DateTime.ParseExact(datetime, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-			trail.LocalDate = DateTime.SpecifyKind(timestamp, DateTimeKind.Unspecified);
-
-			// load gpx file data
+			// load gpx data into trail
 			var reader = new GpxFileReader(file.FullName);
 			var data = reader.ReadFile();
+			var trail = new TopoTrailInfo2(data);
 
-			// load primary information
-			trail.Name = data.Name;
-			trail.Description = data.Description;
+			// setup trail details
+			var filename = Path.GetFileNameWithoutExtension(file.Name);
+			trail.Key = filename.ToUpperInvariant();
+			trail.Source = file.FullName;			
 
-			// load secondary information
-			trail.Url = data.Url;
-			trail.UrlName = data.UrlName;
-			trail.Keywords = data.Keywords;
-
-			// populate defaults
-			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
-			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
-
-			// process custom info
-			var extensions = reader.ReadExtension();
-			if (!String.IsNullOrWhiteSpace(extensions.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(extensions.Timezone);
-			if (!String.IsNullOrWhiteSpace(extensions.Country)) trail.Country = GeoCountryInfo.Find(extensions.Country);
-			if (!String.IsNullOrWhiteSpace(extensions.Region)) trail.Region = GeoRegionInfo.Find(extensions.Region);
-			trail.Location = extensions.Location;
-
-			// create track data
-			var places = new List<CartoPlaceInfo>();
-			foreach (var track in data.Tracks.OrderBy(x => x.Points.First().Timestamp.Value))
+			// discover places for each track
+			foreach (var track in trail.TopoTracks)
 			{
-				var tt = new TopoTrackInfo(trail, track);
-
-				var f = track.Points.First();
-				tt.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(f).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				if (tt.StartPlace != null && !places.Any(x => x.Key == tt.StartPlace.Key)) places.Add(tt.StartPlace);
-
-				var l = track.Points.Last();
-				tt.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(l).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				if (tt.FinishPlace != null && !places.Any(x => x.Key == tt.FinishPlace.Key)) places.Add(tt.FinishPlace);
-
-				trail.Tracks.Add(tt);
+				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.Points.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.Points.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 			}
 
-			// consolidate carto place information
-			trail.ViaPlaces = places;
-
-			// built trail
 			return trail;
 		}
 	}

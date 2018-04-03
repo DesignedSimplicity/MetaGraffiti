@@ -31,7 +31,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = new TrailViewModel();
 
 			model.Trail = _trackExtractService.GetTrail();
-			model.Tracks = _trackExtractService.ListTracks();
+			//model.Tracks = _trackExtractService.ListTracks();
 
 			return model;
 		}
@@ -74,7 +74,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var trail = _trailDataService.GetTrail(id);
 
-			_trackExtractService.ModifyTrail(trail.Uri);
+			_trackExtractService.ModifyTrail(trail.Source);
 
 			return Redirect(TopoViewModel.GetUpdateUrl());
 		}

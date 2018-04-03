@@ -71,17 +71,17 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				_root.AppendChild(keywordsNode);
 				keywordsNode.InnerText = header.Keywords;
 			}
-			if (!String.IsNullOrWhiteSpace(header.Url))
+			if (!String.IsNullOrWhiteSpace(header.UrlLink))
 			{
 				var urlNode = _xml.CreateElement("url", Namespace);
 				_root.AppendChild(urlNode);
-				urlNode.InnerText = header.Url;
+				urlNode.InnerText = header.UrlLink;
 			}
-			if (!String.IsNullOrWhiteSpace(header.UrlName))
+			if (!String.IsNullOrWhiteSpace(header.UrlText))
 			{
 				var urlNameNode = _xml.CreateElement("urlname", Namespace);
 				_root.AppendChild(urlNameNode);
-				urlNameNode.InnerText = header.UrlName;
+				urlNameNode.InnerText = header.UrlText;
 			}
 		}
 

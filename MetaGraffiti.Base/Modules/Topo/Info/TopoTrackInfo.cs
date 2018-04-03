@@ -7,22 +7,8 @@ using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public interface ITrackInfo
-	{
-		string ID { get; }
-		string Name { get; }
-		string Source { get; }
-		string Description { get; }
 
-		IEnumerable<IGeoPoint> GeoPoints { get; }
-
-		/*
-		TimeSpan ElapsedTime { get; }
-		GeoDistance EstimatedDistance { get; }
-		*/
-	}
-
-	public class TopoTrackInfo : ITrackInfo
+	public class TopoTrackInfo
 	{
 		private GpxTrackData _track;
 

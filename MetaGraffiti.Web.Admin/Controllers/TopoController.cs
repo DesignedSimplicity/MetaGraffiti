@@ -34,8 +34,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Countries = _trailDataService.ListCountries().OrderBy(x => x.Name);
 			model.Trails = _trailDataService.ListTrails();
 
-			model.FirstDate = model.Trails.Min(x => x.LocalDate);
-			model.LastDate = model.Trails.Max(x => x.LocalDate);
+			model.FirstDate = model.Trails.Min(x => x.StartLocal);
+			model.LastDate = model.Trails.Max(x => x.StartLocal);
 
 			return model;
 		}

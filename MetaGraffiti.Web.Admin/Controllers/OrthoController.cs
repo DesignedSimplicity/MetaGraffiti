@@ -131,8 +131,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
-			var existing = _trailDataService.FindTrackSource(file.Name);
-			model.Trail = existing?.Trail;
+			//TODO: fix var existing = _trailDataService.FindTrackSource(file.Name);
+			//TODO: fix model.Trail = existing?.Trail;
 
 			// build trail preview
 			var trail = new TopoTrailInfo();
@@ -154,7 +154,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				trail.Country = _geoLookupService.NearestCountry(first);
 				trail.Region = _geoLookupService.NearestRegion(first);
 				trail.Timezone = _geoLookupService.GuessTimezone(trail.Country);
-				trail.LocalDate = trail.Timezone.FromUTC(first.Timestamp.Value);
+				trail.Date = trail.Timezone.FromUTC(first.Timestamp.Value);
 
 				// discover all regions
 				model.Regions = _geoLookupService.NearbyRegions(first);
