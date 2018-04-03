@@ -110,8 +110,8 @@ namespace MetaGraffiti.Base.Services
 				request.Uri = uri;
 				request.Name = track.Name;
 				request.Description = track.Description;
-				request.StartUTC = track.Points.First().Timestamp;
-				request.FinishUTC = track.Points.Last().Timestamp;
+				request.StartUTC = track.PointData.First().Timestamp;
+				request.FinishUTC = track.PointData.Last().Timestamp;
 
 				var extract = CreateExtract(request);
 				extract.Source = track.Source;
@@ -184,7 +184,7 @@ namespace MetaGraffiti.Base.Services
 			if (String.IsNullOrWhiteSpace(extract.Name)) extract.Name = Path.GetFileNameWithoutExtension(file.Name);
 
 			// prepare points and source points lists
-			extract.SourcePoints = source.Tracks.SelectMany(x => x.Points).ToList();
+			extract.SourcePoints = source.Tracks.SelectMany(x => x.PointData).ToList();
 			extract.Points = extract.SourcePoints.ToList();
 
 			return extract;
@@ -331,7 +331,7 @@ namespace MetaGraffiti.Base.Services
 			var t = new GpxTrackData();
 			t.Name = track.Name;
 			t.Description = track.Description;
-			t.Points = track.Points;
+			t.PointData = track.Points;
 			if (!String.IsNullOrWhiteSpace(track.Source)) t.Source = Path.GetFileNameWithoutExtension(track.Source);
 			return t;
 		}

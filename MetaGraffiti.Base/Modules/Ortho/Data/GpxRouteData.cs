@@ -13,6 +13,6 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 	public class GpxRouteData : GpxMetaData
 	{
 		public int Number;
-		public IList<GpxPointData> Points;
+		public List<GpxPointData> PointData { get; set; }
 	}
 }

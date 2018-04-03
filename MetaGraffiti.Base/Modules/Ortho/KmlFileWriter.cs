@@ -69,7 +69,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			pm.AppendChild(trackNode);
 
 			// add points
-			foreach (var p in track.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+			foreach (var p in track.PointData.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
 			{
 				var whenNode = _xml.CreateElement("when", null);
 				trackNode.AppendChild(whenNode);
@@ -87,7 +87,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				Name = name,
 				Description = description,
-				Points = points.ToList()
+				PointData = points.ToList()
 			});
 		}
 

@@ -14,6 +14,29 @@ using MetaGraffiti.Base.Services;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
+	public class TrackViewModel2 : AdminViewModel
+	{
+		public List<TrackEditData> Tracks { get; set; }
+
+		public TrackEditModel SelectedTrack { get; set; }
+
+		public string GetSourceDirectory(string source)
+		{
+			return Path.GetDirectoryName(source);
+		}
+	}
+
+	public class TrackEditModel
+	{
+		public TrackEditData Track { get; set; }
+		public TopoTrackInfo TopoTrack { get; set; }
+
+		public TrackEditFilter Filters { get; set; }
+
+		public List<CartoPlaceInfo> NearbyPlaces { get; set; }
+		public List<CartoPlaceInfo> ContainedPlaces { get; set; }
+	}
+
 	public class TrackViewModel : AdminViewModel
 	{
 		// ==================================================

@@ -114,7 +114,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				tracks.Add(t);
 
 				int segment = 0;
-				t.Points = new List<GpxPointData>();
+				t.PointData = new List<GpxPointData>();
 				var xtss = xt.SelectNodes("gpx:trkseg", _ns);
 				if ((xtss?.Count ?? 0) > 0)
 				{
@@ -125,7 +125,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 						{
 							var p = ReadPoint(xtp, GpxPointTypes.TrackPoint);
 							p.Segment = segment;
-							t.Points.Add(p);
+							t.PointData.Add(p);
 						}
 					}
 				}
@@ -135,7 +135,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 					foreach (XmlNode xtp in xt.SelectNodes("gpx:trkpt", _ns))
 					{
 						var p = ReadPoint(xtp, GpxPointTypes.TrackPoint);
-						t.Points.Add(p);
+						t.PointData.Add(p);
 					}
 				}
 			}
@@ -154,11 +154,11 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				PopulateMetaData(xr, r);
 				routes.Add(r);
 
-				r.Points = new List<GpxPointData>();
+				r.PointData = new List<GpxPointData>();
 				foreach (XmlNode xtp in xr.SelectNodes("gpx:rtept ", _ns))
 				{
 					var p = ReadPoint(xtp, GpxPointTypes.RoutePoint);
-					r.Points.Add(p);
+					r.PointData.Add(p);
 				}
 			}
 			return routes;

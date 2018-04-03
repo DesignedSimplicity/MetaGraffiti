@@ -137,7 +137,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Preview = trail;
 
 			// find intersecting places
-			var points = model.Data.Tracks?.SelectMany(x => x.Points);
+			var points = model.Data.Tracks?.SelectMany(x => x.PointData);
 			if (points != null)
 			{
 				var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
@@ -167,10 +167,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var track = new TopoTrackInfo(trail, t);
 
-				var start = t.Points.First();
+				var start = t.PointData.First();
 				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 
-				var finish = t.Points.Last();
+				var finish = t.PointData.Last();
 				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();				
 
 				trail.AddTrack_TO_DEPRECATE(track);

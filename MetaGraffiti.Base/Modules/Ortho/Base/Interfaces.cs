@@ -23,6 +23,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 	public interface IGpxTrack
 	{
 		string Name { get; }
+		string Source { get; }
 		string Description { get; }
 
 		IList<IGpxPoint> Points { get; }

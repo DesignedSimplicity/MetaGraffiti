@@ -1,6 +1,7 @@
 ﻿using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Topo;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -14,6 +15,24 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class JsonHelper
 	{
+		// ==================================================
+		// IGpxTrack
+		public static HtmlString GetJson(IGpxTrack track)
+		{
+			dynamic t = new JObject();
+			t.track = track.Name;
+			t.points = new JArray();
+			foreach (var point in track.Points)
+			{
+				dynamic p = new JObject();
+				p.lat = point.Latitude;
+				p.lng = point.Longitude;
+				t.points.Add(p);
+			}
+			return new HtmlString(t.ToString());
+		}
+
+
 		// ==================================================
 		// ITopoTrailInfo
 		public static HtmlString GetJson(ITopoTrailInfo trail)

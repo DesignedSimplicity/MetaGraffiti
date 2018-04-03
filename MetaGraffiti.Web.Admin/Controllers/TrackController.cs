@@ -12,6 +12,7 @@ using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Topo.Info;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -23,6 +24,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		private TrackEditService _trackEditService = new TrackEditService();
+
+
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
 		private TopoTrailService _trailDataService;
@@ -31,6 +35,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_trailDataService = ServiceConfig.TopoTrailService;
+		}
+
+		private TrackViewModel2 InitModel2()
+		{
+			var model = new TrackViewModel2();
+
+			model.Tracks = _trackEditService.ListTracks();
+
+			return model;
 		}
 
 		private TrackViewModel InitModel()
@@ -43,9 +56,89 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
+		private TrackEditModel InitModel(TrackEditData track)
+		{
+			var preview = new TrackEditModel();
+			preview.Track = track;
+
+			var topoTrail = new TopoTrailInfo();
+			var country = Graffiti.Geo.NearestCountry(track.Points.First());
+			topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
+
+			// start and finish places
+			var topoTrack = new TopoTrackInfo(topoTrail, track);
+			topoTrack.StartPlace = _cartoPlaceService.NearestPlace(topoTrack.StartPoint);
+			topoTrack.FinishPlace = _cartoPlaceService.NearestPlace(topoTrack.FinishPoint);
+			preview.TopoTrack = topoTrack;
+
+			// discover additional places
+			var bounds = GeoPerimeter.FromPoints(track.Points);
+			preview.NearbyPlaces = _cartoPlaceService.ListPlacesContainingBounds(bounds);
+			preview.ContainedPlaces = _cartoPlaceService.ListPlacesContainedInBounds(bounds);
+
+			return preview;
+		}
+
 
 		// ==================================================
 		// Actions
+
+		// TODO: move this into a service
+		private string GetSourceUri(string source)
+		{
+			if (source.Contains(@"\"))
+				return source;
+			else
+			{
+				var year = source.Substring(0, 4);
+				var month = source.Substring(4, 2);
+				var name = source;
+				return Path.Combine(AutoConfig.TrackSourceUri, year, month, name + ".gpx");
+			}
+		}
+
+		/// <summary>
+		/// Displays the track on a map before extraction
+		/// </summary>
+		public ActionResult Preview2(string source)
+		{
+			var model = InitModel2();
+
+			var uri = GetSourceUri(source);
+
+			var track = _trackEditService.PreviewTrack(uri);
+			model.SelectedTrack = InitModel(track);
+
+			return View(model);
+		}
+
+		public ActionResult Extract2(string source, string name)
+		{
+			var uri = GetSourceUri(source);
+
+			var track = _trackEditService.CreateTrack(new TrackEditCreateRequest() { Uri = uri, Name = name });
+
+			return new RedirectResult($"/track/modify2/{track.Key}");
+		}
+
+		/// <summary>
+		/// Displays a single set of points from the current edit session
+		/// </summary>
+		public ActionResult Modify2(string id)
+		{
+			var model = InitModel2();
+
+			var track = _trackEditService.GetTrack(id);
+			model.SelectedTrack = InitModel(track);
+
+			var filters = new TrackEditFilter();
+			model.SelectedTrack.Filters = filters;
+
+			return View(model);
+		}
+
+
+
 
 		/// <summary>
 		/// Displays all segments in current edit session
@@ -310,7 +403,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			source.Metadata = _trackExtractService.ReadTrail(file.FullName);
 			var data = source.Metadata.Data;
 
-			var points = data.Tracks.SelectMany(x => x.Points);
+			var points = data.Tracks.SelectMany(x => x.PointData);
 			var start = points.First();
 			var finish = points.Last();
 			source.Elapsed = finish.Timestamp.Value.Subtract(start.Timestamp.Value);

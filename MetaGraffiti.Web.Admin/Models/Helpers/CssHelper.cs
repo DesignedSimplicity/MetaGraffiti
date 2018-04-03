@@ -67,5 +67,45 @@ namespace MetaGraffiti.Web.Admin.Models
 				default: return "";
 			}
 		}
+
+
+		public static string GetGpxDOPCss(decimal? dop)
+		{
+			var d = dop ?? 0;
+			if (d == 0)
+				return "secondary";
+			else if (d < 3)
+				return "success";
+			else if (d < 5)
+				return "warning";
+			else
+				return "danger";
+		}
+
+		public static string GetGpxSpeedCss(decimal? speed)
+		{
+			var s = speed ?? 0;
+			if (s == 0)
+				return "danger";
+			if (s <= 2)
+				return "success";
+			else if (s <= 4)
+				return "warning";
+			else
+				return "primary";
+		}
+
+		public static string GetGpxSatsCss(int? sats)
+		{
+			var s = sats ?? 0;
+			if (s == 0)
+				return "secondary";
+			else if (s > 10)
+				return "success";
+			else if (s > 5)
+				return "warning";
+			else
+				return "danger";
+		}
 	}
 }

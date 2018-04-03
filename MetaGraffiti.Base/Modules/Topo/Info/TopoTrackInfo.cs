@@ -10,11 +10,11 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 {
 	public class TopoTrackInfo : ITopoTrackInfo, IGpxTrack
 	{
-		private GpxTrackData _track;
+		private IGpxTrack _track;
 		private TopoTrailInfo _trail;
 		private List<TopoPointInfo> _points;
 
-		public TopoTrackInfo(TopoTrailInfo trail, GpxTrackData track)
+		public TopoTrackInfo(TopoTrailInfo trail, IGpxTrack track)
 		{
 			_trail = trail;
 			_track = track;
@@ -38,11 +38,16 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 		public TimeSpan ElapsedTime { get { return FinishUTC.Subtract(StartUTC); } }
 
 
+		public IGeoPoint StartPoint => _points.FirstOrDefault();
 		public CartoPlaceInfo StartPlace { get; set; }
+
+		public IGeoPoint FinishPoint => _points.LastOrDefault();
 		public CartoPlaceInfo FinishPlace { get; set; }
+
 
 		public IEnumerable<ITopoPointInfo> TopoPoints => _points;
 		public IList<IGpxPoint> Points => _track.Points.ToList<IGpxPoint>();
+
 
 		public TopoStats Stats { get { return TopoStats.FromTrack(this); } }
 		public string[] Tags { get { return TopoTags.FromPoints(_track.Points); } }

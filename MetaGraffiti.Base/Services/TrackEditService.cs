@@ -15,32 +15,42 @@ namespace MetaGraffiti.Base.Services
 		// ==================================================
 		// Internals
 
-		private static BasicCacheService<TrackEdit> _tracks = new BasicCacheService<TrackEdit>();
+		private static BasicCacheService<TrackEditData> _tracks = new BasicCacheService<TrackEditData>();
 
 
 		// ==================================================
 		// Methods
 
 		/// <summary>
+		/// Lists all tracks in current edit session
+		/// </summary>
+		public List<TrackEditData> ListTracks()
+		{
+			return _tracks.All;
+		}
+
+		/// <summary>
 		/// Removes all current track edits from session
 		/// </summary>
-		public void RemoveAll()
+		public List<TrackEditData> RemoveAll()
 		{
-			_tracks = new BasicCacheService<TrackEdit>();
+			var all = _tracks.All;
+			_tracks = new BasicCacheService<TrackEditData>();
+			return all;
 		}
 
 		/// <summary>
 		/// Gets a specific track edit from session
 		/// </summary>
-		public TrackEdit GetTrack(string key)
+		public TrackEditData GetTrack(string key)
 		{
-			return _tracks[key.ToLowerInvariant()];
+			return _tracks[key.ToUpperInvariant()];
 		}
 
 		/// <summary>
 		/// Removes a specific track edit from session
 		/// </summary>
-		public TrackEdit RemoveTrack(string key)
+		public TrackEditData RemoveTrack(string key)
 		{
 			var removed = _tracks[key.ToUpperInvariant()];
 			_tracks.Remove(key.ToUpperInvariant());
@@ -50,7 +60,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Prepares a track edit from all of the data in a given file
 		/// </summary>
-		public TrackEdit PreviewTrack(string uri)
+		public TrackEditData PreviewTrack(string uri)
 		{
 			// load file and read data
 			var file = new FileInfo(uri);
@@ -58,7 +68,7 @@ namespace MetaGraffiti.Base.Services
 			var data = read.ReadFile();
 
 			// create new extract entity
-			var track = new TrackEdit();
+			var track = new TrackEditData();
 			track.Key = Graffiti.Crypto.GetNewHash();
 			track.Source = file.FullName;
 
@@ -67,7 +77,7 @@ namespace MetaGraffiti.Base.Services
 			if (String.IsNullOrWhiteSpace(track.Name)) track.Name = Path.GetFileNameWithoutExtension(file.Name);
 
 			// prepare points and source points lists
-			track.SourcePoints = data.Tracks.SelectMany(x => x.Points).ToList();
+			track.SourcePoints = data.Tracks.SelectMany(x => x.PointData).ToList();
 			track.Points = track.SourcePoints.ToList<IGpxPoint>();
 
 			return track;
@@ -76,7 +86,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Creates a track extract from a specific set of data and adds it to the edit session
 		/// </summary>
-		public TrackEdit CreateTrack(TrackEditCreateRequest request)
+		public TrackEditData CreateTrack(TrackEditCreateRequest request)
 		{
 			var track = PreviewTrack(request.Uri);
 
@@ -97,7 +107,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Filters tracks points with given criteria
 		/// </summary>
-		public TrackEdit ApplyFilter(TrackEditFilterRequest request)
+		public TrackEditData ApplyFilter(TrackEditFilterRequest request)
 		{
 			var track = GetTrack(request.Key);
 
@@ -112,7 +122,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Reverts the set of points to the origional data
 		/// </summary>
-		public TrackEdit RevertFilter(string key)
+		public TrackEditData RevertFilter(string key)
 		{
 			var track = GetTrack(key);
 			track.Points = track.SourcePoints.ToList<IGpxPoint>();
@@ -122,7 +132,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Removes one or more points from the list of filtered points
 		/// </summary>
-		public TrackEdit RemovePoints(TrackEditRemovePointsRequest request)
+		public TrackEditData RemovePoints(TrackEditRemovePointsRequest request)
 		{
 			var track = GetTrack(request.Key);
 
@@ -165,7 +175,7 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
-	public class TrackEdit : ICacheEntity, IGpxTrack
+	public class TrackEditData : ICacheEntity, IGpxTrack
 	{
 		// Track ID for edit session
 		public string Key { get; set; }
@@ -204,7 +214,7 @@ namespace MetaGraffiti.Base.Services
 		public string Key { get; set; }
 	}
 
-	public abstract class TrackEditFilter
+	public class TrackEditFilter
 	{
 		// Time range filters
 		public DateTime? StartUTC { get; set; }

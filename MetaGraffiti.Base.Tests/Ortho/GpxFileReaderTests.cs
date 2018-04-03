@@ -19,7 +19,7 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(1, d.Tracks.Count);
-			Assert.AreEqual(4, d.Tracks.First().Points.Count);
+			Assert.AreEqual(4, d.Tracks.First().PointData.Count);
 		}
 
 		[TestMethod]
@@ -30,7 +30,7 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(1, d.Tracks.Count);
-			Assert.AreEqual(4, d.Tracks.First().Points.Count);
+			Assert.AreEqual(4, d.Tracks.First().PointData.Count);
 		}
 
 		[TestMethod]
@@ -51,8 +51,8 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(2, d.Routes.Count);
-			Assert.AreEqual(4, d.Routes.First().Points.Count);
-			Assert.AreEqual(4, d.Routes.Last().Points.Count);
+			Assert.AreEqual(4, d.Routes.First().PointData.Count);
+			Assert.AreEqual(4, d.Routes.Last().PointData.Count);
 		}
 
 		[TestMethod]
@@ -63,8 +63,8 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(2, d.Tracks.Count);
-			Assert.AreEqual(4, d.Tracks.First().Points.Count);
-			Assert.AreEqual(4, d.Tracks.Last().Points.Count);
+			Assert.AreEqual(4, d.Tracks.First().PointData.Count);
+			Assert.AreEqual(4, d.Tracks.Last().PointData.Count);
 		}
 
 		[TestMethod]
@@ -75,8 +75,8 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(1, d.Tracks.Count);
-			Assert.AreEqual(1, d.Tracks.First().Points.Min(x => x.Segment));
-			Assert.AreEqual(2, d.Tracks.First().Points.Max(x => x.Segment));
+			Assert.AreEqual(1, d.Tracks.First().PointData.Min(x => x.Segment));
+			Assert.AreEqual(2, d.Tracks.First().PointData.Max(x => x.Segment));
 		}
 
 		[TestMethod]
@@ -87,7 +87,7 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var r = new GpxFileReader(uri);
 			var d = r.ReadFile();
 			Assert.AreEqual(1, d.Tracks.Count);
-			Assert.AreEqual(4, d.Tracks.First().Points.Count);
+			Assert.AreEqual(4, d.Tracks.First().PointData.Count);
 		}
 
 		[TestMethod]

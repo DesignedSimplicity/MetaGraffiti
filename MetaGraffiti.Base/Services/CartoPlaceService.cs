@@ -128,6 +128,10 @@ namespace MetaGraffiti.Base.Services
 			_cache.RemoveOrIgnore(key.ToUpperInvariant());
 		}
 
+		public CartoPlaceInfo NearestPlace(IGeoLatLon point)
+		{
+			return _cache.All.Where(x => x.Bounds.Contains(point)).OrderBy(x => GeoDistance.BetweenPoints(point, x.Center).Meters).FirstOrDefault();
+		}
 		public List<CartoPlaceInfo> ListPlacesByContainingPoint(IGeoLatLon point)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(point)).ToList();

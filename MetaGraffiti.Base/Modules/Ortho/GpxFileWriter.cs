@@ -130,7 +130,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		public void WriteTrack(GpxTrackData track)
 		{
 			// create header if needed
-			if (_xml == null) WriteHeader(track.Name, track.Description, track.Points.First().Timestamp.Value);
+			if (_xml == null) WriteHeader(track.Name, track.Description, track.PointData.First().Timestamp.Value);
 
 			// create track
 			var trk = _xml.CreateElement("trk", Namespace);
@@ -157,7 +157,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 			XmlElement tracksegmentNode = null;
 			var segment = -1;
-			foreach (var p in track.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+			foreach (var p in track.PointData.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
 			{
 				if (segment != p.Segment)
 				{
@@ -180,7 +180,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				Name = name,
 				Description = description,
-				Points = points.ToList()
+				PointData = points.ToList()
 			});
 		}
 

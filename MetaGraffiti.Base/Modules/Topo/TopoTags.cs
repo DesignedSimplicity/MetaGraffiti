@@ -1,4 +1,5 @@
 ﻿using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 {
     public class TopoTags
     {
-		public static string[] FromPoints(IEnumerable<GpxPointData> points)
+		public static string[] FromPoints(IEnumerable<IGpxPoint> points)
 		{
 			var tags = new List<string>();
 			var count = points.Count();
