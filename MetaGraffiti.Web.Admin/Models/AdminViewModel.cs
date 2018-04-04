@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -52,7 +53,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			get
 			{
 				return String.IsNullOrWhiteSpace(_pageTitle)
-					? UrlPath.Trim('/').Replace(@"/", " : ")
+					? TextHelper.ToTitleCase(UrlPath.Trim('/').Replace(@"/", " : "))
 					: _pageTitle;
 			}
 			set { _pageTitle = value; }
@@ -72,7 +73,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				if (index <= 1) return "";
 				
 				var name = path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2);
-				return HttpUtility.UrlDecode(name.Replace("/", @" \ "));
+				return TextHelper.ToTitleCase(HttpUtility.UrlDecode(name.Replace("/", @" \ ")));
 			}
 			set { _pageName = value; }
 		}

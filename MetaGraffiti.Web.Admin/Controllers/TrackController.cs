@@ -284,7 +284,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			ServiceConfig.ResetTopoTrail();
 
 			// redirect to new trail page
-			return Redirect(TopoViewModel.GetTrailUrl(filename));
+			return Redirect(TrailViewModel.GetTrailUrl(filename));
 		}
 
 		

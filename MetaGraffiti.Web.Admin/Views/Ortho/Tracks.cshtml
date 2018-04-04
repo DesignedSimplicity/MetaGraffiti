@@ -70,7 +70,7 @@
 							<td>
 								@if (source.Trail != null)
 								{
-									<a class="topo-color font-weight-bold" href="@TopoViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
+									<a class="topo-color font-weight-bold" href="@TrailViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
 								}
 							</td>
 							<td class="text-center">@source.Preview.StartUTC.ToString("yyyy-MM-dd")</td>
@@ -114,7 +114,7 @@
 								<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">Preview</a>
 								@if (source.Trail != null)
 								{
-									<a class="btn btn-sm btn-success" href="@TopoViewModel.GetTrailUrl(source.Trail)">Display</a>
+									<a class="btn btn-sm btn-success" href="@TrailViewModel.GetTrailUrl(source.Trail)">Display</a>
 								}
 								else
 								{

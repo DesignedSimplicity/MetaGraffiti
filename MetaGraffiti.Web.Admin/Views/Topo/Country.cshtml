@@ -130,7 +130,7 @@
 								<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.ISO2, (trail.Region?.RegionISO??""), "Name")">@(trail.Region?.RegionName ?? "")</a>
 							</td>
 							<td>
-								<span class="h6"><a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a></span>
+								<span class="h6"><a class="topo-color" href="@TrailViewModel.GetTrailUrl(trail)">@trail.Name</a></span>
 								<div class="small">@trail.Description</div>
 							</td>
 							<td>

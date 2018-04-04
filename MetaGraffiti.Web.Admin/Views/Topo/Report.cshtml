@@ -61,52 +61,52 @@
 	</thead>
 	<tbody>
 		@{
-				var yearMonth = 0;
-				foreach (var trail in trails)
+			var yearMonth = 0;
+			foreach (var trail in trails)
+			{
+				var stats = trail.Stats;
+				if (!Model.SelectedMonth.HasValue && yearMonth != trail.StartLocal.Month)
 				{
-					var stats = trail.Stats;
-					if (!Model.SelectedMonth.HasValue && yearMonth != trail.StartLocal.Month)
-					{
-						yearMonth = trail.StartLocal.Month;
+					yearMonth = trail.StartLocal.Month;
 					<tr class="table-secondary">
 						<td colspan="10" class="h5">
 							<a class="topo-color" href="@TopoViewModel.GetReportUrl(Model.SelectedYear.Value, yearMonth)">@TextHelper.GetMonth(yearMonth)</a>
 						</td>
 					</tr>
 				}
-					<tr>
-						<td class="text-nowrap">@trail.StartLocal.ToString("yyyy-MM-dd")</td>
-						<td>
-							<div class="h4">
-								<a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a>
+				<tr>
+					<td class="text-nowrap">@trail.StartLocal.ToString("yyyy-MM-dd")</td>
+					<td>
+						<div class="h4">
+							<a class="topo-color" href="@TrailViewModel.GetTrailUrl(trail)">@trail.Name</a>
+						</div>
+						<div>@trail.Description</div>
+					</td>
+					<td class="h5">
+						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
+					</td>
+					<td class="h6">
+						@if (trail.Region != null)
+						{
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
+						}
+					</td>
+					<td>
+						@foreach (var place in Model.ConsolidatePlaces(trail))
+						{
+							<div>
+								<a class="carto-color" href="#">@place.Name</a>
 							</div>
-							<div>@trail.Description</div>
-						</td>
-						<td class="h5">
-							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
-						</td>
-						<td class="h6">
-							@if (trail.Region != null)
-		{
-					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
-}
-						</td>
-						<td>
-							@foreach (var place in Model.ConsolidatePlaces(trail))
-		{
-					<div>
-						<a class="carto-color" href="#">@place.Name</a>
-					</div>
-}
-						</td>
-						<td>
-							@trail.Keywords
-						</td>
-						<td class="text-center">@trail.Tracks.Count()</td>
-						<td class="h5">
-							@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true))
-						</td>
-					</tr>
+						}
+					</td>
+					<td>
+						@trail.Keywords
+					</td>
+					<td class="text-center">@trail.Tracks.Count()</td>
+					<td class="h5">
+						@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true))
+					</td>
+				</tr>
 			}
 		}
 	</tbody>

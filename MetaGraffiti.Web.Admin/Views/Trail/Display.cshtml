@@ -1,5 +1,5 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model TopoViewModel
+@model TrailViewModel
 
 @Html.Partial("_Nav")
 
@@ -89,10 +89,10 @@
 				<div class="h2">@trail.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<form method="post" action="@TopoViewModel.GetModifyUrl()">
+				<form method="post" action="@TrailViewModel.GetModifyUrl()">
 					<input type="hidden" name="ID" value="@trail.Key" />
+					<button type="submit" class="btn btn-success"><i class="fas fa-pencil-alt"></i> Edit Trail</button>
 					<div class="btn-group">
-						<button type="submit" class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i> Edit Trail</button>
 						@Html.Partial("Buttons/ResetView")
 					</div>
 				</form>

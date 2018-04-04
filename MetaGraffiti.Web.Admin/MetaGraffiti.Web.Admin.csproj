@@ -296,7 +296,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
-    <Compile Include="Models\CartoPlaceFormModel.cs" />
+    <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\Helpers\CssHelper.cs" />
@@ -305,6 +305,7 @@
     <Compile Include="Models\OrthoPlacesViewModel.cs" />
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
+    <Compile Include="Models\Partials\TopoStatsPillsModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
     <Compile Include="Models\Helpers\IconHelpers.cs" />
@@ -352,7 +353,6 @@
     <Content Include="Views\Ortho\Places.cshtml" />
     <Content Include="Views\Ortho\Index.cshtml" />
     <Content Include="Views\Ortho\Tracks.cshtml" />
-    <Content Include="Views\Topo\Trail.cshtml" />
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
@@ -362,6 +362,7 @@
     <Content Include="Views\Track\Manage.cshtml" />
     <Content Include="Views\Shared\Widgets\TopoStatsPills.cshtml" />
     <Content Include="Views\Shared\Buttons\ResetView.cshtml" />
+    <Content Include="Views\Trail\Display.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

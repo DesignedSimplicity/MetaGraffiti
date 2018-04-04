@@ -107,22 +107,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Dispalys the details of a single TopoTrailInfo data file
-		/// </summary>
-		public ActionResult Trail(string id)
-		{
-			var model = InitModel();
-
-			var trail = _trailDataService.GetTrail(id);
-
-			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
-
-			model.SelectedTrail = trail;
-
-			return View(model);
-		}
-
-		/// <summary>
 		/// Resets the current TopoTrailInfo GPX data file cache and reloads from disk
 		/// </summary>
 		public ActionResult Refresh()

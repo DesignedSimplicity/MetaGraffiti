@@ -28,15 +28,25 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new TrailViewModel();
 
-			//model.Trail = _trackExtractService.GetTrail();
-			//model.Tracks = _trackExtractService.ListTracks();
-
 			return model;
 		}
 
 
 		// ==================================================
 		// Actions
+
+		public ActionResult Display(string id)
+		{
+			var model = InitModel();
+
+			var trail = _trailDataService.GetTrail(id);
+
+			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
+
+			model.SelectedTrail = trail;
+
+			return View("Display", model);
+		}
 
 		/// <summary>
 		/// Displays trail profile and all track segments in current edit session
@@ -74,7 +84,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			_trackExtractService.ModifyTrail(trail.Source);
 
-			return Redirect(TopoViewModel.GetUpdateUrl());
+			return Redirect(TrailViewModel.GetUpdateUrl());
 		}
 
 		/// <summary>
@@ -131,7 +141,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			ServiceConfig.ResetTopoTrail();
 
 			// redirect to new trail page
-			return Redirect(TopoViewModel.GetTrailUrl(filename));
+			return Redirect(TrailViewModel.GetTrailUrl(filename));
 		}
 	}
 }

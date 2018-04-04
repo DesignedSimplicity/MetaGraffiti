@@ -9,19 +9,6 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public class TopoStatsPillsModel
-	{
-		public TopoStats Stats { get; set; }
-
-		public bool ShowDetails { get; set; }
-
-		public TopoStatsPillsModel(TopoStats stats, bool showDetails = false)
-		{
-			Stats = stats;
-			ShowDetails = showDetails;
-		}
-	}
-
 	public class TopoViewModel : AdminViewModel
 	{
 		// ==================================================
@@ -34,7 +21,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Optional
-		public TopoTrailInfo SelectedTrail { get; set; }
 		public GeoCountryInfo SelectedCountry { get; set; }
 		public GeoRegionInfo SelectedRegion { get; set; }
 		public string SelectedSort { get; set; }
@@ -86,18 +72,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetTopoUrl() { return "/topo/"; }
 
-		public static string GetTrailUrl(string key) { return $"/topo/trail/{key}"; }
-		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 		public static string GetRefreshUrl() { return "/topo/refresh/"; }
 		public static string GetReportUrl() { return "/topo/report/"; }
 		public static string GetReportUrl(int year, int? month = null) { return $"/topo/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/topo/country/{country.ISO2}/"; }
 		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/topo/country/{country}/?region={region}&sort={sort}".Replace("?region=&", "?"); }
-
-
-		public static string GetUpdateUrl() { return $"/trail/update/"; }
-		public static string GetModifyUrl() { return $"/trail/modify/"; }
-		public static string GetImportUrl() { return $"/trail/import/"; }
-		//public static string GetPreviewUrl(string source) { return $"/track/preview/{source}/"; }
 	}
 }
