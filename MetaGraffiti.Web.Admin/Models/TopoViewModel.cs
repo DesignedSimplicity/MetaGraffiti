@@ -52,19 +52,6 @@ namespace MetaGraffiti.Web.Admin.Models
 			else
 				return Trails;
 		}
-		public IEnumerable<CartoPlaceInfo> ConsolidatePlaces(TopoTrailInfo trail)
-		{
-			var places = new List<CartoPlaceInfo>();
-			foreach(var track in trail.TopoTracks)
-			{
-				var start = track.StartPlace;
-				if (start != null && !places.Any(x => x.Key == start.Key)) places.Add(start);
-
-				var finish = track.FinishPlace;
-				if (finish != null && !places.Any(x => x.Key == finish.Key)) places.Add(finish);
-			}
-			return places;
-		}
 
 
 

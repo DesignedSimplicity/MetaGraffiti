@@ -134,6 +134,16 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
+		// TODO: implement this
+		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(TopoTrailUpdateRequest request)
+		{
+			var response = new ValidationServiceResponse<TopoTrailInfo>(GetTrail(request.Key));
+			response.AddError("Field", "Message");
+			return response;
+		}
+
+
+
 		/// <summary>
 		/// Clears the GPX file cache
 		/// </summary>
@@ -178,5 +188,23 @@ namespace MetaGraffiti.Base.Services
 		public int? Year { get; set; }
 		public int? Month { get; set; }
 		public int? Day { get; set; }
+	}
+
+	public class TopoTrailUpdateRequest
+	{
+		public string Key { get; set; }
+
+		public string Name { get; set; }
+		public string Description { get; set; }
+
+		public string Keywords { get; set; }
+
+		public string Url { get; set; }
+		public string UrlName { get; set; }
+
+		public string Timezone { get; set; }
+		public string Country { get; set; }
+		public string Region { get; set; }
+		public string Location { get; set; }
 	}
 }

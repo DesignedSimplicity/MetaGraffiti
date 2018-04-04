@@ -10,6 +10,12 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		private static TextInfo _textInfo = new CultureInfo("en-US", false).TextInfo;
 
+		public static string GetTrimmed(string text)
+		{
+			return (String.IsNullOrWhiteSpace(text) ? "" : text.Trim());
+			
+		}
+
 		public static string GetMonth(int? month, bool abbv = false)
 		{
 			if (!month.HasValue)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
@@ -30,10 +31,10 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 
 		public DateTime StartUTC { get { return TopoPoints.Min(x => x.Timestamp.Value); } }
-		public DateTime StartLocal { get { return Trail.Timezone.FromUTC(StartUTC); } }
+		public DateTime StartLocal { get { return Timezone.FromUTC(StartUTC); } }
 
 		public DateTime FinishUTC { get { return TopoPoints.Max(x => x.Timestamp.Value); } }
-		public DateTime FinishLocal { get { return Trail.Timezone.FromUTC(FinishUTC); } }
+		public DateTime FinishLocal { get { return Timezone.FromUTC(FinishUTC); } }
 
 		public TimeSpan ElapsedTime { get { return FinishUTC.Subtract(StartUTC); } }
 
@@ -51,5 +52,8 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public TopoStats Stats { get { return TopoStats.FromTrack(this); } }
 		public string[] Tags { get { return TopoTags.FromPoints(_track.Points); } }
+
+
+		private GeoTimezoneInfo Timezone { get { return Trail?.Timezone ?? GeoTimezoneInfo.UTC; } }
 	}
 }

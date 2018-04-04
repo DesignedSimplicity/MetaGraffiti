@@ -16,17 +16,23 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
-		private TopoTrailService _trailDataService;
+		private TopoTrailService _topoTrailService;
 
 		public TrailController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_trailDataService = ServiceConfig.TopoTrailService;
+			_topoTrailService = ServiceConfig.TopoTrailService;
 		}
 
-		private TrailViewModel InitModel()
+		private TrailViewModel InitModel(string id = "")
 		{
 			var model = new TrailViewModel();
+
+			if (!String.IsNullOrWhiteSpace(id))
+			{
+				model.Trail = _topoTrailService.GetTrail(id);
+				if (!model.IsTimezoneValid) model.ErrorMessages.Add("Timezone missing! Defaulting to UTC.");
+			}
 
 			return model;
 		}
@@ -37,24 +43,18 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Display(string id)
 		{
-			var model = InitModel();
+			var model = InitModel(id);
 
-			var trail = _trailDataService.GetTrail(id);
-
-			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
-
-			model.SelectedTrail = trail;
-
-			return View("Display", model);
+			return View(model);
 		}
 
 		/// <summary>
 		/// Displays trail profile and all track segments in current edit session
 		/// </summary>
 		[HttpGet]
-		public ActionResult Update()
+		public ActionResult Update(string id)
 		{
-			var model = InitModel();
+			var model = InitModel(id);
 
 			return View(model);
 		}
@@ -63,15 +63,26 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Updates trail profile for current edit session
 		/// </summary>
 		[HttpPost]
-		public ActionResult Update(TrailUpdateRequest update)
+		public ActionResult Update(TopoTrailUpdateRequest update)
 		{
-			var model = InitModel();
+			// TODO: do validation here!!!
+			var response = _topoTrailService.UpdateTrail(update);
 
-			_trackExtractService.UpdateTrail(update);
-
-			model.ConfirmMessage = $"Updated at {DateTime.Now}";
-
-			return View(model);
+			if (response.OK)
+			{
+				var model = InitModel(response.Data.Key);
+				model.ConfirmMessage = $"Trail updated at {DateTime.Now}";
+				return View(model);
+			}
+			else
+			{
+				var model = InitModel(update.Key);
+				foreach(var error in response.ValidationErrors)
+				{
+					model.ErrorMessages.Add($"Error {error.Field} = {error.Message}");
+				}				
+				return View(model);
+			}
 		}
 
 		/// <summary>
@@ -80,7 +91,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Modify(string id)
 		{
-			var trail = _trailDataService.GetTrail(id);
+			var trail = _topoTrailService.GetTrail(id);
 
 			_trackExtractService.ModifyTrail(trail.Source);
 

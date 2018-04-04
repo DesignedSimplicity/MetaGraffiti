@@ -112,7 +112,7 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Updates the trail level metadata
 		/// </summary>
-		public TrackGroupData UpdateTrail(TrailUpdateRequest update)
+		public TrackGroupData UpdateTrail(TrailUpdateRequest2 update)
 		{
 			_trackGroupData.Name = update.Name;
 			_trackGroupData.Description = update.Description;
@@ -322,7 +322,7 @@ namespace MetaGraffiti.Base.Services
 	}
 
 
-	public class TrailUpdateRequest
+	public class TrailUpdateRequest2
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }

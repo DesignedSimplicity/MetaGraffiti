@@ -57,6 +57,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				if (country.HasRegions) topoTrail.Region = Graffiti.Geo.NearestRegion(first);
 				topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
 			}
+			if (topoTrail.Timezone == null) topoTrail.Timezone = GeoTimezoneInfo.UTC;
 
 			// start and finish places
 			var topoTrack = new TopoTrackInfo(topoTrail, track);
@@ -158,8 +159,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var track = _trackEditService.GetTrack(key);
-			track.Name = name;
-			track.Description = description;
+			track.Name = TextHelper.GetTrimmed(name);
+			track.Description = TextHelper.GetTrimmed(description);
 
 			model.EditTrack = InitEditModel(track);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";

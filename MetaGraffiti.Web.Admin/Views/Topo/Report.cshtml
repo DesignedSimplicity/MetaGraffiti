@@ -92,7 +92,7 @@
 						}
 					</td>
 					<td>
-						@foreach (var place in Model.ConsolidatePlaces(trail))
+						@foreach (var place in trail.Places)
 						{
 							<div>
 								<a class="carto-color" href="#">@place.Name</a>

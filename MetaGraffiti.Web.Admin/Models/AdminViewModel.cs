@@ -53,7 +53,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			get
 			{
 				return String.IsNullOrWhiteSpace(_pageTitle)
-					? TextHelper.ToTitleCase(UrlPath.Trim('/').Replace(@"/", " : "))
+					? TextHelper.ToTitleCase(UrlPath.ToLowerInvariant().Trim('/').Replace(@"/", " : "))
 					: _pageTitle;
 			}
 			set { _pageTitle = value; }
@@ -73,7 +73,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				if (index <= 1) return "";
 				
 				var name = path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2);
-				return TextHelper.ToTitleCase(HttpUtility.UrlDecode(name.Replace("/", @" \ ")));
+				return TextHelper.ToTitleCase(HttpUtility.UrlDecode(name.ToLowerInvariant().Replace("/", @" \ ")));
 			}
 			set { _pageName = value; }
 		}

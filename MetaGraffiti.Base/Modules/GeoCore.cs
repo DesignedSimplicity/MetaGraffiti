@@ -30,6 +30,7 @@ namespace MetaGraffiti.Base.Modules
 				case "CL": return GeoTimezoneInfo.ByTZID("America/Santiago");
 				case "JP": return GeoTimezoneInfo.ByTZID("Asia/Tokyo");
 				case "NZ": return GeoTimezoneInfo.ByTZID("Pacific/Auckland");
+				case "CH": return GeoTimezoneInfo.ByTZID("Europe/Zurich");
 				default: return null;
 			}
 		}
@@ -38,7 +39,6 @@ namespace MetaGraffiti.Base.Modules
 		// TODO: update and fix this
 		private GeoTimezoneInfo GuessTimezone(IEnumerable<GeoCountryInfo> countries, IEnumerable<GeoRegionInfo> regions)
 		{
-			//string[] countryOrder = AutoConfig.VisitedCountries;// { "UR", "CL", "AR", "AU", "BE", "BR", "CH", "CN", "DK", "FR", "HK", "IN", "IS", "JP", "MN", "NL", "NZ", "RU", "SG", "CA", "MX", "JM", "AN" };
 			GeoCountryInfo country = countries.FirstOrDefault();
 
 			var regionCountries = regions.Select(x => x.Country).Distinct().Count();

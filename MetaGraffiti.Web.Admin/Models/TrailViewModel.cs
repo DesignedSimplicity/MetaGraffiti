@@ -13,7 +13,7 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		// ==================================================
 		// Required
-		public TopoTrailInfo SelectedTrail { get; set; }
+		public TopoTrailInfo Trail { get; set; }
 
 
 		// ==================================================
@@ -23,20 +23,10 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
+		public bool IsTimezoneValid { get { return Trail.Timezone != null && Trail.Timezone.Key != "UTC;"; } }
+		public bool IsCountryValid { get { return Trail.Country != null; } }
+		public bool IsRegionValid { get { return IsCountryValid && Trail.Country.HasRegions && Trail.Region != null; } }
 
-		public IEnumerable<CartoPlaceInfo> ConsolidatePlaces(TopoTrailInfo trail)
-		{
-			var places = new List<CartoPlaceInfo>();
-			foreach (var track in trail.TopoTracks)
-			{
-				var start = track.StartPlace;
-				if (start != null && !places.Any(x => x.Key == start.Key)) places.Add(start);
-
-				var finish = track.FinishPlace;
-				if (finish != null && !places.Any(x => x.Key == finish.Key)) places.Add(finish);
-			}
-			return places;
-		}
 
 
 
@@ -46,6 +36,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTrailUrl(string key) { return $"/trail/display/{key}"; }
 		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 
+		public static string GetUpdateUrl(ITopoTrailInfo trail) { return $"/trail/update/{trail.Key}"; }
+		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}"; }
 
 
 		public static string GetUpdateUrl() { return $"/trail/update/"; }

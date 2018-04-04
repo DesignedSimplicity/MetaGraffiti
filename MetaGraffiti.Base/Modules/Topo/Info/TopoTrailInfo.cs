@@ -15,6 +15,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 	{
 		public TopoTrailInfo()
 		{
+			Timezone = GeoTimezoneInfo.UTC;
 		}
 
 		public TopoTrailInfo(GpxFileData data)
@@ -92,6 +93,23 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public TopoStats Stats { get { return TopoStats.FromTrail(this); } }
 
+
+		public IEnumerable<CartoPlaceInfo> Places
+		{
+			get
+			{
+				var places = new List<CartoPlaceInfo>();
+				foreach (var track in TopoTracks)
+				{
+					var start = track.StartPlace;
+					if (start != null && !places.Any(x => x.Key == start.Key)) places.Add(start);
+
+					var finish = track.FinishPlace;
+					if (finish != null && !places.Any(x => x.Key == finish.Key)) places.Add(finish);
+				}
+				return places;
+			}
+		}
 
 		public void AddTrack_TO_DEPRECATE(TopoTrackInfo track)
 		{
