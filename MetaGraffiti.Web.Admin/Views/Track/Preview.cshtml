@@ -33,7 +33,7 @@
 		});
 
 		$(".js-show-nearby").hover(function () {
-			var index = $(this).index();
+			var index = $(this).parent().index();
 			var color = getMapColor(index);
 
 			if (_bounds != null) _bounds.setMap(null);
@@ -41,7 +41,7 @@
 		});
 
 		$(".js-show-contains").hover(function () {
-			var index = $(this).index();
+			var index = $(this).parent().index();
 			var color = getMapColor(index);
 
 			if (_bounds != null) _bounds.setMap(null);
@@ -49,8 +49,8 @@
 		});
 
 		$(".js-show-bounds").hover(function () {
-			$(".js-show-bounds").removeClass("table-primary");
-			$(this).addClass("table-primary");
+			$(".js-show-bounds").removeClass("table-secondary");
+			$(this).addClass("table-secondary");
 		});
 	});
 
@@ -72,32 +72,48 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div class="row">
-			<div class="col-sm-6">
-				<div class="h3">
-					@Html.Partial("Widgets/TopoStatsPills", track.Stats)
-				</div>
-			</div>
-			<div class="col-sm-6 text-right">
-				<form method="post" action="@TrackViewModel.GetExtractUrl()">
-					<input type="hidden" name="Source" value="@track.Source" />
-					<div class="form-group">
-						<div class="input-group">
-							<input type="text" class="form-control" name="Name" value="@track.Name">
-							<div class="input-group-append">
-								<button type="submit" class="btn btn-success">Extract</button>
+			<div class="col">
+				<div class="form-group">
+					<div>
+						<label for="name"><i class="far fa-file-alt"></i> Name</label>
+						<span class="float-right h5">
+							@Html.Partial("Widgets/TopoStatsPills", track.Stats)
+						</span>
+					</div>
+					<form method="post" action="@TrackViewModel.GetExtractUrl()">
+						<input type="hidden" name="Source" value="@track.Source" />
+						<div class="form-group">
+							<div class="input-group">
+								<input type="text" class="form-control" name="Name" value="@track.Name" />
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Extract</button>
+								</div>
 							</div>
 						</div>
+					</form>
+				</div>
+
+			</div>
+			<div class="col">
+				<div class="form-group">
+					<label for="name"><i class="fas fa-folder"></i> Directory</label>
+					<div class="input-group">
+						<input type="text" class="form-control" readonly value="@edit.File.DirectoryName" />
+						<div class="input-group-append">
+							<a class="btn btn-secondary" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)"><i class="fas fa-folder-open"></i> Browse</a>
+						</div>
 					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 		<hr />
-		<div class="row">
-			<div class="col-sm-2 h3">Start:</div>
-			<div class="col-sm-8 h3">
+		<div class="row h3">
+			<div class="col-sm-2 text-success"><i class="fas fa-sign-out-alt"></i> Start:</div>
+			<div class="col-sm-8">
 				@if (track.StartPlace != null)
 				{
-					<div class="js-show-start js-show-bounds">
+					<div class="pb-2">
+						<span class="p-1 carto-color js-show-start js-show-bounds"><i class="fas fa-expand"></i></span>
 						<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">
 							@track.StartPlace.Name
 						</a>
@@ -105,65 +121,53 @@
 				}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-sm btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.StartPoint)"><i class="fas fa-search"></i> Lookup</a>
+				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.StartPoint)"><i class="fas fa-search"></i> Lookup</a>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-2 h3">End:</div>
-			<div class="col-sm-8 h3">
+		<div class="row h3">
+			<div class="col-sm-2 text-danger"><i class="fas fa-sign-in-alt"></i> Finish:</div>
+			<div class="col-sm-8">
 				@if (track.FinishPlace != null)
 				{
-					<div class="js-show-finish js-show-bounds">
-						<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
-					</div>
+				<div class="pb-2">
+					<span class="p-1 carto-color js-show-finish js-show-bounds"><i class="fas fa-expand"></i></span>
+					<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
+				</div>
 				}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-sm btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.FinishPoint)"><i class="fas fa-search"></i> Lookup</a>
+				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.FinishPoint)"><i class="fas fa-search"></i> Lookup</a>
 			</div>
 		</div>
 		<div class="row h4">
 			<div class="col-sm-2">
-				Nearby:
+				<i class="far fa-object-ungroup"></i> Nearby:
 			</div>
 			<div class="col-sm-8">
 				@foreach (var place in Model.EditTrack.NearbyPlaces)
 				{
-					<div class="pb-2 js-show-nearby js-show-bounds">
+					<div class="pb-2">
+						<span class="p-1 h3 carto-color js-show-nearby js-show-bounds"><i class="fas fa-expand"></i></span>
 						<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-						<span class="h6">
-							<span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span>
-						</span>
 					</div>
 				}
 			</div>
-		</div><div class="row h4">
+		</div>
+		<div class="row h4">
 			<div class="col-sm-2">
-				Contains:
+				<i class="far fa-object-group"></i> Contains:
 			</div>
 			<div class="col-sm-8">
 				@foreach (var place in Model.EditTrack.ContainedPlaces)
 				{
-					<div class="pb-2 js-show-contains js-show-bounds">
+					<div class="pb-2">
+						<span class="p-1 h3 carto-color js-show-contains js-show-bounds"><i class="fas fa-expand"></i></span>
 						<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-						<span class="h6">
-							<span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span>
-						</span>
 					</div>
 				}
 			</div>
 		</div>
 		<hr />
-		<div class="row h5">
-			<div class="col-sm-2">Source:</div>
-			<div class="col-sm-8">
-				<a class="ortho-color" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)">@edit.File.DirectoryName</a>\@edit.File.Name
-			</div>
-			<div class="col-sm-2 text-right">
-				<a class="btn btn-sm btn-outline-secondary" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)"><i class="fas fa-folder-open"></i> Browse
-				</a>
-			</div>
-		</div>
 		<div class="row h5">
 			<div class="col-sm-2">Country:</div>
 			<div class="col-sm-8">

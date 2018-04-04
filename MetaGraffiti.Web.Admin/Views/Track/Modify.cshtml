@@ -18,6 +18,7 @@
 
 	$(document).ready(function () {
 		initMap();
+		initDirty();
 		loadTrack();
 		showPlaces();
 
@@ -36,13 +37,15 @@
 		});
 
 		$(".js-start-utc").click(function (e) {
-			e.preventDefault();
+			$(".js-start-utc").parent().removeClass("table-success");
+			$(this).parent().addClass("table-success");
 			var timestamp = $(this).siblings("span").text();
-			$("#StartUTC").val(timestamp);
+			$("#StartUTC").val(timestamp);			
 		});
 
 		$(".js-finish-utc").click(function (e) {
-			e.preventDefault();
+			$(".js-finish-utc").parent().removeClass("table-danger");
+			$(this).parent().addClass("table-danger");
 			var timestamp = $(this).siblings("span").text();
 			$("#FinishUTC").val(timestamp);
 		});
@@ -111,11 +114,11 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<button type="submit" class="btn btn-success">Update</button>
+							<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Update</button>
+							<a href="@TrackViewModel.GetManageUrl()" class="btn btn-outline-info js-confirm-dirty"><i class="fas fa-list"></i> Manage</a>
 						</div>
-						<div class="col text-right">
-							<a href="@TrackViewModel.GetManageUrl()" class="btn btn-secondary">Manage</a>
-							<a href="@TrackViewModel.GetDeleteUrl(edit.Key)" class="btn btn-outline-danger js-confirm">Remove</a>
+						<div class="col text-right">							
+							<a href="@TrackViewModel.GetDeleteUrl(edit.Key)" class="btn btn-outline-danger js-confirm"><i class="fas fa-times"></i> Remove</a>
 						</div>
 					</div>
 				</form>
@@ -190,10 +193,10 @@
 					</div>
 					<div class="form-row">
 						<div class="col">
-							<button type="submit" class="btn btn-primary">Apply Filter</button>
+							<button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Apply Filter</button>
 						</div>
 						<div class="col text-right">
-							<a href="@TrackViewModel.GetRevertUrl(edit.Key)" class="btn btn-outline-warning js-confirm">Revert</a>
+							<a href="@TrackViewModel.GetRevertUrl(edit.Key)" class="btn btn-outline-warning js-confirm"><i class="fas fa-undo-alt"></i> Revert</a>
 						</div>
 					</div>
 				</form>
@@ -203,19 +206,19 @@
 		<br />
 		<form method="post" action="@TrackViewModel.GetRemoveUrl()">
 			<input type="hidden" name="Key" value="@edit.Key" />
-			<table class="table table-striped table-bordered table-sm small">
+			<table class="table table-striped table-bordered table-sm">
 				<thead>
 					<tr class="thead-dark">
 						<th>Point #</th>
 						<th>Timestamp</th>
 						<th>Lat / Long</th>
-						<th>Elevation</th>
-						<th>Course</th>
-						<th>M/S</th>
-						<th>GPS</th>
-						<th>HDOP</th>
-						<th>VDOP</th>
-						<th>PDOP</th>
+						<th class="small">Elevation</th>
+						<th class="small">Course</th>
+						<th class="small">M/S</th>
+						<th class="small">GPS</th>
+						<th class="small">HDOP</th>
+						<th class="small">VDOP</th>
+						<th class="small">PDOP</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -226,16 +229,16 @@
 							<tr class="js-mappable-row">
 								<td>
 									<label class="p-0 m-0"><input type="checkbox" name="Points" value="@index" /> @((index + 1).ToString("0000"))</label>
-									<a class="text-warning js-remove-points" href="#" title="Remove selected points"><i class="fas fa-times"></i></a>
+									&nbsp;<a class="text-secondary js-remove-points" href="#" title="Remove selected points"><i class="fas fa-trash"></i></a>
 								</td>
 								<td class="text-nowrap">
 									<span>@TextHelper.GetTimestamp(p.Timestamp)</span>
-									<a class="text-success js-start-utc" href="#" title="Set as start"><i class="fas fa-sign-out-alt"></i></a>
-									<a class="text-danger js-finish-utc" href="#" title="Set as finish"><i class="fas fa-sign-in-alt"></i></a>
+									&nbsp;<a class="text-success js-start-utc" href="#" title="Set as start"><i class="fas fa-sign-out-alt"></i></a>
+									&nbsp;<a class="text-danger js-finish-utc" href="#" title="Set as finish"><i class="fas fa-sign-in-alt"></i></a>
 								</td>
 								<td>
 									@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")
-									<a class="text-primary" href="@PlaceViewModel.GetSearchUrl(p)" target="_blank" title="Lookup location"><i class="fas fa-search"></i></a>
+									&nbsp;<a class="text-primary" href="@PlaceViewModel.GetSearchUrl(p)" target="_blank" title="Lookup location"><i class="fas fa-search"></i></a>
 								</td>
 								<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
 								<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
@@ -250,7 +253,7 @@
 					}
 				</tbody>
 			</table>
-			<button type="submit" class="btn btn-warning">Remove Selected Points</button>
+			<button type="submit" class="btn btn-outline-secondary"><i class="fas fa-trash"></i> Remove Selected Points</button>
 		</form>
 		<br />
 	</div>

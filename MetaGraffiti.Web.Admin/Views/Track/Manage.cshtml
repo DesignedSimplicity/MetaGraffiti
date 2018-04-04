@@ -73,7 +73,7 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div class="text-right">
-			<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
+			<button type="button" class="btn btn-secondary js-reset-view"><i class="fas fa-external-link-alt"></i> Reset View</button>
 		</div>
 		<br />
 		<table class="table table-striped">
@@ -112,12 +112,12 @@
 		</table>
 		<div class="row">
 			<div class="col">
-				<button type="button" class="btn btn-success">Import Trail</button>
-				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-secondary">Export GPX</a>
-				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-secondary">Export KML</a>
+				<button type="button" class="btn btn-success"><i class="fas fa-database"></i> Import Trail</button>
+				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-secondary"><i class="fas fa-download"></i> Export GPX</a>
+				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-secondary"><i class="fas fa-download"></i> Export KML</a>
 			</div>
 			<div class="col text-right">
-				<a href="@TrackViewModel.GetResetUrl()" class="btn btn-outline-danger js-confirm">Remove All</a>
+				<a href="@TrackViewModel.GetResetUrl()" class="btn btn-outline-danger js-confirm"><i class="fas fa-times"></i> Remove All</a>
 			</div>
 		</div>
 	</div>

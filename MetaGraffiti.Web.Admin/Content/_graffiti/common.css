@@ -1,4 +1,9 @@
-﻿#map-container {
+﻿html {
+	overflow-y: scroll;
+}
+
+
+#map-container {
 	position: fixed;
 	top: 0;
 	left: 50%;
