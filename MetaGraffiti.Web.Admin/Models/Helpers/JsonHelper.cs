@@ -19,6 +19,23 @@ namespace MetaGraffiti.Web.Admin.Models
 		// IGpxTrack
 		public static HtmlString GetJson(IGpxTrack track)
 		{
+			var t = BuildTrack(track);
+			return new HtmlString(t.ToString());
+		}
+		public static HtmlString GetJson(IEnumerable<IGpxTrack> tracks)
+		{
+			if (tracks == null || tracks.Count() == 0) new HtmlString("[]");
+
+			JArray all = new JArray();
+			foreach (var track in tracks)
+			{
+				dynamic t = BuildTrack(track);
+				all.Add(t);
+			}
+			return new HtmlString(all.ToString());
+		}
+		private static dynamic BuildTrack(IGpxTrack track)
+		{
 			dynamic t = new JObject();
 			t.track = track.Name;
 			t.points = new JArray();
@@ -29,7 +46,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				p.lng = point.Longitude;
 				t.points.Add(p);
 			}
-			return new HtmlString(t.ToString());
+			return t;
 		}
 
 

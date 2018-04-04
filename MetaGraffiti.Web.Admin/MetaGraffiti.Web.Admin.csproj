@@ -362,6 +362,7 @@
     <Content Include="Views\Trail\Import.cshtml" />
     <Content Include="Views\Trail\Update.cshtml" />
     <Content Include="Views\Track\Modify.cshtml" />
+    <Content Include="Views\Track\Manage.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

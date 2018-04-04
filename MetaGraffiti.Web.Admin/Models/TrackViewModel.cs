@@ -27,6 +27,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 		public static string GetModifyUrl(string key) { return $"/track/modify/{key}/"; }
+
+		public static string GetPreviewUrl(string source) { return $"/track/preview/?source={source}"; }
 	}
 
 	public class TrackEditModel
@@ -97,7 +99,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Navigation
 
-		public static string GetPreviewUrl(string uri) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
+		public static string GetPreviewUrl(string uri) { return $"/track/preview/?source={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetPreviewUrl(string uri, DateTime? start, DateTime? finish) { return $"/track/preview/?uri={HttpUtility.UrlEncode(uri)}&start={start}&finish={finish}"; }
 
 

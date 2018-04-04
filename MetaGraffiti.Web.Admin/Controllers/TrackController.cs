@@ -37,7 +37,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			_trailDataService = ServiceConfig.TopoTrailService;
 		}
 
-		private TrackViewModel2 InitModel2()
+		private TrackViewModel2 InitModel()
 		{
 			var model = new TrackViewModel2();
 
@@ -46,7 +46,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
-		private TrackViewModel InitModel()
+		private TrackViewModel InitModelOld()
 		{
 			var model = new TrackViewModel();
 
@@ -106,11 +106,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
+		/// Displays all segments in current edit session
+		/// </summary>
+		public ActionResult Manage()
+		{
+			var model = InitModel();
+
+			return View(model);
+		}
+
+		/// <summary>
 		/// Displays the track on a map before extraction
 		/// </summary>
 		public ActionResult Preview(string source)
 		{
-			var model = InitModel2();
+			var model = InitModel();
 
 			var uri = GetSourceUri(source);
 
@@ -135,7 +145,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Modify(string id)
 		{
-			var model = InitModel2();
+			var model = InitModel();
 
 			var track = _trackEditService.GetTrack(id);
 			if (track == null) throw new HttpException(404, $"Track {id} not found!");
@@ -150,7 +160,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Modify(string key, string name, string description)
 		{
-			var model = InitModel2();
+			var model = InitModel();
 
 			var track = _trackEditService.GetTrack(key);
 			track.Name = name;
@@ -172,7 +182,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (track == null)
 			{
-				var model = InitModel2();
+				var model = InitModel();
 
 				track = _trackEditService.GetTrack(filter.Key);
 				model.ErrorMessages.Add("Filter contains no points and was not applied.");
@@ -216,29 +226,29 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return Redirect(TrackViewModel.GetManageUrl());
 		}
 
-
-
-
-
-
-
 		/// <summary>
-		/// Displays all segments in current edit session
+		/// Clears all extracts from the current edit session
 		/// </summary>
-		public ActionResult Manage()
+		public ActionResult Reset()
 		{
-			var model = InitModel();
+			_trackEditService.RemoveAll();
 
-			return View("Track", model);
+			return Redirect(TrackViewModel.GetManageUrl());
 		}
 
-		
+
+
+
+
+
+
+
 		/// <summary>
 		/// Creates an internal file from all of the tracks in the current edit session
 		/// </summary>
 		public ActionResult Import(bool overwrite = false)
 		{
-			var model = InitModel();
+			var model = InitModelOld();
 
 			// TODO: move this into TrailDataService
 			var track = _trackExtractService.GetTrackGroup();
@@ -288,7 +298,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Edit(string id)
 		{
-			var model = InitModel();
+			var model = InitModelOld();
 
 			var extract = _trackExtractService.GetExtract(id);
 			//UpdateTrackPlaces(extract);
@@ -303,7 +313,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Save(TrackExtractUpdateRequest save)
 		{
-			var model = InitModel();
+			var model = InitModelOld();
 
 			model.SelectedExtract = _trackExtractService.UpdateExtract(save);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
@@ -324,15 +334,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
 		}
 
-		/// <summary>
-		/// Clears all extracts from the current edit session
-		/// </summary>
-		public ActionResult Reset()
-		{
-			_trackExtractService.ResetSession();
-
-			return Redirect(TrackViewModel.GetManageUrl());
-		}
 
 
 		private void UpdateTrackPlaces(TrackExtractData extract, TrackFileModel source)

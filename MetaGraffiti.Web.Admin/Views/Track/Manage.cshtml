@@ -1,0 +1,124 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrackViewModel2
+
+@Html.Partial("_Nav")
+
+@{ 
+
+}
+
+<script>
+	var _tracks = @JsonHelper.GetJson(Model.Tracks);
+	var _bounds = null;
+	var _start = null;
+	var _stop = null;
+
+	$(document).ready(function () {
+		initDirty();
+
+		initMap();
+
+		_bounds = new google.maps.LatLngBounds();
+		for (index = 0; index < _tracks.length; index++) {
+			var color = getMapColor(index);
+			showTrack(_tracks[index].points, color);
+			$("table > tbody > tr").eq(index).children().eq(0).css('background-color', color);
+
+			var points = _tracks[index].points;
+			for (var i = 0; i < points.length; i++) {
+				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+		}
+		if (_tracks.length > 0) {
+			_mapGoogle.fitBounds(_bounds);
+		}
+
+		$(".js-mappable-row").hover(function () {
+			var index = $(this).index();
+
+			var points = _tracks[index].points;
+			var last = points.length - 1;
+
+			if (_start != null) _start.setMap(null);
+			if (_stop != null) _stop.setMap(null);
+			
+			_start = markStart(points[0].lat, points[0].lng);
+			_stop = markFinish(points[last].lat, points[last].lng);
+		});
+
+		$(".js-mappable-row").click(function () {
+			var index = $(this).index();
+
+			var points = _tracks[index].points;
+			var bounds = new google.maps.LatLngBounds();
+			for (var i = 0; i < points.length; i++) {
+				bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+			_mapGoogle.fitBounds(bounds);
+		});
+
+		$(".js-reset-view").click(function () {
+			if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
+			if (_start != null) _start.setMap(null);
+			if (_stop != null) _stop.setMap(null);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="text-right">
+			<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
+		</div>
+		<br />
+		<table class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th class="w-50">Track</th>
+					<th>Source</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+				var count = 0;
+				foreach (var track in Model.Tracks)
+				{
+					<tr class="js-mappable-row">
+						<td class="text-center font-weight-bold">@(++count)</td>
+						<td>
+							<div class="font-weight-bold">
+								<a class="topo-color" href="@TrackViewModel2.GetModifyUrl(track.Key)">@track.Name</a>
+							</div>
+							<div class="small">@track.Description</div>
+						</td>
+						<td>
+							<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+						</td>
+						<td class="text-nowrap">
+							<a class="btn btn-sm btn-success" href="@TrackViewModel2.GetModifyUrl(track.Key)">Modify</a>
+							<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Remove</a>
+						</td>
+					</tr>
+			}
+				}
+			</tbody>
+		</table>
+		<div class="row">
+			<div class="col">
+				<button type="button" class="btn btn-success">Import Trail</button>
+				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-secondary">Export GPX</a>
+				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-secondary">Export KML</a>
+			</div>
+			<div class="col text-right">
+				<a href="@TrackViewModel.GetResetUrl()" class="btn btn-outline-danger js-confirm">Remove All</a>
+			</div>
+		</div>
+	</div>
+</div>

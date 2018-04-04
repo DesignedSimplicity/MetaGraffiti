@@ -6,6 +6,7 @@ using System.Linq;
 using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
+using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
@@ -26,7 +27,7 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public List<TrackEditData> ListTracks()
 		{
-			return _tracks.All;
+			return _tracks.All.OrderBy(x => x.Points.First().Timestamp.Value).ToList();
 		}
 
 		/// <summary>
