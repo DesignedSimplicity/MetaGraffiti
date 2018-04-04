@@ -363,6 +363,7 @@
     <Content Include="Views\Track\Modify.cshtml" />
     <Content Include="Views\Track\Manage.cshtml" />
     <Content Include="Views\Shared\Widgets\TopoStatsPills.cshtml" />
+    <Content Include="Views\Shared\Buttons\ResetView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

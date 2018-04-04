@@ -96,8 +96,8 @@
 			<div class="col-sm-4 text-right">
 				<form method="post" action="@TopoViewModel.GetModifyUrl()">
 					<input type="hidden" name="ID" value="@trail.Key" />
-					<button type="submit" class="btn btn-outline-success">Edit Tracks</button>
-					<button type="button" class="btn btn-outline-secondary js-reset-view">Reset View</button>
+					<button type="submit" class="btn btn-outline-success"><i class="fas fa-pencil-alt"></i> Edit Trail</button>
+					@Html.Partial("Buttons/ResetView")
 				</form>
 				<div class="h4 mt-2">
 					<div class="badge badge-pill badge-secondary">@TextHelper.GetTotalDays(trail.StartLocal, trail.FinishLocal)</div>
@@ -124,7 +124,7 @@
 					@foreach (var place in Model.ConsolidatePlaces(trail))
 					{
 						<div class="mt-2">
-							<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a> <span class="h6"><span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span></span>
+							<a class="carto-color" href="@CartoViewModel.GetEditUrl(place.Key)"><i class="fas fa-map-marker"></i> @place.Name</a>
 						</div>
 					}
 				</div>
@@ -147,9 +147,9 @@
 			<thead class="thead-dark">
 				<tr class="table-sm">
 					<th class="text-center">#</th>
-					<th>Track</th>
-					<th>Start <small>Time / Location</small></th>
-					<th>Finish <small>Time / Location</small></th>
+					<th class="h4">Track</th>
+					<th><span class="text-success"><i class="fas fa-sign-out-alt"></i> Start</span> <small>Time / Location</small></th>
+					<th><span class="text-danger"><i class="fas fa-sign-in-alt"></i> Finish</span> <small>Time / Location</small></th>
 					<th class="text-right">Time <small>Elapsed</small><br />Speed <small>Average</small></th>
 					<th class="text-right">Distance <small>Estimated</small><br />Elevation <small>Asc/Desc</small></th>
 				</tr>
@@ -178,7 +178,7 @@
 								<div>
 									@if (!String.IsNullOrWhiteSpace(track.Source))
 									{
-										<a class="btn btn-sm btn-outline-info" href="@TopoViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+										<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
 									}
 								</div>
 								<div class="mt-2">
@@ -195,7 +195,7 @@
 								<div class="mt-2">
 									@if (track.StartPlace != null)
 									{
-										<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">@track.StartPlace.Name</a>
+									<a class="carto-color" href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)"><i class="fas fa-map-marker"></i> @track.StartPlace.Name</a>
 									}
 								</div>
 							</td>
@@ -206,7 +206,7 @@
 								<div class="mt-2">
 									@if (track.FinishPlace != null)
 									{
-										<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
+									<a class="carto-color" href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)"><i class="fas fa-map-marker"></i> @track.FinishPlace.Name</a>
 									}
 								</div>
 							</td>
