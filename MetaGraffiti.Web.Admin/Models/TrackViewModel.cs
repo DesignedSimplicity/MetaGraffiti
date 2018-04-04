@@ -38,6 +38,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
+		public static string GetExtractUrl(string source) { return "/track/extract/?source={source}"; }
 		public static string GetModifyUrl(string key) { return $"/track/modify/{key}/"; }
 		public static string GetPreviewUrl(string source) { return $"/track/preview/?source={source}"; }
 		public static string GetFilterUrl() { return "/track/filter/"; }

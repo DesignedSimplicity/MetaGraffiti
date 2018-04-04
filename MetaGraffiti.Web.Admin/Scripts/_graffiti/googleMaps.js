@@ -202,8 +202,8 @@ function markStop(lat, lng) {
 	var marker = new google.maps.Marker({
 		position: new google.maps.LatLng(lat, lng),
 		map: _mapGoogle,
-		icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
-		//icon: 'https://maps.gstatic.com/intl/en_ALL/mapfiles/dd-stop.png'
+		//icon: 'http://maps.google.com/mapfiles/marker_greenB.png'
+		icon: 'https://maps.gstatic.com/intl/en_ALL/mapfiles/dd-stop.png'
 	});
 
 	return marker;
