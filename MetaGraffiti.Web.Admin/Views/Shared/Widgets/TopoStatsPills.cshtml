@@ -1,15 +1,34 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model MetaGraffiti.Base.Modules.Topo.TopoStats
+@model TopoStatsPillsModel
 
 <span class="badge badge-pill badge-dark">
-	@Model.PointCount points
+	@Model.Stats.PointCount pts
 </span>
-<span class="badge badge-pill badge-secondary">
-	@Model.SecondsBetweenPoints.ToString("0") sec
+@if (Model.ShowDetails)
+{
+
+	<span class="badge badge-pill badge-secondary">
+		@Model.Stats.SecondsBetweenPoints.ToString("0") sec
+	</span>
+}
+<span class="badge badge-pill badge-primary">
+	@Model.Stats.EstimatedKM.ToString("#,##0.0") km
 </span>
-<span class="badge badge-pill badge-success">
-	@Model.EstimatedKM.ToString("#,##0.0") km
-</span>
+@if (Model.ShowDetails)
+{
+	<span class="badge badge-pill badge-success">
+		@Model.Stats.EstimatedMetersAscent.ToString("#,##0") u
+	</span>
+	<span class="badge badge-pill badge-danger">
+		@Model.Stats.EstimatedMetersDescent.ToString("#,##0") d
+	</span>
+}
 <span class="badge badge-pill badge-info">
-	@TextHelper.GetElapsedTime(Model.ElapsedTime)
+	@TextHelper.GetElapsedTime(Model.Stats.ElapsedTime)
 </span>
+@if (Model.ShowDetails)
+{
+	<span class="badge badge-pill badge-warning">
+		@TextHelper.GetTotalDays(Model.Stats.DayCount)
+	</span>
+}

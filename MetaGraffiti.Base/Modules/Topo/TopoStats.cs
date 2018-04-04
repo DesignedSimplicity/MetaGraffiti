@@ -33,6 +33,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 			stats.EstimatedMetersDescent = descent;
 			stats.SecondsBetweenPoints = (hours * 60 * 60) / points;
 			stats.PointCount = points;
+			stats.DayCount = trail.FinishLocal.DayOfYear - trail.StartLocal.DayOfYear;
 
 			return stats;
 		}
@@ -48,10 +49,12 @@ namespace MetaGraffiti.Base.Modules.Topo
 			stats.EstimatedMetersDescent = GeoDistance.ElevationBetweenPoints(track.TopoPoints, -1).Meters;
 			stats.SecondsBetweenPoints = stats.ElapsedTime.TotalSeconds / track.TopoPoints.Count();
 			stats.PointCount = track.TopoPoints.Count();
+			stats.DayCount = track.FinishLocal.DayOfYear - track.StartLocal.DayOfYear;
 
 			return stats;
 		}
 
+		public int DayCount { get; private set; }
 		public int PointCount { get; private set; }
 		public double SecondsBetweenPoints { get; private set; }
 

@@ -55,10 +55,8 @@
 			<th>Region</th>
 			<th>Places</th>
 			<th>Keywords</th>
-			<th class="text-center">Distance</th>
-			<th class="text-center">Time</th>
 			<th class="text-center">Tracks</th>
-			<th class="text-center">Points</th>
+			<th class="text-center">Stats</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -76,39 +74,39 @@
 						</td>
 					</tr>
 				}
-				<tr>
-					<td>@trail.StartLocal.ToString("yyyy-MM-dd")</td>
-					<td>
-						<div class="h4">
-							<a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a>
-						</div>
-						<div>@trail.Description</div>
-					</td>
-					<td class="h5">
-						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
-					</td>
-					<td class="h6">
-						@if (trail.Region != null)
-						{
-							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
-						}
-					</td>
-					<td>
-						@foreach (var place in Model.ConsolidatePlaces(trail))
-						{
-							<div>
-								<a class="carto-color" href="#">@place.Name</a>
+					<tr>
+						<td class="text-nowrap">@trail.StartLocal.ToString("yyyy-MM-dd")</td>
+						<td>
+							<div class="h4">
+								<a class="topo-color" href="@TopoViewModel.GetTrailUrl(trail)">@trail.Name</a>
 							</div>
-						}
-					</td>
-					<td>
-						@trail.Keywords
-					</td>
-					<td class="text-center">@stats.EstimatedKM.ToString("0.0") km</td>
-					<td class="text-center text-nowrap">@TextHelper.GetElapsedTime(stats.ElapsedTime)</td>
-					<td class="text-center">@trail.Tracks.Count()</td>
-					<td class="text-center">@trail.Tracks.SelectMany(x => x.Points).Count().ToString("#,##0")</td>
-				</tr>
+							<div>@trail.Description</div>
+						</td>
+						<td class="h5">
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
+						</td>
+						<td class="h6">
+							@if (trail.Region != null)
+		{
+					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
+}
+						</td>
+						<td>
+							@foreach (var place in Model.ConsolidatePlaces(trail))
+		{
+					<div>
+						<a class="carto-color" href="#">@place.Name</a>
+					</div>
+}
+						</td>
+						<td>
+							@trail.Keywords
+						</td>
+						<td class="text-center">@trail.Tracks.Count()</td>
+						<td class="h5">
+							@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true))
+						</td>
+					</tr>
 			}
 		}
 	</tbody>

@@ -90,11 +90,13 @@
 					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country)">@country.Name</a><span class="h3"> \ @region.RegionName</span>
 				</span>
 			}
-			<div class="float-right">
-				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(country)">Geo</a>
-				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">Carto</a>
-				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
-			</div>
+				<div class="float-right">
+					<div class="btn-group">
+						<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(country)"><i class="fas fa-globe"></i></a>
+						<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)"><i class="fas fa-map"></i></a>
+						@Html.Partial("Buttons/ResetView")
+					</div>
+				</div>
 		</div>
 		<br />
 		<table class="table table-sm table-striped">

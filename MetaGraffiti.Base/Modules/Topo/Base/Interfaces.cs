@@ -31,7 +31,11 @@ namespace MetaGraffiti.Base.Modules.Topo
 		string Source { get; }
 
 		DateTime StartUTC { get; }
+		DateTime StartLocal { get; }
+
 		DateTime FinishUTC { get; }
+		DateTime FinishLocal { get; }
+
 
 		IEnumerable<ITopoTrackInfo> Tracks { get; }
 	}

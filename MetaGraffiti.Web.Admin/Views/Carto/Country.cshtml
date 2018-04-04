@@ -73,16 +73,17 @@
 <div class="row">
 	<div class="col-sm-6">
 		<div>
-			<span class="h2"><a class="text-@Model.AreaCss" href="/Carto/">Carto</a></span>
-			<span class="h3 text-@Model.AreaCss">
-				\
-				<a href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@Model.SelectedCountry.Name</a>
+			<span class="h2">
+				@Model.SelectedCountry.Name
 			</span>
 			<div class="float-right">
-				<a class="btn btn-outline-warning" href="@PlaceViewModel.GetReportUrl(Model.SelectedCountry.Name)">Add</a>
-				<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">Geo</a>
-				<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">Topo</a>
-				@Html.Partial("Buttons/ResetView")
+				<a class="btn btn-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)"><i class="fas fa-plus"></i> Add</a>
+				<div class="btn-group">
+					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)"><i class="fas fa-globe"></i></a>
+					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)"><i class="fas fa-code-branch"></i></a>
+					@Html.Partial("Buttons/ResetView")
+				</div>
+
 			</div>
 		</div>
 		<br />
