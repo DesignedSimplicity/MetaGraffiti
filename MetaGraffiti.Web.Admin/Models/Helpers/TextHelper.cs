@@ -18,6 +18,12 @@ namespace MetaGraffiti.Web.Admin.Models
 					: CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month.Value);
 		}
 
+		public static string GetTimestamp(DateTime? timestamp)
+		{
+			if (!timestamp.HasValue) return "";
+			return timestamp.Value.ToString("yyyy-MM-dd") + " " + timestamp.Value.ToString("hh:mm:ss tt");
+		}
+
 		public static string GetElapsedTime(TimeSpan elapsed)
 		{
 			return String.Format("{0:0} h {1:00} m", Math.Floor(elapsed.TotalHours), elapsed.Minutes);

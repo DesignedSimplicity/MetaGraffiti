@@ -18,12 +18,15 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public List<TrackEditData> Tracks { get; set; }
 
-		public TrackEditModel SelectedTrack { get; set; }
+		public TrackEditModel EditTrack { get; set; }
 
 		public string GetSourceDirectory(string source)
 		{
 			return Path.GetDirectoryName(source);
 		}
+
+
+		public static string GetModifyUrl(string key) { return $"/track/modify/{key}/"; }
 	}
 
 	public class TrackEditModel
@@ -221,6 +224,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetExtractUrl(string uri) { return $"/track/extract/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetDeleteUrl(string ID) { return $"/track/delete/{ID}"; }
 		public static string GetEditUrl(string ID) { return $"/track/edit/{ID}"; }
+
+
 		public static string GetSaveUrl() { return $"/track/save/"; }
 		public static string GetFilterUrl() { return "/track/filter/"; }
 		public static string GetRemoveUrl() { return "/track/remove/"; }

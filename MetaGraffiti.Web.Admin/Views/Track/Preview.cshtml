@@ -1,15 +1,15 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model TrackViewModel
+@model TrackViewModel2
 
 @Html.Partial("_Nav")
 
 @{
-	var extract = Model.SelectedExtract;
+	var track = Model.EditTrack.TopoTrack;
 }
 
 <script>
 	var _marker = null;
-	var _track = @Model.GetExtractJson();
+	var _track = @JsonHelper.GetJson(track);
 
 	$(document).ready(function () {
 		initMap();
@@ -49,70 +49,65 @@
 	<div class="col-sm-6">
 		<div class="row">
 			<div class="col-sm-6">
+				<div class="h3">
+					<span class="badge badge-pill badge-secondary">
+						@track.Points.Count points
+					</span>
+					<span class="badge badge-pill badge-success">
+						@track.Stats.EstimatedKM.ToString("#,##0.0") km
+					</span>
+					<span class="badge badge-pill badge-info">
+						@TextHelper.GetElapsedTime(track.Stats.ElapsedTime)
+					</span>
+				</div>
+			</div>
+			<div class="col-sm-6 text-right">
 				<form method="post" action="@TrackViewModel.GetExtractUrl()">
-					<input type="hidden" name="Uri" value="@extract.Source" />
-					<input type="hidden" name="StartTimestamp" value="@Model.SelectedStart" />
-					<input type="hidden" name="FinishTimestamp" value="@Model.SelectedFinish" />
+					<input type="hidden" name="Source" value="@track.Source" />
 					<div class="form-group">
 						<div class="input-group">
-							<input type="text" class="form-control" name="Name" value="@extract.Name">
+							<input type="text" class="form-control" name="Name" value="@track.Name">
 							<div class="input-group-append">
-								<button type="submit" class="btn btn-primary">Extract Track</button>
+								<button type="submit" class="btn btn-success">Extract</button>
 							</div>
 						</div>
 					</div>
 				</form>
-
-				<a href="@TrackViewModel.GetPreviewUrl(extract.Source)" class="btn btn-warning">Reset</a>
-			</div>
-			<div class="col-sm-6">
-				<div class="h4">
-					<span class="badge badge-secondary">
-						@extract.Points.Count points
-					</span>
-					<span class="badge badge-success">
-						@Model.TotalDistance(extract).ToString("#,##0.0") km
-					</span>
-					<span class="badge badge-info">
-						@Model.ElapsedTime(extract)
-					</span>
-				</div>
 			</div>
 		</div>
 		<hr />
 		<div class="row">
 			<div class="col-sm-2 h3">Start:</div>
 			<div class="col-sm-8 h3">
-				@if (Model.SelectedSource.StartPlace != null)
+				@if (track.StartPlace != null)
 				{
-					<a href="@CartoViewModel.GetEditUrl(Model.SelectedSource.StartPlace.Key)">
-						@Model.SelectedSource.StartPlace.Name
+					<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">
+						@track.StartPlace.Name
 					</a>
 				}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-sm btn-outline-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.First())">Lookup</a>
+				<a class="btn btn-sm btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.StartPoint)"><i class="fas fa-search"></i> Lookup</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-2 h3">End:</div>
 			<div class="col-sm-8 h3">
-				@if (Model.SelectedSource.FinishPlace != null)
+				@if (track.FinishPlace != null)
 				{
-					<a href="@CartoViewModel.GetEditUrl(Model.SelectedSource.FinishPlace.Key)">@Model.SelectedSource.FinishPlace.Name</a>
+					<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
 				}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-sm btn-outline-info" href="@PlaceViewModel.GetSearchUrl(extract.Points.Last())">Lookup</a>
+				<a class="btn btn-sm btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.FinishPoint)"><i class="fas fa-search"></i> Lookup</a>
 			</div>
 		</div>
-
 		<div class="row h4">
 			<div class="col-sm-2">
-				Within:
+				Nearby:
 			</div>
 			<div class="col-sm-10">
-				@foreach (var place in Model.SelectedSource.Places)
+				@foreach (var place in Model.EditTrack.NearbyPlaces)
 				{
 					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
 					<span class="h6">
@@ -121,29 +116,41 @@
 					<span>&nbsp;</span>
 				}
 			</div>
-		</div><div class="row h5">
+		</div><div class="row h4">
 			<div class="col-sm-2">
 				Contains:
 			</div>
 			<div class="col-sm-10">
-				@foreach (var place in Model.SelectedSource.NearbyPlaces)
-	{
-			<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-			<span class="h6">
-				<span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span>
-			</span>
-			<span>&nbsp;</span>
-}
+				@foreach (var place in Model.EditTrack.ContainedPlaces)
+				{
+					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+					<span class="h6">
+						<span class="badge badge-pill badge-secondary">@place.Bounds.Area.ToString("0.0")</span>
+					</span>
+					<span>&nbsp;</span>
+				}
 			</div>
 		</div>
 		<hr />
-		<div class="row h6">
+		<div class="row h5">
 			<div class="col-sm-2">Source:</div>
 			<div class="col-sm-10">
-				<a href="@OrthoViewModel.GetTracksUrl(Model.SelectedSource.Directory)">@Model.SelectedSource.Directory</a>
+				<a href="@OrthoViewModel.GetTracksUrl(Model.GetSourceDirectory(track.Source))">@track.Source</a>
 			</div>
 		</div>
-		<hr />
+		<div class="row h5">
+			<div class="col-sm-2">Country:</div>
+			<div class="col-sm-10">
+				<a href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@track.Trail.Country.Name</a>
+			</div>
+		</div>
+		<div class="row h5">
+			<div class="col-sm-2">Timezone:</div>
+			<div class="col-sm-10">
+				@track.Trail.Timezone.Name
+			</div>
+		</div>
+		<br />
 		<table class="table table-sm table-striped table-bordered small">
 			<thead>
 				<tr class="thead-dark">
@@ -157,13 +164,12 @@
 					<th>HDOP</th>
 					<th>VDOP</th>
 					<th>PDOP</th>
-					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
 					var index = 0;
-					foreach (var p in extract.Points)
+					foreach (var p in track.Points)
 					{
 						<tr class="js-mappable-row">
 							<td>@(index + 1)</td>
@@ -173,16 +179,11 @@
 							<td>@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")</td>
 							<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
 							<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
-							<td class="text-center table-@Model.GetSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-							<td class="text-center table-@Model.GetSatsCss(p.Sats)">@p.Sats</td>
-							<td class="text-center table-@Model.GetDOPCss(p.HDOP)">@p.HDOP</td>
-							<td class="text-center table-@Model.GetDOPCss(p.VDOP)">@p.VDOP</td>
-							<td class="text-center table-@Model.GetDOPCss(p.PDOP)">@p.PDOP</td>
-							<td class="h6">
-								<a href="@TrackViewModel.GetPreviewUrl(extract.Source, p.Timestamp, Model.SelectedFinish)" class="badge badge-success">Start</a>
-								<a href="@TrackViewModel.GetPreviewUrl(extract.Source, Model.SelectedStart, p.Timestamp)" class="badge badge-danger">Finish</a>
-								<a href="@PlaceViewModel.GetSearchUrl(p)" class="badge badge-info">Lookup</a>
-							</td>
+							<td class="text-center table-@CssHelper.GetGpxSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+							<td class="text-center table-@CssHelper.GetGpxSatsCss(p.Sats)">@p.Sats</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.HDOP)">@p.HDOP</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.VDOP)">@p.VDOP</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.PDOP)">@p.PDOP</td>
 						</tr>
 						index++;
 					}

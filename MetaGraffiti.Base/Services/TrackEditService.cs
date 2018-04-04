@@ -136,6 +136,8 @@ namespace MetaGraffiti.Base.Services
 		{
 			var track = GetTrack(request.Key);
 
+			if (request.Points == null) return track;
+
 			List<IGpxPoint> points = new List<IGpxPoint>();
 			for (var index = 0; index < track.Points.Count; index++)
 			{
@@ -170,10 +172,18 @@ namespace MetaGraffiti.Base.Services
 			if (filter == null) return points.OrderBy(x => x.Timestamp).ToList();
 
 			var query = points.AsQueryable();
-			if (filter.StartUTC.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MinValue) >= filter.StartUTC.Value);
-			if (filter.FinishUTC.HasValue) query = query.Where(x => (x.Timestamp ?? DateTime.MaxValue) <= filter.FinishUTC.Value);
+			if (filter.StartUTC.HasValue)
+			{
+				var start = filter.StartUTC.Value.AddMilliseconds(-1);
+				query = query.Where(x => (x.Timestamp ?? DateTime.MinValue) >= start);
+			}
+			if (filter.FinishUTC.HasValue)
+			{
+				var finish = filter.FinishUTC.Value.AddSeconds(1).AddMilliseconds(-1);
+				query = query.Where(x => (x.Timestamp ?? DateTime.MaxValue) <= finish);
+			}
 			if (filter.MinimumSatellite.HasValue) query = query.Where(x => (x.Sats ?? 0) >= filter.MinimumSatellite.Value);
-			if (filter.MaximumVelocity.HasValue) query = query.Where(x => (x.Speed ?? 0) <= filter.MaximumVelocity.Value);
+			if (filter.MaximumVelocity.HasValue) query = query.Where(x => (x.Speed ?? 999) <= filter.MaximumVelocity.Value);
 			if (filter.MaximumDilution.HasValue) query = query.Where(x => GetMaxDOP(x) <= filter.MaximumDilution.Value);
 			if (filter.MissingDilution) query = query.Where(x => x.HDOP.HasValue && x.VDOP.HasValue && x.PDOP.HasValue);
 			return query.OrderBy(x => x.Timestamp).ToList();
