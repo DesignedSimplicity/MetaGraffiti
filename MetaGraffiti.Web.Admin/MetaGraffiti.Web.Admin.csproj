@@ -336,8 +336,7 @@
     <Content Include="Views\Geo\Countries.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-    <Content Include="Views\Track\Track.cshtml" />
-    <Content Include="Views\Track\Edit.cshtml" />
+    <Content Include="Views\Track\~Track.cshtml" />
     <Content Include="Views\Track\Preview.cshtml" />
     <Content Include="Views\Carto\Place.cshtml" />
     <Content Include="Views\Carto\Index.cshtml" />
@@ -358,7 +357,7 @@
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
-    <Content Include="Views\Track\Import.cshtml" />
+    <Content Include="Views\Track\~Import.cshtml" />
     <Content Include="Views\Trail\Import.cshtml" />
     <Content Include="Views\Trail\Update.cshtml" />
     <Content Include="Views\Track\Modify.cshtml" />

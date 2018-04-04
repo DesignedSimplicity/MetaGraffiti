@@ -1,5 +1,5 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model TrackViewModel2
+@model TrackViewModel
 
 @Html.Partial("_Nav")
 
@@ -94,7 +94,7 @@
 						<td class="text-center font-weight-bold">@(++count)</td>
 						<td>
 							<div class="font-weight-bold">
-								<a class="topo-color" href="@TrackViewModel2.GetModifyUrl(track.Key)">@track.Name</a>
+								<a class="topo-color" href="@TrackViewModel.GetModifyUrl(track.Key)">@track.Name</a>
 							</div>
 							<div class="small">@track.Description</div>
 						</td>
@@ -102,7 +102,7 @@
 							<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
 						</td>
 						<td class="text-nowrap">
-							<a class="btn btn-sm btn-success" href="@TrackViewModel2.GetModifyUrl(track.Key)">Modify</a>
+							<a class="btn btn-sm btn-success" href="@TrackViewModel.GetModifyUrl(track.Key)">Modify</a>
 							<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Remove</a>
 						</td>
 					</tr>

@@ -24,34 +24,20 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
-		private TrackEditService _trackEditService = new TrackEditService();
-
-
-		private TrackExtractService _trackExtractService = new TrackExtractService();
 		private CartoPlaceService _cartoPlaceService;
-		private TopoTrailService _trailDataService;
+		private TrackEditService _trackEditService;
 
 		public TrackController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
-			_trailDataService = ServiceConfig.TopoTrailService;
+			_trackEditService = new TrackEditService();
 		}
 
-		private TrackViewModel2 InitModel()
-		{
-			var model = new TrackViewModel2();
-
-			model.Tracks = _trackEditService.ListTracks();
-
-			return model;
-		}
-
-		private TrackViewModel InitModelOld()
+		private TrackViewModel InitModel()
 		{
 			var model = new TrackViewModel();
 
-			model.TrackGroup = _trackExtractService.GetTrackGroup();
-			model.TrackExtracts = _trackExtractService.ListExtracts();
+			model.Tracks = _trackEditService.ListTracks();
 
 			return model;
 		}
@@ -87,10 +73,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
-
-		// ==================================================
-		// Actions
-
 		// TODO: move this into a service
 		private string GetSourceUri(string source)
 		{
@@ -104,6 +86,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				return Path.Combine(AutoConfig.TrackSourceUri, year, month, name + ".gpx");
 			}
 		}
+
+
+		// ==================================================
+		// Actions
 
 		/// <summary>
 		/// Displays all segments in current edit session
@@ -130,13 +116,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Creates a track extract for editing
+		/// </summary>
 		public ActionResult Extract(string source, string name)
 		{
 			var uri = GetSourceUri(source);
 
 			var track = _trackEditService.CreateTrack(new TrackEditCreateRequest() { Uri = uri, Name = name });
 
-			return Redirect(TrackViewModel2.GetModifyUrl(track.Key));
+			return Redirect(TrackViewModel.GetModifyUrl(track.Key));
 		}
 
 		/// <summary>
@@ -192,7 +181,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				return View("Modify", model);
 			}
 			else
-				return Redirect(TrackViewModel2.GetModifyUrl(track.Key));
+				return Redirect(TrackViewModel.GetModifyUrl(track.Key));
 		}
 
 		/// <summary>
@@ -202,7 +191,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var track = _trackEditService.RevertFilter(id);
 
-			return Redirect(TrackViewModel2.GetModifyUrl(track.Key));
+			return Redirect(TrackViewModel.GetModifyUrl(track.Key));
 		}
 
 		/// <summary>
@@ -213,7 +202,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var track = _trackEditService.RemovePoints(remove);
 
-			return Redirect(TrackViewModel2.GetModifyUrl(track.Key));
+			return Redirect(TrackViewModel.GetModifyUrl(track.Key));
 		}
 
 		/// <summary>
@@ -238,6 +227,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 
 
+		
+
+
 
 
 
@@ -248,10 +240,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// </summary>
 		public ActionResult Import(bool overwrite = false)
 		{
-			var model = InitModelOld();
+			var model = InitModel();
 
 			// TODO: move this into TrailDataService
-			var track = _trackExtractService.GetTrackGroup();
+			var track = new TrackGroupData(); // _trackExtractService.GetTrackGroup();
 			if (String.IsNullOrWhiteSpace(track.Name)) model.ErrorMessages.Add("Name is missing.");
 			if (track.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
 			if (track.Country == null) model.ErrorMessages.Add("Country is missing.");
@@ -277,10 +269,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			}
 
 			// create internal file
-			_trackExtractService.WriteTrackFile(uri);
+			//_trackExtractService.WriteTrackFile(uri);
 
 			// reset track extract cache
-			_trackExtractService.ResetSession();
+			//_trackExtractService.ResetSession();
 
 			// reload trails data before redirect
 			ServiceConfig.ResetTopoTrail();
@@ -294,124 +286,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		
 
 		/// <summary>
-		/// Displays a single set of points from the current edit session
-		/// </summary>
-		public ActionResult Edit(string id)
-		{
-			var model = InitModelOld();
-
-			var extract = _trackExtractService.GetExtract(id);
-			//UpdateTrackPlaces(extract);
-			model.SelectedExtract = extract;
-
-			return View(model);
-		}
-
-		/// <summary>
-		/// Updates the set of points from the current edit session
-		/// </summary>
-		[HttpPost]
-		public ActionResult Save(TrackExtractUpdateRequest save)
-		{
-			var model = InitModelOld();
-
-			model.SelectedExtract = _trackExtractService.UpdateExtract(save);
-			model.ConfirmMessage = $"Updated at {DateTime.Now}";
-
-			return View("Edit", model);
-		}
-
-		
-
-		/// <summary>
 		/// Exports all of the tracks in the current edit session to a new file
 		/// </summary>
 		public ActionResult Export(string format)
 		{
+			/*
 			var data = _trackExtractService.CreateTrackFile(format);
 			var name = _trackExtractService.GetTrackGroup().Name;
 
 			return File(data, System.Net.Mime.MediaTypeNames.Application.Octet, $"{name}.{format.ToLowerInvariant()}");
-		}
-
-
-
-		private void UpdateTrackPlaces(TrackExtractData extract, TrackFileModel source)
-		{
-			// TODO: update this
-			// *********************************************
-			var points = extract.Points;
-			var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
-			source.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
-			source.NearbyPlaces = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
-			source.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(points.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-			source.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(points.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-		}
-
-
-		private TrackFileModel InitTrackFileModel(FileInfo file)
-		{
-			// TODO: show all possible countries
-			// TODO: use track bounds to find places
-
-			var source = new TrackFileModel();
-			source.Uri = file.FullName;
-			source.FileName = file.Name;
-			source.Directory = file.Directory.FullName;
-
-			//TODO: fix var existing = _trailDataService.FindTrackSource(file.Name);
-			//TODO: fix source.Trail = existing?.Trail;
-
-			source.Metadata = _trackExtractService.ReadTrail(file.FullName);
-			var data = source.Metadata.Data;
-
-			var points = data.Tracks.SelectMany(x => x.PointData);
-			var start = points.First();
-			var finish = points.Last();
-			source.Elapsed = finish.Timestamp.Value.Subtract(start.Timestamp.Value);
-
-			source.Distance = GeoDistance.BetweenPoints(points).KM;
-
-			if (!source.Metadata.Timestamp.HasValue) source.Metadata.Timestamp = start.Timestamp;
-
-			source.Metadata.Country = Graffiti.Geo.NearestCountry(start);
-			source.Metadata.Region = Graffiti.Geo.NearestRegion(start);
-			source.Metadata.Timezone = Graffiti.Geo.GuessTimezone(source.Metadata.Country);
-
-			source.Regions = Graffiti.Geo.NearbyRegions(start);
-			foreach (var region in Graffiti.Geo.NearbyRegions(finish))
-			{
-				if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
-			}
-
-			//var startPlaces = _cartoPlaceService.ListPlacesByBounds(start);
-			//var finishPlaces = _cartoPlaceService.ListPlacesByBounds(finish);			
-			//source.Places = startPlaces.Union(finishPlaces).ToList();
-			var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
-			source.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
-			source.NearbyPlaces = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
-			source.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-			source.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-
-
-			var speed = source.Distance / source.Elapsed.TotalHours;
-			source.IsWalk = speed <= 5; // km/h
-			source.IsBike = speed > 5 && speed < 15; // km/h
-
-			var max = points.Max(x => x.Speed ?? 0);
-			source.IsFast = max > 5; // m/s
-
-			var loop = GeoDistance.BetweenPoints(start, finish).Meters;
-			source.IsLoop = loop < 200;
-
-			var bad = max > 33; // m/s
-			if (!bad) bad = points.Average(x => (x.Sats ?? 0)) < 5;
-			if (!bad) bad = points.Count(x => !x.HDOP.HasValue) > 20; // TODO: fix this threshold for old files without DOP data
-			source.IsBad = bad;
-
-			source.IsShort = points.Count() < 30;
-
-			return source;
+			*/
+			return null;
 		}
 	}
 }

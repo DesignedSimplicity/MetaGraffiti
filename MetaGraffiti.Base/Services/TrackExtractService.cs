@@ -54,15 +54,6 @@ namespace MetaGraffiti.Base.Services
 			return _extracts[ID.ToUpperInvariant()];
 		}
 
-		/// <summary>
-		/// Removes a specific extract from edit session
-		/// </summary>
-		public TrackExtractData DeleteExtract(string ID)
-		{
-			var deleted = _extracts[ID.ToUpperInvariant()];
-			_extracts.Remove(ID.ToUpperInvariant());
-			return deleted;
-		}
 
 
 		/// <summary>
@@ -211,62 +202,7 @@ namespace MetaGraffiti.Base.Services
 			_extracts.Add(extract.ID, extract);
 			return extract;
 		}
-
-		/// <summary>
-		/// Updates track extract metadata for given track
-		/// </summary>
-		public TrackExtractData UpdateExtract(TrackExtractUpdateRequest request)
-		{
-			var save = GetExtract(request.ID);
-
-			save.Name = request.Name;
-			save.Description = request.Description;
-
-			return save;
-		}
-
-		/// <summary>
-		/// Filters tracks points with given criteria
-		/// </summary>
-		public TrackExtractData ApplyFilter(TrackEditFilterRequest request)
-		{
-			var extract = GetExtract(request.Key);
-			var points = FilterPoints(extract.Points, request);
-
-			// TODO: need better way to address when filter excludes everything
-			if (points.Count == 0) return null;
-
-			extract.Points = points;
-			return extract;
-		}
-
-		/// <summary>
-		/// Reverts the set of points to the origional data
-		/// </summary>
-		public TrackExtractData RevertFilter(string ID)
-		{
-			var extract = GetExtract(ID);
-			extract.Points = extract.SourcePoints;
-			return extract;
-		}
-
-		/// <summary>
-		/// Removes one or more points from the list of filtered points
-		/// </summary>
-		public TrackExtractData RemovePoints(TrackRemovePointsRequest request)
-		{
-			var extract = GetExtract(request.ID);
-
-			List<GpxPointData> points = new List<GpxPointData>();
-			for (var index = 0; index < extract.Points.Count; index++)
-			{
-				if (!request.Points.Contains(index)) points.Add(extract.Points[index]);
-			}
-
-			extract.Points = points;
-			return extract;
-		}
-
+		
 		/// <summary>
 		/// Exports edit session as new file for download
 		/// </summary>
