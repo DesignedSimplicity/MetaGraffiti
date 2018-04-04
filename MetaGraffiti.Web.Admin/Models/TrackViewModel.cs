@@ -28,10 +28,6 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
-		public string GetSourceDirectory(string source)
-		{
-			return Path.GetDirectoryName(source);
-		}
 
 
 		// ==================================================
@@ -53,6 +49,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class TrackEditModel
 	{
+		public FileInfo File { get; set; }
 		public TrackEditData Track { get; set; }
 		public TopoTrackInfo TopoTrack { get; set; }
 

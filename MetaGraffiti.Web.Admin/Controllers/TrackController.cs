@@ -42,15 +42,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return model;
 		}
 
-		private TrackEditModel InitModel(TrackEditData track)
+		private TrackEditModel InitEditModel(TrackEditData track)
 		{
 			var model = new TrackEditModel();
-			model.Track = track;
+			model.File = new FileInfo(track.Source);
+			model.Track = track;			
 
 			var topoTrail = new TopoTrailInfo();
-			var country = Graffiti.Geo.NearestCountry(track.Points.FirstOrDefault());
-			topoTrail.Country = country;
-			topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
+			var first = track.Points.FirstOrDefault();
+			var country = Graffiti.Geo.NearestCountry(first);
+			if (country != null)
+			{
+				topoTrail.Country = country;
+				if (country.HasRegions) topoTrail.Region = Graffiti.Geo.NearestRegion(first);
+				topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
+			}
 
 			// start and finish places
 			var topoTrack = new TopoTrackInfo(topoTrail, track);
@@ -111,7 +117,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var uri = GetSourceUri(source);
 
 			var track = _trackEditService.PreviewTrack(uri);
-			model.EditTrack = InitModel(track);
+			model.EditTrack = InitEditModel(track);
 
 			return View(model);
 		}
@@ -138,7 +144,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			var track = _trackEditService.GetTrack(id);
 			if (track == null) throw new HttpException(404, $"Track {id} not found!");
-			model.EditTrack = InitModel(track);			
+			model.EditTrack = InitEditModel(track);			
 
 			return View(model);
 		}
@@ -155,7 +161,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			track.Name = name;
 			track.Description = description;
 
-			model.EditTrack = InitModel(track);
+			model.EditTrack = InitEditModel(track);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			return View(model);
@@ -176,7 +182,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				track = _trackEditService.GetTrack(filter.Key);
 				model.ErrorMessages.Add("Filter contains no points and was not applied.");
 
-				model.EditTrack = InitModel(track);
+				model.EditTrack = InitEditModel(track);
 
 				return View("Modify", model);
 			}

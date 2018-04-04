@@ -90,16 +90,8 @@
 					<div class="form-group">
 						<div>
 							<label for="name"><i class="far fa-file-alt"></i> Name</label>
-							<span class="float-right">
-								<span class="mt-2 badge badge-pill badge-secondary">
-									@track.Points.Count points
-								</span>
-								<span class="mt-2 badge badge-pill badge-success">
-									@track.Stats.EstimatedKM.ToString("#,##0.0") km
-								</span>
-								<span class="mt-2 badge badge-pill badge-info">
-									@TextHelper.GetElapsedTime(track.Stats.ElapsedTime)
-								</span>
+							<span class="float-right h5">
+								@Html.Partial("Widgets/TopoStatsPills", track.Stats)
 							</span>
 						</div>
 						<input type="text" class="form-control" name="Name" value="@track.Name" />
@@ -137,7 +129,7 @@
 							<div class="float-right">
 								@if (track.StartPlace != null)
 								{
-									<a class="carto-color font-weight-bold" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)"><i class="fas fa-map-marker"></i> @track.StartPlace.Name</a>
+									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)"><i class="fas fa-map-marker"></i> @track.StartPlace.Name</a>
 								}
 							</div>
 						</div>
@@ -157,7 +149,7 @@
 							<div class="float-right">
 								@if (track.FinishPlace != null)
 								{
-									<a class="carto-color font-weight-bold" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)"><i class="fas fa-map-marker"></i> @track.FinishPlace.Name</a>
+									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)"><i class="fas fa-map-marker"></i> @track.FinishPlace.Name</a>
 								}
 							</div>
 						</div>

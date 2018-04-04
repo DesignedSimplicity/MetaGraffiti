@@ -98,7 +98,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// CartoPlaceInfo
 		public static HtmlString GetJson(CartoPlaceInfo place)
 		{
-			return new HtmlString(place.ToJson());
+			return new HtmlString(place == null ? "{}" : place.ToJson());
 		}
 		public static HtmlString GetJson(IEnumerable<CartoPlaceInfo> places)
 		{

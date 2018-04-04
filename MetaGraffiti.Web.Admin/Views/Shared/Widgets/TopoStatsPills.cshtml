@@ -1,0 +1,15 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model MetaGraffiti.Base.Modules.Topo.TopoStats
+
+<span class="badge badge-pill badge-dark">
+	@Model.PointCount points
+</span>
+<span class="badge badge-pill badge-secondary">
+	@Model.SecondsBetweenPoints.ToString("0") sec
+</span>
+<span class="badge badge-pill badge-success">
+	@Model.EstimatedKM.ToString("#,##0.0") km
+</span>
+<span class="badge badge-pill badge-info">
+	@TextHelper.GetElapsedTime(Model.ElapsedTime)
+</span>

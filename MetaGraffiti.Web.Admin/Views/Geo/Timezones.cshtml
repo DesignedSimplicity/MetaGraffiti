@@ -23,7 +23,10 @@
 		@foreach (var t in Model.Timezones.OrderBy(x => x.TimezoneType).ThenBy(x => x.OffsetUTC).ThenBy(x => x.OffsetDST))
 		{
 			<tr>
-				<td>@t.TimezoneType</td>
+				<td>
+					<a id="@t.GeoTZID"></a>
+					@t.TimezoneType
+				</td>
 				<td>@t.GeoTZID</td>
 				<td>@t.IsDefault</td>
 				<td>@t.OffsetUTC</td>

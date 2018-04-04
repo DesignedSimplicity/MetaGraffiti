@@ -4,9 +4,8 @@
 @Html.Partial("_Nav")
 
 @{
-	var track = Model.EditTrack.TopoTrack;
-	var nearby = Model.EditTrack.NearbyPlaces;
-	var contains = Model.EditTrack.ContainedPlaces;
+	var edit = Model.EditTrack;
+	var track = edit.TopoTrack;
 }
 
 <script>
@@ -14,8 +13,8 @@
 	var _bounds = null;
 	var _start = @JsonHelper.GetJson(track.StartPlace);
 	var _finish = @JsonHelper.GetJson(track.FinishPlace);
-	var _nearby = @JsonHelper.GetJson(nearby);
-	var _contains =@JsonHelper.GetJson(contains);
+	var _nearby = @JsonHelper.GetJson(edit.NearbyPlaces);
+	var _contains =@JsonHelper.GetJson(edit.ContainedPlaces);
 	var _track = @JsonHelper.GetJson(track);
 
 	$(document).ready(function () {
@@ -75,15 +74,7 @@
 		<div class="row">
 			<div class="col-sm-6">
 				<div class="h3">
-					<span class="badge badge-pill badge-secondary">
-						@track.Points.Count points
-					</span>
-					<span class="badge badge-pill badge-success">
-						@track.Stats.EstimatedKM.ToString("#,##0.0") km
-					</span>
-					<span class="badge badge-pill badge-info">
-						@TextHelper.GetElapsedTime(track.Stats.ElapsedTime)
-					</span>
+					@Html.Partial("Widgets/TopoStatsPills", track.Stats)
 				</div>
 			</div>
 			<div class="col-sm-6 text-right">
@@ -165,20 +156,28 @@
 		<hr />
 		<div class="row h5">
 			<div class="col-sm-2">Source:</div>
-			<div class="col-sm-10">
-				<a href="@OrthoViewModel.GetTracksUrl(Model.GetSourceDirectory(track.Source))">@track.Source</a>
+			<div class="col-sm-8">
+				<a class="ortho-color" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)">@edit.File.DirectoryName</a>\@edit.File.Name
+			</div>
+			<div class="col-sm-2 text-right">
+				<a class="btn btn-sm btn-outline-secondary" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)"><i class="fas fa-folder-open"></i> Browse
+				</a>
 			</div>
 		</div>
 		<div class="row h5">
 			<div class="col-sm-2">Country:</div>
-			<div class="col-sm-10">
-				<a href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@track.Trail.Country.Name</a>
+			<div class="col-sm-8">
+				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@track.Trail.Country.Name</a>
+				@if (track.Trail.Region != null)
+				{
+					<span> \ <a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country.Name, track.Trail.Region.RegionName)">@track.Trail.Region.RegionName</a></span>
+				}
 			</div>
 		</div>
 		<div class="row h5">
 			<div class="col-sm-2">Timezone:</div>
-			<div class="col-sm-10">
-				@track.Trail.Timezone.Name
+			<div class="col-sm-8">
+				<a class="geo-color" href="@GeoViewModel.GetTimezoneUrl(track.Trail.Timezone)">@track.Trail.Timezone.Name</a> <small>(@track.Trail.Timezone.DisplayOffsetUTC)</small>
 			</div>
 		</div>
 	</div>

@@ -1,7 +1,7 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using System.Linq;
+using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Topo
 {
@@ -11,6 +11,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 		{
 			var stats = new TopoStats();
 
+			var points = 0;
 			var hours = 0.0;
 			var ascent = 0.0;
 			var descent = 0.0;
@@ -18,6 +19,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 			var distanceWithElevation = 0.0;
 			foreach (var track in trail.Tracks)
 			{
+				points += track.TopoPoints.Count();
 				hours += track.FinishUTC.Subtract(track.StartUTC).TotalHours;
 				ascent += GeoDistance.ElevationBetweenPoints(track.TopoPoints, 1).Meters;
 				descent += GeoDistance.ElevationBetweenPoints(track.TopoPoints, -1).Meters;
@@ -29,6 +31,8 @@ namespace MetaGraffiti.Base.Modules.Topo
 			stats.DistanceWithElevation = GeoDistance.FromMeters(distanceWithElevation);
 			stats.EstimatedMetersAscent = ascent;
 			stats.EstimatedMetersDescent = descent;
+			stats.SecondsBetweenPoints = (hours * 60 * 60) / points;
+			stats.PointCount = points;
 
 			return stats;
 		}
@@ -42,9 +46,14 @@ namespace MetaGraffiti.Base.Modules.Topo
 			stats.DistanceWithElevation = GeoDistance.BetweenPoints(track.TopoPoints, true);
 			stats.EstimatedMetersAscent = GeoDistance.ElevationBetweenPoints(track.TopoPoints, 1).Meters;
 			stats.EstimatedMetersDescent = GeoDistance.ElevationBetweenPoints(track.TopoPoints, -1).Meters;
+			stats.SecondsBetweenPoints = stats.ElapsedTime.TotalSeconds / track.TopoPoints.Count();
+			stats.PointCount = track.TopoPoints.Count();
 
 			return stats;
 		}
+
+		public int PointCount { get; private set; }
+		public double SecondsBetweenPoints { get; private set; }
 
 		public TimeSpan ElapsedTime { get; private set; }
 		public GeoDistance Distance { get; private set; }
@@ -54,6 +63,5 @@ namespace MetaGraffiti.Base.Modules.Topo
 		public double EstimatedMetersDescent { get; private set; }
 		public double EstimatedKM { get { return DistanceWithElevation.KM; } }
 		public double EstimatedKPH { get { return DistanceWithElevation.KM / ElapsedTime.TotalHours; } }
-
 	}
 }
