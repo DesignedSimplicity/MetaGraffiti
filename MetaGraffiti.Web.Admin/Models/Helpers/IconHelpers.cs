@@ -13,19 +13,29 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class IconHelper
 	{
-		public static HtmlString ConfirmationMessageIcon { get { return GetFontAwesomeIcon("fas fa-thumbs-up"); } }
-		public static HtmlString ErrorMessageIcon { get { return GetFontAwesomeIcon("fas fa-exclamation-triangle"); } }
-
-
-		public static HtmlString AddIcon { get { return GetFontAwesomeIcon("fas fa-plus"); } }
-		public static HtmlString RemoveIcon { get { return GetFontAwesomeIcon("fas fa-times"); } }
-
-
-
 		public static HtmlString GetFontAwesomeIcon(string faName)
 		{
 			return new HtmlString($"<i class='{faName}'></i>");
 		}
+
+		// ==================================================
+		// Alert Messages
+		public static HtmlString ConfirmationMessageIcon { get { return GetFontAwesomeIcon("fas fa-thumbs-up"); } }
+		public static HtmlString ErrorMessageIcon { get { return GetFontAwesomeIcon("fas fa-exclamation-triangle"); } }
+
+		// ==================================================
+		// Form Actions
+		public static HtmlString AddIcon { get { return GetFontAwesomeIcon("fas fa-plus"); } }
+		public static HtmlString SaveIcon { get { return GetFontAwesomeIcon("fas fa-save"); } }
+		public static HtmlString EditIcon { get { return GetFontAwesomeIcon("fas fa-pencil-alt"); } }
+		public static HtmlString UndoIcon { get { return GetFontAwesomeIcon("fas fa-undo"); } }
+		public static HtmlString RemoveIcon { get { return GetFontAwesomeIcon("fas fa-times"); } }
+
+		// ==================================================
+		// Entity Identifiers
+		public static HtmlString TrailIcon { get { return GetFontAwesomeIcon("fas fa-map-signs"); } }
+		public static HtmlString PlaceIcon { get { return GetFontAwesomeIcon("fas fa-map-marker"); } }
+
 	}
 
 	// TODO: migrate to helper folder and IconHelper name

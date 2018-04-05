@@ -36,12 +36,12 @@
 			<div class="row">
 				<div class="col-sm-8">
 					<input type="hidden" name="Key" value="@trail.Key" />
-					<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Trail</button>
-					<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetModifyUrl(trail)"><i class="fas fa-pencil-alt"></i> Edit Tracks</a>
+					<button type="submit" class="btn btn-primary">@IconHelper.SaveIcon Update Trail</button>
+					<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetModifyUrl(trail)">@IconHelper.EditIcon Edit Tracks</a>
 				</div>
 				<div class="col-sm-4 text-right">
 					<a class="btn btn-outline-secondary js-confirm-dirty" href="@TrailViewModel.GetTrailUrl(trail)"><i class="fas fa-ban"></i> Cancel</a>
-					<a class="btn btn-outline-warning js-confirm" href="@TrailViewModel.GetUpdateUrl(trail)"><i class="fas fa-undo"></i> Revert</a>
+					<a class="btn btn-outline-warning js-confirm" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.UndoIcon Revert</a>
 				</div>
 			</div>
 		</form>

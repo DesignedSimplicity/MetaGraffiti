@@ -35,18 +35,19 @@
 			<div class="row">
 				<div class="col-sm-6">
 					@if (existing)
-					{
-						<input type="hidden" name="Key" value="@Model.Trail.Key" />
-						<button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Overwrite Existing Trail</button>
-					}
-					else if (Model.HasTracks)
-					{
-						<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Import New Trail</button>
-					}
+	{
+				<input type="hidden" name="Key" value="@Model.Trail.Key" />
+				<button type="submit" class="btn btn-warning">@IconHelper.SaveIcon Overwrite Existing Trail</button>
+				<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetTrailUrl(Model.Trail)">@IconHelper.TrailIcon View Trail</a>
+}
+else if (Model.HasTracks)
+{
+				<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Import New Trail</button>
+}
 				</div>
 				<div class="col-sm-6 text-right">
 					<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage Tracks</a>
-					<a class="btn btn-outline-danger js-confirm" href="@TrailViewModel.GetDiscardUrl()"><i class="fas fa-undo"></i> Discard Trail</a>
+					<a class="btn btn-outline-danger js-confirm" href="@TrailViewModel.GetDiscardUrl()">@IconHelper.UndoIcon Discard Trail</a>
 				</div>
 			</div>
 		</form>

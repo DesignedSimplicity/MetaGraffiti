@@ -23,7 +23,7 @@
 				<div class="h2">@trail.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)"><i class="fas fa-pencil-alt"></i> Edit Trail</a>
+				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit Trail</a>
 				<div class="btn-group">
 					@Html.Partial("Buttons/ResetView")
 				</div>
@@ -46,7 +46,7 @@
 					@foreach (var place in trail.Places)
 				{
 					<div class="mt-2">
-						<a class="carto-color" href="@CartoViewModel.GetEditUrl(place.Key)"><i class="fas fa-map-marker"></i> @place.Name</a>
+						<a class="carto-color" href="@CartoViewModel.GetEditUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a>
 					</div>
 			}
 				</div>

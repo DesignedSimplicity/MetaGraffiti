@@ -114,7 +114,7 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Update</button>
+							<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Update</button>
 							<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage</a>
 						</div>
 						<div class="col text-right">							
@@ -132,7 +132,7 @@
 							<div class="float-right">
 								@if (track.StartPlace != null)
 								{
-									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)"><i class="fas fa-map-marker"></i> @track.StartPlace.Name</a>
+									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
 								}
 							</div>
 						</div>
@@ -152,7 +152,7 @@
 							<div class="float-right">
 								@if (track.FinishPlace != null)
 								{
-									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)"><i class="fas fa-map-marker"></i> @track.FinishPlace.Name</a>
+									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
 								}
 							</div>
 						</div>
@@ -196,7 +196,7 @@
 							<button type="submit" class="btn btn-primary"><i class="fas fa-filter"></i> Apply Filter</button>
 						</div>
 						<div class="col text-right">
-							<a href="@TrackViewModel.GetRevertUrl(edit.Key)" class="btn btn-outline-warning js-confirm"><i class="fas fa-undo"></i> Revert</a>
+							<a href="@TrackViewModel.GetRevertUrl(edit.Key)" class="btn btn-outline-warning js-confirm">@IconHelper.UndoIcon Revert</a>
 						</div>
 					</div>
 				</form>
