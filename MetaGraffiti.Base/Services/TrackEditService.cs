@@ -20,6 +20,15 @@ namespace MetaGraffiti.Base.Services
 
 
 		// ==================================================
+		// Properties
+
+		public bool HasEdits
+		{
+			get { return _tracks.Count > 0; }
+		}
+
+
+		// ==================================================
 		// Methods
 
 		/// <summary>
@@ -97,6 +106,30 @@ namespace MetaGraffiti.Base.Services
 
 			// apply points filters if provided
 			track.Points = FilterPoints(track.SourcePoints, request);
+
+			// add to edit session
+			_tracks.Add(track);
+
+			// return new track edit
+			return track;
+		}
+
+		
+		// TODO: remove duplication with PreviewTrack
+		public TrackEditData EditTrack(IGpxTrack source)
+		{
+			var track = new TrackEditData();
+			track.Key = Graffiti.Crypto.GetNewHash();
+			track.Source = source.Source;
+
+			track.Name = source.Name;
+			track.Description = source.Description;
+
+			// apply points filters if provided
+			//track.SourcePoints = source.Points.ToList<GpxPointData>();
+			track.SourcePoints = new List<GpxPointData>();
+			track.SourcePoints.Add(new GpxPointData() { Latitude = 0, Longitude = 0, Timestamp = DateTime.Now });
+			track.Points = track.SourcePoints.ToList<IGpxPoint>();
 
 			// add to edit session
 			_tracks.Add(track);

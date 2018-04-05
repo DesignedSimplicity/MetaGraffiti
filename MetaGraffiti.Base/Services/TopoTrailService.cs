@@ -137,7 +137,11 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
-		// TODO: implement this
+		/// <summary>
+		/// Updates the trail metadata and synchronizes file and cache
+		/// </summary>
+		/// <param name="request"></param>
+		/// <returns></returns>
 		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(ITopoTrailUpdateRequest request)
 		{
 			// load existing trail

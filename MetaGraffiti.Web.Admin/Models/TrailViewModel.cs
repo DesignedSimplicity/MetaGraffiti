@@ -13,6 +13,11 @@ namespace MetaGraffiti.Web.Admin.Models
 	public class TrailViewModel : AdminViewModel
 	{
 		// ==================================================
+		// Globals
+		public enum MergeConfirmTypes { Intent, Combine, Discard }
+
+
+		// ==================================================
 		// Required
 		public TopoTrailInfo Trail { get; set; }
 		public ITopoTrailUpdateRequest Edit { get; set; }
@@ -31,11 +36,12 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Navigation
 
-		public static string GetTrailUrl(string key) { return $"/trail/display/{key}"; }
+		public static string GetTrailUrl(string key) { return $"/trail/display/{key}/"; }
 		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 
-		public static string GetUpdateUrl(ITopoTrailInfo trail) { return $"/trail/update/{trail.Key}"; }
-		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}"; }
+		public static string GetUpdateUrl(ITopoTrailInfo trail) { return $"/trail/update/{trail.Key}/"; }
+		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}/"; }
+		public static string GetModifyUrl(ITopoTrailInfo trail, MergeConfirmTypes confirm) { return $"/trail/modify/{trail.Key}/?confirm={confirm}"; }
 
 
 		public static string GetUpdateUrl() { return $"/trail/update/"; }

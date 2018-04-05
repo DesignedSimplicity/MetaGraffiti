@@ -14,13 +14,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
-		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private CartoPlaceService _cartoPlaceService;
 		private TopoTrailService _topoTrailService;
 
 		public TrailController()
 		{
-			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_topoTrailService = ServiceConfig.TopoTrailService;
 		}
 
@@ -90,77 +87,39 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 
 		/// <summary>
-		/// Updates the metadata in an existing GPX track data file (name, description, keywords, but NOT track/point data)
+		/// Extracts tracks from an existing trail for editing
 		/// </summary>
-		public ActionResult Modify(string id)
+		public ActionResult Modify(string id, TrailViewModel.MergeConfirmTypes confirm = TrailViewModel.MergeConfirmTypes.Intent)
 		{
-			return null;
+			var trackEditService = new TrackEditService();
 
+			var edits = trackEditService.ListTracks().Count;
 
-			/*
-			
-
-			_trackExtractService.ModifyTrail(trail.Source);
-
-			return Redirect(TrailViewModel.GetUpdateUrl());
-			*/
-		}
-
-		/// <summary>
-		/// Creates an internal file from all of the tracks in the current edit session
-		/// </summary>
-		public ActionResult Import(bool overwrite = false)
-		{
-			var model = InitModel();
-
-			// TODO: move this into TrailDataService
-			var trail = _trackExtractService.GetTrackGroup();
-			if (String.IsNullOrWhiteSpace(trail.Name)) model.ErrorMessages.Add("Name is missing.");
-			if (trail.Timezone == null) model.ErrorMessages.Add("Timezone is missing.");
-			if (trail.Country == null) model.ErrorMessages.Add("Country is missing.");
-			if (trail.Country != null && trail.Country.HasRegions && trail.Region == null) model.ErrorMessages.Add("Region is missing.");
-
-			// show error messages if necessary
-			if (model.HasError) return View(model);
-
-			// check folders are initialized
-			var folder = Path.Combine(AutoConfig.TrailSourceUri, trail.Country.Name);
-			if (!Directory.Exists(AutoConfig.TrailSourceUri)) throw new Exception($"TrackRoot not initalized: {AutoConfig.TrailSourceUri}");
-			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-
-			// check existing filename and if overwrite
-			var filename = $"{String.Format("{0:yyyyMMdd}", trail.Timestamp)} {trail.Name}";
-			var uri = Path.Combine(folder, filename + ".gpx");
-
-			// show overwrite confirmation if necessary
-			if (System.IO.File.Exists(uri) && !overwrite)
+			if (edits > 0)
 			{
-				model.ConfirmMessage = uri;
-				return View(model);
+				if (confirm == TrailViewModel.MergeConfirmTypes.Intent)
+				{
+					// show confirmation message
+					var model = InitModel(id);
+					model.ErrorMessages.Add(edits.ToString());
+					return View(model);
+				}
+				else if (confirm == TrailViewModel.MergeConfirmTypes.Discard)
+				{
+					// discard existing
+					trackEditService.RemoveAll();
+				}
 			}
 
-			// check old file requires cleanup
-			var previous = trail.Uri;
-			if (!String.IsNullOrWhiteSpace(previous) && previous.StartsWith(AutoConfig.TrailSourceUri) && System.IO.File.Exists(previous) && !overwrite)
+			// perform extracts
+			var trail = _topoTrailService.GetTrail(id);
+			foreach(var track in trail.TopoTracks)
 			{
-				model.ConfirmMessage = uri;
-				return View(model);
+				trackEditService.EditTrack(track);
 			}
 
-			// create internal file
-			_trackExtractService.WriteTrackFile(uri);
-
-			// clean up old renamed file
-			if (System.IO.File.Exists(previous)) System.IO.File.Delete(previous);
-
-			// reset track extract cache
-			_trackExtractService.ResetSession();
-
-			// reload trails data before redirect
-			ServiceConfig.ResetTopoTrail();
-
-			// redirect to new trail page
-			return Redirect(TrailViewModel.GetTrailUrl(filename));
+			// go to track manage page
+			return Redirect(TrackViewModel.GetManageUrl());			
 		}
 	}
 }

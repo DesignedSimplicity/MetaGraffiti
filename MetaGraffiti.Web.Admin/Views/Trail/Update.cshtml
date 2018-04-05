@@ -23,14 +23,14 @@
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
 		{
-			<div class="alert alert-success"><i class="fas fa-thumbs-up"></i> @Model.ConfirmMessage</div>
+			<div class="alert alert-success">@IconHelper.ConfirmationMessageIcon @Model.ConfirmMessage</div>
 		}
 		@if (Model.HasError)
 		{
 			<div class="alert alert-danger">
 				@foreach (var error in Model.ErrorMessages)
 				{
-					<div><i class="fas fa-exclamation-triangle"></i> @error</div>
+					<div>@IconHelper.ErrorMessageIcon @error</div>
 				}
 			</div>
 		}
