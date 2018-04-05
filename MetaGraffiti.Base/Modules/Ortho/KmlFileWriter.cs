@@ -41,7 +41,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			}
 		}
 
-		public void WriteTrack(GpxTrackData track)
+		public void WriteTrack(IGpxTrack track)
 		{
 			// create header if needed
 			if (_xml == null) WriteHeader(track.Name, track.Description);
@@ -69,7 +69,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			pm.AppendChild(trackNode);
 
 			// add points
-			foreach (var p in track.PointData.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
+			foreach (var p in track.Points.OrderBy(x => x.Segment).ThenBy(x => x.Timestamp))
 			{
 				var whenNode = _xml.CreateElement("when", null);
 				trackNode.AppendChild(whenNode);

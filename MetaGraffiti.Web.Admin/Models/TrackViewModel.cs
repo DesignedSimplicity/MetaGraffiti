@@ -40,16 +40,14 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetManageUrl() { return "/track/manage/"; }
 		public static string GetExtractUrl() { return "/track/extract/"; }
-		public static string GetExtractUrl(string source) { return "/track/extract/?source={source}"; }
 		public static string GetModifyUrl(string key) { return $"/track/modify/{key}/"; }
+		public static string GetExtractUrl(string source) { return $"/track/extract/?source={source}"; }
 		public static string GetPreviewUrl(string source) { return $"/track/preview/?source={source}"; }
 		public static string GetFilterUrl() { return "/track/filter/"; }
 		public static string GetRemoveUrl() { return "/track/remove/"; }
-		public static string GetRevertUrl(string key) { return $"/track/revert/{key}"; }
-		public static string GetDeleteUrl(string key) { return $"/track/delete/{key}"; }
+		public static string GetRevertUrl(string key) { return $"/track/revert/{key}/"; }
+		public static string GetDeleteUrl(string key) { return $"/track/delete/{key}/"; }
 		public static string GetResetUrl() { return "/track/reset/"; }
-
-
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
 	}
 

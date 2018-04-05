@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using System.Text;
 using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
@@ -193,6 +193,36 @@ namespace MetaGraffiti.Base.Services
 
 			track.Points = points;
 			return track;
+		}
+
+		/// <summary>
+		/// Generates a GPX file from the current set of tracks
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GenerateGPX(string name = "")
+		{
+			var writer = new GpxFileWriter();
+			writer.WriteHeader(name);
+			foreach (var track in ListTracks())
+			{
+				writer.WriteTrack(track);
+			}
+			return Encoding.ASCII.GetBytes(writer.GetXml());
+		}
+
+		/// <summary>
+		/// Generates a KML file from the current set of tracks
+		/// </summary>
+		/// <returns></returns>
+		public byte[] GenerateKML(string name = "")
+		{
+			var writer = new KmlFileWriter();
+			writer.WriteHeader(name);
+			foreach (var track in ListTracks())
+			{
+				writer.WriteTrack(track);
+			}
+			return Encoding.ASCII.GetBytes(writer.GetXml());
 		}
 
 

@@ -23,6 +23,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString ConfirmationMessageIcon { get { return GetFontAwesomeIcon("fas fa-thumbs-up"); } }
 		public static HtmlString ErrorMessageIcon { get { return GetFontAwesomeIcon("fas fa-exclamation-triangle"); } }
 
+
 		// ==================================================
 		// Form Actions
 		public static HtmlString AddIcon { get { return GetFontAwesomeIcon("fas fa-plus"); } }
@@ -31,9 +32,16 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString UndoIcon { get { return GetFontAwesomeIcon("fas fa-undo"); } }
 		public static HtmlString RemoveIcon { get { return GetFontAwesomeIcon("fas fa-times"); } }
 
+
+		// ==================================================
+		// Other Actions
+		public static HtmlString ImportIcon { get { return GetFontAwesomeIcon("fas fa-database"); } }
+		public static HtmlString ExportIcon { get { return GetFontAwesomeIcon("fas fa-download"); } }
+
 		// ==================================================
 		// Entity Identifiers
 		public static HtmlString TrailIcon { get { return GetFontAwesomeIcon("fas fa-map-signs"); } }
+		public static HtmlString TrackIcon { get { return GetFontAwesomeIcon("fas fa-paw"); } }
 		public static HtmlString PlaceIcon { get { return GetFontAwesomeIcon("fas fa-map-marker"); } }
 
 	}
