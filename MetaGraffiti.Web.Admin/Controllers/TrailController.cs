@@ -43,6 +43,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Actions
 
+		/// <summary>
+		/// Displays a trail and tracks in read only mode
+		/// </summary>
 		public ActionResult Display(string id)
 		{
 			var model = InitModel(id);
@@ -51,7 +54,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Displays trail profile and all track segments in current edit session
+		/// Displays trail profile for editing
 		/// </summary>
 		[HttpGet]
 		public ActionResult Update(string id)
@@ -64,7 +67,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
-		/// Updates trail profile for current edit session
+		/// Updates trail profile
 		/// </summary>
 		[HttpPost]
 		public ActionResult Update(TopoTrailFormModel update)
@@ -122,9 +125,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return Redirect(TrackViewModel.GetManageUrl());
 		}
 
+		/// <summary>
+		/// Displays form to update existing or create new trail from track edit data
+		/// </summary>
 		[HttpGet]
 		public ActionResult Import()
 		{
+			// TODO: REFACTOR: move to service and fix TopoTrail.Track useage
 			var model = InitModel();
 
 			model.Trail = _editing;
@@ -143,9 +150,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Processes update or create import track edit data request
+		/// </summary>
 		[HttpPost]
 		public ActionResult Import(TopoTrailFormModel update)
 		{
+			// TODO: REFACTOR: move to service and fix TopoTrail.Track useage
+
 			// validate form inputs
 			var response = _topoTrailService.ValidateCreate(update);
 
@@ -207,7 +219,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Clears the current trail data edit session
 		/// </summary>
-		/// <returns></returns>
 		public ActionResult Discard()
 		{
 			_editing = null;

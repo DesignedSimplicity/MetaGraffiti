@@ -1,11 +1,10 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Topo;
-using MetaGraffiti.Base.Modules.Topo.Info;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Topo.Info;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -26,7 +25,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public string SelectedSort { get; set; }
 		public int? SelectedYear { get; set; }
 		public int? SelectedMonth { get; set; }
-
 
 
 		// ==================================================
@@ -54,11 +52,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 
 
-
 		// ==================================================
 		// Navigation
 		public static string GetTopoUrl() { return "/topo/"; }
-
 		public static string GetRefreshUrl() { return "/topo/refresh/"; }
 		public static string GetReportUrl() { return "/topo/report/"; }
 		public static string GetReportUrl(int year, int? month = null) { return $"/topo/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }

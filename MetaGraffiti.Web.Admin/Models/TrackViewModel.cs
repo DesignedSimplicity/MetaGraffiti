@@ -4,14 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Web;
 
-using Newtonsoft.Json.Linq;
-
 using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
-using MetaGraffiti.Base.Modules.Topo;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -31,6 +26,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Helpers
 		public DateTime GetTrackDate(TrackEditData edit)
 		{
+			//TODO: BUG: fix this to use timezone for local time display
 			//return edit.Timezone.FromUTC(edit.Points.First().Timestamp.Value);
 			return edit.Points.First().Timestamp.Value;
 		}
@@ -51,6 +47,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetExportUrl(string format = "GPX") { return $"/track/export/?format={format}"; }
 	}
 
+
+	// ==================================================
+	// Partials
 	public class TrackEditModel
 	{
 		public FileInfo File { get; set; }

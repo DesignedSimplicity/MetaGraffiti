@@ -18,9 +18,6 @@ using MetaGraffiti.Base.Modules.Topo;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-	/// <summary>
-	/// Extracts points from GPX files in order to regroup and export to a new file
-	/// </summary>
 	public class TrackController : Controller
 	{
 		// ==================================================

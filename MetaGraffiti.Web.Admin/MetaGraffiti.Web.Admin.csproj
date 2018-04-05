@@ -306,6 +306,7 @@
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
     <Compile Include="Models\Partials\TopoStatsPillsModel.cs" />
+    <Compile Include="Models\Partials\TopoTrailFormModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
     <Compile Include="Models\Helpers\IconHelpers.cs" />

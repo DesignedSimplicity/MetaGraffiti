@@ -9,12 +9,6 @@ using System.Web.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-	// topo/						GET Displays a calendar and a list of countries with their respective TopoTrailInfo data files
-	// topo/trail/{id}				GET Dispalys a single TopoTrailInfo GPX data file on a map
-	// topo/report/?				GET Displays a list of TopoTrailInfo GPX data files filtered by report criteria
-	// topo/country/{id}/?region=	GET Displays all of the TopoTrailInfo GPX data files in a list and on a map for a given country with optional region filter
-	// topo/refresh/				GET Resets the current TopoTrailInfo GPX data file cache and reloads from disk
-
 	public class TopoController : Controller
     {
 		// ==================================================

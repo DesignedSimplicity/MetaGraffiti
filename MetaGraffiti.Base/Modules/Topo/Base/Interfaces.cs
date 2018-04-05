@@ -68,10 +68,6 @@ namespace MetaGraffiti.Base.Modules.Topo
 
 		TimeSpan ElapsedTime { get; }
 
-
-		//CartoPlaceInfo StartPlace { get; }
-		//CartoPlaceInfo FinishPlace { get; }
-
 		IEnumerable<ITopoPointInfo> TopoPoints { get; }
 	}
 

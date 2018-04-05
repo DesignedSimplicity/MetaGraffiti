@@ -8,12 +8,15 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TopoStatsPillsModel
 	{
+		// ==================================================
+		// Required
 		public TopoStats Stats { get; set; }
-
 		public bool ShowDetails { get; set; }
-
 		public bool AlignJustify { get; set; }
 
+		
+		// ==================================================
+		// Constructors
 		public TopoStatsPillsModel(TopoStats stats, bool showDetails = false, bool alignJustify = false)
 		{
 			Stats = stats;
