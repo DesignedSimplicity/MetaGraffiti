@@ -161,16 +161,14 @@ namespace MetaGraffiti.Base.Services
 			return places;
 		}
 
-		public ValidationServiceResponse<TopoTrailInfo> ValidateUpdate(ITopoTrailUpdateRequest request)
+
+		/// <summary>
+		/// Validates the request to create a new trail
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> ValidateCreate(ITopoTrailUpdateRequest request)
 		{
 			// load existing trail
-			var trail = GetTrail(request.Key);
-			var response = new ValidationServiceResponse<TopoTrailInfo>(trail);
-			if (trail == null)
-			{
-				response.AddError("Trail", $"Trail {request.Key} does not exist!");
-				return response;
-			}
+			var response = new ValidationServiceResponse<TopoTrailInfo>(null);
 
 			// do basic validation
 			if (String.IsNullOrWhiteSpace(request.Name)) response.AddError("Name", "Name is required!");
@@ -185,6 +183,53 @@ namespace MetaGraffiti.Base.Services
 			if (region == null && !String.IsNullOrWhiteSpace(request.Region)) response.AddError("Region", "Region is invalid!");
 
 			return response;
+		}
+
+		/// <summary>
+		/// Create the trail metadata, file and cache
+		/// </summary>
+		public string CreateTrail(TopoTrailInfo trail)
+		{
+			var response = new ValidationServiceResponse<TopoTrailInfo>(trail);
+
+			// check file system
+			if (!Directory.Exists(_rootUri)) throw new Exception($"Directory not initalized: {_rootUri}");
+			var folder = Path.Combine(_rootUri, trail.Country.Name);
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+			// generate new and rename/remove existing files
+			var filename = GetFilename(trail);
+
+			// check if overwrite file
+			if (File.Exists(filename)) throw new Exception($"{filename} already exists!");
+
+			// write new file
+			var contents = BuildGpx(trail);
+			File.WriteAllText(filename, contents);
+
+			// add new file to cache
+			trail.Key = Path.GetFileNameWithoutExtension(filename).ToUpperInvariant();
+			_trails.Add(trail);
+
+			// return new key
+			return trail.Key;
+		}
+
+		/// <summary>
+		/// Validates the request to update an existing trail
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> ValidateUpdate(ITopoTrailUpdateRequest request)
+		{
+			// validate basic request first
+			var response = ValidateCreate(request);
+			if (response.HasErrors) return response;
+
+			// load existing trail
+			var trail = GetTrail(request.Key);
+			if (trail == null) response.AddError("Trail", $"Trail {request.Key} does not exist!");
+
+			// fresh result with trail attached
+			return new ValidationServiceResponse<TopoTrailInfo>(trail);
 		}
 
 		/// <summary>
@@ -223,7 +268,6 @@ namespace MetaGraffiti.Base.Services
 
 			// generate new and rename/remove existing files
 			var filename = GetFilename(trail);
-			var contents = BuildGpx(trail);
 
 			// check if overwrite file
 			var renamed = String.Compare(existing, filename, true) != 0;
@@ -235,6 +279,7 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			// write new file
+			var contents = BuildGpx(trail);
 			File.WriteAllText(filename, contents);
 
 			// delete old file

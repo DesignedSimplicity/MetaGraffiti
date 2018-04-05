@@ -129,6 +129,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			model.Trail = _editing;
 			model.Edit = new TopoTrailFormModel(_editing);
+
+			// TODO: duplicated in GET + POST
 			var tracks = new List<TopoTrackInfo>();
 			foreach (var t in _trackEditService.ListTracks())
 			{
@@ -144,17 +146,25 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpPost]
 		public ActionResult Import(TopoTrailFormModel update)
 		{
-			if (String.IsNullOrWhiteSpace(update.Key))
-			{
-				// do create
-				return null;
-			}
-			else
-			{
-				// finish rest of update
-				var response = _topoTrailService.ValidateUpdate(update);
+			// validate form inputs
+			var response = _topoTrailService.ValidateCreate(update);
 
-				if (response.OK)
+			if (response.OK)
+			{
+				var key = "";
+
+				// do create
+				if (String.IsNullOrWhiteSpace(update.Key))
+				{
+					var trail = new TopoTrailInfo(update, null);
+					foreach (var t in _trackEditService.ListTracks())
+					{
+						var track = new TopoTrackInfo(trail, t);
+						trail.AddTrack_TODO_DEPRECATE(track);
+					}
+					key = _topoTrailService.CreateTrail(trail);
+				}
+				else // do update
 				{
 					// replace trails on existing track
 					var trail = _topoTrailService.GetTrail(update.Key);
@@ -164,21 +174,33 @@ namespace MetaGraffiti.Web.Admin.Controllers
 						var track = new TopoTrackInfo(_editing, t);
 						trail.AddTrack_TODO_DEPRECATE(track);
 					}
-					_topoTrailService.UpdateTrail(update);
+					key = _topoTrailService.UpdateTrail(update).Data.Key;
+				}
 
-					// show results
-					var model = InitModel(response.Data.Key);
-					model.Edit = new TopoTrailFormModel(model.Trail);
-					model.ConfirmMessage = $"Trail updated at {DateTime.Now}";
-					return View(model);
-				}
-				else
+				// show results
+				var model = InitModel(key);
+				model.Edit = new TopoTrailFormModel(model.Trail);
+				model.ConfirmMessage = $"Trail imported at {DateTime.Now}";
+				return View(model);
+			}
+			else
+			{
+				var model = InitModel();
+				model.Trail = _editing;
+				model.Edit = update;
+
+				// TODO: duplicated in GET + POST
+				var tracks = new List<TopoTrackInfo>();
+				foreach (var t in _trackEditService.ListTracks())
 				{
-					var model = InitModel(update.Key);
-					model.Edit = update;
-					model.AddValidationErrors(response.ValidationErrors);
-					return View(model);
+					var track = new TopoTrackInfo(_editing, t);
+					_topoTrailService.UpdateTrackPlaces(track);
+					tracks.Add(track);
 				}
+				model.Tracks = tracks;
+
+				model.AddValidationErrors(response.ValidationErrors);
+				return View(model);
 			}
 		}
 

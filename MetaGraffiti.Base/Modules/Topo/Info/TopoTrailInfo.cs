@@ -41,7 +41,7 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 			}
 		}
 
-		public TopoTrailInfo(ITopoTrailData data, List<GpxTrackData> tracks)
+		public TopoTrailInfo(ITopoTrailUpdateRequest data, List<GpxTrackData> tracks)
 		{
 			Name = data.Name;
 			Description = data.Description;
@@ -50,17 +50,20 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 			UrlText = data.UrlText;
 			UrlLink = data.UrlLink;
 
-			Timezone = data.Timezone;
+			Timezone = GeoTimezoneInfo.Find(data.Timezone);
 			if (Timezone == null) Timezone = GeoTimezoneInfo.UTC;
 
-			Country = data.Country;
-			Region = data.Region;
+			Country = GeoCountryInfo.Find(data.Country);
+			Region = GeoRegionInfo.Find(data.Region);
 			Location = data.Location;
 
-			foreach (var track in tracks)
+			if (tracks != null)
 			{
-				var t = new TopoTrackInfo(this, track);
-				_tracks.Add(t);
+				foreach (var track in tracks)
+				{
+					var t = new TopoTrackInfo(this, track);
+					_tracks.Add(t);
+				}
 			}
 		}
 
