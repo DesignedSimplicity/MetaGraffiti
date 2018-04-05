@@ -130,7 +130,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 
 			if (c == null)
 			{
-				text = TextTranslate.StripAccents(text);
+				text = TextMutate.StripAccents(text);
 				c = Cache.FirstOrDefault(x => String.Compare(x.NameLocal, text, true) == 0);
 				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLong, text, true) == 0);
 				if (c == null) c = Cache.FirstOrDefault(x => String.Compare(x.NameLocalLong, text, true) == 0);

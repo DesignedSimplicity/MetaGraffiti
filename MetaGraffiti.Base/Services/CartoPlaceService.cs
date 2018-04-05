@@ -5,13 +5,15 @@ using System.Linq;
 
 using OfficeOpenXml;
 
+using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Carto.Data;
 using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Crypto;
+
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
+using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -126,6 +128,10 @@ namespace MetaGraffiti.Base.Services
 			_cache.RemoveOrIgnore(key.ToUpperInvariant());
 		}
 
+		public CartoPlaceInfo NearestPlace(IGeoLatLon point)
+		{
+			return _cache.All.Where(x => x.Bounds.Contains(point)).OrderBy(x => GeoDistance.BetweenPoints(point, x.Center).Meters).FirstOrDefault();
+		}
 		public List<CartoPlaceInfo> ListPlacesByContainingPoint(IGeoLatLon point)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(point)).ToList();
@@ -267,7 +273,7 @@ namespace MetaGraffiti.Base.Services
 
 		public CartoPlaceInfo CreatePlace(CartoPlaceCreateRequest create)
 		{
-			create.PlaceKey = CryptoGraffiti.NewHashID();
+			create.PlaceKey = Graffiti.Crypto.GetNewHash();
 			var place = new CartoPlaceInfo(create);
 
 			_cache.Add(place);

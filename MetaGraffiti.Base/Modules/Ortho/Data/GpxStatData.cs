@@ -3,6 +3,7 @@ using System.Linq;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
+	// TODO: refactor this like TopoStats
 	public class GpxStatData
 	{
 		public int Count;

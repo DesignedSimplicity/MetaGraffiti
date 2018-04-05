@@ -7,7 +7,7 @@ using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
-// TODO: cleanup after purge of GpxController
+// TODO: DEPRECATE cleanup after purge of GpxController
 namespace MetaGraffiti.Base.Modules.Ortho.Info
 {
 	public class GpxFileInfo
@@ -31,7 +31,7 @@ namespace MetaGraffiti.Base.Modules.Ortho.Info
 
 		public List<GpxTrackData> Tracks => _data.Tracks;
 
-		public IEnumerable<GpxPointData> Points { get { return Tracks.SelectMany(x => x.Points); } }
+		public IEnumerable<GpxPointData> Points { get { return Tracks.SelectMany(x => x.PointData); } }
 
 
 		/// <summary>
@@ -49,8 +49,8 @@ namespace MetaGraffiti.Base.Modules.Ortho.Info
 				double s = 0;
 				foreach (var t in Tracks)
 				{
-					var f = t.Points.OrderBy(x => x.Timestamp).First();
-					var l = t.Points.OrderByDescending(x => x.Timestamp).First();
+					var f = t.PointData.OrderBy(x => x.Timestamp).First();
+					var l = t.PointData.OrderByDescending(x => x.Timestamp).First();
 					s += l.Timestamp.Value.Subtract(f.Timestamp.Value).TotalSeconds;
 				}
 				return TimeSpan.FromSeconds(s);

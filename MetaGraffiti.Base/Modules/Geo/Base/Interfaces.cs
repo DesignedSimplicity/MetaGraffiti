@@ -40,6 +40,7 @@ namespace MetaGraffiti.Base.Modules.Geo
 		GeoDirection Direction { get; }
 	}
 
+
 	// --------------------------------------------------
 	public interface IGeoPerimeter
 	{

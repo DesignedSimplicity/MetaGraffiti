@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 
@@ -28,7 +29,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 		[HttpGet]
 		public IHttpActionResult FindRegionByPoint(double lat, double lng)
 		{
-			var region = ServiceConfig.GeoLookupService.NearestRegion(new GeoPosition(lat, lng));
+			var region = Graffiti.Geo.NearestRegion(new GeoPosition(lat, lng));
 			return ReturnRegion(region);
 		}
 

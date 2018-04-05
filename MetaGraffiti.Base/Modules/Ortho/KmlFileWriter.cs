@@ -41,7 +41,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			}
 		}
 
-		public void WriteTrack(GpxTrackData track)
+		public void WriteTrack(IGpxTrack track)
 		{
 			// create header if needed
 			if (_xml == null) WriteHeader(track.Name, track.Description);
@@ -87,7 +87,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				Name = name,
 				Description = description,
-				Points = points.ToList()
+				PointData = points.ToList()
 			});
 		}
 

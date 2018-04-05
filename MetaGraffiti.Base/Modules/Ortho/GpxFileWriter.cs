@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
-
+using System.Xml.Linq;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 
@@ -12,15 +12,26 @@ namespace MetaGraffiti.Base.Modules.Ortho
 {
 	public class GpxFileWriter
 	{
+		// ==================================================
+		// Internal
+
 		private const string _gpxTemplateV1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.0"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/0"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd""></gpx>";
 		private const string _gpxTemplateV1_1 = @"<?xml version=""1.0"" encoding=""UTF-8"" ?><gpx version=""1.1"" creator=""MetaGraffiti"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://www.topografix.com/GPX/1/1"" xsi:schemaLocation=""http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd""></gpx>";
 
 		private XmlDocument _xml = null;
 		private XmlNode _root = null;
 
+
+		// ==================================================
+		// Properties
+
 		public GpxSchemaVersion Version { get; private set; } = GpxSchemaVersion.Version1;
 		public string Creator { get; private set; } = "MetaGraffiti - https://github.com/DesignedSimplicity/MetaGraffiti";
-		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? Gpx.XmlNamespaceV1 : Gpx.XmlNamespaceV1_1; } }
+		public string Namespace { get { return Version == GpxSchemaVersion.Version1 ? OrthoConstants.GpxNamespaceV1 : OrthoConstants.GpxNamespaceV1_1; } }
+
+
+		// ==================================================
+		// Methods
 
 		public void SetVersion(GpxSchemaVersion version)
 		{
@@ -47,12 +58,14 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				_root = _xml.CreateElement("metadata", Namespace);
 				_xml.DocumentElement.AppendChild(_root);
 			}
+			/*
 			if (header.Timestamp.HasValue)
 			{
 				var timestampNode = _xml.CreateElement("time", Namespace);
 				_root.AppendChild(timestampNode);
 				timestampNode.InnerText = header.Timestamp.Value.ToString("s") + "Z";
 			}
+			*/
 			if (!String.IsNullOrWhiteSpace(header.Name))
 			{
 				var nameNode = _xml.CreateElement("name", Namespace);
@@ -71,39 +84,56 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				_root.AppendChild(keywordsNode);
 				keywordsNode.InnerText = header.Keywords;
 			}
-			if (!String.IsNullOrWhiteSpace(header.Url))
+			if (!String.IsNullOrWhiteSpace(header.UrlLink))
 			{
 				var urlNode = _xml.CreateElement("url", Namespace);
 				_root.AppendChild(urlNode);
-				urlNode.InnerText = header.Url;
+				urlNode.InnerText = header.UrlLink;
 			}
-			if (!String.IsNullOrWhiteSpace(header.UrlName))
+			if (!String.IsNullOrWhiteSpace(header.UrlText))
 			{
 				var urlNameNode = _xml.CreateElement("urlname", Namespace);
 				_root.AppendChild(urlNameNode);
-				urlNameNode.InnerText = header.UrlName;
+				urlNameNode.InnerText = header.UrlText;
 			}
 		}
 
-		public void WriteMetadata(string timezone, string country, string region = "")
+		public void WriteMetadata(GpxExtensionData data)
 		{
 			var extensions = _xml.CreateElement("extensions");
 			_root.AppendChild(extensions);
 
 			var timezoneNode = _xml.CreateElement("timezone");
 			extensions.AppendChild(timezoneNode);
-			timezoneNode.InnerText = timezone;
+			timezoneNode.InnerText = data.Timezone;
 
 			var countryNode = _xml.CreateElement("country");
 			extensions.AppendChild(countryNode);
-			countryNode.InnerText = country;
+			countryNode.InnerText = data.Country;
 
-			if (!String.IsNullOrWhiteSpace(region))
+			if (!String.IsNullOrWhiteSpace(data.Region))
 			{
 				var regionNode = _xml.CreateElement("region");
 				extensions.AppendChild(regionNode);
-				regionNode.InnerText = region;
+				regionNode.InnerText = data.Region;
 			}
+
+			if (!String.IsNullOrWhiteSpace(data.Location))
+			{
+				var locationNode = _xml.CreateElement("location");
+				extensions.AppendChild(locationNode);
+				locationNode.InnerText = data.Location;
+			}
+		}
+
+		public void WriteMetadata(string timezone, string country, string region = "")
+		{
+			WriteMetadata(new GpxExtensionData()
+			{
+				Timezone = timezone,
+				Country = country,
+				Region = region
+			});
 		}
 
 		public void WriteHeader(string name, string description = null, DateTime? timestamp = null)
@@ -116,7 +146,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			});
 		}
 
-		public void WriteTrack(GpxTrackData track)
+		public void WriteTrack(IGpxTrack track)
 		{
 			// create header if needed
 			if (_xml == null) WriteHeader(track.Name, track.Description, track.Points.First().Timestamp.Value);
@@ -169,57 +199,20 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				Name = name,
 				Description = description,
-				Points = points.ToList()
+				PointData = points.ToList()
 			});
 		}
 
 		public string GetXml()
 		{
-			return _xml.OuterXml;
+			return XElement.Parse(_xml.OuterXml).ToString();
 		}
 
 
+		// ==================================================
+		// Internal
 
-		/*
-		public void WriteTrack(GpxTrackData track)
-		{
-		}
-
-		public void WriteRoute(GpxRouteData route)
-		{
-		}
-
-		public void WritePoint(GpxPointData point)
-		{
-		}
-
-		public void WritePoint(IGeoLocation point)
-		{
-		}
-
-		public void WritePoint(double latitude, double longitude, double? elevation, DateTime? timestamp)
-		{
-		}
-
-		public void WritePoints(IEnumerable<GpxPointData> points)
-		{
-		}
-
-		public void WritePoints(IEnumerable<IGeoLocation> points)
-		{
-		}
-
-		public void WriteWaypoint(GpxPointData waypoint)
-		{
-		}
-
-		public void WriteWaypoints(IEnumerable<GpxPointData> waypoints)
-		{
-		}
-		*/
-
-
-		private void SetPoint(XmlNode node, GpxPointData p)
+		private void SetPoint(XmlNode node, IGpxPoint p)
 		{
 			var lat = node.OwnerDocument.CreateAttribute("lat");
 			node.Attributes.Append(lat);

@@ -1,0 +1,82 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+@{
+	var trail = Model.Trail;
+}
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		@if (Model.HasError)
+		{
+			<div class="alert alert-danger">@Model.ErrorMessages.First()</div>
+		}
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="h2">@trail.Name</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit Trail</a>
+				<div class="btn-group">
+					@Html.Partial("Buttons/ResetView")
+				</div>
+			</div>
+		</div>
+		<div class="h5">@trail.Description</div>
+		<div class="h6">@trail.Keywords</div>
+		<div class="small mt-1">
+			@trail.Source
+		</div>
+		<div class="h4 mt-2">
+			<div class="h6">
+				<a href="@trail.UrlLink">@trail.UrlText</a>
+			</div>
+		</div>
+
+		<hr />
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="h4">
+					@if (trail.Region != null)
+					{
+						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name, trail.Region.RegionISO)">@trail.Region.RegionName</a><span>,</span>
+					}
+					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name)">@trail.Country.Name</a>
+				</div>
+				<div class="h5">
+					@foreach (var place in trail.Places)
+					{
+						<div class="mt-2">
+							<a class="carto-color" href="@CartoViewModel.GetEditUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a>
+						</div>
+					}
+				</div>
+			</div>
+			<div class="col-sm-4 text-right">
+				<div class="h5">
+					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.StartLocal.Year, trail.StartLocal.Month)">@trail.StartLocal.ToString("MMMM")</a>
+					<a class="topo-color" href="@TopoViewModel.GetReportUrl(trail.StartLocal.Year)">@trail.StartLocal.Year</a>
+				</div>
+				<div class="h5">
+					<span>@trail.StartLocal.ToString("dd") @trail.StartLocal.ToString("dddd")</span><br />
+				</div>
+				<div>
+					@trail.Timezone.Name <small>(@trail.Timezone.DisplayOffsetUTC)</small>
+				</div>
+			</div>
+		</div>
+		<hr />
+		<div class="pt-1">
+			<div class="h3">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true, true))</div>
+		</div>
+		<br />
+		@Html.Partial("_TrackGrid")
+	</div>
+</div>

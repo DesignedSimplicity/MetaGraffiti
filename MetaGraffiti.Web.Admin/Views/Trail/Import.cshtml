@@ -3,36 +3,57 @@
 
 @Html.Partial("_Nav")
 
-<div class="row">
-	<div class="col-sm-6">
+@{
+	var existing = Model.Trail != null;
+}
 
-		@if (Model.HasError)
-		{
-			<div class="alert alert-danger">
-				<div class="font-weight-bold">Please correct these errors:</div>
-				<hr />
-				<ul>
-					@foreach (var error in Model.ErrorMessages)
-					{
-						<li>@error</li>
-					}
-				</ul>
-			</div>
-			<a class="btn btn-danger" href="@TrackViewModel.GetManageUrl()">Resolve</a>
-		}
-		else if (Model.HasConfirmation)
-		{
-			<div class="alert alert-warning">
-				<div class="font-weight-bold">The trail already exists:</div>
-				<hr />
-				@Model.ConfirmMessage
-			</div>
-			<form method="post">
-				<input type="hidden" name="Overwrite" value="true" />
-				<button type="submit" class="btn btn-warning">Overwrite</button>
-				<a class="btn btn-outline-secondary" href="@TrackViewModel.GetManageUrl()">Rename</a>
-			</form>
+<script>
+	$(document).ready(function () {
+		initDirty();
+	});
+</script>
 
-		}
+<div id="map-container">
+	<div id="map">
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-sm-6">
+		@Html.Partial("Alerts/SuccessConfirm")
+		@Html.Partial("Alerts/ErrorMessages")
+
+		<div>
+			<span class="h3">
+				@IconHelper.TrailIcon @(existing ? "Modify Existing" : "Import New") Trail
+			</span>
+			<div class="h5 float-right">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(Model.Tracks, true))</div>
+		</div>
+		<hr />
+		<form method="post">
+			@Html.Partial("_TrailForm", Model.Edit)
+			<div class="row">
+				<div class="col-sm-6">
+					@if (existing)
+					{
+						<input type="hidden" name="Key" value="@Model.Trail.Key" />
+						<button type="submit" class="btn btn-warning">@IconHelper.SaveIcon Overwrite Existing Trail</button>
+						<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetTrailUrl(Model.Trail)">@IconHelper.TrailIcon View Trail</a>
+					}
+					else if (Model.HasTracks)
+					{
+						<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Import New Trail</button>
+					}
+				</div>
+				<div class="col-sm-6 text-right">
+					<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage Tracks</a>
+					<a class="btn btn-outline-danger js-confirm" href="@TrailViewModel.GetDiscardUrl()">@IconHelper.UndoIcon Discard Trail</a>
+				</div>
+			</div>
+		</form>
+		<br />
+		<br />
+		@Html.Partial("_TrackGrid")
+	</div>
+</div>
+<br />

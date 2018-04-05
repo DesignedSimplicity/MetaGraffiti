@@ -15,7 +15,7 @@ $(document).ready(function () {
 		}
 	});
 
-	$(".js-check-dirty").click(function (e) {
+	$(".js-confirm-dirty").click(function (e) {
 		if (_dirty) {
 			e.preventDefault();
 			if (confirm("Discard changes?")) window.location = $(this).attr("href");

@@ -8,12 +8,6 @@ namespace MetaGraffiti.Base.Modules.Ortho
 {
 	// http://www.topografix.com/gpx_manual.asp
 
-	public static class Gpx
-	{
-		public const string XmlNamespaceV1 = "http://www.topografix.com/GPX/1/0";
-		public const string XmlNamespaceV1_1 = "http://www.topografix.com/GPX/1/1";
-	}
-
 	public enum GpxSchemaVersion
 	{
 		Version1 = 1,

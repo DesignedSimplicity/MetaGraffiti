@@ -296,7 +296,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
-    <Compile Include="Models\CartoPlaceFormModel.cs" />
+    <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
     <Compile Include="Models\Helpers\CssHelper.cs" />
@@ -305,9 +305,11 @@
     <Compile Include="Models\OrthoPlacesViewModel.cs" />
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
+    <Compile Include="Models\Partials\TopoStatsPillsModel.cs" />
+    <Compile Include="Models\Partials\TopoTrailFormModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
     <Compile Include="Models\TrailViewModel.cs" />
-    <Compile Include="Models\_Helpers.cs" />
+    <Compile Include="Models\Helpers\IconHelpers.cs" />
     <Compile Include="Models\PlaceViewModel.cs" />
     <Compile Include="Models\TrackViewModel.cs" />
     <Compile Include="Models\OrthoViewModel.cs" />
@@ -336,8 +338,6 @@
     <Content Include="Views\Geo\Countries.cshtml" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-    <Content Include="Views\Track\Track.cshtml" />
-    <Content Include="Views\Track\Edit.cshtml" />
     <Content Include="Views\Track\Preview.cshtml" />
     <Content Include="Views\Carto\Place.cshtml" />
     <Content Include="Views\Carto\Index.cshtml" />
@@ -354,13 +354,21 @@
     <Content Include="Views\Ortho\Places.cshtml" />
     <Content Include="Views\Ortho\Index.cshtml" />
     <Content Include="Views\Ortho\Tracks.cshtml" />
-    <Content Include="Views\Topo\Trail.cshtml" />
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
-    <Content Include="Views\Track\Import.cshtml" />
-    <Content Include="Views\Trail\Import.cshtml" />
     <Content Include="Views\Trail\Update.cshtml" />
+    <Content Include="Views\Track\Modify.cshtml" />
+    <Content Include="Views\Track\Manage.cshtml" />
+    <Content Include="Views\Shared\Widgets\TopoStatsPills.cshtml" />
+    <Content Include="Views\Shared\Buttons\ResetView.cshtml" />
+    <Content Include="Views\Trail\Display.cshtml" />
+    <Content Include="Views\Trail\Modify.cshtml" />
+    <Content Include="Views\Trail\_TrackGrid.cshtml" />
+    <Content Include="Views\Trail\Import.cshtml" />
+    <Content Include="Views\Trail\_TrailForm.cshtml" />
+    <Content Include="Views\Shared\Alerts\ErrorMessages.cshtml" />
+    <Content Include="Views\Shared\Alerts\SuccessConfirm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

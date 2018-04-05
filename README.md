@@ -1,100 +1,6 @@
 # MetaGraffiti
 A 4 dimensional space time framework to process geographic and topographic data for map building and visualizations
 
-## Releases
-
-### Alpha
-* Timezone, Country and Region metadata
-* Geospacial calculations and operations
-* Read GPX and save GPX/KML file formats
-* Auto identifiy location and timezone
-* Display GPX tracks on Google Maps
-* Edit, trim and combine GPX tracks
-
-### Beta
-
-
-\ortho\tracks\?path=2018/04
-
-\track\preview\?uri=
-
-\track\extract\
-\track\display\ID
-
-\track\manage\
-\track\import\
-
-\track\delete\
-\track\modify\
-\track\export\
-
-
-
-\topo\
-
-\topo\country\ID
-
-\topo\trail\ID
-
-\topo\map\?
-\topo\list\?
-\topo\report\?year=&month=&day=&country=&region=&place=		shows map, list and/or grid with optional filters
-
-
-\topo\track\display\ID
-\topo\track\preview\?uri=
-\topo\track\extract\
-\topo\track\update\
-\topo\track\create\
-
-
-
-\carto\
-\carto\country\ID
-
-\carto\place\ID
-
-\carto\map\?type=&country=&region=&place=
-\carto\report\?type=&country=&region=&place=
-
-
-\carto\place\create\
-\carto\place\update\
-\carto\place\delete\
-
-
-
-
-
-\meta\who\
-\meta\what\{type}
-\meta\where\{country}\{region}\{locality}\{place}
-\meta\when\{year}\{month}\{day}
-\meta\why\
-
-
-
-
-### Now
-* Finalize fields and edit form for GeoPlaceInfo
-* Standardize controller level cache for Tracks + Places
-
-### Next
-* Base RegionID off of CountryID * (1000 ^ Division)
-* Add Local Name data for non-English regions
-* Move Region and Country metadata to reference file/array
-* Add Japan level 1 and level 2 region data
-
-### Later
-* Unit tests for Gpx and Kml writer classes
-* Unit tests for additional Geo classes
-* Unit tests for service methods
-* Finish windows utility to merge/convert gpx files
-
-
-
-
-
 ## Inspiration
 **Geography** is a field of science devoted to the study of the lands, the features, the inhabitants, and the phenomena of Earth.
 * Seeks an understanding of the Earth and its human and natural complexities—not merely where objects are, but how they have changed and come to be.
@@ -116,6 +22,67 @@ A 4 dimensional space time framework to process geographic and topographic data 
 * Eliminate characteristics of the mapped object that are not relevant to the map's purpose. This is the concern of generalization.
 * Reduce the complexity of the characteristics that will be mapped. This is also the concern of generalization.
 * Orchestrate the elements of the map to best convey its message to its audience. This is the concern of map design.
+
+**Orthography** is a set of conventions for writing a language
+* Includes norms of spelling, hyphenation, capitalization, word breaks, emphasis, and punctuation.
+
+## Releases
+
+### Alpha
+* Timezone, Country and Region metadata
+* Geospacial calculations and operations
+* Read GPX and save GPX/KML file formats
+* Auto identifiy location and timezone
+* Display GPX tracks on Google Maps
+* Edit, trim and combine GPX tracks
+
+### Beta
+
+
+### RC1
+
+
+### RC2
+
+
+### RC3
+
+
+
+## Backlogs
+
+### Topo
+* Fix existing trail files with incorrect local date filename
+* Create options to split import track into multiple edit segments
+* Update import new trail to auto-discover country, region, timezone
+* Add country, region, timezone autocomplete/lookup to trail form
+* Change TopoTrailService to use internal ID in GPX as trail key
+* Build keyword autocomplete/selector and select icons for display
+* Fix fragile implementation and duplicate code for trail import
+* Cleanup interfaces and implementation of TopoTrail/Track/Point
+* Consolidate ITopoTrailData, ITopoTrailUpdateRequest, TrackEditModel
+* Change track edit manage page to show details using TopoTrackInfo
+
+### Ortho
+* Remove usage of GpxFileInfo from browse tracks
+* Update GpxExtensionsData to read/write internal ID/key
+* Fix implementation of UrlText and UrlLink for GPX v1.1
+
+### Geo
+* Base RegionID off of CountryID * (1000 ^ Division)
+* Add Local Name data for non-English regions
+* Move Region and Country metadata to reference file/array
+* Add Japan level 1 and level 2 region data
+
+### Tests
+* Unit tests for Gpx and Kml writer classes
+* Unit tests for additional Geo classes
+* Unit tests for service methods
+
+
+
+
+
 
 
 ## Architecture
@@ -236,4 +203,3 @@ Ideography
 
 Chorography: The study of provinces, regions, cities, etc., as opposed to larger-scale geography.
 Diplography: double writing; the writing of something twice or in two forms.
-

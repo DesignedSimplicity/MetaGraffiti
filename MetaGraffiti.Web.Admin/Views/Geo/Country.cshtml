@@ -71,15 +71,15 @@
 	<div class="col-sm-6">
 		<div>
 			<span class="h2">
-				<a class="text-@Model.AreaCss" href="/geo/countries/">Countries</a>
-				<span class="h3 text-@Model.AreaCss">
-					\ @country.Name
-				</span>
+				<a class="geo-color" href="/geo/countries/">Countries</a>
+				<span class="h3"> \ @country.Name</span>
 			</span>
 			<div class="float-right">
-				<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(country.ISO2)">Topo</a>
-				<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">Carto</a>
-				<a href="#" class="btn btn-secondary js-reset-view">Reset View</a>
+				<div class="btn-group">
+					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(country.ISO2)">@IconHelper.TopoIcon</a>
+					<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">@IconHelper.CartoIcon</a>
+					@Html.Partial("Buttons/ResetView")
+				</div>
 			</div>
 		</div>
 		<br />

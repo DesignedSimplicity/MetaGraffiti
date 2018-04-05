@@ -1,6 +1,6 @@
-﻿using MetaGraffiti.Base.Modules.Geo;
+﻿using MetaGraffiti.Base.Modules;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
-using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -19,19 +19,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		private TopoTrailService _trailDataService;
 		private TripSheetService _tripSheetService;
 		private CartoPlaceService _cartoPlaceService;
-
-		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private GeoLookupService _geoLookupService;
-		private TopoTrailService _trailDataService;
-
 
 		public OrthoController()
 		{
 			_tripSheetService = ServiceConfig.TripSheetService;
 			_trailDataService = ServiceConfig.TopoTrailService;
-			_geoLookupService = ServiceConfig.GeoLookupService;
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
@@ -131,7 +126,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
-			var existing = _trailDataService.FindTrackSource(file.Name);
+			var existing = _trailDataService.FindTrackSource_TODO(file.Name);
 			model.Trail = existing?.Trail;
 
 			// build trail preview
@@ -139,7 +134,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Preview = trail;
 
 			// find intersecting places
-			var points = model.Data.Tracks?.SelectMany(x => x.Points);
+			var points = model.Data.Tracks?.SelectMany(x => x.PointData);
 			if (points != null)
 			{
 				var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
@@ -151,14 +146,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var first = points?.FirstOrDefault();
 			if (first != null)
 			{
-				trail.Country = _geoLookupService.NearestCountry(first);
-				trail.Region = _geoLookupService.NearestRegion(first);
-				trail.Timezone = _geoLookupService.GuessTimezone(trail.Country);
-				trail.LocalDate = trail.Timezone.FromUTC(first.Timestamp.Value);
+				trail.Country = Graffiti.Geo.NearestCountry(first);
+				trail.Region = Graffiti.Geo.NearestRegion(first);
+				trail.Timezone = Graffiti.Geo.GuessTimezone(trail.Country);
+				//trail.StartLocal = trail.Timezone.FromUTC(first.Timestamp.Value);
 
 				// discover all regions
-				model.Regions = _geoLookupService.NearbyRegions(first);
-				foreach (var region in _geoLookupService.NearbyRegions(points.Last()))
+				model.Regions = Graffiti.Geo.NearbyRegions(first);
+				foreach (var region in Graffiti.Geo.NearbyRegions(points.Last()))
 				{
 					if (!model.Regions.Any(x => x.RegionID == region.RegionID)) model.Regions.Add(region);
 				}
@@ -169,13 +164,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var track = new TopoTrackInfo(trail, t);
 
-				var start = t.Points.First();
+				var start = t.PointData.First();
 				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(start).OrderBy(x => x.Bounds.Area).FirstOrDefault();
 
-				var finish = t.Points.Last();
+				var finish = t.PointData.Last();
 				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();				
 
-				trail.Tracks.Add(track);
+				trail.AddTrack_TODO_DEPRECATE(track);
 			}
 
 			return model;

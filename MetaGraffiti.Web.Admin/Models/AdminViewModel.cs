@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Services.Internal;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -16,6 +19,13 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public List<string> ErrorMessages { get; set; } = new List<string>();
 		public bool HasError { get { return ErrorMessages.Count > 0; } }
+		public void AddValidationErrors(IEnumerable<ValidationServiceResponseError> errors)
+		{
+			foreach (var error in errors)
+			{
+				ErrorMessages.Add(error.Message);
+			}
+		}
 
 
 		public AdminAreas[] Areas
@@ -52,7 +62,7 @@ namespace MetaGraffiti.Web.Admin.Models
 			get
 			{
 				return String.IsNullOrWhiteSpace(_pageTitle)
-					? UrlPath.Trim('/').Replace(@"/", " : ")
+					? TextMutate.ToTitleCase(UrlPath.ToLowerInvariant().Trim('/').Replace(@"/", " : "))
 					: _pageTitle;
 			}
 			set { _pageTitle = value; }
@@ -72,7 +82,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				if (index <= 1) return "";
 				
 				var name = path.Substring(index + 1, 1).ToUpperInvariant() + path.Substring(index + 2);
-				return HttpUtility.UrlDecode(name.Replace("/", @" \ "));
+				return TextMutate.ToTitleCase(HttpUtility.UrlDecode(name.ToLowerInvariant().Replace("/", @" \ ")));
 			}
 			set { _pageName = value; }
 		}

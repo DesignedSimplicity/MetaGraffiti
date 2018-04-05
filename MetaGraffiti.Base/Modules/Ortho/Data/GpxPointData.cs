@@ -5,18 +5,22 @@ using MetaGraffiti.Base.Modules.Geo;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
-	public class GpxPointData : GpxMetaData, IGeoPoint
+	public class GpxPointData : GpxMetaData, IGpxPoint, IGeoPoint
 	{
-		public GpxPointTypes GpxPointType;
-		public int Segment;
+		public GpxPointTypes GpxPointType { get; set; }
+		public int Segment { get; set; }
 
 		public double Latitude { get; set; }
 		public double Longitude { get; set; }
 		public double? Elevation { get; set; }
 		public DateTime? Timestamp { get; set; }
 
-		public decimal? Course;
-		public decimal? Speed;
+		public int? Sats { get; set; }
+		public decimal? HDOP { get; set; }
+		public decimal? VDOP { get; set; }
+		public decimal? PDOP { get; set; }
+		public decimal? Speed { get; set; }
+		public decimal? Course { get; set; }
 
 		public decimal? MagVariation;
 		public decimal? GeoIDHeight;
@@ -25,14 +29,12 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 		public string Category;
 
 		public string Fix;
-		public int? Sats;
-		public decimal? HDOP;
-		public decimal? VDOP;
-		public decimal? PDOP;
 
 		public TimeSpan? Decay;
 		public string DpgsID;
 
+
+		// TODO: deprecate
 		public decimal GetDOP()
 		{
 			var h = HDOP ?? 0;
@@ -44,6 +46,7 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 			return b;
 		}
 
+		// TODO: deprecate
 		public decimal MaxDOP
 		{
 			get

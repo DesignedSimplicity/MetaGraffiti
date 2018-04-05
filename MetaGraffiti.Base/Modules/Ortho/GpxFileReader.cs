@@ -8,14 +8,22 @@ using MetaGraffiti.Base.Modules.Ortho.Data;
 
 namespace MetaGraffiti.Base.Modules.Ortho
 {
+	/// <summary>
+	/// Parses a GPX file into a set of data classes
+	/// </summary>
 	public class GpxFileReader
 	{
+		// ==================================================
+		// Internal
+
 		private GpxSchemaVersion _version;
 		private XmlNamespaceManager _ns;
 		private XmlDocument _xml;
 
+
 		// ==================================================
 		// Constructors
+
 		public GpxFileReader(string uri)
 		{
 			_xml = new XmlDocument();
@@ -30,11 +38,16 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			InitXml();
 		}
 
+
 		// ==================================================
 		// Properties
-		public GpxSchemaVersion SchemaVersion { get { return _version; } }
+
 		public decimal Version { get; private set; }
 		public string Creator { get; private set; }
+
+
+		// ==================================================
+		// Methods
 
 		/// <summary>
 		/// Reads all file data into object
@@ -45,21 +58,8 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			data.Tracks = ReadTracks();
 			data.Routes = ReadRoutes();
 			data.Waypoints = ReadWaypoints();
+			data.Extensions = ReadExtension();
 			return data;
-		}
-
-		// ==================================================
-		// Methods
-
-		private XmlNode MetadataNode
-		{
-			get
-			{
-				if (_version == GpxSchemaVersion.Version1_1)
-					return _xml.DocumentElement.FirstChild;
-				else
-					return (XmlNode)_xml.DocumentElement;
-			}
 		}
 
 		/// <summary>
@@ -74,14 +74,14 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			Version = TypeConvert.ToDecimal(_xml.DocumentElement.Attributes["version"].InnerText);
 
 			// common top elements
-			data.Name = ReadString(MetadataNode, "name");
-			data.Description = ReadString(MetadataNode, "desc");
-			data.Timestamp = ReadDateTime(MetadataNode, "time");
+			data.Name = ReadString(GetMetaDataNode(), "name");
+			data.Description = ReadString(GetMetaDataNode(), "desc");
+			data.Timestamp = ReadDateTime(GetMetaDataNode(), "time");
 
 			// optional top elements
-			data.Url = ReadString(MetadataNode, "url");
-			data.UrlName = ReadString(MetadataNode, "urlname");
-			data.Keywords = ReadString(MetadataNode, "keywords");
+			data.UrlLink = ReadString(GetMetaDataNode(), "url");
+			data.UrlText = ReadString(GetMetaDataNode(), "urlname");
+			data.Keywords = ReadString(GetMetaDataNode(), "keywords");
 
 			// TODO: support other optional elements
 
@@ -94,7 +94,6 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		public GpxExtensionData ReadExtension()
 		{
 			var data = new GpxExtensionData();
-			data.ID = ReadExtension("id");
 			data.Timezone = ReadExtension("timezone");
 			data.Country = ReadExtension("country");
 			data.Region = ReadExtension("region");
@@ -115,7 +114,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				tracks.Add(t);
 
 				int segment = 0;
-				t.Points = new List<GpxPointData>();
+				t.PointData = new List<GpxPointData>();
 				var xtss = xt.SelectNodes("gpx:trkseg", _ns);
 				if ((xtss?.Count ?? 0) > 0)
 				{
@@ -126,7 +125,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 						{
 							var p = ReadPoint(xtp, GpxPointTypes.TrackPoint);
 							p.Segment = segment;
-							t.Points.Add(p);
+							t.PointData.Add(p);
 						}
 					}
 				}
@@ -136,7 +135,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 					foreach (XmlNode xtp in xt.SelectNodes("gpx:trkpt", _ns))
 					{
 						var p = ReadPoint(xtp, GpxPointTypes.TrackPoint);
-						t.Points.Add(p);
+						t.PointData.Add(p);
 					}
 				}
 			}
@@ -155,11 +154,11 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				PopulateMetaData(xr, r);
 				routes.Add(r);
 
-				r.Points = new List<GpxPointData>();
+				r.PointData = new List<GpxPointData>();
 				foreach (XmlNode xtp in xr.SelectNodes("gpx:rtept ", _ns))
 				{
 					var p = ReadPoint(xtp, GpxPointTypes.RoutePoint);
-					r.Points.Add(p);
+					r.PointData.Add(p);
 				}
 			}
 			return routes;
@@ -183,6 +182,14 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 		// ==================================================
 		// Internal
+
+		private XmlNode GetMetaDataNode()
+		{
+			if (_version == GpxSchemaVersion.Version1_1)
+				return _xml.DocumentElement.FirstChild;
+			else
+				return (XmlNode)_xml.DocumentElement;
+		}
 
 		private void PopulateMetaData(XmlNode node, GpxMetaData meta)
 		{
@@ -220,7 +227,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 		private string ReadExtension(string name)
 		{
-			var ex = MetadataNode.SelectSingleNode("extensions");
+			var ex = GetMetaDataNode().SelectSingleNode("extensions");
 			if (ex == null) return null;
 
 			var n = ex.SelectSingleNode(name);
@@ -282,12 +289,12 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			if (_xml.DocumentElement.FirstChild.Name == "metadata")
 			{
 				_version = GpxSchemaVersion.Version1_1;
-				_ns.AddNamespace("gpx", Gpx.XmlNamespaceV1_1);
+				_ns.AddNamespace("gpx", OrthoConstants.GpxNamespaceV1_1);
 			}
 			else
 			{
 				_version = GpxSchemaVersion.Version1;
-				_ns.AddNamespace("gpx", Gpx.XmlNamespaceV1);
+				_ns.AddNamespace("gpx", OrthoConstants.GpxNamespaceV1);
 			}
 		}
 	}

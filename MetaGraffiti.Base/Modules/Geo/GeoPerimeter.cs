@@ -7,6 +7,13 @@ namespace MetaGraffiti.Base.Modules.Geo
     public class GeoPerimeter : IGeoPerimeter
 	{
 		// ==================================================
+		// Static Factory
+		public static GeoPerimeter FromPoints(IEnumerable<IGeoLatLon> points)
+		{
+			return new GeoPerimeter(points);
+		}
+
+		// ==================================================
 		// Constructors
 		public GeoPerimeter(IEnumerable<IGeoLatLon> points)
 		{

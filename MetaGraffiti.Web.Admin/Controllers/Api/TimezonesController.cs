@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
@@ -19,8 +20,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 			var t = GeoTimezoneInfo.Find(id);
 			if (t == null)
 			{
-				var service = new GeoLookupService(null);
-				t = service.FindTimezone(id);
+				t = Graffiti.Geo.FindTimezone(id);
 			}
 			if (t == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 

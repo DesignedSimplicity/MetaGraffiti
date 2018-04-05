@@ -62,7 +62,7 @@
   <ItemGroup>
     <Compile Include="Geo\GeoCountryInfoTests.cs" />
     <Compile Include="Geo\GeoDistanceTests.cs" />
-    <Compile Include="Geo\GeoLookupServiceTests.cs" />
+    <Compile Include="Geo\GoogleLookupServiceTests.cs" />
     <Compile Include="Geo\GeoRegionInfoTests.cs" />
     <Compile Include="Geo\GeoTimezoneInfoTests.cs" />
     <Compile Include="Geo\GeoLocationTests.cs" />
@@ -100,6 +100,9 @@
       <Project>{6a28254a-80a7-4d9e-b1bb-f5fb0abbbebf}</Project>
       <Name>MetaGraffiti.Web.Admin</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Topo\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,10 +1,11 @@
 ﻿using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Carto.Data;
-using MetaGraffiti.Base.Modules.Crypto;
+
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
+using MetaGraffiti.Base.Services.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -88,7 +89,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 			
 			_data.PlaceType = result.TypedNameSource;
 
-			_data.Name = TextTranslate.StripAccents(result.ShortName);
+			_data.Name = TextMutate.StripAccents(result.ShortName);
 			_data.LocalName = (_data.Name == result.LongName ? "" : result.LongName);
 			_data.DisplayAs = (_data.Name == result.TypedName ? "" : result.TypedName);
 			_data.Description = result.ColloquialArea;

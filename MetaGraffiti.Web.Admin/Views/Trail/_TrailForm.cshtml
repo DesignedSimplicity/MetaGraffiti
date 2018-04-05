@@ -1,0 +1,52 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TopoTrailFormModel
+
+<div class="form-group">
+	<label class="font-weight-bold" for="Name"><i class="far fa-file-alt"></i> Trail Name</label>
+	<input type="text" class="form-control form-control-lg" name="Name" value="@Model.Name" />
+</div>
+<div class="form-group">
+	<label for="Description"><i class="fas fa-quote-left"></i> Description</label>
+	<textarea class="form-control" rows="5" name="Description">@Model.Description</textarea>
+</div>
+<div class="row form-group">
+	<div class="col-sm-8">
+		<label for="Country"><i class="fas fa-flag"></i> Country \ Region</label>
+		<div class="input-group">
+			<input type="text" class="form-control @(TopoTrailFormModel.IsCountryValid(Model.Country) ? "" : "is-invalid")" name="Country" id="CountryField" value="@Model.Country" />
+			<input type="text" class="form-control @(TopoTrailFormModel.IsRegionValid(Model.Country, Model.Region) ? "" : "is-invalid")" name="Region" id="RegionField" placeholder="Region" value="@Model.Region" />
+
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<label for="Location">@IconHelper.PlaceIcon Location</label>
+		<div class="input-group">
+			<input type="text" class="form-control" name="Location" id="LocationField" value="@Model.Location" />
+			<div class="input-group-append">
+				<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row form-group">
+	<div class="col-sm-8">
+		<label for="UrlLink"><i class="fas fa-link"></i> Link \ Text</label>
+		<div class="input-group">
+			<input type="text" class="form-control" name="UrlLink" placeholder="https://" value="@Model.UrlLink" disabled />
+			<input type="text" class="form-control" name="UrlText" placeholder="Link Text" value="@Model.UrlText" disabled />
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<label for="Timezone"><i class="fas fa-clock"></i> Timezone</label>
+		<div class="input-group">
+			<input type="text" class="form-control @(TopoTrailFormModel.IsTimezoneValid(Model.Timezone) ? "" : "is-invalid")" name="Timezone" id="TimezoneField" value="@Model.Timezone" />
+			<div class="input-group-append">
+				<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="form-group">
+	<label for="Keywords"><i class="fas fa-tags"></i> Keywords</label>
+	<input type="text" class="form-control" name="Keywords" value="@Model.Keywords" />
+</div>

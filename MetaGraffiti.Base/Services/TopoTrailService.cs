@@ -1,14 +1,14 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
+using MetaGraffiti.Base.Services.Internal;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -16,10 +16,10 @@ namespace MetaGraffiti.Base.Services
     {
 		// ==================================================
 		// Internals
+		private static string _rootUri = "";
 		private static object _init = false;
 		private static BasicCacheService<TopoTrailInfo> _trails;
 		private CartoPlaceService _cartoPlaceService;
-
 
 		public TopoTrailService(CartoPlaceService cartoPlaceService)
 		{
@@ -35,12 +35,13 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public void Init(string uri)
 		{
-			lock (_init)
+			lock (_init) // TODO: use internal init for basic cache
 			{
 				if (Convert.ToBoolean(_init)) return;
 
 				_trails = new BasicCacheService<TopoTrailInfo>();
 				var root = new DirectoryInfo(uri);
+				_rootUri = root.FullName;
 				foreach (var dir in root.EnumerateDirectories())
 				{
 					var country = GeoCountryInfo.ByName(dir.Name);
@@ -49,7 +50,7 @@ namespace MetaGraffiti.Base.Services
 						foreach (var file in dir.EnumerateFiles("*.gpx"))
 						{
 							var trail = LoadTrail(file);
-							_trails.Add(trail.ID.ToUpperInvariant(), trail);
+							_trails.Add(trail);
 						}
 					}
 				}
@@ -82,45 +83,53 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Retrieves a specific GPX file from the cache
 		/// </summary>
-		public TopoTrailInfo GetTrail(string id)
+		public TopoTrailInfo GetTrail(string key)
 		{
-			return _trails[id.ToUpperInvariant()];
+			return _trails[key.ToUpperInvariant()];
 		}
 
-		public TopoTrackInfo FindTrackSource(string uri)
+		/// <summary>
+		/// Builds the full path for a specific GPX file
+		/// </summary>
+		public string GetTrailUri(string key)
 		{
-			return _trails.All.SelectMany(x => x.Tracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
+			return GetFilename(GetTrail(key));
 		}
 
-		public List<TopoTrailInfo> ListByDate(int year, int? month = null, int? day = null)
+		/// <summary>
+		/// Locates the track with the given file as the source
+		/// </summary>
+		public TopoTrackInfo FindTrackSource_TODO(string uri)
 		{
-			return Report(new TopoTrailReportRequest() { Year = year, Month = month, Day = day });
+			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
 		}
 
+		/// <summary>
+		/// Lists all trails in a country
+		/// </summary>
 		public List<TopoTrailInfo> ListByCountry(GeoCountryInfo country)
 		{
 			return Report(new TopoTrailReportRequest() { Country = country.ISO3 });
 		}
 
+		/// <summary>
+		/// Lists all trals in a region
+		/// </summary>
 		public List<TopoTrailInfo> ListByRegion(GeoRegionInfo region)
 		{
 			return Report(new TopoTrailReportRequest() { Region = region.RegionISO });
 		}
 
-		/*
-		public List<TopoTrailInfo> ListByPerimeter(IGeoPerimeter perimeter)
-		{
-			return null;
-		}
-		*/
-
+		/// <summary>
+		/// Lists all trails meeting the report request
+		/// </summary>
 		public List<TopoTrailInfo> Report(TopoTrailReportRequest request)
 		{
 			var query = _trails.All.AsQueryable();
 
-			if (request.Year.HasValue) query = query.Where(x => x.LocalDate.Year == request.Year);
-			if (request.Month.HasValue) query = query.Where(x => x.LocalDate.Month == request.Month);
-			if (request.Day.HasValue) query = query.Where(x => x.LocalDate.Day == request.Day);
+			if (request.Year.HasValue) query = query.Where(x => x.StartLocal.Year == request.Year);
+			if (request.Month.HasValue) query = query.Where(x => x.StartLocal.Month == request.Month);
+			if (request.Day.HasValue) query = query.Where(x => x.StartLocal.Day == request.Day);
 
 			if (!String.IsNullOrWhiteSpace(request.Country))
 			{
@@ -137,6 +146,158 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
+		/// <summary>
+		/// Updates the start and finish places on the given track
+		/// </summary>
+		public List<CartoPlaceInfo> UpdateTrackPlaces(TopoTrackInfo track)
+		{
+			var places = new List<CartoPlaceInfo>();
+			track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+
+			if (track.StartPlace != null) places.Add(track.StartPlace);
+			if (track.FinishPlace != null && (!places.Any(x => x.Key == track.FinishPlace.Key))) places.Add(track.FinishPlace);
+
+			return places;
+		}
+
+
+		/// <summary>
+		/// Validates the request to create a new trail
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> ValidateCreate(ITopoTrailUpdateRequest request)
+		{
+			// load existing trail
+			var response = new ValidationServiceResponse<TopoTrailInfo>(null);
+
+			// do basic validation
+			if (String.IsNullOrWhiteSpace(request.Name)) response.AddError("Name", "Name is required!");
+
+			var timezone = GeoTimezoneInfo.Find(request.Timezone);
+			if (timezone == null) response.AddError("Timezone", "Timezone is missing or invalid!");
+
+			var country = GeoCountryInfo.Find(request.Country);
+			if (country == null) response.AddError("Country", "Country is missing or invalid!");
+
+			var region = GeoRegionInfo.Find(request.Region);
+			if (region == null && !String.IsNullOrWhiteSpace(request.Region)) response.AddError("Region", "Region is invalid!");
+
+			return response;
+		}
+
+		/// <summary>
+		/// Create the trail metadata, file and cache
+		/// </summary>
+		public string CreateTrail(TopoTrailInfo trail)
+		{
+			var response = new ValidationServiceResponse<TopoTrailInfo>(trail);
+
+			// check file system
+			if (!Directory.Exists(_rootUri)) throw new Exception($"Directory not initalized: {_rootUri}");
+			var folder = Path.Combine(_rootUri, trail.Country.Name);
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+			// generate new and rename/remove existing files
+			var filename = GetFilename(trail);
+
+			// check if overwrite file
+			if (File.Exists(filename)) throw new Exception($"{filename} already exists!");
+
+			// write new file
+			var contents = BuildGpx(trail);
+			File.WriteAllText(filename, contents);
+
+			// add new file to cache
+			trail.Key = Path.GetFileNameWithoutExtension(filename).ToUpperInvariant();
+			_trails.Add(trail);
+
+			// return new key
+			return trail.Key;
+		}
+
+		/// <summary>
+		/// Validates the request to update an existing trail
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> ValidateUpdate(ITopoTrailUpdateRequest request)
+		{
+			// validate basic request first
+			var response = ValidateCreate(request);
+			if (response.HasErrors) return response;
+
+			// load existing trail
+			var trail = GetTrail(request.Key);
+			if (trail == null) response.AddError("Trail", $"Trail {request.Key} does not exist!");
+
+			// fresh result with trail attached
+			return new ValidationServiceResponse<TopoTrailInfo>(trail);
+		}
+
+		/// <summary>
+		/// Updates the trail metadata and synchronizes file and cache
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(ITopoTrailUpdateRequest request)
+		{
+			// validate update request
+			var response = ValidateUpdate(request);
+			if (response.HasErrors) return response;
+
+			// process update request
+			var trail = response.Data;
+
+			// save current filename for later
+			var existing = GetFilename(trail);
+
+			// check file system
+			if (!Directory.Exists(_rootUri)) throw new Exception($"Directory not initalized: {_rootUri}");
+			var folder = Path.Combine(_rootUri, trail.Country.Name);
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+			// update trail properties
+			trail.Timezone = GeoTimezoneInfo.Find(request.Timezone);
+			trail.Country = GeoCountryInfo.Find(request.Country);
+			trail.Region = GeoRegionInfo.Find(request.Region);
+
+			trail.Name = TextMutate.TrimSafe(request.Name);
+			trail.Description = TextMutate.TrimSafe(request.Description);
+			trail.Location = TextMutate.TrimSafe(request.Location);
+			trail.Keywords = TextMutate.FixKeywords(request.Keywords);
+
+			// TODO: BUG: fix url writing for v1.1 files!
+			//trail.UrlLink = TextMutate.FixUrl(request.UrlLink);
+			//trail.UrlText = TextMutate.TrimSafe(request.UrlText);
+
+			// generate new and rename/remove existing files
+			var filename = GetFilename(trail);
+
+			// check if overwrite file
+			var renamed = String.Compare(existing, filename, true) != 0;
+			if (!renamed)
+			{
+				// temp rename current file
+				File.Move(existing, existing + "~temp");
+				existing = existing + "~temp";
+			}
+
+			// write new file
+			var contents = BuildGpx(trail);
+			File.WriteAllText(filename, contents);
+
+			// delete old file
+			File.Delete(existing);
+
+			// refresh key and cache data
+			if (renamed)
+			{
+				trail.Key = Path.GetFileNameWithoutExtension(filename).ToUpperInvariant();
+				_trails.Remove(request.Key.ToUpperInvariant());
+				_trails.Add(trail);
+			}
+
+			// return successful response
+			return response;
+		}
+
+		
 
 
 		/// <summary>
@@ -148,70 +309,68 @@ namespace MetaGraffiti.Base.Services
 			_init = false;
 		}
 
+
+		
+
+
 		// ==================================================
 		// Helpers
 		private TopoTrailInfo LoadTrail(FileInfo file)
 		{
-			// initial topo trail setup
-			var trail = new TopoTrailInfo();
-			var filename = Path.GetFileNameWithoutExtension(file.Name);
-			trail.ID = filename.ToUpperInvariant();
-			trail.Uri = file.FullName;
-
-			// setup local timestamps
-			var datetime = filename.Substring(0, 8);
-			var timestamp = DateTime.ParseExact(datetime, "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.None);
-			trail.LocalDate = DateTime.SpecifyKind(timestamp, DateTimeKind.Unspecified);
-
-			// load gpx file data
+			// load gpx data into trail
 			var reader = new GpxFileReader(file.FullName);
 			var data = reader.ReadFile();
+			var trail = new TopoTrailInfo(data);
 
-			// load primary information
-			trail.Name = data.Name;
-			trail.Description = data.Description;
+			// setup trail details
+			var filename = Path.GetFileNameWithoutExtension(file.Name);
+			trail.Key = filename.ToUpperInvariant();
+			trail.Source = file.FullName;
 
-			// load secondary information
-			trail.Url = data.Url;
-			trail.UrlName = data.UrlName;
-			trail.Keywords = data.Keywords;
-
-			// populate defaults
-			trail.Country = GeoCountryInfo.ByName(file.Directory.Name);
-			trail.Timezone = GeoTimezoneInfo.ByKey("UTC");
-
-			// process custom info
-			var extensions = reader.ReadExtension();
-			if (!String.IsNullOrWhiteSpace(extensions.Timezone)) trail.Timezone = GeoTimezoneInfo.ByKey(extensions.Timezone);
-			if (!String.IsNullOrWhiteSpace(extensions.Country)) trail.Country = GeoCountryInfo.Find(extensions.Country);
-			if (!String.IsNullOrWhiteSpace(extensions.Region)) trail.Region = GeoRegionInfo.Find(extensions.Region);
-			trail.Location = extensions.Location;
-
-			// create track data
-			var places = new List<CartoPlaceInfo>();
-			foreach (var track in data.Tracks.OrderBy(x => x.Points.First().Timestamp.Value))
+			// discover places for each track
+			foreach (var track in trail.TopoTracks)
 			{
-				var tt = new TopoTrackInfo(trail, track);
-
-				var f = track.Points.First();
-				tt.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(f).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				if (tt.StartPlace != null && !places.Any(x => x.Key == tt.StartPlace.Key)) places.Add(tt.StartPlace);
-
-				var l = track.Points.Last();
-				tt.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(l).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				if (tt.FinishPlace != null && !places.Any(x => x.Key == tt.FinishPlace.Key)) places.Add(tt.FinishPlace);
-
-				trail.Tracks.Add(tt);
+				UpdateTrackPlaces(track);
 			}
 
-			// consolidate carto place information
-			trail.ViaPlaces = places;
-
-			// built trail
 			return trail;
+		}
+
+		private string GetFilename(TopoTrailInfo trail)
+		{
+			var name = $"{String.Format("{0:yyyyMMdd}", trail.StartLocal)} {trail.Name}.gpx";
+			return Path.Combine(_rootUri, trail.Country.Name, name);
+		}
+
+		private string BuildGpx(TopoTrailInfo trail)
+		{
+			var writer = new GpxFileWriter();
+			
+			// write file header
+			writer.SetVersion(GpxSchemaVersion.Version1_1);
+			writer.WriteHeader(trail);
+
+			// write custom data
+			var data = new GpxExtensionData()
+			{
+				Timezone = trail.Timezone.TZID,
+				Country = (trail.Country?.Name ?? ""),
+				Region = (trail.Region?.RegionName ?? ""),
+				Location = trail.Location
+			};
+			writer.WriteMetadata(data);
+
+			// write tracks
+			foreach (var track in trail.TopoTracks)
+			{
+				writer.WriteTrack(track);
+			}
+
+			return writer.GetXml();
 		}
 	}
 
+	// TODO: refactor this to use an interface
 	public class TopoTrailReportRequest
 	{
 		public string Country { get; set; }
@@ -220,5 +379,23 @@ namespace MetaGraffiti.Base.Services
 		public int? Year { get; set; }
 		public int? Month { get; set; }
 		public int? Day { get; set; }
+	}
+
+	public interface ITopoTrailUpdateRequest
+	{
+		string Key { get; }
+
+		string Name { get; }
+		string Description { get; }
+
+		string Keywords { get; }
+
+		string UrlLink { get; }
+		string UrlText { get; }
+
+		string Timezone { get; }
+		string Country { get; }
+		string Region { get; }
+		string Location { get; }
 	}
 }

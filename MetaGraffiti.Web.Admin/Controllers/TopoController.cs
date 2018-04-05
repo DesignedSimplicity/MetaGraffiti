@@ -9,12 +9,6 @@ using System.Web.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
-	// topo/						GET Displays a calendar and a list of countries with their respective TopoTrailInfo data files
-	// topo/trail/{id}				GET Dispalys a single TopoTrailInfo GPX data file on a map
-	// topo/report/?				GET Displays a list of TopoTrailInfo GPX data files filtered by report criteria
-	// topo/country/{id}/?region=	GET Displays all of the TopoTrailInfo GPX data files in a list and on a map for a given country with optional region filter
-	// topo/refresh/				GET Resets the current TopoTrailInfo GPX data file cache and reloads from disk
-
 	public class TopoController : Controller
     {
 		// ==================================================
@@ -34,8 +28,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Countries = _trailDataService.ListCountries().OrderBy(x => x.Name);
 			model.Trails = _trailDataService.ListTrails();
 
-			model.FirstDate = model.Trails.Min(x => x.LocalDate);
-			model.LastDate = model.Trails.Max(x => x.LocalDate);
+			model.FirstDate = model.Trails.Min(x => x.StartLocal);
+			model.LastDate = model.Trails.Max(x => x.StartLocal);
 
 			return model;
 		}
@@ -102,22 +96,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedMonth = report.Month;
 
 			model.Trails = _trailDataService.Report(report);
-
-			return View(model);
-		}
-
-		/// <summary>
-		/// Dispalys the details of a single TopoTrailInfo data file
-		/// </summary>
-		public ActionResult Trail(string id)
-		{
-			var model = InitModel();
-
-			var trail = _trailDataService.GetTrail(id);
-
-			if (trail.Timezone.Key == "UTC") model.ErrorMessages.Add("Timezone missing! Default to UTC.");
-
-			model.SelectedTrail = trail;
 
 			return View(model);
 		}

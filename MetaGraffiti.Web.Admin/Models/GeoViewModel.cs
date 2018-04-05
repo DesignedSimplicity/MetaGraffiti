@@ -36,8 +36,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetGeoUrl() { return "/geo/"; }
 		public static string GetTimezonesUrl() { return "/geo/timezones/"; }
+		public static string GetTimezoneUrl(GeoTimezoneInfo timezone) { return $"/geo/timezones/#{timezone.GeoTZID}"; }
 		public static string GetCountriesUrl() { return "/geo/countries/"; }
-		public static string GetRegionsUrl(GeoCountryInfo country = null) { return "/geo/regions/" + (country == null ? "" : $"#{country.ISO3}"); }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/geo/country/{country.CountryID}/"; }
+		public static string GetRegionsUrl(GeoCountryInfo country = null) { return "/geo/regions/" + (country == null ? "" : $"#{country.ISO3}"); }
 	}
 }

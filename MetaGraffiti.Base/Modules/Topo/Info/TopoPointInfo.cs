@@ -1,22 +1,24 @@
 ﻿using System;
 using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Ortho.Data;
+using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Ortho;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoPointInfo : IGeoPoint
+	public class TopoPointInfo : ITopoPointInfo
 	{
-		private GpxPointData _point;
+		private ITopoTrackInfo _track;
+		private IGpxPoint _point;
 
-		public TopoTrackInfo Track { get; private set; }
-
-
-		public TopoPointInfo(TopoTrackInfo track, GpxPointData point)
+		public TopoPointInfo(ITopoTrackInfo track, IGpxPoint point)
 		{
-			Track = track;
+			_track = track;
 			_point = point;
 		}
 
+		public string Description { get; set; }
+
+		public ITopoTrackInfo Track => _track;
 
 		public double Latitude => _point.Latitude;
 
@@ -26,6 +28,11 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public DateTime? Timestamp => _point.Timestamp;
 
-		public DateTime LocalTime => Track.Trail.Timezone.FromUTC(_point.Timestamp.Value);
+		public DateTime LocalTime => GetTimezone().FromUTC(_point.Timestamp.Value);
+
+		private GeoTimezoneInfo GetTimezone()
+		{
+			return _track.Trail?.Timezone ?? GeoTimezoneInfo.UTC;
+		}
 	}
 }

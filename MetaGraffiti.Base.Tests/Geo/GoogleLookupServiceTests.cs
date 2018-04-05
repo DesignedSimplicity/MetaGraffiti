@@ -10,12 +10,12 @@ using MetaGraffiti.Base.Modules.Geo;
 namespace MetaGraffiti.Base.Tests.Geo
 {
 	[TestClass]
-	public class GeoLookupServiceTests
+	public class GoogleLookupServiceTests
 	{
-		private GeoLookupService GetService()
+		private GoogleLookupService GetService()
 		{
 			var google = new GoogleApiService(Web.Admin.AutoConfig.GoogleMapsApiKey);
-			return new GeoLookupService(google);
+			return new GoogleLookupService(google);
 		}
 
 		[TestMethod]

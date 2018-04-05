@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
@@ -18,7 +17,8 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 	</trkpt>
 	*/
 
-	public class GpxTrackData : GpxRouteData
+	public class GpxTrackData : GpxRouteData, IGpxTrack
 	{
+		public IList<IGpxPoint> Points => PointData.ToList<IGpxPoint>();
 	}
 }
