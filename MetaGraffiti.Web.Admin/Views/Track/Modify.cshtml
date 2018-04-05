@@ -80,11 +80,11 @@
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
 		{
-			<div class="alert alert-success">@Model.ConfirmMessage</div>
+		<div class="alert alert-success"><i class="fas fa-thumbs-up"></i> @Model.ConfirmMessage</div>
 		}
 		@if (Model.HasError)
 		{
-			<div class="alert alert-danger">@Model.ErrorMessages.First()</div>
+		<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> @Model.ErrorMessages.First()</div>
 		}
 		<div class="row">
 			<div class="col-sm-6">

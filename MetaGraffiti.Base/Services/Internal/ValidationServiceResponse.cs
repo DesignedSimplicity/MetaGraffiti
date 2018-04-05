@@ -6,7 +6,9 @@ namespace MetaGraffiti.Base.Services.Internal
 {
 	public class ValidationServiceResponse<T>
 	{
-		public bool OK { get { return ValidationErrors.Count == 0; } }
+		public bool OK { get { return !HasErrors; } }
+
+		public bool HasErrors { get { return ValidationErrors.Count > 0; } }
 
 		public T Data { get; private set; }
 

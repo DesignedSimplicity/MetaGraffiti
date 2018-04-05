@@ -30,8 +30,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (!String.IsNullOrWhiteSpace(id))
 			{
-				model.Trail = _topoTrailService.GetTrail(id);
-				if (!model.IsTimezoneValid) model.ErrorMessages.Add("Timezone missing! Defaulting to UTC.");
+				var trail = _topoTrailService.GetTrail(id);
+				model.Trail = trail;
 			}
 
 			return model;
@@ -56,6 +56,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel(id);
 
+			model.Edit = new TopoTrailFormModel(model.Trail);
+
 			return View(model);
 		}
 
@@ -63,39 +65,45 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// Updates trail profile for current edit session
 		/// </summary>
 		[HttpPost]
-		public ActionResult Update(TopoTrailUpdateRequest update)
+		public ActionResult Update(TopoTrailFormModel update)
 		{
-			// TODO: do validation here!!!
 			var response = _topoTrailService.UpdateTrail(update);
 
 			if (response.OK)
 			{
 				var model = InitModel(response.Data.Key);
+				model.Edit = new TopoTrailFormModel(model.Trail);
 				model.ConfirmMessage = $"Trail updated at {DateTime.Now}";
 				return View(model);
 			}
 			else
 			{
 				var model = InitModel(update.Key);
-				foreach(var error in response.ValidationErrors)
-				{
-					model.ErrorMessages.Add($"Error {error.Field} = {error.Message}");
-				}				
+				model.Edit = update;
+				model.AddValidationErrors(response.ValidationErrors);
 				return View(model);
 			}
 		}
 
+
+
+
+
 		/// <summary>
 		/// Updates the metadata in an existing GPX track data file (name, description, keywords, but NOT track/point data)
 		/// </summary>
-		[HttpPost]
 		public ActionResult Modify(string id)
 		{
-			var trail = _topoTrailService.GetTrail(id);
+			return null;
+
+
+			/*
+			
 
 			_trackExtractService.ModifyTrail(trail.Source);
 
 			return Redirect(TrailViewModel.GetUpdateUrl());
+			*/
 		}
 
 		/// <summary>

@@ -13,6 +13,7 @@ using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Common;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -159,8 +160,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var track = _trackEditService.GetTrack(key);
-			track.Name = TextHelper.GetTrimmed(name);
-			track.Description = TextHelper.GetTrimmed(description);
+			track.Name = TextMutate.TrimSafe(name);
+			track.Description = TextMutate.TrimSafe(description);
 
 			model.EditTrack = InitEditModel(track);
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";

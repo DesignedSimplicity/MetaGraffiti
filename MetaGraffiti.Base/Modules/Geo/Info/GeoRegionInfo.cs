@@ -121,7 +121,7 @@ namespace MetaGraffiti.Base.Modules.Geo.Info
 			r = ByName(text);
 			if (r != null) return r;
 
-			r = ByName(TextTranslate.StripAccents(text));
+			r = ByName(TextMutate.StripAccents(text));
 			return r;
 		}
 

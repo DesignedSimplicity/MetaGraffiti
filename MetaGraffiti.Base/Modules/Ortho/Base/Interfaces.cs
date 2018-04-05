@@ -17,7 +17,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		string UrlLink { get; }
 		string UrlText { get; }
 
-		DateTime? Timestamp { get; }
+		//DateTime? Timestamp { get; }
 	}
 
 	public interface IGpxTrack
@@ -31,6 +31,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 	public interface IGpxPoint : IGeoPoint
 	{
+		int Segment { get; }
 		int? Sats { get; }
 		decimal? HDOP { get; }
 		decimal? VDOP { get; }

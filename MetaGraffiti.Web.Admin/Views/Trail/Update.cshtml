@@ -5,6 +5,7 @@
 
 @{
 	var trail = Model.Trail;
+	var edit = Model.Edit;
 }
 
 <script>
@@ -22,7 +23,7 @@
 	<div class="col-sm-6">
 		@if (Model.HasConfirmation)
 		{
-			<div class="alert alert-success">@Model.ConfirmMessage</div>
+			<div class="alert alert-success"><i class="fas fa-thumbs-up"></i> @Model.ConfirmMessage</div>
 		}
 		@if (Model.HasError)
 		{
@@ -39,27 +40,27 @@
 					<label class="font-weight-bold" for="Name"><i class="far fa-file-alt"></i> Trail Name</label>
 					<div class="h5 float-right">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true))</div>
 				</div>
-				<input type="text" class="form-control form-control-lg" name="Name" value="@trail.Name">
+				<input type="text" class="form-control form-control-lg" name="Name" value="@edit.Name" />
 			</div>
 			<div class="form-group">
 				<label for="Description"><i class="fas fa-quote-left"></i> Description</label>
-				<textarea class="form-control" rows="5" name="Description">@trail.Description</textarea>
+				<textarea class="form-control" rows="5" name="Description">@edit.Description</textarea>
 			</div>
 			<div class="row form-group">
 				<div class="col-sm-8">
 					<label for="Country"><i class="fas fa-flag"></i> Country \ Region</label>
 					<div class="input-group">
-						<input type="text" class="form-control @(Model.IsCountryValid ? " is-valid" : "is-invalid" )" name="Country" id="CountryField" value="@(trail.Country?.Name ?? " ")">
-						<input type="text" class="form-control @(Model.IsCountryValid && trail.Country.HasRegions & Model.IsRegionValid ? " is-valid" : (Model.IsCountryValid && trail.Country.HasRegions ? "is-invalid" : "bg-light"))" name="Region" id="RegionField" placeholder="Region" value="@(trail.Region?.RegionName ?? "")">
+						<input type="text" class="form-control @(TopoTrailFormModel.IsCountryValid(edit.Country) ? "" : "is-invalid")" name="Country" id="CountryField" value="@edit.Country" />
+						<input type="text" class="form-control @(TopoTrailFormModel.IsRegionValid(edit.Country, edit.Region) ? "" : "is-invalid")" name="Region" id="RegionField" placeholder="Region" value="@edit.Region" />
 
 					</div>
 				</div>
 				<div class="col-sm-4">
 					<label for="Location"><i class="fas fa-map-marker"></i> Location</label>
 					<div class="input-group">
-						<input type="text" class="form-control" name="Location" id="LocationField" value="@trail.Location">
+						<input type="text" class="form-control" name="Location" id="LocationField" value="@edit.Location" />
 						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary" id="lookupCountry"><i class="fas fa-magnet"></i></a>
+							<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
 						</div>
 					</div>
 				</div>
@@ -68,27 +69,27 @@
 				<div class="col-sm-8">
 					<label for="UrlLink"><i class="fas fa-link"></i> Link \ Text</label>
 					<div class="input-group">
-						<input type="text" class="form-control" name="UrlLink" placeholder="https://" value="@trail.UrlLink">
-						<input type="text" class="form-control" name="UrlText" placeholder="Link Text" value="@trail.UrlText">
+						<input type="text" class="form-control" name="UrlLink" placeholder="https://" value="@edit.UrlLink" disabled />
+						<input type="text" class="form-control" name="UrlText" placeholder="Link Text" value="@edit.UrlText" disabled />
 					</div>
 				</div>
 				<div class="col-sm-4">
 					<label for="Timezone"><i class="fas fa-clock"></i> Timezone</label>
 					<div class="input-group">
-						<input type="text" class="form-control @(Model.IsTimezoneValid ? "" : "is-invalid")" name="Timezone" id="TimezoneField" value="@(trail.Timezone?.Name ?? "")">
+						<input type="text" class="form-control @(TopoTrailFormModel.IsTimezoneValid(edit.Timezone) ? "" : "is-invalid")" name="Timezone" id="TimezoneField" value="@edit.Timezone" />
 						<div class="input-group-append">
-							<a href="#" class="btn btn-outline-secondary" id="lookupTimezone"><i class="fas fa-magnet"></i></a>
+							<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="Keywords"><i class="fas fa-tags"></i> Keywords</label>
-				<input type="text" class="form-control" name="Keywords" value="@trail.Keywords">
+				<input type="text" class="form-control" name="Keywords" value="@edit.Keywords" />
 			</div>
 			<div class="row">
 				<div class="col-sm-8">
-					<input type="hidden" name="Key" value="@trail.Key" />
+					<input type="hidden" name="Key" value="@edit.Key" />
 					<button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update Trail</button>
 					<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetModifyUrl(trail)"><i class="fas fa-pencil-alt"></i> Edit Tracks</a>
 				</div>

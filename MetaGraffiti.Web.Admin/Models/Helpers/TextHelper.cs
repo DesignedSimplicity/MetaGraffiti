@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MetaGraffiti.Base.Common;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -8,14 +9,6 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class TextHelper
 	{
-		private static TextInfo _textInfo = new CultureInfo("en-US", false).TextInfo;
-
-		public static string GetTrimmed(string text)
-		{
-			return (String.IsNullOrWhiteSpace(text) ? "" : text.Trim());
-			
-		}
-
 		public static string GetMonth(int? month, bool abbv = false)
 		{
 			if (!month.HasValue)
@@ -36,12 +29,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		{
 			return String.Format("{0:0} h {1:00} m", Math.Floor(elapsed.TotalHours), elapsed.Minutes);
 		}
-
-		public static string ToTitleCase(string text)
-		{
-			return _textInfo.ToTitleCase(text);
-		}
-
 
 		public static string GetTotalDays(TimeSpan elapsed)
 		{

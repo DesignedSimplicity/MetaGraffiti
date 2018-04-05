@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
+using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services.Internal;
 
@@ -14,6 +15,7 @@ namespace MetaGraffiti.Base.Services
     {
 		// ==================================================
 		// Internals
+		private static string _rootUri = "";
 		private static object _init = false;
 		private static BasicCacheService<TopoTrailInfo> _trails;
 		private CartoPlaceService _cartoPlaceService;
@@ -38,6 +40,7 @@ namespace MetaGraffiti.Base.Services
 
 				_trails = new BasicCacheService<TopoTrailInfo>();
 				var root = new DirectoryInfo(uri);
+				_rootUri = root.FullName;
 				foreach (var dir in root.EnumerateDirectories())
 				{
 					var country = GeoCountryInfo.ByName(dir.Name);
@@ -135,10 +138,81 @@ namespace MetaGraffiti.Base.Services
 		}
 
 		// TODO: implement this
-		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(TopoTrailUpdateRequest request)
+		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(ITopoTrailUpdateRequest request)
 		{
-			var response = new ValidationServiceResponse<TopoTrailInfo>(GetTrail(request.Key));
-			response.AddError("Field", "Message");
+			// load existing trail
+			var trail = GetTrail(request.Key);
+			var response = new ValidationServiceResponse<TopoTrailInfo>(trail);
+			if (trail == null)
+			{
+				response.AddError("Trail", $"Trail {request.Key} does not exist!");
+				return response;
+			}
+
+			// save current filename for later
+			var existing = GetFilename(trail);
+
+			// do basic validation
+			if (String.IsNullOrWhiteSpace(request.Name)) response.AddError("Name", "Name is required!");
+
+			var timezone = GeoTimezoneInfo.Find(request.Timezone);
+			if (timezone == null) response.AddError("Timezone", "Timezone is missing or invalid!");
+
+			var country = GeoCountryInfo.Find(request.Country);
+			if (country == null) response.AddError("Country", "Country is missing or invalid!");
+
+			var region = GeoRegionInfo.Find(request.Region);
+			if (region == null && !String.IsNullOrWhiteSpace(request.Region)) response.AddError("Region", "Region is invalid!");
+
+			if (response.HasErrors) return response;
+
+			// check file system
+			if (!Directory.Exists(_rootUri)) throw new Exception($"Directory not initalized: {_rootUri}");
+			var folder = Path.Combine(_rootUri, country.Name);
+			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+			// update trail properties
+			trail.Timezone = timezone;
+			trail.Country = country;
+			trail.Region = region;
+
+			trail.Name = TextMutate.TrimSafe(request.Name);
+			trail.Description = TextMutate.TrimSafe(request.Description);
+			trail.Location = TextMutate.TrimSafe(request.Location);
+			trail.Keywords = TextMutate.FixKeywords(request.Keywords);
+
+			// TODO: BUG: fix url writing for v1.1 files!
+			//trail.UrlLink = TextMutate.FixUrl(request.UrlLink);
+			//trail.UrlText = TextMutate.TrimSafe(request.UrlText);
+
+			// generate new and rename/remove existing files
+			var filename = GetFilename(trail);
+			var contents = BuildGpx(trail);
+
+			// check if overwrite file
+			var renamed = String.Compare(existing, filename, true) != 0;
+			if (!renamed)
+			{
+				// temp rename current file
+				File.Move(existing, existing + "~temp");
+				existing = existing + "~temp";
+			}
+
+			// write new file
+			File.WriteAllText(filename, contents);
+
+			// delete old file
+			File.Delete(existing);
+
+			// refresh key and cache data
+			if (renamed)
+			{
+				trail.Key = Path.GetFileNameWithoutExtension(filename).ToUpperInvariant();
+				_trails.Remove(request.Key.ToUpperInvariant());
+				_trails.Add(trail);
+			}
+
+			// return successful response
 			return response;
 		}
 
@@ -177,6 +251,39 @@ namespace MetaGraffiti.Base.Services
 
 			return trail;
 		}
+
+		private string GetFilename(TopoTrailInfo trail)
+		{
+			var name = $"{String.Format("{0:yyyyMMdd}", trail.StartLocal)} {trail.Name}.gpx";
+			return Path.Combine(_rootUri, trail.Country.Name, name);
+		}
+
+		private string BuildGpx(TopoTrailInfo trail)
+		{
+			var writer = new GpxFileWriter();
+			
+			// write file header
+			writer.SetVersion(GpxSchemaVersion.Version1_1);
+			writer.WriteHeader(trail);
+
+			// write custom data
+			var data = new GpxExtensionData()
+			{
+				Timezone = trail.Timezone.TZID,
+				Country = (trail.Country?.Name ?? ""),
+				Region = (trail.Region?.RegionName ?? ""),
+				Location = trail.Location
+			};
+			writer.WriteMetadata(data);
+
+			// write tracks
+			foreach (var track in trail.TopoTracks)
+			{
+				writer.WriteTrack(track);
+			}
+
+			return writer.GetXml();
+		}
 	}
 
 	// TODO: refactor this to use an interface
@@ -190,21 +297,21 @@ namespace MetaGraffiti.Base.Services
 		public int? Day { get; set; }
 	}
 
-	public class TopoTrailUpdateRequest
+	public interface ITopoTrailUpdateRequest
 	{
-		public string Key { get; set; }
+		string Key { get; }
 
-		public string Name { get; set; }
-		public string Description { get; set; }
+		string Name { get; }
+		string Description { get; }
 
-		public string Keywords { get; set; }
+		string Keywords { get; }
 
-		public string Url { get; set; }
-		public string UrlName { get; set; }
+		string UrlLink { get; }
+		string UrlText { get; }
 
-		public string Timezone { get; set; }
-		public string Country { get; set; }
-		public string Region { get; set; }
-		public string Location { get; set; }
+		string Timezone { get; }
+		string Country { get; }
+		string Region { get; }
+		string Location { get; }
 	}
 }

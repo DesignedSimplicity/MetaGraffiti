@@ -8,10 +8,11 @@ using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Services.Internal;
+using MetaGraffiti.Base.Modules.Ortho;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
 {
-	public class TopoTrailInfo : ITopoTrailInfo, ICacheEntity
+	public class TopoTrailInfo : ITopoTrailInfo, ICacheEntity, IGpxFileHeader
 	{
 		public TopoTrailInfo()
 		{

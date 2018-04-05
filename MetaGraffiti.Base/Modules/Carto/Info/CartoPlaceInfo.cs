@@ -89,7 +89,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 			
 			_data.PlaceType = result.TypedNameSource;
 
-			_data.Name = TextTranslate.StripAccents(result.ShortName);
+			_data.Name = TextMutate.StripAccents(result.ShortName);
 			_data.LocalName = (_data.Name == result.LongName ? "" : result.LongName);
 			_data.DisplayAs = (_data.Name == result.TypedName ? "" : result.TypedName);
 			_data.Description = result.ColloquialArea;
