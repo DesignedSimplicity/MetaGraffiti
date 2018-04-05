@@ -173,7 +173,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				var finish = t.PointData.Last();
 				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(finish).OrderBy(x => x.Bounds.Area).FirstOrDefault();				
 
-				trail.AddTrack_TO_DEPRECATE(track);
+				trail.AddTrack_TODO_DEPRECATE(track);
 			}
 
 			return model;

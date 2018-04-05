@@ -34,17 +34,23 @@ namespace MetaGraffiti.Web.Admin.Models
 		{
 			return GetTotalDays(Math.Ceiling(elapsed.TotalDays));
 		}
+
+		public static string GetTotalDays(double days)
+		{
+			if (days == 0)
+				return "0 days";
+			else if (days <= 1)
+				return "1 day";
+			else
+				return $"{days} days";
+		}
+
+		/*
 		public static string GetTotalDays(DateTime start, DateTime finish)
 		{
 			var days = (finish.DayOfYear - start.DayOfYear) + 1;
 			return GetTotalDays(days);
 		}
-		public static string GetTotalDays(double days)
-		{
-			if (days <= 1)
-				return "1 day";
-			else
-				return $"{days} days";
-		}
+		*/
 	}
 }

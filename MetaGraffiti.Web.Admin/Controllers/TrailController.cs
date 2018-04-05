@@ -122,7 +122,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return Redirect(TrackViewModel.GetManageUrl());
 		}
 
-
+		[HttpGet]
 		public ActionResult Import()
 		{
 			var model = InitModel();
@@ -130,14 +130,56 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Trail = _editing;
 			model.Edit = new TopoTrailFormModel(_editing);
 			var tracks = new List<TopoTrackInfo>();
-			foreach(var t in _trackEditService.ListTracks())
+			foreach (var t in _trackEditService.ListTracks())
 			{
 				var track = new TopoTrackInfo(_editing, t);
+				_topoTrailService.UpdateTrackPlaces(track);
 				tracks.Add(track);
 			}
 			model.Tracks = tracks;
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Import(TopoTrailFormModel update)
+		{
+			if (String.IsNullOrWhiteSpace(update.Key))
+			{
+				// do create
+				return null;
+			}
+			else
+			{
+				// finish rest of update
+				var response = _topoTrailService.ValidateUpdate(update);
+
+				if (response.OK)
+				{
+					// replace trails on existing track
+					var trail = _topoTrailService.GetTrail(update.Key);
+					trail.ClearTracks_TODO_DEPRECATE();
+					foreach (var t in _trackEditService.ListTracks())
+					{
+						var track = new TopoTrackInfo(_editing, t);
+						trail.AddTrack_TODO_DEPRECATE(track);
+					}
+					_topoTrailService.UpdateTrail(update);
+
+					// show results
+					var model = InitModel(response.Data.Key);
+					model.Edit = new TopoTrailFormModel(model.Trail);
+					model.ConfirmMessage = $"Trail updated at {DateTime.Now}";
+					return View(model);
+				}
+				else
+				{
+					var model = InitModel(update.Key);
+					model.Edit = update;
+					model.AddValidationErrors(response.ValidationErrors);
+					return View(model);
+				}
+			}
 		}
 
 		/// <summary>

@@ -4,8 +4,7 @@
 @Html.Partial("_Nav")
 
 @{
-	var trail = Model.Trail;
-	var edit = Model.Edit;
+	var existing = Model.Trail != null;
 }
 
 <script>
@@ -23,14 +22,22 @@
 	<div class="col-sm-6">
 		@Html.Partial("Alerts/SuccessConfirm")
 		@Html.Partial("Alerts/ErrorMessages")
+		
+		<div>
+			<span class="h3">
+				@(existing ? "Modify Existing" : "Import New")
+			</span>
+			<div class="h5 float-right">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(Model.Tracks, true))</div>
+		</div>
+		<hr />
 		<form method="post">
 			@Html.Partial("_TrailForm", Model.Edit)
 			<div class="row">
 				<div class="col-sm-6">
-					@if (Model.Trail != null)
+					@if (existing)
 					{
 						<input type="hidden" name="Key" value="@Model.Trail.Key" />
-						<button type="submit" class="btn btn-warning js-confirm"><i class="fas fa-save"></i> Update Existing Trail</button>
+						<button type="submit" class="btn btn-warning"><i class="fas fa-save"></i> Overwrite Existing Trail</button>
 					}
 					else if (Model.HasTracks)
 					{

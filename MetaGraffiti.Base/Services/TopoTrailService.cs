@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
@@ -146,11 +147,21 @@ namespace MetaGraffiti.Base.Services
 		}
 
 		/// <summary>
-		/// Updates the trail metadata and synchronizes file and cache
+		/// Updates the start and finish places on the given track
 		/// </summary>
-		/// <param name="request"></param>
-		/// <returns></returns>
-		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(ITopoTrailUpdateRequest request)
+		public List<CartoPlaceInfo> UpdateTrackPlaces(TopoTrackInfo track)
+		{
+			var places = new List<CartoPlaceInfo>();
+			track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+			track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+
+			if (track.StartPlace != null) places.Add(track.StartPlace);
+			if (track.FinishPlace != null && (!places.Any(x => x.Key == track.FinishPlace.Key))) places.Add(track.FinishPlace);
+
+			return places;
+		}
+
+		public ValidationServiceResponse<TopoTrailInfo> ValidateUpdate(ITopoTrailUpdateRequest request)
 		{
 			// load existing trail
 			var trail = GetTrail(request.Key);
@@ -160,9 +171,6 @@ namespace MetaGraffiti.Base.Services
 				response.AddError("Trail", $"Trail {request.Key} does not exist!");
 				return response;
 			}
-
-			// save current filename for later
-			var existing = GetFilename(trail);
 
 			// do basic validation
 			if (String.IsNullOrWhiteSpace(request.Name)) response.AddError("Name", "Name is required!");
@@ -176,17 +184,33 @@ namespace MetaGraffiti.Base.Services
 			var region = GeoRegionInfo.Find(request.Region);
 			if (region == null && !String.IsNullOrWhiteSpace(request.Region)) response.AddError("Region", "Region is invalid!");
 
+			return response;
+		}
+
+		/// <summary>
+		/// Updates the trail metadata and synchronizes file and cache
+		/// </summary>
+		public ValidationServiceResponse<TopoTrailInfo> UpdateTrail(ITopoTrailUpdateRequest request)
+		{
+			// validate update request
+			var response = ValidateUpdate(request);
 			if (response.HasErrors) return response;
+
+			// process update request
+			var trail = response.Data;
+
+			// save current filename for later
+			var existing = GetFilename(trail);
 
 			// check file system
 			if (!Directory.Exists(_rootUri)) throw new Exception($"Directory not initalized: {_rootUri}");
-			var folder = Path.Combine(_rootUri, country.Name);
+			var folder = Path.Combine(_rootUri, trail.Country.Name);
 			if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
 			// update trail properties
-			trail.Timezone = timezone;
-			trail.Country = country;
-			trail.Region = region;
+			trail.Timezone = GeoTimezoneInfo.Find(request.Timezone);
+			trail.Country = GeoCountryInfo.Find(request.Country);
+			trail.Region = GeoRegionInfo.Find(request.Region);
 
 			trail.Name = TextMutate.TrimSafe(request.Name);
 			trail.Description = TextMutate.TrimSafe(request.Description);
@@ -228,6 +252,7 @@ namespace MetaGraffiti.Base.Services
 			return response;
 		}
 
+		
 
 
 		/// <summary>
@@ -238,6 +263,9 @@ namespace MetaGraffiti.Base.Services
 			_trails = null;
 			_init = false;
 		}
+
+
+		
 
 
 		// ==================================================
@@ -257,8 +285,7 @@ namespace MetaGraffiti.Base.Services
 			// discover places for each track
 			foreach (var track in trail.TopoTracks)
 			{
-				track.StartPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.First()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
-				track.FinishPlace = _cartoPlaceService.ListPlacesByContainingPoint(track.TopoPoints.Last()).OrderBy(x => x.Bounds.Area).FirstOrDefault();
+				UpdateTrackPlaces(track);
 			}
 
 			return trail;

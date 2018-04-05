@@ -111,7 +111,11 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 			}
 		}
 
-		public void AddTrack_TO_DEPRECATE(TopoTrackInfo track)
+		public void ClearTracks_TODO_DEPRECATE()
+		{
+			_tracks.Clear();
+		}
+		public void AddTrack_TODO_DEPRECATE(TopoTrackInfo track)
 		{
 			_tracks.Add(track);
 		}

@@ -17,5 +17,11 @@ namespace MetaGraffiti.Web.Admin.Models
 			Stats = stats;
 			ShowDetails = showDetails;
 		}
+
+		public TopoStatsPillsModel(IEnumerable<ITopoTrackInfo> tracks, bool showDetails = false)
+		{
+			Stats = TopoStats.FromTracks(tracks);
+			ShowDetails = showDetails;
+		}
 	}
 }

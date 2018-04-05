@@ -367,8 +367,8 @@
     <Content Include="Views\Trail\_TrackGrid.cshtml" />
     <Content Include="Views\Trail\Import.cshtml" />
     <Content Include="Views\Trail\_TrailForm.cshtml" />
-    <Content Include="Views\Shared\Widgets\ErrorMessages.cshtml" />
-    <Content Include="Views\Shared\Widgets\SuccessConfirmation.cshtml" />
+    <Content Include="Views\Shared\Alerts\ErrorMessages.cshtml" />
+    <Content Include="Views\Shared\Alerts\SuccessConfirm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

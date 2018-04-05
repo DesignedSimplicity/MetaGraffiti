@@ -1,5 +1,6 @@
 ﻿using System;
 using MetaGraffiti.Base.Modules.Geo;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 
 namespace MetaGraffiti.Base.Modules.Topo.Info
@@ -27,6 +28,11 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 
 		public DateTime? Timestamp => _point.Timestamp;
 
-		public DateTime LocalTime => _track.Trail.Timezone.FromUTC(_point.Timestamp.Value);
+		public DateTime LocalTime => GetTimezone().FromUTC(_point.Timestamp.Value);
+
+		private GeoTimezoneInfo GetTimezone()
+		{
+			return _track.Trail?.Timezone ?? GeoTimezoneInfo.UTC;
+		}
 	}
 }
