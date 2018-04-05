@@ -86,7 +86,7 @@
 							<div class="input-group">
 								<input type="text" class="form-control" name="Name" value="@track.Name" />
 								<div class="input-group-append">
-									<button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Extract</button>
+									<button type="submit" class="btn btn-success">@IconHelper.ExtractIcon Extract</button>
 								</div>
 							</div>
 						</div>
@@ -100,7 +100,7 @@
 					<div class="input-group">
 						<input type="text" class="form-control" readonly value="@edit.File.DirectoryName" />
 						<div class="input-group-append">
-							<a class="btn btn-secondary" href="@OrthoViewModel.GetTracksUrl(edit.File.DirectoryName)"><i class="fas fa-folder-open"></i> Browse</a>
+							<a class="btn btn-secondary" href="@OrthoViewModel.GetBrowseTracksUrl(edit.File.DirectoryName)"><i class="fas fa-folder-open"></i> Browse</a>
 						</div>
 					</div>
 				</div>

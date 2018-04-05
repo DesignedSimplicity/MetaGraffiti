@@ -5,7 +5,7 @@
 
 <div class="row">
 	<div class="col-sm-2">
-		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetPlacesUrl()">@SvgHelper.GetIcon("types/place")Places</a></div>
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetPlacesUrl()">@IconHelper.PlaceIcon Places</a></div>
 		<hr />
 		@foreach (var year in Model.Years.OrderByDescending(x => x))
 		{
@@ -13,16 +13,16 @@
 		}
 	</div>
 	<div class="col-sm-2">
-		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetTracksUrl()">@SvgHelper.GetIcon("types/track")Tracks</a></div>
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetBrowseTracksUrl()">@IconHelper.TrackIcon Tracks</a></div>
 		<hr />
 		@foreach (var year in Model.Years.OrderByDescending(x => x))
 		{
-			<div class="h4"><a class="ortho-color" href="@OrthoViewModel.GetTracksUrl(year.ToString())">@year</a></div>
+			<div class="h4"><a class="ortho-color" href="@OrthoViewModel.GetBrowseTracksUrl(year.ToString())">@year</a></div>
 		}
 	</div>
 	<div class="col-sm-2">
-		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetSheetsUrl()">@SvgHelper.GetIcon("Ortho")Sheets</a></div>
+		<div class="h2"><a class="ortho-color icon-link" href="@OrthoViewModel.GetSheetsUrl()">@IconHelper.SheetIcon Sheets</a></div>
 		<hr />
-		<a class="btn btn-outline-warning" href="@OrthoViewModel.GetResetUrl()">Reload Source Data</a>
+		<a class="btn btn-block btn-outline-warning" href="@OrthoViewModel.GetResetUrl()">@IconHelper.RecycleIcon Recycle Import Cache</a>
 	</div>
 </div>

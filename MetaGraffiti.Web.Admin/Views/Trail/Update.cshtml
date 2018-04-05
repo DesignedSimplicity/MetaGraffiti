@@ -25,7 +25,7 @@
 
 		<div>
 			<span class="h3">
-				Update Trail
+				@IconHelper.TrailIcon Edit Existing Trail
 			</span>
 			<div class="h5 float-right">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(Model.Tracks, true))</div>
 		</div>
@@ -36,8 +36,8 @@
 			<div class="row">
 				<div class="col-sm-8">
 					<input type="hidden" name="Key" value="@trail.Key" />
-					<button type="submit" class="btn btn-primary">@IconHelper.SaveIcon Update Trail</button>
-					<a class="btn btn-outline-success js-confirm-dirty" href="@TrailViewModel.GetModifyUrl(trail)">@IconHelper.EditIcon Edit Tracks</a>
+					<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Update Trail</button>
+					<a class="btn btn-outline-primary js-confirm-dirty" href="@TrailViewModel.GetModifyUrl(trail)">@IconHelper.ExtractIcon Modify Tracks</a>
 				</div>
 				<div class="col-sm-4 text-right">
 					<a class="btn btn-outline-secondary js-confirm-dirty" href="@TrailViewModel.GetTrailUrl(trail)"><i class="fas fa-ban"></i> Cancel</a>

@@ -11,21 +11,21 @@
 		}
 		else
 		{
-			<a class="ortho-color" href="@OrthoViewModel.GetTracksUrl()">Tracks</a>
+			<a class="ortho-color" href="@OrthoViewModel.GetBrowseTracksUrl()">Tracks</a>
 		}
 	</span>
 	<span>
 		@foreach (var year in Model.TrackSourceRoot.GetDirectories())
 		{
 			<span class="h3">
-				\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetTracksUrl(year.Name)">@year.Name</a>
+				\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowseTracksUrl(year.Name)">@year.Name</a>
 				@if (Model.IsSelected(year) || Model.IsAncestor(year))
 				{
 					var months = (Model.IsSelected(year) ? Model.SelectedDirectory.GetDirectories() : Model.SelectedDirectory.Parent.GetDirectories());
 					<span class="h4">
 						@foreach (var month in months)
 						{
-							<span>\<a class="@(Model.IsSelected(month) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetTracksUrl(year.Name + "/" + month.Name)">@month.Name</a></span>
+							<span>\<a class="@(Model.IsSelected(month) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowseTracksUrl(year.Name + "/" + month.Name)">@month.Name</a></span>
 						}
 					</span>
 					<span>&nbsp;</span>
@@ -70,7 +70,7 @@
 							<td>
 								@if (source.Trail != null)
 								{
-									<a class="topo-color font-weight-bold" href="@TrailViewModel.GetTrailUrl(source.Trail)">@source.Trail.Name</a>
+								<a class="topo-color font-weight-bold" href="@TrailViewModel.GetTrailUrl(source.Trail)">@IconHelper.TrailIcon @source.Trail.Name</a>
 								}
 							</td>
 							<td class="text-center">@source.Preview.StartUTC.ToString("yyyy-MM-dd")</td>
@@ -111,14 +111,14 @@
 								</div>
 							</td>
 							<td>
-								<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">Preview</a>
+								<a class="btn btn-sm btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">@IconHelper.TrackIcon Preview</a>
 								@if (source.Trail != null)
 								{
-									<a class="btn btn-sm btn-success" href="@TrailViewModel.GetTrailUrl(source.Trail)">Display</a>
+									<a class="btn btn-sm btn-success" href="@TrailViewModel.GetTrailUrl(source.Trail)">@IconHelper.TrailIcon Display</a>
 								}
 								else
 								{
-									<a class="btn btn-sm btn-outline-warning" href="@TrackViewModel.GetExtractUrl(source.File.FullName)">Import</a>
+									<a class="btn btn-sm btn-outline-warning" href="@TrackViewModel.GetExtractUrl(source.File.FullName)">@IconHelper.ExtractIcon Extract</a>
 								}
 							</td>
 						</tr>

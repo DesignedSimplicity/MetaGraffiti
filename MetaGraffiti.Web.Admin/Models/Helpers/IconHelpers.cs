@@ -37,13 +37,24 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Other Actions
 		public static HtmlString ImportIcon { get { return GetFontAwesomeIcon("fas fa-database"); } }
 		public static HtmlString ExportIcon { get { return GetFontAwesomeIcon("fas fa-download"); } }
+		public static HtmlString RecycleIcon { get { return GetFontAwesomeIcon("fas fa-recycle"); } }
+		public static HtmlString ExtractIcon { get { return GetFontAwesomeIcon("fas fa-edit"); } }
+		public static HtmlString PreviewIcon { get { return GetFontAwesomeIcon("fas fa-eye"); } }
+
 
 		// ==================================================
 		// Entity Identifiers
 		public static HtmlString TrailIcon { get { return GetFontAwesomeIcon("fas fa-map-signs"); } }
 		public static HtmlString TrackIcon { get { return GetFontAwesomeIcon("fas fa-paw"); } }
 		public static HtmlString PlaceIcon { get { return GetFontAwesomeIcon("fas fa-map-marker"); } }
+		public static HtmlString SheetIcon { get { return GetFontAwesomeIcon("fas fa-sitemap"); } }
 
+		// ==================================================
+		// Namespace Identifiers
+		public static HtmlString GeoIcon { get { return GetFontAwesomeIcon("fas fa-globe"); } }
+		public static HtmlString TopoIcon { get { return GetFontAwesomeIcon("fas fa-code-branch"); } }
+		public static HtmlString CartoIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }
+		public static HtmlString OrthoIcon { get { return GetFontAwesomeIcon("fas fa-sitemap"); } }
 	}
 
 	// TODO: migrate to helper folder and IconHelper name

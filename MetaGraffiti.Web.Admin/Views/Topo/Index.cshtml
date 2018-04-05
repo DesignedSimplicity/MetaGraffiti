@@ -9,20 +9,21 @@
 		<hr />
 
 		@foreach (var country in Model.Countries)
-		{
-			<div class="h2">
-				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.Name)">
-					@country.Name
-				</a>
-				<div class="h4 float-right">
-					<span class="badge badge-secondary">@Model.GetTrailCount(country)</span>
-				</div>				
+	{
+		<div class="h3">
+			<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.Name)">
+				@country.Name
+			</a>
+			<div class="h5 float-right">
+				<span class="badge badge-secondary">@Model.GetTrailCount(country)</span>
 			</div>
+		</div>
 
-		}
+}
 		<br />
 		<hr />
-		<a href="@TopoViewModel.GetRefreshUrl()" class="btn btn-outline-success"><i class="fas fa-recycle"></i> Refresh Cache</a>
+		<a class="btn btn-block btn-outline-secondary" href="@OrthoViewModel.GetBrowseTracksUrl()">@IconHelper.TrackIcon Import New Tracks</a>
+		<a class="btn btn-block btn-outline-success" href="@TopoViewModel.GetRefreshUrl()">@IconHelper.RecycleIcon Recycle Trail Cache</a>
 	</div>
 	<div class="col-sm-4">
 		<div class="h2">Calendar</div>
@@ -48,10 +49,10 @@
 						@for (var month = 1; month <= 12; month++)
 						{
 							var count = Model.GetTrailCount(year, month);
-							<td class="text-center @(count > 0 ? "table-success" : "")">
+							<td class="h5 text-center p-0 m-0 @(count > 0 ? "table-success" : "")">
 								@if (count > 0)
 								{
-									<a class="h5" href="@TopoViewModel.GetReportUrl(year, month)">@count</a>
+									<a class="d-inline-block p-3 topo-color" href="@TopoViewModel.GetReportUrl(year, month)">@count</a>
 								}
 							</td>
 						}

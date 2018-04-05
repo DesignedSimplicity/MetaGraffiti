@@ -19,12 +19,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		private TopoTrailService _trailDataService;
 		private TripSheetService _tripSheetService;
 		private CartoPlaceService _cartoPlaceService;
-
-		private TrackExtractService _trackExtractService = new TrackExtractService();
-		private TopoTrailService _trailDataService;
-
 
 		public OrthoController()
 		{

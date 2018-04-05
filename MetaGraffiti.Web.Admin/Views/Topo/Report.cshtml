@@ -50,13 +50,11 @@
 	<thead class="table-dark">
 		<tr>
 			<th>Date</th>
-			<th class="w-25">Trail</th>
-			<th>Country</th>
-			<th>Region</th>
+			<th class="w-33">Trail</th>
+			<th>Location</th>
 			<th>Places</th>
-			<th>Keywords</th>
 			<th class="text-center">Tracks</th>
-			<th class="text-center">Stats</th>
+			<th class="text-center">Tags</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -75,36 +73,50 @@
 					</tr>
 				}
 				<tr>
-					<td class="text-nowrap">@trail.StartLocal.ToString("yyyy-MM-dd")</td>
+					<td class="font-weight-bold text-nowrap">@trail.StartLocal.ToString("yyyy-MM-dd")</td>
 					<td>
 						<div class="h4">
-							<a class="topo-color" href="@TrailViewModel.GetTrailUrl(trail)">@trail.Name</a>
+							<a class="topo-color" href="@TrailViewModel.GetTrailUrl(trail)">@IconHelper.TrailIcon @trail.Name</a>
 						</div>
 						<div>@trail.Description</div>
 					</td>
-					<td class="h5">
-						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
-					</td>
-					<td class="h6">
+					<td>
+						@if (!String.IsNullOrWhiteSpace(trail.Location))
+						{
+							<div class="font-weight-bold">@trail.Location</div>
+						}
+
 						@if (trail.Region != null)
 						{
-							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
+							<div>
+								<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2, trail.Region.RegionISO)">@trail.Region.RegionName</a>
+							</div>
 						}
+						<div>
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.ISO2)">@trail.Country.Name</a>
+						</div>
 					</td>
 					<td>
 						@foreach (var place in trail.Places)
 						{
 							<div>
-								<a class="carto-color" href="#">@place.Name</a>
+								<a class="carto-color" href="@CartoViewModel.GetPlaceUrl(place)">@IconHelper.PlaceIcon @place.Name</a>
 							</div>
 						}
 					</td>
-					<td>
-						@trail.Keywords
+					<td class="small">
+						@foreach (var track in trail.Tracks)
+						{
+							<div>@track.Name</div>
+						}
 					</td>
-					<td class="text-center">@trail.Tracks.Count()</td>
-					<td class="h5">
-						@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true))
+					<td>
+						<div class="h6">
+							@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true, true))
+						</div>
+						<div class="h6 pt-2">
+							@trail.Keywords
+						</div>
 					</td>
 				</tr>
 			}

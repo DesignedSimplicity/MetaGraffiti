@@ -76,8 +76,8 @@
 			</span>
 			<div class="float-right">
 				<div class="btn-group">
-					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(country.ISO2)"><i class="fas fa-code-branch"></i></a>
-					<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)"><i class="fas fa-map"></i></a>
+					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(country.ISO2)">@IconHelper.TopoIcon</a>
+					<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">@IconHelper.CartoIcon</a>
 					@Html.Partial("Buttons/ResetView")
 				</div>
 			</div>

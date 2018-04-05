@@ -79,8 +79,8 @@
 			<div class="float-right">
 				<a class="btn btn-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)">@IconHelper.AddIcon Add</a>
 				<div class="btn-group">
-					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)"><i class="fas fa-globe"></i></a>
-					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)"><i class="fas fa-code-branch"></i></a>
+					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">@IconHelper.GeoIcon</a>
+					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@IconHelper.TopoIcon</a>
 					@Html.Partial("Buttons/ResetView")
 				</div>
 

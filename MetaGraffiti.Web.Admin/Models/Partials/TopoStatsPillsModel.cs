@@ -12,16 +12,20 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public bool ShowDetails { get; set; }
 
-		public TopoStatsPillsModel(TopoStats stats, bool showDetails = false)
+		public bool AlignJustify { get; set; }
+
+		public TopoStatsPillsModel(TopoStats stats, bool showDetails = false, bool alignJustify = false)
 		{
 			Stats = stats;
 			ShowDetails = showDetails;
+			AlignJustify = alignJustify;
 		}
 
-		public TopoStatsPillsModel(IEnumerable<ITopoTrackInfo> tracks, bool showDetails = false)
+		public TopoStatsPillsModel(IEnumerable<ITopoTrackInfo> tracks, bool showDetails = false, bool fixedWidth = false)
 		{
 			Stats = TopoStats.FromTracks(tracks);
 			ShowDetails = showDetails;
+			AlignJustify = fixedWidth;
 		}
 	}
 }

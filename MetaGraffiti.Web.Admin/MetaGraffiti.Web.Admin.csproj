@@ -356,7 +356,6 @@
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
-    <Content Include="Views\Trail\~Import.cshtml" />
     <Content Include="Views\Trail\Update.cshtml" />
     <Content Include="Views\Track\Modify.cshtml" />
     <Content Include="Views\Track\Manage.cshtml" />
