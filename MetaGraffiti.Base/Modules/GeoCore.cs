@@ -20,6 +20,11 @@ namespace MetaGraffiti.Base.Modules
 			return GeoTimezoneInfo.All.Where(x => x.TZID.EndsWith(name, StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault();
 		}
 
+		public GeoTimezoneInfo GuessTimezone(GeoRegionInfo region)
+		{
+			return GuessTimezone(region?.Country);
+		}
+
 		public GeoTimezoneInfo GuessTimezone(GeoCountryInfo country)
 		{
 			if (country == null) return null;

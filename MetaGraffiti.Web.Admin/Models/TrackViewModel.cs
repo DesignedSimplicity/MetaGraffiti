@@ -11,6 +11,7 @@ using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
+using MetaGraffiti.Base.Modules.Topo;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -28,6 +29,11 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
+		public DateTime GetTrackDate(TrackEditData edit)
+		{
+			//return edit.Timezone.FromUTC(edit.Points.First().Timestamp.Value);
+			return edit.Points.First().Timestamp.Value;
+		}
 
 
 		// ==================================================

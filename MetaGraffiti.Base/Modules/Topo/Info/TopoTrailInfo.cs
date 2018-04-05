@@ -16,7 +16,6 @@ namespace MetaGraffiti.Base.Modules.Topo.Info
 	{
 		public TopoTrailInfo()
 		{
-			Timezone = GeoTimezoneInfo.UTC;
 		}
 
 		public TopoTrailInfo(GpxFileData data)

@@ -88,6 +88,14 @@ namespace MetaGraffiti.Base.Services
 		}
 
 		/// <summary>
+		/// Builds the full path for a specific GPX file
+		/// </summary>
+		public string GetTrailUri(string key)
+		{
+			return GetFilename(GetTrail(key));
+		}
+
+		/// <summary>
 		/// Locates the track with the given file as the source
 		/// </summary>
 		public TopoTrackInfo FindTrackSource_TODO(string uri)

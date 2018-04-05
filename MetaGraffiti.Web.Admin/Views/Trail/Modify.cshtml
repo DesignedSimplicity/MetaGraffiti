@@ -3,10 +3,6 @@
 
 @Html.Partial("_Nav")
 
-
-
-
-
 <div class="row">
 	<div class="col-sm-6">
 		@if (Model.HasError)
@@ -17,9 +13,9 @@
 			<div class="h5">Would you like to discard the existing tracks or combine them with the current set?</div>
 			<br />
 			<div>
-				<a class="btn btn-danger" href="#">@IconHelper.RemoveIcon Discard Existing</a>
+				<a class="btn btn-danger" href="@TrailViewModel.GetModifyUrl(Model.Trail, TrailViewModel.MergeConfirmTypes.Discard)">@IconHelper.RemoveIcon Discard Existing</a>
 				&nbsp;
-				<a class="btn btn-warning" href="#">@IconHelper.AddIcon Combine Current</a>
+				<a class="btn btn-warning" href="@TrailViewModel.GetModifyUrl(Model.Trail, TrailViewModel.MergeConfirmTypes.Combine)">@IconHelper.AddIcon Combine Current</a>
 			</div>
 
 		</div>

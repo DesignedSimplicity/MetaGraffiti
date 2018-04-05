@@ -1,12 +1,8 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
 @model TrailViewModel
 
-@{
-	var trail = Model.Trail;
-}
-
 <script>
-	var _tracks = @JsonHelper.GetJson(trail);
+	var _tracks = @JsonHelper.GetJson(Model.Tracks);
 	var _bounds = null;
 	var _start = null;
 	var _finish = null;
@@ -85,7 +81,7 @@
 	<tbody>
 		@{
 			var count = 0;
-			foreach (var track in trail.TopoTracks)
+			foreach (var track in Model.Tracks)
 			{
 				var stats = track.Stats;
 				<tr class="js-mappable-row">
@@ -106,7 +102,7 @@
 						<div>
 							@if (!String.IsNullOrWhiteSpace(track.Source))
 							{
-								<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+								<a class="btn btn-sm btn-outline-info" href="@TrackViewModel.GetPreviewUrl(track.Source)">@Model.GetSourceName(track)</a>
 							}
 						</div>
 						<div class="mt-2">

@@ -14,6 +14,7 @@ using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Topo;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -45,18 +46,25 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackEditModel InitEditModel(TrackEditData track)
 		{
+			// prepare edit model
 			var model = new TrackEditModel();
 			model.File = new FileInfo(track.Source);
 			model.Track = track;			
 
+			// build fake trail data
 			var topoTrail = new TopoTrailInfo();
 			var first = track.Points.FirstOrDefault();
 			var country = Graffiti.Geo.NearestCountry(first);
 			if (country != null)
 			{
 				topoTrail.Country = country;
-				if (country.HasRegions) topoTrail.Region = Graffiti.Geo.NearestRegion(first);
-				topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
+				if (country.HasRegions)
+				{
+					var region = Graffiti.Geo.NearestRegion(first);
+					if (region != null && topoTrail.Timezone == null) topoTrail.Timezone = Graffiti.Geo.GuessTimezone(region);
+					topoTrail.Region = region;
+				}
+				if (topoTrail.Timezone == null) topoTrail.Timezone = Graffiti.Geo.GuessTimezone(country);
 			}
 			if (topoTrail.Timezone == null) topoTrail.Timezone = GeoTimezoneInfo.UTC;
 
@@ -146,7 +154,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			var track = _trackEditService.GetTrack(id);
 			if (track == null) throw new HttpException(404, $"Track {id} not found!");
-			model.EditTrack = InitEditModel(track);			
+
+			model.EditTrack = InitEditModel(track);
 
 			return View(model);
 		}

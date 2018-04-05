@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using MetaGraffiti.Base.Modules;
+using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
@@ -68,7 +69,7 @@ namespace MetaGraffiti.Base.Services
 		}
 
 		/// <summary>
-		/// Prepares a track edit from all of the data in a given file
+		/// Prepares a single track edit from all of the data in a given file
 		/// </summary>
 		public TrackEditData PreviewTrack(string uri)
 		{
@@ -87,14 +88,14 @@ namespace MetaGraffiti.Base.Services
 			if (String.IsNullOrWhiteSpace(track.Name)) track.Name = Path.GetFileNameWithoutExtension(file.Name);
 
 			// prepare points and source points lists
-			track.SourcePoints = data.Tracks.SelectMany(x => x.PointData).ToList();
-			track.Points = track.SourcePoints.ToList<IGpxPoint>();
+			track.DataPoints = data.Tracks.SelectMany(x => x.PointData).ToList();
+			track.Points = track.DataPoints.ToList<IGpxPoint>();
 
 			return track;
 		}
 
 		/// <summary>
-		/// Creates a track extract from a specific set of data and adds it to the edit session
+		/// Creates a single track edit from a specific set of file data and adds it to the edit session
 		/// </summary>
 		public TrackEditData CreateTrack(TrackEditCreateRequest request)
 		{
@@ -105,7 +106,7 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(request.Description)) track.Description = request.Description;
 
 			// apply points filters if provided
-			track.Points = FilterPoints(track.SourcePoints, request);
+			track.Points = FilterPoints(track.DataPoints, request);
 
 			// add to edit session
 			_tracks.Add(track);
@@ -114,28 +115,40 @@ namespace MetaGraffiti.Base.Services
 			return track;
 		}
 
-		
-		// TODO: remove duplication with PreviewTrack
-		public TrackEditData EditTrack(IGpxTrack source)
+		/// <summary>
+		/// Creates track edits for each track in the file data
+		/// </summary>
+		public List<TrackEditData> CreateTracks(string uri)
 		{
-			var track = new TrackEditData();
-			track.Key = Graffiti.Crypto.GetNewHash();
-			track.Source = source.Source;
+			// load file and read data
+			var file = new FileInfo(uri);
+			var read = new GpxFileReader(file.FullName);
+			var data = read.ReadFile();
 
-			track.Name = source.Name;
-			track.Description = source.Description;
+			var tracks = new List<TrackEditData>();
+			foreach (var t in data.Tracks)
+			{
+				// create new extract entity
+				var track = new TrackEditData();
+				track.Key = Graffiti.Crypto.GetNewHash();
+				track.Source = t.Source;
 
-			// apply points filters if provided
-			//track.SourcePoints = source.Points.ToList<GpxPointData>();
-			track.SourcePoints = new List<GpxPointData>();
-			track.SourcePoints.Add(new GpxPointData() { Latitude = 0, Longitude = 0, Timestamp = DateTime.Now });
-			track.Points = track.SourcePoints.ToList<IGpxPoint>();
+				track.Name = t.Name;
+				track.Description = t.Description;
 
-			// add to edit session
-			_tracks.Add(track);
+				track.DataPoints = t.PointData;
+				track.Points = t.Points;
 
-			// return new track edit
-			return track;
+				// default missing properties
+				if (String.IsNullOrWhiteSpace(track.Source)) track.Source = file.FullName;
+				if (String.IsNullOrWhiteSpace(track.Name)) track.Source = Path.GetFileNameWithoutExtension(file.Name);
+
+				// add to edit session
+				_tracks.Add(track);
+				tracks.Add(track);
+			}
+
+			return tracks;
 		}
 
 		/// <summary>
@@ -159,7 +172,7 @@ namespace MetaGraffiti.Base.Services
 		public TrackEditData RevertFilter(string key)
 		{
 			var track = GetTrack(key);
-			track.Points = track.SourcePoints.ToList<IGpxPoint>();
+			track.Points = track.DataPoints.ToList<IGpxPoint>();
 			return track;
 		}
 
@@ -242,7 +255,7 @@ namespace MetaGraffiti.Base.Services
 		public IList<IGpxPoint> Points { get; set; }
 
 		// Origional set of raw data points
-		public List<GpxPointData> SourcePoints { get; set; }
+		public List<GpxPointData> DataPoints { get; set; }
 	}
 
 	public class TrackEditCreateRequest : TrackEditFilter

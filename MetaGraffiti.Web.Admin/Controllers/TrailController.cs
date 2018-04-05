@@ -1,4 +1,5 @@
-﻿using MetaGraffiti.Base.Services;
+﻿using MetaGraffiti.Base.Modules.Topo.Info;
+using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
 using System;
 using System.Collections.Generic;
@@ -14,11 +15,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		private TrackEditService _trackEditService;
 		private TopoTrailService _topoTrailService;
+		private static TopoTrailInfo _editing;
 
 		public TrailController()
 		{
 			_topoTrailService = ServiceConfig.TopoTrailService;
+			_trackEditService = new TrackEditService();
 		}
 
 		private TrailViewModel InitModel(string id = "")
@@ -29,6 +33,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				var trail = _topoTrailService.GetTrail(id);
 				model.Trail = trail;
+				model.Tracks = trail.TopoTracks;
 			}
 
 			return model;
@@ -82,18 +87,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			}
 		}
 
-
-
-
-
 		/// <summary>
 		/// Extracts tracks from an existing trail for editing
 		/// </summary>
 		public ActionResult Modify(string id, TrailViewModel.MergeConfirmTypes confirm = TrailViewModel.MergeConfirmTypes.Intent)
 		{
-			var trackEditService = new TrackEditService();
-
-			var edits = trackEditService.ListTracks().Count;
+			var edits = _trackEditService.ListTracks().Count;
 
 			if (edits > 0)
 			{
@@ -107,19 +106,49 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				else if (confirm == TrailViewModel.MergeConfirmTypes.Discard)
 				{
 					// discard existing
-					trackEditService.RemoveAll();
+					_trackEditService.RemoveAll();
 				}
 			}
 
-			// perform extracts
+			// perform track extracts
+			var uri = _topoTrailService.GetTrailUri(id);
+			_trackEditService.CreateTracks(uri);
+
+			// cache trail level data
 			var trail = _topoTrailService.GetTrail(id);
-			foreach(var track in trail.TopoTracks)
-			{
-				trackEditService.EditTrack(track);
-			}
+			_editing = trail;
 
 			// go to track manage page
-			return Redirect(TrackViewModel.GetManageUrl());			
+			return Redirect(TrackViewModel.GetManageUrl());
+		}
+
+
+		public ActionResult Import()
+		{
+			var model = InitModel();
+
+			model.Trail = _editing;
+			model.Edit = new TopoTrailFormModel(_editing);
+			var tracks = new List<TopoTrackInfo>();
+			foreach(var t in _trackEditService.ListTracks())
+			{
+				var track = new TopoTrackInfo(_editing, t);
+				tracks.Add(track);
+			}
+			model.Tracks = tracks;
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Clears the current trail data edit session
+		/// </summary>
+		/// <returns></returns>
+		public ActionResult Discard()
+		{
+			_editing = null;
+
+			return Redirect(TrailViewModel.GetImportUrl());
 		}
 	}
 }

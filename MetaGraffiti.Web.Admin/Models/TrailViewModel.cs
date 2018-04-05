@@ -5,6 +5,7 @@ using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -20,6 +21,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Required
 		public TopoTrailInfo Trail { get; set; }
+		public IEnumerable<TopoTrackInfo> Tracks { get; set; }
 		public ITopoTrailUpdateRequest Edit { get; set; }
 
 
@@ -30,8 +32,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
-
-
+		public bool HasTracks { get { return (Tracks?.Count() ?? 0) > 0; } }
+		public string GetSourceName(ITopoTrackInfo track) { return Path.GetFileNameWithoutExtension(track.Source); }
 
 		// ==================================================
 		// Navigation
@@ -43,10 +45,12 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}/"; }
 		public static string GetModifyUrl(ITopoTrailInfo trail, MergeConfirmTypes confirm) { return $"/trail/modify/{trail.Key}/?confirm={confirm}"; }
 
-
-		public static string GetUpdateUrl() { return $"/trail/update/"; }
-		public static string GetModifyUrl() { return $"/trail/modify/"; }
 		public static string GetImportUrl() { return $"/trail/import/"; }
+		public static string GetDiscardUrl() { return $"/trail/discard/"; }
+
+		//public static string GetUpdateUrl() { return $"/trail/update/"; }
+		//public static string GetModifyUrl() { return $"/trail/modify/"; }
+
 	}
 
 	public class TopoTrailFormModel : ITopoTrailUpdateRequest
@@ -54,6 +58,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public TopoTrailFormModel() { }
 		public TopoTrailFormModel(ITopoTrailInfo trail)
 		{
+			if (trail == null) return;
+
 			Key = trail.Key;
 			Name = trail.Name;
 			Description = trail.Description;

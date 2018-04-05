@@ -115,10 +115,10 @@
 					<div class="row">
 						<div class="col">
 							<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Update</button>
-							<a href="@TrackViewModel.GetManageUrl()" class="btn btn-outline-info js-confirm-dirty"><i class="fas fa-list"></i> Manage</a>
+							<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage</a>
 						</div>
 						<div class="col text-right">							
-							<a href="@TrackViewModel.GetDeleteUrl(edit.Key)" class="btn btn-outline-danger js-confirm">@IconHelper.RemoveIcon Remove</a>
+							<a class="btn btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(edit.Key)">@IconHelper.RemoveIcon Remove</a>
 						</div>
 					</div>
 				</form>

@@ -356,7 +356,7 @@
     <Content Include="Views\Topo\Index.cshtml" />
     <Content Include="Views\Topo\Country.cshtml" />
     <Content Include="Views\Topo\Report.cshtml" />
-    <Content Include="Views\Trail\Import.cshtml" />
+    <Content Include="Views\Trail\~Import.cshtml" />
     <Content Include="Views\Trail\Update.cshtml" />
     <Content Include="Views\Track\Modify.cshtml" />
     <Content Include="Views\Track\Manage.cshtml" />
@@ -364,7 +364,11 @@
     <Content Include="Views\Shared\Buttons\ResetView.cshtml" />
     <Content Include="Views\Trail\Display.cshtml" />
     <Content Include="Views\Trail\Modify.cshtml" />
-    <Content Include="Views\Trail\_Tracks.cshtml" />
+    <Content Include="Views\Trail\_TrackGrid.cshtml" />
+    <Content Include="Views\Trail\Import.cshtml" />
+    <Content Include="Views\Trail\_TrailForm.cshtml" />
+    <Content Include="Views\Shared\Widgets\ErrorMessages.cshtml" />
+    <Content Include="Views\Shared\Widgets\SuccessConfirmation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

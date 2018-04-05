@@ -1,0 +1,38 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-sm-6">
+
+		@if (Model.HasError)
+		{
+			<div class="alert alert-danger">
+				<div class="font-weight-bold">Please correct these errors:</div>
+				<hr />
+				<ul>
+					@foreach (var error in Model.ErrorMessages)
+					{
+						<li>@error</li>
+					}
+				</ul>
+			</div>
+			<a class="btn btn-danger" href="@TrackViewModel.GetManageUrl()">Resolve</a>
+		}
+		else if (Model.HasConfirmation)
+		{
+			<div class="alert alert-warning">
+				<div class="font-weight-bold">The trail already exists:</div>
+				<hr />
+				@Model.ConfirmMessage
+			</div>
+			<form method="post">
+				<input type="hidden" name="Overwrite" value="true" />
+				<button type="submit" class="btn btn-warning">Overwrite</button>
+				<a class="btn btn-outline-secondary" href="@TrackViewModel.GetManageUrl()">Rename</a>
+			</form>
+
+		}
+	</div>
+</div>

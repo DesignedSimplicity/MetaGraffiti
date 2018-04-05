@@ -3,7 +3,7 @@
 
 @Html.Partial("_Nav")
 
-@{ 
+@{
 
 }
 
@@ -41,7 +41,7 @@
 
 			if (_start != null) _start.setMap(null);
 			if (_stop != null) _stop.setMap(null);
-			
+
 			_start = markStart(points[0].lat, points[0].lng);
 			_stop = markFinish(points[last].lat, points[last].lng);
 		});
@@ -80,6 +80,7 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
+					<th>Date</th>
 					<th class="w-50">Track</th>
 					<th>Source</th>
 					<th>Actions</th>
@@ -87,32 +88,33 @@
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var track in Model.Tracks)
-				{
-					<tr class="js-mappable-row">
-						<td class="text-center font-weight-bold">@(++count)</td>
-						<td>
-							<div class="font-weight-bold">
-								<a class="topo-color" href="@TrackViewModel.GetModifyUrl(track.Key)">@track.Name</a>
-							</div>
-							<div class="small">@track.Description</div>
-						</td>
-						<td>
-							<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
-						</td>
-						<td class="text-nowrap">
-							<a class="btn btn-sm btn-success" href="@TrackViewModel.GetModifyUrl(track.Key)">Modify</a>
-							<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Remove</a>
-						</td>
-					</tr>
-			}
+					var count = 0;
+					foreach (var track in Model.Tracks)
+					{
+						<tr class="js-mappable-row">
+							<td class="text-center font-weight-bold">@(++count)</td>
+							<td class="text-nowrap">@TextHelper.GetTimestamp(Model.GetTrackDate(track))</td>
+							<td>
+								<div class="font-weight-bold">
+									<a class="topo-color" href="@TrackViewModel.GetModifyUrl(track.Key)">@track.Name</a>
+								</div>
+								<div class="small">@track.Description</div>
+							</td>
+							<td>
+								<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
+							</td>
+							<td class="text-nowrap">
+								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetModifyUrl(track.Key)">Modify</a>
+								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Remove</a>
+							</td>
+						</tr>
+					}
 				}
 			</tbody>
 		</table>
 		<div class="row">
 			<div class="col">
-				<button type="button" class="btn btn-success"><i class="fas fa-database"></i> Import Trail</button>
+				<a href="@TrailViewModel.GetImportUrl()" class="btn btn-success"><i class="fas fa-database"></i> Import Trail</a>
 				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-secondary"><i class="fas fa-download"></i> Export GPX</a>
 				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-secondary"><i class="fas fa-download"></i> Export KML</a>
 			</div>

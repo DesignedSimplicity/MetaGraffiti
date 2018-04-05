@@ -3,36 +3,49 @@
 
 @Html.Partial("_Nav")
 
-<div class="row">
-	<div class="col-sm-6">
+@{
+	var trail = Model.Trail;
+	var edit = Model.Edit;
+}
 
-		@if (Model.HasError)
-		{
-			<div class="alert alert-danger">
-				<div class="font-weight-bold">Please correct these errors:</div>
-				<hr />
-				<ul>
-					@foreach (var error in Model.ErrorMessages)
-					{
-						<li>@error</li>
-					}
-				</ul>
-			</div>
-			<a class="btn btn-danger" href="@TrackViewModel.GetManageUrl()">Resolve</a>
-		}
-		else if (Model.HasConfirmation)
-		{
-			<div class="alert alert-warning">
-				<div class="font-weight-bold">The trail already exists:</div>
-				<hr />
-				@Model.ConfirmMessage
-			</div>
-			<form method="post">
-				<input type="hidden" name="Overwrite" value="true" />
-				<button type="submit" class="btn btn-warning">Overwrite</button>
-				<a class="btn btn-outline-secondary" href="@TrackViewModel.GetManageUrl()">Rename</a>
-			</form>
+<script>
+	$(document).ready(function () {
+		initDirty();
+	});
+</script>
 
-		}
+<div id="map-container">
+	<div id="map">
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-sm-6">
+		@Html.Partial("Alerts/SuccessConfirm")
+		@Html.Partial("Alerts/ErrorMessages")
+		<form method="post">
+			@Html.Partial("_TrailForm", Model.Edit)
+			<div class="row">
+				<div class="col-sm-6">
+					@if (Model.Trail != null)
+					{
+						<input type="hidden" name="Key" value="@Model.Trail.Key" />
+						<button type="submit" class="btn btn-warning js-confirm"><i class="fas fa-save"></i> Update Existing Trail</button>
+					}
+					else if (Model.HasTracks)
+					{
+						<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Import New Trail</button>
+					}
+				</div>
+				<div class="col-sm-6 text-right">
+					<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage Tracks</a>
+					<a class="btn btn-outline-danger js-confirm" href="@TrailViewModel.GetDiscardUrl()"><i class="fas fa-undo"></i> Discard Trail</a>
+				</div>
+			</div>
+		</form>
+		<br />
+		<br />
+		@Html.Partial("_TrackGrid")
+	</div>
+</div>
+<br />
