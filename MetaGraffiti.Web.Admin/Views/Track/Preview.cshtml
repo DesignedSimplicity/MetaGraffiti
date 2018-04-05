@@ -52,6 +52,12 @@
 			$(".js-show-bounds").removeClass("table-secondary");
 			$(this).addClass("table-secondary");
 		});
+
+		$(".js-reset-view").click(function () {
+			if (_bounds != null) _bounds.setMap(null);
+			var all = calcBounds(_track.points);
+			_mapGoogle.fitBounds(all);
+		});
 	});
 
 	function loadTrack() {
@@ -71,6 +77,14 @@
 
 <div class="row">
 	<div class="col-sm-6">
+		<div class="h2">
+			@IconHelper.TrackIcon Preview Track
+			<div class="float-right">
+				<a class="btn btn-outline-success js-confirm-dirty" href="@TrackViewModel.GetManageUrl()">@IconHelper.ListIcon Manage Track Edits</a>
+				@Html.Partial("Buttons/ResetView")
+			</div>
+		</div>
+		<hr />
 		<div class="row">
 			<div class="col">
 				<div class="form-group">
@@ -108,35 +122,35 @@
 		</div>
 		<hr />
 		<div class="row h3">
-			<div class="col-sm-2 text-success"><i class="fas fa-sign-out-alt"></i> Start:</div>
+			<div class="col-sm-2 text-success">@IconHelper.StartIcon Start:</div>
 			<div class="col-sm-8">
 				@if (track.StartPlace != null)
-				{
-					<div class="pb-2">
-						<span class="p-1 carto-color js-show-start js-show-bounds"><i class="fas fa-expand"></i></span>
-						<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">
-							@track.StartPlace.Name
-						</a>
-					</div>
-				}
+			{
+				<div class="pb-2">
+					<span class="p-1 carto-color js-show-start js-show-bounds">@IconHelper.BoundsIcon</span>
+					<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">
+						@track.StartPlace.Name
+					</a>
+				</div>
+		}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.StartPoint)"><i class="fas fa-search"></i> Lookup</a>
+				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.StartPoint)">@IconHelper.SearchIcon Lookup</a>
 			</div>
 		</div>
 		<div class="row h3">
-			<div class="col-sm-2 text-danger"><i class="fas fa-sign-in-alt"></i> Finish:</div>
+			<div class="col-sm-2 text-danger">@IconHelper.FinishIcon Finish:</div>
 			<div class="col-sm-8">
 				@if (track.FinishPlace != null)
-				{
+			{
 				<div class="pb-2">
-					<span class="p-1 carto-color js-show-finish js-show-bounds"><i class="fas fa-expand"></i></span>
+					<span class="p-1 carto-color js-show-finish js-show-bounds">@IconHelper.BoundsIcon</span>
 					<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
 				</div>
-				}
+		}
 			</div>
 			<div class="col-sm-2 text-right">
-				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.FinishPoint)"><i class="fas fa-search"></i> Lookup</a>
+				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetSearchUrl(track.FinishPoint)">@IconHelper.SearchIcon Lookup</a>
 			</div>
 		</div>
 		<div class="row h4">
@@ -145,12 +159,12 @@
 			</div>
 			<div class="col-sm-8">
 				@foreach (var place in Model.EditTrack.NearbyPlaces)
-				{
-					<div class="pb-2">
-						<span class="p-1 h3 carto-color js-show-nearby js-show-bounds"><i class="fas fa-expand"></i></span>
-						<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-					</div>
-				}
+			{
+				<div class="pb-2">
+					<span class="p-1 h3 carto-color js-show-nearby js-show-bounds">@IconHelper.BoundsIcon</span>
+					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+				</div>
+		}
 			</div>
 		</div>
 		<div class="row h4">
@@ -159,12 +173,12 @@
 			</div>
 			<div class="col-sm-8">
 				@foreach (var place in Model.EditTrack.ContainedPlaces)
-				{
-					<div class="pb-2">
-						<span class="p-1 h3 carto-color js-show-contains js-show-bounds"><i class="fas fa-expand"></i></span>
-						<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
-					</div>
-				}
+			{
+				<div class="pb-2">
+					<span class="p-1 h3 carto-color js-show-contains js-show-bounds">@IconHelper.BoundsIcon</span>
+					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+				</div>
+		}
 			</div>
 		</div>
 		<hr />
@@ -173,9 +187,9 @@
 			<div class="col-sm-8">
 				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@track.Trail.Country.Name</a>
 				@if (track.Trail.Region != null)
-				{
-					<span> \ <a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country.Name, track.Trail.Region.RegionName)">@track.Trail.Region.RegionName</a></span>
-				}
+			{
+				<span> \ <a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country.Name, track.Trail.Region.RegionName)">@track.Trail.Region.RegionName</a></span>
+		}
 			</div>
 		</div>
 		<div class="row h5">

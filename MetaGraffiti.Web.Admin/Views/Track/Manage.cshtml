@@ -3,10 +3,6 @@
 
 @Html.Partial("_Nav")
 
-@{
-
-}
-
 <script>
 	var _tracks = @JsonHelper.GetJson(Model.Tracks);
 	var _bounds = null;
@@ -72,13 +68,13 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="h2">Manage Trail Edits
+		<div class="h2">
+			@IconHelper.TrackIcon Manage Track Edits
 			<div class="float-right">
-				<a class="btn btn-outline-warning" href="@OrthoViewModel.GetBrowseTracksUrl()">@IconHelper.TrackIcon Import Tracks</a>
+				<a class="btn btn-outline-secondary" href="@OrthoViewModel.GetBrowseTracksUrl()">@IconHelper.TrackIcon Import New Tracks</a>
 				@Html.Partial("Buttons/ResetView")
 			</div>
 		</div>
-		
 		<br />
 		<table class="table table-striped">
 			<thead class="thead-dark">
@@ -99,17 +95,17 @@
 							<td class="text-center font-weight-bold">@(++count)</td>
 							<td class="text-nowrap">@TextHelper.GetTimestamp(Model.GetTrackDate(track))</td>
 							<td>
-								<div class="font-weight-bold">
-									<a class="topo-color" href="@TrackViewModel.GetModifyUrl(track.Key)">@track.Name</a>
+								<div class="h5">
+									<a class="topo-color" href="@TrackViewModel.GetModifyUrl(track.Key)">@IconHelper.TrackIcon @track.Name</a>
 								</div>
 								<div class="small">@track.Description</div>
 							</td>
-							<td>
+							<td class="small">
 								<a class="topo-color" href="@TrackViewModel.GetPreviewUrl(track.Source)">@track.Source</a>
 							</td>
 							<td class="text-nowrap">
 								<a class="btn btn-sm btn-success" href="@TrackViewModel.GetModifyUrl(track.Key)">Modify</a>
-								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Remove</a>
+								<a class="btn btn-sm btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(track.Key)">Discard</a>
 							</td>
 						</tr>
 					}
@@ -119,11 +115,11 @@
 		<div class="row">
 			<div class="col">
 				<a href="@TrailViewModel.GetImportUrl()" class="btn btn-success">@IconHelper.ImportIcon Import Trail</a>
-				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-secondary">@IconHelper.ExportIcon Export GPX</a>
-				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-secondary">@IconHelper.ExportIcon Export KML</a>
+				<a href="@TrackViewModel.GetExportUrl()" class="btn btn-outline-primary">@IconHelper.ExportIcon Export GPX</a>
+				<a href="@TrackViewModel.GetExportUrl("kml")" class="btn btn-outline-primary">@IconHelper.ExportIcon Export KML</a>
 			</div>
 			<div class="col text-right">
-				<a href="@TrackViewModel.GetResetUrl()" class="btn btn-outline-danger js-confirm">@IconHelper.RemoveIcon Remove All</a>
+				<a href="@TrackViewModel.GetResetUrl()" class="btn btn-outline-danger js-confirm">@IconHelper.RemoveIcon Discard All</a>
 			</div>
 		</div>
 	</div>

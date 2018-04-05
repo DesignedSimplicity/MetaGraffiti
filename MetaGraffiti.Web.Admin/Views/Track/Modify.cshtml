@@ -36,6 +36,23 @@
 			gotoPoint(point.lat, point.lng);
 		});
 
+		$(".js-auto-name").click(function (e) {
+			var name = "";
+
+			if (_start && _finish) {
+				if (_start.name == _finish.name)
+					name = _start.name + " Loop"
+				else
+					name = _start.name + " To " + _finish.name;
+			}
+			else if (_start)
+				name = "From " + _start.name;
+			else if (_finish)
+				name = "To " + _finish.name;
+
+			if (name != "") $("#NameField").val(name);
+		});
+
 		$(".js-start-utc").click(function (e) {
 			$(".js-start-utc").parent().removeClass("table-success");
 			$(this).parent().addClass("table-success");
@@ -53,6 +70,12 @@
 		$(".js-remove-points").click(function (e) {
 			e.preventDefault();
 			$(this).closest("form").submit();
+		});
+
+		$(".js-reset-view").click(function () {
+			if (_marker != null) _marker.setMap(null);
+			var all = calcBounds(_track.points);
+			_mapGoogle.fitBounds(all);
 		});
 	});
 
@@ -78,14 +101,16 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		@if (Model.HasConfirmation)
-		{
-		<div class="alert alert-success"><i class="fas fa-thumbs-up"></i> @Model.ConfirmMessage</div>
-		}
-		@if (Model.HasError)
-		{
-		<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> @Model.ErrorMessages.First()</div>
-		}
+		@Html.Partial("Alerts/SuccessConfirm")
+		@Html.Partial("Alerts/ErrorMessages")
+		<div class="h2">
+			@IconHelper.TrackIcon Modify Track
+			<div class="float-right">
+				<a class="btn btn-outline-success js-confirm-dirty" href="@TrackViewModel.GetManageUrl()">@IconHelper.ListIcon Manage Track Edits</a>
+				@Html.Partial("Buttons/ResetView")
+			</div>
+		</div>
+		<hr />
 		<div class="row">
 			<div class="col-sm-6">
 				<form method="post">
@@ -97,7 +122,12 @@
 								@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(track.Stats, false))
 							</span>
 						</div>
-						<input type="text" class="form-control" name="Name" value="@track.Name" />
+						<div class="input-group">
+							<input type="text" class="form-control" id="NameField" name="Name" value="@track.Name" />
+							<div class="input-group-append">
+								<a class="btn btn-outline-primary js-auto-name" href="#" title="Autoname"><i class="fas fa-asterisk"></i></a>
+							</div>
+						</div>						
 					</div>
 					<div class="form-group">
 						<label for="description"><i class="fas fa-quote-left"></i> Description</label>
@@ -108,17 +138,16 @@
 						<div class="input-group">
 							<input type="text" class="form-control" readonly value="@track.Source">
 							<div class="input-group-append">
-								<a class="btn btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(track.Source)"><i class="fas fa-eye"></i></a>
+								<a class="btn btn-outline-secondary" href="@TrackViewModel.GetPreviewUrl(track.Source)">@IconHelper.PreviewIcon</a>
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col">
-							<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Update</button>
-							<a class="btn btn-outline-info js-confirm-dirty" href="@TrackViewModel.GetManageUrl()"><i class="fas fa-list"></i> Manage</a>
+					<div class="form-row">
+						<div class="col-auto">
+							<button type="submit" class="btn btn-success">@IconHelper.SaveIcon Update Track</button>
 						</div>
-						<div class="col text-right">							
-							<a class="btn btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(edit.Key)">@IconHelper.RemoveIcon Remove</a>
+						<div class="col text-right">
+							<a class="btn btn-outline-danger js-confirm" href="@TrackViewModel.GetDeleteUrl(edit.Key)">@IconHelper.RemoveIcon Discard</a>
 						</div>
 					</div>
 				</form>
@@ -128,12 +157,12 @@
 					<input type="hidden" name="Key" value="@edit.Key" />
 					<div class="form-group">
 						<div>
-							<span class="text-success"><i class="fas fa-sign-out-alt"></i> <label for="StartUTC">Start</label></span>
+							<span class="text-success">@IconHelper.StartIcon <label for="StartUTC">Start</label></span>
 							<div class="float-right">
 								@if (track.StartPlace != null)
-								{
-									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
-								}
+							{
+								<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
+						}
 							</div>
 						</div>
 						<div class="form-row">
@@ -148,12 +177,12 @@
 
 					<div class="form-group">
 						<div>
-							<span class="text-danger"><i class="fas fa-sign-in-alt"></i> <label for="FinishUTC">Finish</label></span>
+							<span class="text-danger">@IconHelper.FinishIcon <label for="FinishUTC">Finish</label></span>
 							<div class="float-right">
 								@if (track.FinishPlace != null)
-								{
-									<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
-								}
+							{
+								<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
+						}
 							</div>
 						</div>
 						<div class="form-row">
@@ -223,33 +252,33 @@
 				</thead>
 				<tbody>
 					@{
-						var index = 0;
-						foreach (var p in track.Points)
-						{
-							<tr class="js-mappable-row">
-								<td>
-									<label class="p-0 m-0"><input type="checkbox" name="Points" value="@index" /> @((index + 1).ToString("0000"))</label>
-									&nbsp;<a class="text-secondary js-remove-points" href="#" title="Remove selected points"><i class="fas fa-trash"></i></a>
-								</td>
-								<td class="text-nowrap">
-									<span>@TextHelper.GetTimestamp(p.Timestamp)</span>
-									&nbsp;<a class="text-success js-start-utc" href="#" title="Set as start"><i class="fas fa-sign-out-alt"></i></a>
-									&nbsp;<a class="text-danger js-finish-utc" href="#" title="Set as finish"><i class="fas fa-sign-in-alt"></i></a>
-								</td>
-								<td>
-									@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")
-									&nbsp;<a class="text-primary" href="@PlaceViewModel.GetSearchUrl(p)" target="_blank" title="Lookup location"><i class="fas fa-search"></i></a>
-								</td>
-								<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
-								<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
-								<td class="text-center table-@CssHelper.GetGpxSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
-								<td class="text-center table-@CssHelper.GetGpxSatsCss(p.Sats)">@p.Sats</td>
-								<td class="text-center table-@CssHelper.GetGpxDOPCss(p.HDOP)">@p.HDOP</td>
-								<td class="text-center table-@CssHelper.GetGpxDOPCss(p.VDOP)">@p.VDOP</td>
-								<td class="text-center table-@CssHelper.GetGpxDOPCss(p.PDOP)">@p.PDOP</td>
-							</tr>
-							index++;
-						}
+					var index = 0;
+					foreach (var p in track.Points)
+					{
+						<tr class="js-mappable-row">
+							<td>
+								<label class="p-0 m-0"><input type="checkbox" name="Points" value="@index" /> @((index + 1).ToString("0000"))</label>
+								&nbsp;<a class="text-secondary js-remove-points" href="#" title="Remove selected points"><i class="fas fa-trash"></i></a>
+							</td>
+							<td class="text-nowrap">
+								<span>@TextHelper.GetTimestamp(p.Timestamp)</span>
+								&nbsp;<a class="text-success js-start-utc" href="#" title="Set as start">@IconHelper.StartIcon</a>
+								&nbsp;<a class="text-danger js-finish-utc" href="#" title="Set as finish">@IconHelper.FinishIcon</a>
+							</td>
+							<td>
+								@p.Latitude.ToString("0.000000"), @p.Longitude.ToString("0.000000")
+								&nbsp;<a class="text-primary" href="@PlaceViewModel.GetSearchUrl(p)" target="_blank" title="Lookup location">@IconHelper.SearchIcon</a>
+							</td>
+							<td class="text-center">@((p.Elevation ?? 0).ToString("#,##0"))</td>
+							<td class="text-center">@((p.Course ?? 0).ToString("##0"))</td>
+							<td class="text-center table-@CssHelper.GetGpxSpeedCss(p.Speed)">@((p.Speed ?? 0).ToString("#,##0.0"))</td>
+							<td class="text-center table-@CssHelper.GetGpxSatsCss(p.Sats)">@p.Sats</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.HDOP)">@p.HDOP</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.VDOP)">@p.VDOP</td>
+							<td class="text-center table-@CssHelper.GetGpxDOPCss(p.PDOP)">@p.PDOP</td>
+						</tr>
+					index++;
+				}
 					}
 				</tbody>
 			</table>

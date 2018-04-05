@@ -35,6 +35,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Other Actions
+		public static HtmlString SearchIcon { get { return GetFontAwesomeIcon("fas fa-search"); } }
 		public static HtmlString ImportIcon { get { return GetFontAwesomeIcon("fas fa-database"); } }
 		public static HtmlString ExportIcon { get { return GetFontAwesomeIcon("fas fa-download"); } }
 		public static HtmlString RecycleIcon { get { return GetFontAwesomeIcon("fas fa-recycle"); } }
@@ -43,14 +44,23 @@ namespace MetaGraffiti.Web.Admin.Models
 
 
 		// ==================================================
-		// Entity Identifiers
+		// Object Types
+		public static HtmlString ListIcon { get { return GetFontAwesomeIcon("fas fa-list"); } }
+		public static HtmlString BoundsIcon { get { return GetFontAwesomeIcon("fas fa-expand"); } }
+		public static HtmlString StartIcon { get { return GetFontAwesomeIcon("fas fa-sign-out-alt"); } }
+		public static HtmlString FinishIcon { get { return GetFontAwesomeIcon("fas fa-sign-in-alt"); } }
+
+
+		// ==================================================
+		// Entity Types
 		public static HtmlString TrailIcon { get { return GetFontAwesomeIcon("fas fa-map-signs"); } }
 		public static HtmlString TrackIcon { get { return GetFontAwesomeIcon("fas fa-paw"); } }
 		public static HtmlString PlaceIcon { get { return GetFontAwesomeIcon("fas fa-map-marker"); } }
 		public static HtmlString SheetIcon { get { return GetFontAwesomeIcon("fas fa-sitemap"); } }
 
+
 		// ==================================================
-		// Namespace Identifiers
+		// Namespace Types
 		public static HtmlString GeoIcon { get { return GetFontAwesomeIcon("fas fa-globe"); } }
 		public static HtmlString TopoIcon { get { return GetFontAwesomeIcon("fas fa-code-branch"); } }
 		public static HtmlString CartoIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }

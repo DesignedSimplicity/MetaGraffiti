@@ -97,6 +97,13 @@ function editBounds(bounds, color, fill) {
 	return rectangle;
 }
 
+function calcBounds(path) {
+	var bounds = new google.maps.LatLngBounds();
+	for (var i = 0; i < path.length; i++) {
+		bounds.extend(new google.maps.LatLng(path[i].lat, path[i].lng));
+	}
+	return bounds;
+}
 
 function showTrack(path, color) {
 	if (color == null) color = '#ff0000';
@@ -109,10 +116,7 @@ function showTrack(path, color) {
 		map: _mapGoogle
 	});
 
-	var bounds = new google.maps.LatLngBounds();
-	for (var i = 0; i < path.length; i++) {
-		bounds.extend(new google.maps.LatLng(path[i].lat, path[i].lng));
-	}
+	var bounds = calcBounds(path);
 	_mapGoogle.fitBounds(bounds);
 
 	return track;
