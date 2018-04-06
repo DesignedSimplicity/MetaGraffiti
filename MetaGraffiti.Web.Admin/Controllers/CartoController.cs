@@ -64,13 +64,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		// TODO: add place type filter navigation
-		public ActionResult Country(string id, string placeType = "")
+		/// <summary>
+		/// Displays all places in a country on a map
+		/// </summary>
+		public ActionResult Country(string id)
 		{
 			var model = InitModel();
 
 			model.SelectedCountry = GeoCountryInfo.Find(id);
-			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.SelectedCountry.ISO2, PlaceType = placeType });			
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() { Country = model.SelectedCountry.ISO2, Sort = "Region" });
 
 			return View(model);
 		}

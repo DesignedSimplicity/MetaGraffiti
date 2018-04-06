@@ -5,62 +5,21 @@
 
 <script>
 	var _places = @JsonHelper.GetJson(Model.Places);
-	var _bounds = null;
-	var _all = null;
 
 	$(document).ready(function () {
 		initMap();
 
-		_all = new google.maps.LatLngBounds();
-		for (i = 0; i < _places.length; i++) {
-			var place = _places[i];
-			place.marker = markPlace(place, '@CartoViewModel.GetEditUrl("{key}")');
+		initCartoPlaces(_places, '@CartoViewModel.GetEditUrl("{key}")');
 
-			var color = getMapColor(i);
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		drawCartoPlaces();
+		fitCartoPlaces();
 
-			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
-			_all.extend(center);
-		}
+		initActionRows(actionCartoPlaceBounceMarkerAndDrawBounds, actionCartoPlaceToFitBounds);
 
-		if (_places.length > 0) fitBounds(_all);
-		
-		$(".js-mappable-row").hover(function () {
-			if (_bounds) _bounds.setMap(null);
-
-			var index = $(this).index();
-			var place = _places[index];
-			var color = getMapColor(index);
-
-			_bounds = drawBounds(place.bounds, color);
-
-			for (i = 0; i < _places.length; i++) {
-				if (i == index) {
-					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-				} else {
-					_places[i].marker.setAnimation(null);
-				}
-			}
-		});
-
-		$(".js-mappable-row").click(function () {
-			var index = $(this).index();
-			var place = _places[index];
-
-			place.marker.setAnimation(null);
-
-			fitBounds(place.bounds);
-		});
-
-		$(".js-reset-view").click(function (e) {
-			e.preventDefault();
-
-			fitBounds(_all);
-
-			if (_bounds) _bounds.setMap(null);
-			for (i = 0; i < _places.length; i++) {
-				_places[i].marker.setAnimation(null);
-			}
+		$(".js-reset-view").click(function () {
+			fitCartoPlaces();
+			drawCartoPlaceBounds(-1);
+			bounceCartoPlaceMarker(-1);
 		});
 	});
 </script>
@@ -77,7 +36,7 @@
 				@Model.SelectedCountry.Name
 			</span>
 			<div class="float-right">
-				<a class="btn btn-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)">@IconHelper.AddIcon Add</a>
+				<a class="btn btn-outline-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)">@IconHelper.PlaceIcon Import New Places</a>
 				<div class="btn-group">
 					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">@IconHelper.GeoIcon</a>
 					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@IconHelper.TopoIcon</a>
@@ -87,13 +46,13 @@
 			</div>
 		</div>
 		<br />
-		<table class="table table-sm table-striped table-hover">
+		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
 					<th>Type</th>
-					<th>Name</th>
-					<th>Locality</th>
+					<th class="w-50">Name</th>
+					<th>Location</th>
 					<th>Region</th>
 				</tr>
 			</thead>
@@ -103,9 +62,9 @@
 					foreach (var p in Model.Places)
 					{
 						<tr class="js-mappable-row">
-							<td class="text-center">@(++count)</td>
+							<td class="text-center h5">@(++count)</td>
 							<td>@p.PlaceType</td>
-							<td class="font-weight-bold"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
+							<td class="font-weight-bold"><a href="@CartoViewModel.GetEditUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a></td>
 							<td>
 								@{
 									var locality = Model.FindLocalityPlace(p);
@@ -127,7 +86,9 @@
 									}
 								}
 							</td>
-							<td>@(p.Region == null ? "" : p.Region.RegionName)</td>
+							<td>
+								@(p.Region == null ? "" : p.Region.RegionName)
+							</td>
 						</tr>
 					}
 				}

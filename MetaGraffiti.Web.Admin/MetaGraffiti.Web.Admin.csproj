@@ -272,8 +272,11 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Scripts\_graffiti\common.js" />
-    <Content Include="Scripts\_graffiti\googleMaps.js" />
+    <Content Include="Scripts\_graffiti\geo.js" />
+    <Content Include="Scripts\_graffiti\topo.js" />
+    <Content Include="Scripts\_graffiti\carto.js" />
+    <Content Include="Scripts\_graffiti\meta.js" />
+    <Content Include="Scripts\_graffiti\maps.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

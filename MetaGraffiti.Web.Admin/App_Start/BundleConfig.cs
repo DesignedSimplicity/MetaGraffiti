@@ -9,8 +9,11 @@ namespace MetaGraffiti.Web.Admin
 			bundles.Add(new ScriptBundle("~/bundle/js")
 						.Include("~/Scripts/jquery-{version}.js")
 						.Include("~/Scripts/bootstrap.js")
-						.Include("~/Scripts/_graffiti/common.js")
-						.Include("~/Scripts/_graffiti/googleMaps.js")
+						.Include("~/Scripts/_graffiti/meta.js")
+						.Include("~/Scripts/_graffiti/maps.js")
+						.Include("~/Scripts/_graffiti/geo.js")
+						.Include("~/Scripts/_graffiti/topo.js")
+						.Include("~/Scripts/_graffiti/carto.js")
 						);
 
 			bundles.Add(new StyleBundle("~/bundle/css")

@@ -3,35 +3,36 @@
 
 @Html.Partial("_Nav")
 
-<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)"></script>
-<script src="~/Scripts/_graffiti/googleMaps.js"></script>
 <script>
 	var _places = @JsonHelper.GetJson(Model.SearchResults);
 	var _bounds = null;
+	var _all = null;
 
 	$(document).ready(function () {
 		initMap();
 
+		_all = new google.maps.LatLngBounds();
 		for (i = 0; i < _places.length; i++) {
-			var number = i + 1;
-			if (number > 10) number = null;
-
-			var place = _places[i];
-			place.marker = markPoint(place.center.lat, place.center.lng, place.name, number);
-
 			var color = getMapColor(i);
+			var place = _places[i];
+
+			place.marker = markPlace(place, getPlaceIcon(color), '@CartoViewModel.GetEditUrl("{key}")');
+
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+
+			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
+			_all.extend(center);
 		}
 
-		if (_places.length > 0) fitBounds(_places[0].bounds);
+		if (_places.length > 0) fitBounds(_all);
 
 		$(".js-mappable-row").hover(function () {
 			if (_bounds) _bounds.setMap(null);
 
 			var index = $(this).index();
 			var place = _places[index];
-
 			var color = getMapColor(index);
+
 			_bounds = drawBounds(place.bounds, color);
 
 			for (i = 0; i < _places.length; i++) {
@@ -46,9 +47,21 @@
 		$(".js-mappable-row").click(function () {
 			var index = $(this).index();
 			var place = _places[index];
+
 			place.marker.setAnimation(null);
 
 			fitBounds(place.bounds);
+		});
+
+		$(".js-reset-view").click(function (e) {
+			e.preventDefault();
+
+			fitBounds(_all);
+
+			if (_bounds) _bounds.setMap(null);
+			for (i = 0; i < _places.length; i++) {
+				_places[i].marker.setAnimation(null);
+			}
 		});
 	});
 </script>
@@ -122,7 +135,7 @@
 					{
 						var existing = (p.Key != p.GoogleKey);
 						<tr class="js-mappable-row @(existing ? " table-success" : "" )">
-							<td class="text-center">@(++count)</td>
+							<td class="text-center h5">@(++count)</td>
 							<td>
 								@if (existing)
 								{

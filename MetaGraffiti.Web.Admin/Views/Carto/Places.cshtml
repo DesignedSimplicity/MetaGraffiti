@@ -6,19 +6,25 @@
 <script>
 	var _places = @JsonHelper.GetJson(Model.Places);
 	var _bounds = null;
+	var _all = null;
 
 	$(document).ready(function () {
 		initMap();
 
+		_all = new google.maps.LatLngBounds();
 		for (i = 0; i < _places.length; i++) {
-			var place = _places[i];
-			place.marker = markPlace(place, '@CartoViewModel.GetEditUrl("{key}")');
-
 			var color = getMapColor(i);
+			var place = _places[i];
+
+			place.marker = markPlace(place, getPlaceIcon(color), '@CartoViewModel.GetEditUrl("{key}")');
+
 			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+
+			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
+			_all.extend(center);
 		}
 
-		showWorld();
+		if (_places.length > 0) showWorld();
 
 		$(".js-mappable-row").hover(function () {
 			if (_bounds) _bounds.setMap(null);
@@ -48,7 +54,14 @@
 		});
 
 		$(".js-reset-view").click(function (e) {
+			e.preventDefault();
+
 			showWorld();
+
+			if (_bounds) _bounds.setMap(null);
+			for (i = 0; i < _places.length; i++) {
+				_places[i].marker.setAnimation(null);
+			}
 		});
 	});
 </script>
@@ -73,8 +86,8 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
-					<th>Name</th>
 					<th>Type</th>
+					<th>Name</th>
 					<th>Locality</th>
 					<th>Region</th>
 					<th>Country</th>
@@ -82,21 +95,21 @@
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var p in Model.Places)
-				{
-					<tr class="js-mappable-row">
-						<td class="text-center">@(++count)</td>
-						<td>
-							<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
-							<span class="font-italic">@p.DisplayAs</span>
-						</td>
-						<td>@p.PlaceType</td>
-						<td>@p.Locality</td>
-						<td>@(p.Region?.RegionName ?? "")</td>
-						<td>@p.Country.ISO2</td>
-					</tr>
-			}
+					var count = 0;
+					foreach (var p in Model.Places)
+					{
+						<tr class="js-mappable-row">
+							<td class="text-center h5">@(++count)</td>
+							<td>@SvgHelper.GetPlaceTypeIcon(p.PlaceType) @p.PlaceType</td>
+							<td>
+								<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a>
+								<span class="font-italic">@p.DisplayAs</span>
+							</td>
+							<td>@p.Locality</td>
+							<td>@(p.Region?.RegionName ?? "")</td>
+							<td>@p.Country.Name</td>
+						</tr>
+					}
 				}
 			</tbody>
 		</table>

@@ -220,7 +220,10 @@ namespace MetaGraffiti.Base.Services
 				query = query.Where(x => GetFullTextSearch(x).Contains(t));
 			}
 
+			// apply sort
 			query = query.OrderBy(x => x.Country.Name).ThenBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name);
+
+			// return list
 			return query.ToList();
 		}
 
@@ -413,6 +416,8 @@ namespace MetaGraffiti.Base.Services
 		public string Country { get; set; }
 		public string Region { get; set; }
 		public string Locality { get; set; }
+
+		public string Sort { get; set; }
 	}
 
 	public class CartoPlaceCreateRequest : CartoPlaceData

@@ -65,6 +65,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString TopoIcon { get { return GetFontAwesomeIcon("fas fa-code-branch"); } }
 		public static HtmlString CartoIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }
 		public static HtmlString OrthoIcon { get { return GetFontAwesomeIcon("fas fa-sitemap"); } }
+
 	}
 
 	// TODO: migrate to helper folder and IconHelper name
@@ -75,6 +76,16 @@ namespace MetaGraffiti.Web.Admin.Models
 			var root = HttpContext.Current.Server.MapPath(@"\Images\Icons");
 			if (name.Contains("/")) root = @"C:\Code\KnE\Icons\";
 			string path = Path.Combine(root, name + ".svg");
+			if (File.Exists(path))
+				return new HtmlString(File.ReadAllText(path));
+			else
+				return new HtmlString("");
+		}
+
+		public static HtmlString GetPlaceTypeIcon(string placeType)
+		{
+			var root = @"C:\Code\KnE\Icons\Places\";
+			string path = Path.Combine(root, placeType + ".svg");
 			if (File.Exists(path))
 				return new HtmlString(File.ReadAllText(path));
 			else
