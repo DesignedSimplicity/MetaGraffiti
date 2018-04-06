@@ -5,63 +5,21 @@
 
 <script>
 	var _places = @JsonHelper.GetJson(Model.SearchResults);
-	var _bounds = null;
-	var _all = null;
 
 	$(document).ready(function () {
 		initMap();
 
-		_all = new google.maps.LatLngBounds();
-		for (i = 0; i < _places.length; i++) {
-			var color = getMapColor(i);
-			var place = _places[i];
+		initCartoPlaces(_places, '@CartoViewModel.GetEditUrl("{key}")');
 
-			place.marker = markPlace(place, getPlaceIcon(color), '@CartoViewModel.GetEditUrl("{key}")');
+		drawCartoPlaces(2);
+		fitCartoPlaces();
 
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		initActionRows(actionCartoPlaceBounceMarkerAndDrawBounds, actionCartoPlaceToFitBounds);
 
-			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
-			_all.extend(center);
-		}
-
-		if (_places.length > 0) fitBounds(_all);
-
-		$(".js-mappable-row").hover(function () {
-			if (_bounds) _bounds.setMap(null);
-
-			var index = $(this).index();
-			var place = _places[index];
-			var color = getMapColor(index);
-
-			_bounds = drawBounds(place.bounds, color);
-
-			for (i = 0; i < _places.length; i++) {
-				if (i == index) {
-					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-				} else {
-					_places[i].marker.setAnimation(null);
-				}
-			}
-		});
-
-		$(".js-mappable-row").click(function () {
-			var index = $(this).index();
-			var place = _places[index];
-
-			place.marker.setAnimation(null);
-
-			fitBounds(place.bounds);
-		});
-
-		$(".js-reset-view").click(function (e) {
-			e.preventDefault();
-
-			fitBounds(_all);
-
-			if (_bounds) _bounds.setMap(null);
-			for (i = 0; i < _places.length; i++) {
-				_places[i].marker.setAnimation(null);
-			}
+		$(".js-reset-view").click(function () {
+			fitCartoPlaces();
+			drawCartoPlaceBounds(-1);
+			bounceCartoPlaceMarker(-1);
 		});
 	});
 </script>
@@ -73,7 +31,15 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<h2>Search</h2>
+		<div>
+			<span class="h2">
+				Search Places
+			</span>
+			<div class="float-right">
+				@Html.Partial("Buttons/ResetView")
+			</div>
+		</div>
+		<hr />
 		<div class="row">
 			<div class="col">
 				<form method="post" action="@PlaceViewModel.GetSearchUrl()">
@@ -87,15 +53,15 @@
 						</div>
 					</div>
 					<!--
-	<div class="form-group">
-		<label for="description">Region</label>
-		<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.SearchCriteria.Region">
-	</div>
-	<div class="form-group">
-		<label for="description">Country</label>
-		<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.SearchCriteria.Country">
-	</div>
-		-->
+				<div class="form-group">
+					<label for="description">Region</label>
+					<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.SearchCriteria.Region">
+				</div>
+				<div class="form-group">
+					<label for="description">Country</label>
+					<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.SearchCriteria.Country">
+				</div>
+					-->
 				</form>
 			</div>
 			<div class="col">
@@ -130,30 +96,30 @@
 			</thead>
 			<tbody>
 				@{
-					var count = 0;
-					foreach (var p in Model.SearchResults)
-					{
-						var existing = (p.Key != p.GoogleKey);
-						<tr class="js-mappable-row @(existing ? " table-success" : "" )">
-							<td class="text-center h5">@(++count)</td>
-							<td>
-								@if (existing)
-								{
-									<a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
-								}
-								else
-								{
-									<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
-								}
-							</td>
-							<td>@p.LocalName</td>
-							<td>@p.DisplayAs</td>
-							<td>@p.PlaceType</td>
-							<td>@p.Locality</td>
-							<td>@(p.Region?.RegionName ?? "")</td>
-							<td>@p.Country.ISO2</td>
-						</tr>
+				var count = 0;
+				foreach (var p in Model.SearchResults)
+				{
+					var existing = (p.Key != p.GoogleKey);
+					<tr class="js-mappable-row @(existing ? " table-success" : "" )">
+						<td class="text-center h5">@(++count)</td>
+						<td>
+							@if (existing)
+						{
+							<a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
 					}
+					else
+					{
+						<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
+				}
+						</td>
+						<td>@p.LocalName</td>
+						<td>@p.DisplayAs</td>
+						<td>@p.PlaceType</td>
+						<td>@p.Locality</td>
+						<td>@(p.Region?.RegionName ?? "")</td>
+						<td>@p.Country.ISO2</td>
+					</tr>
+			}
 				}
 			</tbody>
 		</table>

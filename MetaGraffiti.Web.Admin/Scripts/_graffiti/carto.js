@@ -14,12 +14,13 @@ function initCartoPlaces(places, url) {
 	_cartoPlaceBounds = null;
 }
 
-function drawCartoPlaces() {
+function drawCartoPlaces(scale) {
+	if (!scale) scale = 1;
 	for (var index = 0; index < _cartoPlaces.length; index++) {
 		var place = _cartoPlaces[index];
 		var color = getMapColor(index);
 
-		place.marker = markPlace(place, getPlaceIcon(color), _cartoPlaceUrl);
+		place.marker = markPlace(place, getPlaceIcon(color, scale), _cartoPlaceUrl);
 		var center = new google.maps.LatLng(place.center.lat, place.center.lng);
 		_cartoPlacesBounds.extend(center);
 	}

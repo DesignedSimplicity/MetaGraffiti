@@ -11,57 +11,17 @@
 	$(document).ready(function () {
 		initMap();
 
-		_all = new google.maps.LatLngBounds();
-		for (i = 0; i < _places.length; i++) {
-			var color = getMapColor(i);
-			var place = _places[i];
+		initCartoPlaces(_places, '@CartoViewModel.GetEditUrl("{key}")');
 
-			place.marker = markPlace(place, getPlaceIcon(color), '@CartoViewModel.GetEditUrl("{key}")');
+		drawCartoPlaces(1);
+		showWorld();
 
-			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color);
+		initActionRows(actionCartoPlaceBounceMarkerAndDrawBounds, actionCartoPlaceToFitBounds);
 
-			var center = new google.maps.LatLng(place.center.lat, place.center.lng);
-			_all.extend(center);
-		}
-
-		if (_places.length > 0) showWorld();
-
-		$(".js-mappable-row").hover(function () {
-			if (_bounds) _bounds.setMap(null);
-
-			var index = $(this).index();
-			var place = _places[index];
-			var color = getMapColor(index);
-
-			_bounds = drawBounds(place.bounds, color);
-
-			for (i = 0; i < _places.length; i++) {
-				if (i == index) {
-					_places[i].marker.setAnimation(google.maps.Animation.BOUNCE);
-				} else {
-					_places[i].marker.setAnimation(null);
-				}
-			}
-		});
-
-		$(".js-mappable-row").click(function () {
-			var index = $(this).index();
-			var place = _places[index];
-
-			place.marker.setAnimation(null);
-
-			fitBounds(place.bounds);
-		});
-
-		$(".js-reset-view").click(function (e) {
-			e.preventDefault();
-
+		$(".js-reset-view").click(function () {
 			showWorld();
-
-			if (_bounds) _bounds.setMap(null);
-			for (i = 0; i < _places.length; i++) {
-				_places[i].marker.setAnimation(null);
-			}
+			drawCartoPlaceBounds(-1);
+			bounceCartoPlaceMarker(-1);
 		});
 	});
 </script>
@@ -81,7 +41,7 @@
 				@Html.Partial("Buttons/ResetView")
 			</div>
 		</div>
-
+		<br />
 		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
 				<tr>

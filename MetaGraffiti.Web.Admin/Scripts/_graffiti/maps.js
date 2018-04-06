@@ -213,7 +213,7 @@ function getPlaceIcon(color, scale) {
 		anchor: new google.maps.Point(12, 24),
 		fillOpacity: 1,
 		fillColor: color,
-		strokeColor: color,
+		strokeColor: "#000",
 	};
 	return icon;
 }
