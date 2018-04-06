@@ -99,3 +99,21 @@
 		color: #555c62;
 		fill: #555c62;
 	}
+
+
+
+
+.display-meta {
+	font-size: 150px !important;
+}
+
+	.display-meta > * {
+		display: inline-block;
+		vertical-align: middle;
+
+	}
+
+	.display-meta img {
+		height: 128px;
+		margin-top: 16px;
+	}

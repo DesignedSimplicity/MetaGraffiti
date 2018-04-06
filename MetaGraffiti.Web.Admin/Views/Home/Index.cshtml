@@ -2,7 +2,7 @@
 @model AdminViewModel
 <div class="jumbotron">
 	<div class="container">
-		<h1 class="icon-link display-1">@SvgHelper.GetIcon("Meta")<span class="font-weight-bold">Meta</span><span>Graffiti</span></h1>
+		<div class="icon-link display-meta"><img src="~/Images/logo.png" /> <span class="font-weight-bold">Meta</span><span>Graffiti</span></div>
 	</div>
 </div>
 
@@ -39,11 +39,11 @@
 		</div>
 		<div class="col-md-4">
 			<div class="mt-2">
-				<a href="@OrthoViewModel.GetBrowseTracksUrl(DateTime.Now.Year.ToString())" class="topo-color icon-link h1">@SvgHelper.GetIcon("types/track")<span>Load Track</span></a>
+				<a href="@OrthoViewModel.GetBrowseTracksUrl(DateTime.Now.Year.ToString())" class="topo-color h1">@IconHelper.TrackIcon <span>Load Track</span></a>
 			</div>
 			<hr />
 			<div class="mt-2">
-				<a href="@OrthoViewModel.GetPlacesUrl(DateTime.Now.Year)" class="carto-color icon-link h1">@SvgHelper.GetIcon("types/place")<span>Find Place</span></a>
+				<a href="@OrthoViewModel.GetPlacesUrl(DateTime.Now.Year)" class="carto-color h1">@IconHelper.PlaceIcon <span>Add Place</span></a>
 			</div>
 			<!--
 			<div><a href="/chrono/" class="text-danger"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Build Timelines<small></small></div></a></div>
