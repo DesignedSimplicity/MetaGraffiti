@@ -53,6 +53,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 			dynamic json = new JObject();
 			json.name = Name;
 			json.key = Key;
+			json.type = PlaceType;
 
 			json.center = new JObject();
 			json.center.lat = _data.CenterLatitude;
