@@ -8,6 +8,23 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CssHelper
 	{
+		/// <summary>
+		/// Marks field as vaild or invalid
+		/// </summary>
+		public static string GetFieldValidCss(bool valid)
+		{
+			return (valid ? "is-valid" : "is-invalid");
+		}
+
+		/// <summary>
+		/// Highlights invalid fields only
+		/// </summary>
+		public static string GetFieldInvalidCss(bool valid)
+		{
+			return (valid ? "" : "is-invalid");
+		}
+
+
 		public static string GetAreaCss(AdminAreas area)
 		{
 			switch (area)

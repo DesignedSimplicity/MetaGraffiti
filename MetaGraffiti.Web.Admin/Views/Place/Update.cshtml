@@ -1,0 +1,48 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model PlaceViewModel
+
+@Html.Partial("_Nav")
+
+@{
+	var place = Model.SelectedPlace;
+}
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		@Html.Partial("Alerts/SuccessConfirm")
+		@Html.Partial("Alerts/ErrorMessages")
+		<div>
+			<span class="h2">
+				<a href="@CartoViewModel.GetCountryUrl(Model.SelectedCountry)">@Model.SelectedCountry.Name</a>
+				<span class="h3">\</span>
+				<span class="h3"> @(place.Name)</span>
+			</span>
+			<div class="float-right">
+				<button class="btn btn-outline-primary" type="submit">@IconHelper.ImportIcon Persist Places</button>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<hr />
+		<form method="post">
+			<input type="hidden" name="Key" value="@place.Key" />
+			@Html.Partial("_PlaceForm", Model.Edit)
+			<hr />
+			<div class="row">
+				<div class="col">
+					<button class="btn btn-success" type="submit">@IconHelper.SaveIcon Update Place</button>
+				</div>
+				<div class="col text-right">
+					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetDeleteUrl(place)">@IconHelper.RemoveIcon Delete</a>
+					<a class="btn btn-outline-secondary js-confirm" href="@PlaceViewModel.GetDisplayUrl(place)">@IconHelper.CancelIcon Cancel</a>
+					<a class="btn btn-outline-warning js-confirm" href="@PlaceViewModel.GetUpdateUrl(place)">@IconHelper.UndoIcon Revert</a>
+				</div>
+			</div>
+			<hr />
+		</form>
+	</div>
+</div>

@@ -35,12 +35,65 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Actions
 
-		public ActionResult Index()
-        {
+		[HttpGet]
+		public ActionResult Display(string id)
+		{
+			var key = id.ToUpperInvariant();
+
 			var model = InitModel();
+			var place = _cartoPlaceService.GetPlace(key);
+			model.Edit = new CartoPlaceFormModel2(place);
+			model.SelectedPlace = place;
+			model.SelectedCountry = place.Country;
 
 			return View(model);
-        }
+		}
+
+		[HttpGet]
+		public ActionResult Update(string id)
+		{
+			var key = id.ToUpperInvariant();
+
+			var model = InitModel();
+			var place = _cartoPlaceService.GetPlace(key);
+			model.Edit = new CartoPlaceFormModel2(place);
+			model.SelectedPlace = place;
+			model.SelectedCountry = place.Country;
+
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult Update(CartoPlaceUpdateRequest request)
+		{
+			var model = InitModel();
+
+			var source = _cartoPlaceService.GetPlace(request.Key);
+			model.SelectedCountry = source.Country;
+
+			var response = _cartoPlaceService.UpdatePlace(request);
+			var place = response.Data;
+			model.SelectedPlace = place;			
+
+			if (response.OK)
+			{
+				model.Edit = new CartoPlaceFormModel2(place);
+				model.ConfirmMessage = $"Place {request.PlaceKey} updated at {DateTime.Now}";
+			}
+			else
+			{
+				model.Edit = new CartoPlaceFormModel2(place, request);
+				model.AddValidationErrors(response.ValidationErrors);
+			}
+
+			//model.HasChanges = true;
+
+			return View(model);
+		}
+
+
+
+
 
 		/// <summary>
 		/// Searches google for places by name
@@ -96,8 +149,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Create(CartoPlaceCreateRequest request)
 		{
 			// TODO: do validation
-			var place = _cartoPlaceService.CreatePlace(request);
-			if (place != null) return new RedirectResult(CartoViewModel.GetEditUrl(place.Key));
+			var response = _cartoPlaceService.CreatePlace(request);
+			if (response != null) return new RedirectResult(CartoViewModel.GetEditUrl(response.Data.Key));
 
 			// show validation error messages
 			var model = InitModel();

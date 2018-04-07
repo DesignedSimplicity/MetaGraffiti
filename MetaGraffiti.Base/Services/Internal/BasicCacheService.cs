@@ -1,12 +1,15 @@
-﻿using System;
+﻿using MetaGraffiti.Base.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MetaGraffiti.Base.Services.Internal
 {
-	public interface ICacheEntity
+	public interface ICacheEntity : IEntityInfo
 	{
+		/* IEntityInfo
 		string Key { get; }
+		*/
 	}
 
 	// TODO: move cache locking/init toggle into interface

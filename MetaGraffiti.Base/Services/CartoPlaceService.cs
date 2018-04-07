@@ -14,6 +14,7 @@ using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Services.External;
 using MetaGraffiti.Base.Services.Internal;
+using MetaGraffiti.Base.Common;
 
 namespace MetaGraffiti.Base.Services
 {
@@ -111,6 +112,11 @@ namespace MetaGraffiti.Base.Services
 		public List<CartoPlaceInfo> ListPlaces()
 		{
 			return _cache.All;
+		}
+
+		public bool HasPlace(string key)
+		{
+			return GetPlace(key) != null;
 		}
 
 		public CartoPlaceInfo GetPlace(string key)
@@ -274,29 +280,94 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
-		public CartoPlaceInfo CreatePlace(CartoPlaceCreateRequest create)
+		public ValidationServiceResponse<CartoPlaceInfo> CreatePlace(CartoPlaceCreateRequest create)
 		{
+			if (!String.IsNullOrWhiteSpace(create.PlaceKey)) throw new Exception($"CreatePlace request should not have PlaceKey {create.PlaceKey} set!");
 			create.PlaceKey = Graffiti.Crypto.GetNewHash();
-			var place = new CartoPlaceInfo(create);
 
-			_cache.Add(place);
+			var response = ValidatePlace(create);
 
-			_dirty = true;
-			return place;
+			if (response.OK)
+			{
+				_cache.Add(response.Data);
+				_dirty = true;
+			}
+
+			return response;
 		}
 
-		public CartoPlaceInfo UpdatePlace(CartoPlaceUpdateRequest update)
+		public ValidationServiceResponse<CartoPlaceInfo> UpdatePlace(CartoPlaceUpdateRequest update)
 		{
-			var place = new CartoPlaceInfo(update);
+			if (!HasPlace(update.Key)) throw new Exception($"Place {update.Key} does not exist!");
 
-			_cache.Update(place.Key, place);
+			var response = ValidatePlace(update);
 
-			_dirty = true;
-			return place;
+			if (response.OK)
+			{
+				var place = response.Data;
+				_cache.Update(place.Key, place); // TODO: REFACTOR: make this use ICacheEntity
+				_dirty = true;
+			}
+				
+			return response;
+		}
+
+
+		
+
+		public ValidationServiceResponse<CartoPlaceInfo> ValidatePlace(CartoPlaceData data)
+		{
+			var place = CreateCleanPlaceInfo(data);
+			var response = new ValidationServiceResponse<CartoPlaceInfo>(place);
+
+			// validate place info
+			if (String.IsNullOrWhiteSpace(place.Name)) response.AddError("Name", "Place name is missing!");
+
+			// validate political info
+			var political = new GeoPolitical(data);
+
+			// country is required
+			if (!political.IsCountryValid()) response.AddError("Country", "Country is missing or invalid!");
+
+			// region is only required if specified
+			if (!political.IsRegionOptionalValid()) response.AddError("Region", "Region is invalid!");
+
+			// timezone cannot be empty or UTC
+			if (!political.IsTimezoneNotUTCValid()) response.AddError("Timezone", "Timezone is missing, invalid or UTC!");
+
+			// TODO: check center/bounds			
+
+
+			// basic validation
+			return response;
 		}
 
 
 
+
+
+		private CartoPlaceInfo CreateCleanPlaceInfo(CartoPlaceData data)
+		{
+			data.PlaceType = TextMutate.TrimSafe(data.PlaceType);
+
+			data.Timezone = TextMutate.TrimSafe(data.Timezone);
+			data.Country = TextMutate.TrimSafe(data.Country);
+			data.Region = TextMutate.TrimSafe(data.Region);
+
+			data.Name = TextMutate.TrimSafe(data.Name);
+			data.LocalName = TextMutate.TrimSafe(data.LocalName);
+			data.DisplayAs = TextMutate.TrimSafe(data.DisplayAs);
+			data.Description = TextMutate.TrimSafe(data.Description);
+
+			data.Address = TextMutate.TrimSafe(data.Address);
+			data.Locality = TextMutate.TrimSafe(data.Locality);
+			data.Postcode = TextMutate.TrimSafe(data.Postcode);
+
+			data.Subregions = TextMutate.TrimSafe(data.Subregions);
+			data.Sublocalities = TextMutate.TrimSafe(data.Sublocalities);
+
+			return new CartoPlaceInfo(data);
+		}
 
 
 		private string GetFullTextSearch(CartoPlaceInfo place)
@@ -393,6 +464,19 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
+	public class CartoPlaceCreateRequest : CartoPlaceData
+	{
+	}
+
+	public class CartoPlaceUpdateRequest : CartoPlaceCreateRequest
+	{
+		public string Key { get; set; }
+	}
+
+
+
+
+
 	public class CartoPlaceReportRequest
 	{
 		/// <summary>
@@ -420,12 +504,4 @@ namespace MetaGraffiti.Base.Services
 		public string Sort { get; set; }
 	}
 
-	public class CartoPlaceCreateRequest : CartoPlaceData
-	{
-	}
-
-	public class CartoPlaceUpdateRequest : CartoPlaceCreateRequest
-	{
-		public string ID { get; set; }
-	}
 }

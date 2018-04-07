@@ -31,11 +31,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString EditIcon { get { return GetFontAwesomeIcon("fas fa-pencil-alt"); } }
 		public static HtmlString UndoIcon { get { return GetFontAwesomeIcon("fas fa-undo"); } }
 		public static HtmlString RemoveIcon { get { return GetFontAwesomeIcon("fas fa-times"); } }
+		public static HtmlString CancelIcon { get { return GetFontAwesomeIcon("fas fa-ban"); } }
 
 
 		// ==================================================
 		// Other Actions
 		public static HtmlString SearchIcon { get { return GetFontAwesomeIcon("fas fa-search"); } }
+		public static HtmlString LookupIcon { get { return GetFontAwesomeIcon("fas fa-magnet"); } }
 		public static HtmlString ImportIcon { get { return GetFontAwesomeIcon("fas fa-database"); } }
 		public static HtmlString ExportIcon { get { return GetFontAwesomeIcon("fas fa-download"); } }
 		public static HtmlString RecycleIcon { get { return GetFontAwesomeIcon("fas fa-recycle"); } }

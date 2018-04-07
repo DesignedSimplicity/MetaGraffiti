@@ -235,6 +235,7 @@
     <Content Include="Images\Icons\meta.svg" />
     <Content Include="Images\Icons\ortho.svg" />
     <Content Include="Images\Icons\topo.svg" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -350,7 +351,7 @@
     <Content Include="Views\Carto\Index.cshtml" />
     <Content Include="Views\Carto\Places.cshtml" />
     <Content Include="Views\Ortho\Sheets.cshtml" />
-    <Content Include="Views\Place\Index.cshtml" />
+    <Content Include="Views\Place\~Index.cshtml" />
     <Content Include="Views\Place\Search.cshtml" />
     <Content Include="Views\Place\Create.cshtml" />
     <Content Include="Views\Shared\Forms\_Place.cshtml" />
@@ -376,6 +377,8 @@
     <Content Include="Views\Trail\_TrailForm.cshtml" />
     <Content Include="Views\Shared\Alerts\ErrorMessages.cshtml" />
     <Content Include="Views\Shared\Alerts\SuccessConfirm.cshtml" />
+    <Content Include="Views\Place\Update.cshtml" />
+    <Content Include="Views\Place\_PlaceForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

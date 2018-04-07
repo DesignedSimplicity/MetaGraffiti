@@ -103,7 +103,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.SelectedPlace = _cartoPlaceService.UpdatePlace(request);
+			model.SelectedPlace = _cartoPlaceService.UpdatePlace(request).Data;
 			model.ConfirmMessage = $"Updated at {DateTime.Now}";
 
 			model.HasChanges = true;

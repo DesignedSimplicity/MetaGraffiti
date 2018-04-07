@@ -23,7 +23,7 @@
 		<div class="input-group">
 			<input type="text" class="form-control" name="Location" id="LocationField" value="@Model.Location" />
 			<div class="input-group-append">
-				<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
+				<a href="#" class="btn btn-outline-secondary">@IconHelper.LookupIcon</a>
 			</div>
 		</div>
 	</div>
@@ -41,7 +41,7 @@
 		<div class="input-group">
 			<input type="text" class="form-control @(TopoTrailFormModel.IsTimezoneValid(Model.Timezone) ? "" : "is-invalid")" name="Timezone" id="TimezoneField" value="@Model.Timezone" />
 			<div class="input-group-append">
-				<a href="#" class="btn btn-outline-secondary"><i class="fas fa-magnet"></i></a>
+				<a href="#" class="btn btn-outline-secondary">@IconHelper.LookupIcon</a>
 			</div>
 		</div>
 	</div>

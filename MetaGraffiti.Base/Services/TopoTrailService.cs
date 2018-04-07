@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Data;
@@ -173,6 +174,7 @@ namespace MetaGraffiti.Base.Services
 			// do basic validation
 			if (String.IsNullOrWhiteSpace(request.Name)) response.AddError("Name", "Name is required!");
 
+			// TODO: REFACTOR: use GeoPolitical
 			var timezone = GeoTimezoneInfo.Find(request.Timezone);
 			if (timezone == null) response.AddError("Timezone", "Timezone is missing or invalid!");
 
@@ -381,10 +383,8 @@ namespace MetaGraffiti.Base.Services
 		public int? Day { get; set; }
 	}
 
-	public interface ITopoTrailUpdateRequest
+	public interface ITopoTrailUpdateRequest : IGeoPoliticalData, IEntityInfo
 	{
-		string Key { get; }
-
 		string Name { get; }
 		string Description { get; }
 
@@ -393,9 +393,16 @@ namespace MetaGraffiti.Base.Services
 		string UrlLink { get; }
 		string UrlText { get; }
 
+		string Location { get; }
+
+		/* IEntityInfo
+		string Key { get; }
+		*/
+
+		/* IGeoPoliticalData
 		string Timezone { get; }
 		string Country { get; }
 		string Region { get; }
-		string Location { get; }
+		*/
 	}
 }

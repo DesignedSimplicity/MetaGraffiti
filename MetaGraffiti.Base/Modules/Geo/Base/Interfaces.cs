@@ -52,4 +52,13 @@ namespace MetaGraffiti.Base.Modules.Geo
 		bool Contains(IGeoLatLon point);
 		bool Contains(IGeoPerimeter point);
 	}
+
+
+	// --------------------------------------------------
+	public interface IGeoPoliticalData
+	{
+		string Country { get; }
+		string Region { get; }
+		string Timezone { get; }
+	}
 }

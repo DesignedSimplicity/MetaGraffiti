@@ -23,6 +23,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<CartoPlaceInfo> SearchResults { get; set; }
 
 
+		public GeoCountryInfo SelectedCountry { get; set; }
+		public CartoPlaceFormModel2 Edit { get; set; }
+
 
 		// ==================================================
 		// Helpers
@@ -30,6 +33,15 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Navigation
+		public static string GetDisplayUrl(string key) { return $"/place/display/{key}/"; }
+		public static string GetDisplayUrl(CartoPlaceInfo place) { return GetDisplayUrl(place.Key); }
+		public static string GetUpdateUrl(string key) { return $"/place/update/{key}/"; }
+		public static string GetUpdateUrl(CartoPlaceInfo place) { return GetUpdateUrl(place.Key); }
+		public static string GetDeleteUrl(CartoPlaceInfo place) { return $"/place/delete/{place.Key}/"; }
+
+
+
+
 		public static string GetPlacesUrl() { return "/place/"; }
 		public static string GetReportUrl(int year) { return $"/place/report/?year={year}"; }
 		public static string GetReportUrl(string country = "") { return $"/place/report/?country={country}"; }
@@ -42,6 +54,14 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetCreateUrl() { return "/place/create/"; }
 	}
+
+
+
+
+
+
+
+
 
 	public class PlaceReportModel //TODO: deprecate
 	{

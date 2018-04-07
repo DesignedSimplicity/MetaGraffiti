@@ -36,6 +36,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		public string Postcode => _data.Postcode;
 
 
+		// TODO: CARTO: make use of GeoPolitical
 		public GeoCountryInfo Country { get { return GeoCountryInfo.Find(_data.Country); } set { _data.Country = (value == null ? "" : value.ISO2); } }
 		public GeoRegionInfo Region { get { return GeoRegionInfo.Find(_data.Region); } set { _data.Region = (value == null ? "" : value.RegionISO); } }
 
@@ -69,9 +70,14 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		}
 
 
+
 		public string GetRawData()
 		{
 			return _raw;
+		}
+		public CartoPlaceData GetData()
+		{
+			return _data;
 		}
 
 
