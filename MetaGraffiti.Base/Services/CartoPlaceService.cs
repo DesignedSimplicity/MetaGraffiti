@@ -333,7 +333,7 @@ namespace MetaGraffiti.Base.Services
 			if (!political.IsRegionOptionalValid()) response.AddError("Region", "Region is invalid!");
 
 			// timezone cannot be empty or UTC
-			if (!political.IsTimezoneNotUTCValid()) response.AddError("Timezone", "Timezone is missing, invalid or UTC!");
+			if (!political.IsTimezoneOptionalButNotUTCValid()) response.AddError("Timezone", "Timezone is invalid!");
 
 			// TODO: check center/bounds			
 

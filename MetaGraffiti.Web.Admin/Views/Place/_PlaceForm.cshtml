@@ -41,19 +41,12 @@
 		});
 
 		$(".js-region-lookup").click(function () {
-			$("#Region").val("...").addClass("is-invalid").removeClass("is-valid");
-			geocodeRegion();
+			lookupRegion("#RegionField", _place.center);
 		});
 
-		function geocodeRegion() {
-			$.getJSON('/api/regions/point/?lat=' + _place.center.lat + "&lng=" + _place.center.lng)
-				.done(function (data) {
-					$("#Region").val(edit.RegionName).addClass("is-valid").removeClass("is-invalid");
-				})
-				.fail(function (jqXHR, textStatus, err) {
-					$("#Region").val('').addClass("is-invalid").removeClass("is-valid");
-				});
-		}
+		$(".js-timezone-lookup").click(function () {
+			lookupTimezone("#TimezoneField", _place.center);
+		});
 	});
 </script>
 
@@ -127,12 +120,23 @@
 	</div>
 	<div class="col">
 		<div class="form-group">
-			<label for="Postcode">Postcode</label>
-			<input type="text" class="form-control" name="Postcode" value="@edit.Postcode" />
+			<label for="Region">Region</label>
+			<div class="input-group">
+				<input type="text" class="form-control @CssHelper.GetFieldInvalidCss(Model.Political.IsRegionValid())" id="RegionField" name="Region" value="@Model.Region" />
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary js-region-lookup" type="button">@IconHelper.LookupIcon</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 <div class="form-row">
+	<div class="col">
+		<div class="form-group">
+			<label for="Postcode">Postcode</label>
+			<input type="text" class="form-control" name="Postcode" value="@edit.Postcode" />
+		</div>
+	</div>
 	<div class="col">
 		<div class="form-group">
 			<label for="Country">Country</label>
@@ -144,17 +148,6 @@
 			<label for="Subregions">Subregions</label>
 			<input type="hidden" name="Subregions" value="@edit.Subregions" />
 			<input type="text" class="form-control" readonly value="@edit.Subregions" />
-		</div>
-	</div>
-	<div class="col">
-		<div class="form-group">
-			<label for="Region">Region</label>
-			<div class="input-group">
-				<input type="text" class="form-control @CssHelper.GetFieldInvalidCss(Model.Political.IsRegionValid())" id="Region" name="Region" value="@Model.Region" />
-				<div class="input-group-append">
-					<button class="btn btn-outline-secondary js-region-lookup" type="button">@IconHelper.LookupIcon</button>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
@@ -213,9 +206,9 @@
 		<div class="form-group">
 			<label for="TimezoneKey">Timezone</label>
 			<div class="input-group">
-				<input type="text" class="form-control  @CssHelper.GetFieldInvalidCss(Model.Political.IsTimezoneNotUTCValid())" name="Timezone" value="@Model.Timezone">
+				<input type="text" class="form-control @CssHelper.GetFieldInvalidCss(Model.Political.IsTimezoneOptionalButNotUTCValid())" id="TimezoneField" name="Timezone" value="@Model.Timezone">
 				<div class="input-group-append">
-					<button class="btn btn-outline-secondary" type="button">@IconHelper.LookupIcon</button>
+					<button class="btn btn-outline-secondary js-timezone-lookup" type="button">@IconHelper.LookupIcon</button>
 				</div>
 			</div>
 		</div>

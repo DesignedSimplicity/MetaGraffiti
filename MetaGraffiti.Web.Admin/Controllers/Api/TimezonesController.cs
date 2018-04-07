@@ -15,6 +15,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 {
 	public class TimezonesController : ApiController
 	{
+		[HttpGet]
 		public IHttpActionResult GetTimezone(string id)
 		{
 			var t = GeoTimezoneInfo.Find(id);

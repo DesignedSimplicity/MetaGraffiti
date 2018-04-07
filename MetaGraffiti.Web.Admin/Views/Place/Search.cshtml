@@ -53,15 +53,15 @@
 						</div>
 					</div>
 					<!--
-				<div class="form-group">
-					<label for="description">Region</label>
-					<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.SearchCriteria.Region">
-				</div>
-				<div class="form-group">
-					<label for="description">Country</label>
-					<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.SearchCriteria.Country">
-				</div>
-					-->
+					<div class="form-group">
+						<label for="description">Region</label>
+						<input type="text" class="form-control" name="Region" placeholder="Region" value="@Model.SearchCriteria.Region">
+					</div>
+					<div class="form-group">
+						<label for="description">Country</label>
+						<input type="text" class="form-control" name="Country" placeholder="Country" value="@Model.SearchCriteria.Country">
+					</div>
+						-->
 				</form>
 			</div>
 			<div class="col">
@@ -92,34 +92,38 @@
 					<th>Locality</th>
 					<th>Region</th>
 					<th>Country</th>
+					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
 				@{
-				var count = 0;
-				foreach (var p in Model.SearchResults)
-				{
-					var existing = (p.Key != p.GoogleKey);
-					<tr class="js-mappable-row @(existing ? " table-success" : "" )">
-						<td class="text-center h5">@(++count)</td>
-						<td>
-							@if (existing)
-						{
-							<a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
-					}
-					else
+					var count = 0;
+					foreach (var p in Model.SearchResults)
 					{
-						<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
-				}
-						</td>
-						<td>@p.LocalName</td>
-						<td>@p.DisplayAs</td>
-						<td>@p.PlaceType</td>
-						<td>@p.Locality</td>
-						<td>@(p.Region?.RegionName ?? "")</td>
-						<td>@p.Country.ISO2</td>
-					</tr>
-			}
+						var existing = (p.Key != p.GoogleKey);
+						<tr class="js-mappable-row @(existing ? " table-success" : "" )">
+							<td class="text-center h5">@(++count)</td>
+							<td>
+								@if (existing)
+								{
+									<a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
+								}
+								else
+								{
+									<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
+								}
+							</td>
+							<td>@p.LocalName</td>
+							<td>@p.DisplayAs</td>
+							<td>@p.PlaceType</td>
+							<td>@p.Locality</td>
+							<td>@(p.Region?.RegionName ?? "")</td>
+							<td>@p.Country.ISO2</td>
+							<td>
+								<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">Preview</a>
+							</td>
+						</tr>
+					}
 				}
 			</tbody>
 		</table>

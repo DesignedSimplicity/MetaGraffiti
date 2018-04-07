@@ -20,6 +20,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 		}
 		*/
 
+		[HttpGet]
 		public IHttpActionResult GetRegion(string id)
 		{
 			var region = GeoRegionInfo.Find(id);
@@ -29,8 +30,8 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 		[HttpGet]
 		public IHttpActionResult FindRegionByPoint(double lat, double lng)
 		{
-			var region = Graffiti.Geo.NearestRegion(new GeoPosition(lat, lng));
-			return ReturnRegion(region);
+			var regions = Graffiti.Geo.NearbyRegions(new GeoPosition(lat, lng));
+			return ReturnRegions(regions);
 		}
 
 		private IHttpActionResult ReturnRegion(GeoRegionInfo region)
@@ -39,6 +40,17 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 
 			var d = MapRegion(region);
 			return Ok(d);
+		}
+		private IHttpActionResult ReturnRegions(IEnumerable<GeoRegionInfo> regions)
+		{
+			if (regions == null || regions.Count() == 0) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+			var a = new List<dynamic>();
+			foreach (var region in regions)
+			{
+				a.Add(MapRegion(region));
+			}
+			return Ok(a);
 		}
 
 		private dynamic MapRegion(GeoRegionInfo r)

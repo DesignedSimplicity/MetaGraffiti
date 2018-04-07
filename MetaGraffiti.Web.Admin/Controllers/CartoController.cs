@@ -122,12 +122,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 
-		public ActionResult Persist()
+		public ActionResult Persist(string url = "")
 		{
 			_cartoPlaceService.Save();
 			_cartoPlaceService.Reload();
 
-			return new RedirectResult(CartoViewModel.GetCartoUrl());
+			return new RedirectResult(String.IsNullOrWhiteSpace(url) ? CartoViewModel.GetCartoUrl() : url);
 		}
 
 		public ActionResult Reload()

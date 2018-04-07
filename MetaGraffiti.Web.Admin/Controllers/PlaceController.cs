@@ -28,6 +28,8 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = new PlaceViewModel();
 
+			model.HasChanges = _cartoPlaceService.HasChanges;
+
 			return model;
 		}
 
@@ -38,61 +40,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		[HttpGet]
 		public ActionResult Display(string id)
 		{
-			var key = id.ToUpperInvariant();
-
 			var model = InitModel();
-			var place = _cartoPlaceService.GetPlace(key);
-			model.Edit = new CartoPlaceFormModel2(place);
+
+			var place = _cartoPlaceService.GetPlace(id);
 			model.SelectedPlace = place;
 			model.SelectedCountry = place.Country;
 
 			return View(model);
 		}
-
-		[HttpGet]
-		public ActionResult Update(string id)
-		{
-			var key = id.ToUpperInvariant();
-
-			var model = InitModel();
-			var place = _cartoPlaceService.GetPlace(key);
-			model.Edit = new CartoPlaceFormModel2(place);
-			model.SelectedPlace = place;
-			model.SelectedCountry = place.Country;
-
-			return View(model);
-		}
-
-		[HttpPost]
-		public ActionResult Update(CartoPlaceUpdateRequest request)
-		{
-			var model = InitModel();
-
-			var source = _cartoPlaceService.GetPlace(request.Key);
-			model.SelectedCountry = source.Country;
-
-			var response = _cartoPlaceService.UpdatePlace(request);
-			var place = response.Data;
-			model.SelectedPlace = place;			
-
-			if (response.OK)
-			{
-				model.Edit = new CartoPlaceFormModel2(place);
-				model.ConfirmMessage = $"Place {request.PlaceKey} updated at {DateTime.Now}";
-			}
-			else
-			{
-				model.Edit = new CartoPlaceFormModel2(place, request);
-				model.AddValidationErrors(response.ValidationErrors);
-			}
-
-			//model.HasChanges = true;
-
-			return View(model);
-		}
-
-
-
 
 
 		/// <summary>
@@ -141,8 +96,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				// TODO: backfill country and region if they are not set
 				model.SelectedPlace = _cartoPlaceService.LookupByPlaceID(id);
 			}
+			model.Edit = new CartoPlaceFormModel2(model.SelectedPlace);
 
 			return View("Create", model);
+		}
+
+		// TODO: CARTO: RC2: allow create place from scratch
+		[HttpGet]
+		public ActionResult Create(string search = "")
+		{
+			return null;
 		}
 
 		[HttpPost]
@@ -150,12 +113,68 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			// TODO: do validation
 			var response = _cartoPlaceService.CreatePlace(request);
-			if (response != null) return new RedirectResult(CartoViewModel.GetEditUrl(response.Data.Key));
 
-			// show validation error messages
+			if (response.OK)
+			{
+				return Redirect(PlaceViewModel.GetDisplayUrl(response.Data.Key));
+			}
+			else
+			{
+				// show validation error messages
+				var model = InitModel();
+
+				model.SelectedPlace = response.Data;
+				model.Edit = new CartoPlaceFormModel2(response.Data, request);
+				model.AddValidationErrors(response.ValidationErrors);
+
+				return View("Create", model);
+			}
+		}
+
+		/// <summary>
+		/// Displays place edit form
+		/// </summary>
+		[HttpGet]
+		public ActionResult Update(string id)
+		{
 			var model = InitModel();
 
-			return View("Create", model);
+			var place = _cartoPlaceService.GetPlace(id);
+			model.Edit = new CartoPlaceFormModel2(place);
+			model.SelectedPlace = place;
+			model.SelectedCountry = place.Country;
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Processes place edit request
+		/// </summary>
+		[HttpPost]
+		public ActionResult Update(CartoPlaceUpdateRequest request)
+		{
+			var model = InitModel();
+
+			var source = _cartoPlaceService.GetPlace(request.Key);
+			model.SelectedCountry = source.Country;
+
+			var response = _cartoPlaceService.UpdatePlace(request);
+			var place = response.Data;
+			model.SelectedPlace = place;
+
+			if (response.OK)
+			{
+				model.HasChanges = true;
+				model.Edit = new CartoPlaceFormModel2(place);
+				model.ConfirmMessage = $"Place {request.PlaceKey} updated at {DateTime.Now}";
+			}
+			else
+			{
+				model.Edit = new CartoPlaceFormModel2(place, request);
+				model.AddValidationErrors(response.ValidationErrors);
+			}
+
+			return View(model);
 		}
 	}
 }

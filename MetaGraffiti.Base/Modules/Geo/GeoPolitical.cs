@@ -50,6 +50,13 @@ namespace MetaGraffiti.Base.Modules.Geo
 
 
 		/// <summary>
+		/// Timezone is optional
+		/// </summary>
+		/// <returns></returns>
+		public bool IsTimezoneOptionalButNotUTCValid() { return (IsTimezoneValid() && !IsTimezoneUTC()) || String.IsNullOrWhiteSpace(_data.Timezone); }
+
+
+		/// <summary>
 		/// Country is required
 		/// </summary>
 		public bool IsCountryValid() { return Country != null; }

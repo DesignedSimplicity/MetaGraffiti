@@ -54,8 +54,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Navigation
 		public static string GetCartoUrl() { return $"/carto/"; }
-		public static string GetPersistUrl() { return $"/carto/persist/"; }
+		public static string GetPersistUrl(string url = "") { return $"/carto/persist/?url={url}"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
+
+
 
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }

@@ -5,7 +5,6 @@
 
 @{
 	var place = Model.SelectedPlace;
-	var placeForm = new CartoPlaceFormModel(place);
 }
 
 <div id="map-container">
@@ -18,31 +17,48 @@
 		@if (Model.HasConfirmation)
 		{
 			<div class="alert alert-warning">
-				<span class="h4">@Model.ConfirmMessage</span>
-				<a href="@CartoViewModel.GetEditUrl(place.Key)" class="btn btn-sm btn-warning float-right">Edit Existing</a>
+				<span class="h4">
+					<a class="carto-color" href="@PlaceViewModel.GetUpdateUrl(place.Key)">@IconHelper.PlaceIcon @Model.SelectedPlace.Name</a> already exists!
+				</span>
+				<a href="@PlaceViewModel.GetUpdateUrl(place.Key)" class="btn btn-sm btn-outline-primary float-right">@IconHelper.EditIcon Edit Place</a>
 			</div>
 		}
-		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
-			<div class="row">
-				<div class="col-sm-10">
-					<div class="h2"><a href="@PlaceViewModel.GetSearchUrl(Model.SearchCriteria.Name)">Search</a> <span class="h2">: @Model.SearchCriteria.Name</span></div>
-				</div>
-				<div class="col-sm-2 text-right">
-					<button class="btn btn-primary" type="submit">Create</button>
-				</div>
+		@Html.Partial("Alerts/ErrorMessages")
+		<div class="clearfix"></div>
+		@if (Model.SearchCriteria != null)
+		{
+			<div>
+				<span class="h2"><a href="@PlaceViewModel.GetSearchUrl(Model.SearchCriteria.Name)">Search</a> <span class="h3">\ @Model.SearchCriteria.Name</span></span>
+				<span class="float-right">
+
+				</span>
 			</div>
-			@Html.Partial("Forms/_Place", placeForm)
+		}
+		else
+		{
+			<div class="h2">Create Place</div>
+		}
+		<hr />
+		<form method="post" action="@PlaceViewModel.GetCreateUrl()">
+			@Html.Partial("_PlaceForm", Model.Edit)
 			<hr />
 			<div class="row">
 				<div class="col">
-					<button class="btn btn-primary" type="submit">Create</button>
+					<button class="btn btn-primary" type="submit">@IconHelper.SaveIcon Create Place</button>
 				</div>
 				<div class="col text-right">
-					<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(place.GoogleKey, Model.SearchCriteria.Name)">Revert</a>
+					@if (Model.SearchCriteria != null)
+					{
+						<a class="btn btn-outline-danger js-confirm" href="@PlaceViewModel.GetPreviewUrl(place.GoogleKey, Model.SearchCriteria.Name)">@IconHelper.UndoIcon Revert</a>
+					}
 				</div>
 			</div>
 		</form>
-		<hr />
-		<textarea rows="10" class="w-100">@place.GetRawData()</textarea>
+		@if (Model.Edit.IsPreview)
+		{
+			<hr />
+			<div class="h4">Raw Data</div>
+			<textarea rows="8" class="w-100">@place.GetRawData()</textarea>
+		}
 	</div>
 </div>
