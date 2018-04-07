@@ -299,9 +299,10 @@
     <Compile Include="Controllers\Api\RegionsController.cs" />
     <Compile Include="Controllers\Api\TimezonesController.cs" />
     <Compile Include="Controllers\CartoController.cs" />
+    <Compile Include="Controllers\Data\JsonController.cs" />
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IconController.cs" />
+    <Compile Include="Controllers\Data\IconController.cs" />
     <Compile Include="Controllers\OrthoController.cs" />
     <Compile Include="Controllers\PlaceController.cs" />
     <Compile Include="Controllers\TopoController.cs" />
@@ -311,7 +312,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
-    <Compile Include="Models\Helpers\DataHelper.cs" />
     <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />

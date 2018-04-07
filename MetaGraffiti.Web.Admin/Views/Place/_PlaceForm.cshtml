@@ -6,7 +6,6 @@
 }
 
 <script>
-	var _placeTypes = @JsonHelper.GetJson(DataHelper.PlaceTypes);
 	var _place = @JsonHelper.GetJson(place);
 	var _marker = null;
 	var _bounds = null;
@@ -49,18 +48,8 @@
 			lookupTimezone("#TimezoneField", _place.center);
 		});
 
-
-		$("#PlaceTypeField").typeahead({
-			minLength: 1,
-			highlight: true,
-		}, {
-			name: "PlaceTypes",
-			source: new Bloodhound({
-				local: _placeTypes,
-				queryTokenizer: Bloodhound.tokenizers.whitespace,
-				datumTokenizer: Bloodhound.tokenizers.whitespace
-			})
-		});
+		initGeoCountryLookup("#CountryField");
+		initCartoPlaceTypeLookup("#PlaceTypeField");
 	});
 </script>
 
@@ -154,7 +143,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="Country">Country</label>
-			<input type="text" name="Country" class="form-control @CssHelper.GetFieldInvalidCss(Model.Political.IsCountryValid())" value="@Model.Country" />
+			<input type="text" name="Country" id="CountryField" class="form-control @CssHelper.GetFieldInvalidCss(Model.Political.IsCountryValid())" value="@Model.Country" />
 		</div>
 	</div>
 	<div class="col">

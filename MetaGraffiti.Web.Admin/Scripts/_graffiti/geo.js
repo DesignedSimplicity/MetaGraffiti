@@ -51,3 +51,19 @@ function processTimezone(field, data) {
 	else
 		$(field).val("").addClass("is-invalid").removeClass("is-valid");
 }
+
+
+
+function initGeoCountryLookup(field) {
+	$(field).typeahead({
+		minLength: 2,
+		highlight: true,
+	}, {
+			name: "Countries",
+			source: new Bloodhound({
+				prefetch: "/json/countries/",
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				datumTokenizer: Bloodhound.tokenizers.whitespace
+			})
+		});
+}

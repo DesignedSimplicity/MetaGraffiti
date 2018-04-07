@@ -48,6 +48,20 @@ function getCartoPlaceTypeIcon(type, scale) {
 }
 
 
+function initCartoPlaceTypeLookup(field) {
+	$(field).typeahead({
+		minLength: 1,
+		highlight: true,
+	}, {
+			name: "PlaceTypes",
+			source: new Bloodhound({
+				prefetch: "/json/placetypes/",
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				datumTokenizer: Bloodhound.tokenizers.whitespace
+			})
+		});
+}
+
 
 
 
