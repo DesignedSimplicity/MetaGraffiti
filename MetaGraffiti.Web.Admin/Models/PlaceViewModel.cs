@@ -15,6 +15,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Required
 		public bool HasChanges { get; set; }
+		public List<string> PlaceTypes { get; set; }
+
 
 		// ==================================================
 		// Optional
@@ -29,6 +31,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
+		
 
 
 		// ==================================================

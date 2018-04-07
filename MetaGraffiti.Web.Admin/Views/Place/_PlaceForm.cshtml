@@ -6,6 +6,7 @@
 }
 
 <script>
+	var _placeTypes = @JsonHelper.GetJson(DataHelper.PlaceTypes);
 	var _place = @JsonHelper.GetJson(place);
 	var _marker = null;
 	var _bounds = null;
@@ -47,6 +48,19 @@
 		$(".js-timezone-lookup").click(function () {
 			lookupTimezone("#TimezoneField", _place.center);
 		});
+
+
+		$("#PlaceTypeField").typeahead({
+			minLength: 1,
+			highlight: true,
+		}, {
+			name: "PlaceTypes",
+			source: new Bloodhound({
+				local: _placeTypes,
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				datumTokenizer: Bloodhound.tokenizers.whitespace
+			})
+		});
 	});
 </script>
 
@@ -87,7 +101,7 @@
 	<div class="col">
 		<div class="form-group">
 			<label for="PlaceType">Place Type</label>
-			<input type="text" class="form-control" name="PlaceType" value="@edit.PlaceType" />
+			<input type="text" class="form-control" name="PlaceType" id="PlaceTypeField" value="@edit.PlaceType" />
 		</div>
 	</div>
 	<div class="col">

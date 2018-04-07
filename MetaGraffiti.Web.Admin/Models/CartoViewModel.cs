@@ -64,9 +64,12 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
 
 		public static string GetPlaceUrl(CartoPlaceInfo place) { return GetEditUrl(place.Key); }
-		public static string GetSaveUrl() { return $"/carto/update/"; }		
-		public static string GetEditUrl(string key) { return $"/carto/place/{key}/"; }
-		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}/"; }
+		public static string GetSaveUrl() { return $"/carto/update/"; }
 		public static string GetImportUrl(string country, string name) { return $"/place/search/?name={name}&country={country}"; }
+
+
+		// TODO: CARTO: RC1: move these
+		public static string GetEditUrl(string key) { return PlaceViewModel.GetUpdateUrl(key); }
+		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}/"; }
 	}
 }

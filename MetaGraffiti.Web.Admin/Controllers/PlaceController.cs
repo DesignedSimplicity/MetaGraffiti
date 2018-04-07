@@ -29,6 +29,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = new PlaceViewModel();
 
 			model.HasChanges = _cartoPlaceService.HasChanges;
+			model.PlaceTypes = _cartoPlaceService.ListPlaceTypes();
 
 			return model;
 		}

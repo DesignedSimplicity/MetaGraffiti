@@ -5,6 +5,7 @@ using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Topo;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,14 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class JsonHelper
 	{
+		// ==================================================
+		// Strings
+		public static HtmlString GetJson(IEnumerable<string> list)
+		{
+			return new HtmlString(JsonConvert.SerializeObject(list));
+		}
+
+
 		// ==================================================
 		// IGpxTrack
 		public static HtmlString GetJson(IGpxTrack track)
