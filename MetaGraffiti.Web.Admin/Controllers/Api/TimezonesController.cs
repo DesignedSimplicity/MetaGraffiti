@@ -15,8 +15,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 {
 	public class TimezonesController : ApiController
 	{
-		[HttpGet]
-		public IHttpActionResult GetTimezone(string id)
+		private IHttpActionResult GetTimezone(string id)
 		{
 			var t = GeoTimezoneInfo.Find(id);
 			if (t == null)
@@ -38,6 +37,17 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 
 			return GetTimezone(response.TimeZoneId);
 		}
+
+		[HttpGet]
+		public IHttpActionResult FindTimezoneByLocation(string name)
+		{
+			var timezone = Graffiti.Geo.GuessTimezone(GeoRegionInfo.Find(name));
+			if (timezone != null) return GetTimezone(timezone?.TZID ?? "");
+
+			timezone = Graffiti.Geo.GuessTimezone(GeoCountryInfo.Find(name));
+			return GetTimezone(timezone?.TZID ?? "");
+		}
+
 
 		private dynamic MapTimezone(GeoTimezoneInfo t)
 		{

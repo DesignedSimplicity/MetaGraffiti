@@ -1,6 +1,18 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
 @model TopoTrailFormModel
 
+<script>
+	$(document).ready(function () {
+		$(".js-timezone-lookup").click(function () {
+			var region = $("#RegionField").val()
+			if (region.length > 0)
+				lookupTimezoneByLocation("#TimezoneField", region);
+			else
+				lookupTimezoneByLocation("#TimezoneField", $("#CountryField").val());
+		});
+	});
+</script>
+
 <div class="form-group">
 	<label class="font-weight-bold" for="Name"><i class="far fa-file-alt"></i> Trail Name</label>
 	<input type="text" class="form-control form-control-lg" name="Name" value="@Model.Name" />
@@ -15,7 +27,6 @@
 		<div class="input-group">
 			<input type="text" class="form-control @(TopoTrailFormModel.IsCountryValid(Model.Country) ? "" : "is-invalid")" name="Country" id="CountryField" value="@Model.Country" />
 			<input type="text" class="form-control @(TopoTrailFormModel.IsRegionValid(Model.Country, Model.Region) ? "" : "is-invalid")" name="Region" id="RegionField" placeholder="Region" value="@Model.Region" />
-
 		</div>
 	</div>
 	<div class="col-sm-4">
@@ -41,7 +52,7 @@
 		<div class="input-group">
 			<input type="text" class="form-control @(TopoTrailFormModel.IsTimezoneValid(Model.Timezone) ? "" : "is-invalid")" name="Timezone" id="TimezoneField" value="@Model.Timezone" />
 			<div class="input-group-append">
-				<a href="#" class="btn btn-outline-secondary">@IconHelper.LookupIcon</a>
+				<a href="#" class="btn btn-outline-secondary js-timezone-lookup">@IconHelper.LookupIcon</a>
 			</div>
 		</div>
 	</div>
