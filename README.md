@@ -40,13 +40,19 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 
 ### RC1
-
+* Topo/Trail/Track functionality complete
 
 ### RC2
-
+* Carto/Place functionality complete
 
 ### RC3
+Geo/Ortho functionality complete
 
+### V1.0
+
+### V1.1
+
+### V2.0
 
 
 ## Backlogs
@@ -56,11 +62,14 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 
 ### Carto
+* Break out search for existing places (vs search for new places to add)
 * Add ability to create a place from scratch (drop pin, set bounds, etc)
-* Optimize and expand FindLocalityPlace functionality
 * Build out report page and add filters/sorting
-* Add auto-persist warning/functionality and update backup file copy pattern
 * Add PlaceTags/IconKey/Created/Update fields and remove PlaceFlags from CartoPlaceInfo/Form/etc
+* Add page to list unsaved changed
+* Fix empty enter/blank preview on google place search widget
+* Optimize and expand FindLocalityPlace functionality
+* Add auto-persist warning/functionality and update backup file copy pattern
 * Add filters to global place map, change url and revert icons back to markers (from types)
 * Build simple place read only/display page which includes nearby/containing/contained places
 * Update backend to use google place details: https://maps.googleapis.com/maps/api/place/details/json
@@ -189,32 +198,13 @@ __Process__
 
 ## Ideas
 
-Map Info
-~~~~~~~~
-Geography
-Topography
-Cartography
+*Chronography: an arrangement of past events
+*Chorography: The study of provinces, regions, cities, etc., as opposed to larger-scale geography.
 
-Chronography: an arrangement of past events
+*Biography
+*Iconography: the visual images and symbols used in a work of art or the study or interpretation of these.
 
-
-File Formats (Gpx, Kml, Xsl)
-~~~~~~~~~~~~
-Orthography: An orthography is a set of conventions for writing a language. It includes norms of spelling, hyphenation, capitalization, word breaks, emphasis, and punctuation.
-
-
-Sql Databases
-~~~~~~~~~~~~~
 Lexicography: The art or craft of compiling, writing and editing dictionaries.
 Glossography: The writing of glossaries or glosses; The study of ancient words or languages.
-
-
-
-Biography
-
-Iconography
-Ideography
-
-
-Chorography: The study of provinces, regions, cities, etc., as opposed to larger-scale geography.
 Diplography: double writing; the writing of something twice or in two forms.
+Ideography: a branch of lexicography, specifically creating ideographic or conceptual dictionaries.
