@@ -11,7 +11,7 @@
 	$(document).ready(function () {
 		initMap();
 
-		initCartoPlaces(_places, '@CartoViewModel.GetEditUrl("{key}")');
+		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
 
 		drawCartoPlaces(2, true);
 		showWorld();
@@ -60,9 +60,9 @@
 					{
 						<tr class="js-mappable-row">
 							<td class="text-center h5">@(++count)</td>
-							<td>@SvgHelper.GetPlaceTypeIcon(p.PlaceType) @p.PlaceType</td>
+							<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(p.PlaceType) @p.PlaceType</td>
 							<td>
-								<a class="font-weight-bold" href="@CartoViewModel.GetEditUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a>
+								<a class="font-weight-bold" href="@PlaceViewModel.GetDisplayUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a>
 								<span class="font-italic">@p.DisplayAs</span>
 							</td>
 							<td>@p.Locality</td>

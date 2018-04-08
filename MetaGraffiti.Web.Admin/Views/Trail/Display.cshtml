@@ -54,7 +54,7 @@
 					@foreach (var place in trail.Places)
 					{
 						<div class="mt-2">
-							<a class="carto-color" href="@CartoViewModel.GetEditUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a>
+							<a class="carto-color" href="@PlaceViewModel.GetDisplayUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a>
 						</div>
 					}
 				</div>

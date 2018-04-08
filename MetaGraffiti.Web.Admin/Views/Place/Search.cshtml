@@ -9,7 +9,7 @@
 	$(document).ready(function () {
 		initMap();
 
-		initCartoPlaces(_places, '@CartoViewModel.GetEditUrl("{key}")');
+		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
 
 		drawCartoPlaces(2);
 		fitCartoPlaces();
@@ -106,7 +106,7 @@
 							<td>
 								@if (existing)
 								{
-									<a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a>
+									<a href="@PlaceViewModel.GetDisplayUrl(p.Key)">@p.Name</a>
 								}
 								else
 								{

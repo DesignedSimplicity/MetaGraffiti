@@ -64,7 +64,7 @@
 					<td>
 						@if (row.Place != null)
 						{
-							<a href="@CartoViewModel.GetPlaceUrl(row.Place)">@row.Place.Name</a>
+							<a href="@PlaceViewModel.GetDisplayUrl(row.Place)">@row.Place.Name</a>
 							<span>@row.Place.Locality <b>@(row.Place.Region?.RegionName ?? "")</b></span>
 						}
 					</td>

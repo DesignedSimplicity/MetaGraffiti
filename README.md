@@ -51,6 +51,21 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 ## Backlogs
 
+### Api
+* Migrate away from using the new API Controller model or spend time to build it properly
+
+
+### Carto
+* Add ability to create a place from scratch (drop pin, set bounds, etc)
+* Optimize and expand FindLocalityPlace functionality
+* Build out report page and add filters/sorting
+* Add auto-persist warning/functionality and update backup file copy pattern
+* Add PlaceTags/IconKey/Created/Update fields and remove PlaceFlags from CartoPlaceInfo/Form/etc
+* Add filters to global place map, change url and revert icons back to markers (from types)
+* Build simple place read only/display page which includes nearby/containing/contained places
+* Update backend to use google place details: https://maps.googleapis.com/maps/api/place/details/json
+* Update backend to use google place search: https://developers.google.com/places/web-service/search
+
 ### Topo
 * Fix existing trail files with incorrect local date filename
 * Create options to split import track into multiple edit segments

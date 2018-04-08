@@ -161,7 +161,7 @@
 							<div class="float-right">
 								@if (track.StartPlace != null)
 							{
-								<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.StartPlace)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
+								<a class="carto-color h5" href="@PlaceViewModel.GetDisplayUrl(track.StartPlace)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
 						}
 							</div>
 						</div>
@@ -181,7 +181,7 @@
 							<div class="float-right">
 								@if (track.FinishPlace != null)
 							{
-								<a class="carto-color h5" href="@CartoViewModel.GetPlaceUrl(track.FinishPlace)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
+								<a class="carto-color h5" href="@PlaceViewModel.GetDisplayUrl(track.FinishPlace)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
 						}
 							</div>
 						</div>

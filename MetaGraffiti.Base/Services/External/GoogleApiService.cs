@@ -89,6 +89,7 @@ namespace MetaGraffiti.Base.Services.External
 			return data;
 		}
 
+		// TODO: also implement this ias https://developers.google.com/places/web-service/search
 		public GoogleLocationResponse RequestLocations(string text)
 		{
 			var key = text.Trim().ToLowerInvariant();

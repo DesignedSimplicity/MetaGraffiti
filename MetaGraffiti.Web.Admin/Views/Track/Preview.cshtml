@@ -128,7 +128,7 @@
 			{
 				<div class="pb-2">
 					<span class="p-1 carto-color js-show-start js-show-bounds">@IconHelper.BoundsIcon</span>
-					<a href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">
+					<a href="@PlaceViewModel.GetDisplayUrl(track.StartPlace.Key)">
 						@track.StartPlace.Name
 					</a>
 				</div>
@@ -145,7 +145,7 @@
 			{
 				<div class="pb-2">
 					<span class="p-1 carto-color js-show-finish js-show-bounds">@IconHelper.BoundsIcon</span>
-					<a href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
+					<a href="@PlaceViewModel.GetDisplayUrl(track.FinishPlace.Key)">@track.FinishPlace.Name</a>
 				</div>
 		}
 			</div>
@@ -162,7 +162,7 @@
 			{
 				<div class="pb-2">
 					<span class="p-1 h3 carto-color js-show-nearby js-show-bounds">@IconHelper.BoundsIcon</span>
-					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+					<a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@place.Name</a>
 				</div>
 		}
 			</div>
@@ -176,7 +176,7 @@
 			{
 				<div class="pb-2">
 					<span class="p-1 h3 carto-color js-show-contains js-show-bounds">@IconHelper.BoundsIcon</span>
-					<a href="@CartoViewModel.GetEditUrl(place.Key)">@place.Name</a>
+					<a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@place.Name</a>
 				</div>
 		}
 			</div>

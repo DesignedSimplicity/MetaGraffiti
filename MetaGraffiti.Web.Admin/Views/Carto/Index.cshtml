@@ -7,36 +7,36 @@
 	<div class="col-sm-2">
 		<div class="h1"><a href="@CartoViewModel.GetPlacesUrl()">Global Map</a></div>
 		<hr />
-		<div class="h1"><a href="@CartoViewModel.GetReportUrl()">Full Report</a></div>
-		<hr />
+		<div class="h1"><a href="@CartoViewModel.GetReportUrl()">Report All</a></div>
 		<br />
+		<hr />
 		<h2>Google</h2>
 		@Html.Partial("Widgets/GooglePlaces")
-		<hr />
 		<br />
+		<hr />
 		<h2>Search</h2>
 		@Html.Partial("Widgets/SearchPlaces")
-		<hr />
 		<br />
+		<hr />
 		@if (Model.HasChanges)
 		{
-			<div class="alert alert-info font-weight-bold">
-				There are unsaved changes!
+			<div class="alert alert-warning h6">
+				@IconHelper.ErrorMessageIcon There are unsaved changes!
 			</div>
 		}
 		else if (Model.LastSaved.HasValue)
 		{
 			<div class="alert alert-success">
-				Saved at @Model.LastSaved.ToString()
+				@IconHelper.ConfirmationMessageIcon Saved at @Model.LastSaved.ToString()
 			</div>
 		}
-		<div class="btn-group d-flex w-100">
-			<a class="btn w-100 btn-outline-info" href="@CartoViewModel.GetPersistUrl()">@IconHelper.SaveIcon Persist Changes</a>
-			<a class="btn w-100 btn-outline-secondary" href="@CartoViewModel.GetReloadUrl()">@IconHelper.RecycleIcon Reload Data</a>
+		<div>
+			<a class="btn btn-block btn-outline-primary" href="@CartoViewModel.GetPersistUrl()">@IconHelper.SaveIcon Persist Place Changes</a>
+			<a class="btn btn-block btn-outline-secondary js-confirm" href="@CartoViewModel.GetReloadUrl()">@IconHelper.RecycleIcon Recycle Place Cache</a>
 		</div>
 	</div>
 	<div class="col-sm-2">
-		<div class="h3">Country Display</div>
+		<div class="h3">Country Map</div>
 		@foreach (var country in Model.Countries)
 		{
 			<div class="h4">
@@ -58,7 +58,7 @@
 		@foreach (var country in Model.SourceCountries)
 		{
 			<div class="h6">
-				<a href="@PlaceViewModel.GetReportUrl(country.ISO2)">@country.Name</a>
+				<a href="@OrthoViewModel.GetPlacesUrl(country.Name)">@country.Name</a>
 			</div>
 		}
 	</div>
@@ -67,7 +67,7 @@
 		@foreach (var year in Model.SourceYears.OrderByDescending(x => x))
 		{
 			<div class="h6">
-				<a href="@PlaceViewModel.GetReportUrl(year)">@year</a>
+				<a href="@OrthoViewModel.GetPlacesUrl(year)">@year</a>
 			</div>
 		}
 	</div>

@@ -100,7 +100,7 @@
 						@foreach (var place in trail.Places)
 						{
 							<div>
-								<a class="carto-color" href="@CartoViewModel.GetPlaceUrl(place)">@IconHelper.PlaceIcon @place.Name</a>
+								<a class="carto-color" href="@PlaceViewModel.GetDisplayUrl(place)">@IconHelper.PlaceIcon @place.Name</a>
 							</div>
 						}
 					</td>

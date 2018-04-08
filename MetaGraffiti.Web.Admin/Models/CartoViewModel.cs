@@ -13,11 +13,9 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Required
 		public List<string> PlaceTypes { get; set; }
 		public List<GeoCountryInfo> Countries { get; set; }
-
 		public List<CartoPlaceInfo> Places { get; set; }
 
 		public bool HasChanges { get; set; }
-
 		public DateTime? LastSaved { get; set; }
 
 
@@ -26,7 +24,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<int> SourceYears{ get; set; }
 		public List<GeoCountryInfo> SourceCountries { get; set; }
 
-		public CartoPlaceInfo SelectedPlace { get; set; }
 		public GeoCountryInfo SelectedCountry { get; set; }
 
 		public List<CartoPlaceInfo> ReportPlaces { get; set; }
@@ -63,13 +60,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
 
-		public static string GetPlaceUrl(CartoPlaceInfo place) { return GetEditUrl(place.Key); }
-		public static string GetSaveUrl() { return $"/carto/update/"; }
+		public static string GetDeleteUrl(string key) { return $"/place/delete/{key}/"; }
+
 		public static string GetImportUrl(string country, string name) { return $"/place/search/?name={name}&country={country}"; }
 
 
 		// TODO: CARTO: RC1: move these
 		public static string GetEditUrl(string key) { return PlaceViewModel.GetUpdateUrl(key); }
-		public static string GetDeleteUrl(string key) { return $"/carto/delete/{key}/"; }
+		
 	}
 }

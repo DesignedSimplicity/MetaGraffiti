@@ -119,7 +119,7 @@
 						<div class="mt-2">
 							@if (track.StartPlace != null)
 							{
-								<a class="carto-color" href="@CartoViewModel.GetEditUrl(track.StartPlace.Key)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
+								<a class="carto-color" href="@PlaceViewModel.GetDisplayUrl(track.StartPlace.Key)">@IconHelper.PlaceIcon @track.StartPlace.Name</a>
 							}
 						</div>
 					</td>
@@ -130,7 +130,7 @@
 						<div class="mt-2">
 							@if (track.FinishPlace != null)
 							{
-								<a class="carto-color" href="@CartoViewModel.GetEditUrl(track.FinishPlace.Key)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
+								<a class="carto-color" href="@PlaceViewModel.GetDisplayUrl(track.FinishPlace.Key)">@IconHelper.PlaceIcon @track.FinishPlace.Name</a>
 							}
 						</div>
 					</td>

@@ -55,8 +55,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-
-		// TODO: make type, country and region columns links
+		// TODO: rename this to Map
 		public ActionResult Places()
 		{
 			var model = InitModel();
@@ -64,9 +63,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		/// <summary>
-		/// Displays all places in a country on a map
-		/// </summary>
 		public ActionResult Country(string id)
 		{
 			var model = InitModel();
@@ -77,7 +73,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-
 		public ActionResult Report(CartoPlaceReportRequest report)
 		{
 			var model = InitModel();
@@ -86,41 +81,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View(model);
 		}
-
-
-		public ActionResult Place(string id)
-		{
-			var key = id.ToUpperInvariant();
-
-			var model = InitModel();
-
-			model.SelectedPlace = _cartoPlaceService.GetPlace(key);
-
-			return View("Place", model);
-		}
-
-		public ActionResult Update(CartoPlaceUpdateRequest request)
-		{
-			var model = InitModel();
-
-			model.SelectedPlace = _cartoPlaceService.UpdatePlace(request).Data;
-			model.ConfirmMessage = $"Updated at {DateTime.Now}";
-
-			model.HasChanges = true;
-
-			return View("Place", model);
-		}
-
-		// TODO: make this a post only or get with confirmation
-		public ActionResult Delete(string id)
-		{
-			var key = id.ToUpperInvariant();
-
-			_cartoPlaceService.DeletePlace(key);
-
-			return new RedirectResult(CartoViewModel.GetPlacesUrl());
-		}
-
 
 		public ActionResult Persist(string url = "")
 		{

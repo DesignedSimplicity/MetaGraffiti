@@ -176,5 +176,17 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return View(model);
 		}
+
+		/// <summary>
+		/// Removes a place from the cache
+		/// </summary>
+		public ActionResult Delete(string id)
+		{
+			var key = id.ToUpperInvariant();
+
+			_cartoPlaceService.DeletePlace(key);
+
+			return new RedirectResult(CartoViewModel.GetPlacesUrl());
+		}
 	}
 }

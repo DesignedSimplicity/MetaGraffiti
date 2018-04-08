@@ -35,7 +35,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Navigation
-		public static string GetDisplayUrl(string key) { return $"/place/display/{key}/"; }
+		public static string GetDisplayUrl(string key) { return $"/place/update/{key}/"; } // TODO: CARTO: RC1: build display page
 		public static string GetDisplayUrl(CartoPlaceInfo place) { return GetDisplayUrl(place.Key); }
 		public static string GetUpdateUrl(string key) { return $"/place/update/{key}/"; }
 		public static string GetUpdateUrl(CartoPlaceInfo place) { return GetUpdateUrl(place.Key); }

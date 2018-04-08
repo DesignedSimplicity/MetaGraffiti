@@ -4,14 +4,14 @@
 @Html.Partial("_Nav")
 
 <div class="h2">Places Report</div>
-<table class="table table-striped table-sm">
+<br />
+<table class="table table-striped table-bordered">
 	<thead class="thead-dark">
 		<tr>
 			<th class="text-center">#</th>
 			<th>Type</th>
 			<th>Name</th>
-			<th>Display </th>
-			<th>Local Name</th>
+			<th>Display As <small>Local Name</small></th>
 			<th>Locality</th>
 			<th>Region</th>
 			<th>Country</th>
@@ -21,40 +21,51 @@
 	<tbody>
 		@{
 			var count = 0;
-			foreach (var p in Model.ReportPlaces)
+			foreach (var place in Model.ReportPlaces)
 			{
-				<tr data-index="@(count)">
-					<td class="text-center">@(++count)</td>
-					<td>
-						<a href="@CartoViewModel.GetReportUrl(p.PlaceType)">@p.PlaceType</a>
+				<tr>
+					<td class="text-center h4">@(++count)</td>
+					<td class="text-nowrap">
+						<a class="carto-color" href="@CartoViewModel.GetReportUrl(place.PlaceType)">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</a>
 					</td>
-					<td class="h5"><a href="@CartoViewModel.GetEditUrl(p.Key)">@p.Name</a></td>
-					<td>@p.DisplayAs</td>
-					<td class="font-italic">@p.LocalName</td>
+					<td>
+						<div class="h5">
+							<a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a>
+						</div>
+						<div class="small">
+							@place.Description
+						</div>
+					</td>
+					<td>
+						<div>@place.DisplayAs</div>
+						<div class="small">@place.LocalName</div>
+					</td>
 					<td>
 						@{
-							var locality = Model.FindLocalityPlace(p);
+							var locality = Model.FindLocalityPlace(place);
 							if (locality == null)
 							{
-								<span>@p.Locality</span>
+								<span>@place.Locality</span>
 							}
-							else if (locality.Key == p.Key)
+							else if (locality.Key == place.Key)
 							{
-								<span class="font-weight-bold">@p.Locality</span>
+								<span class="font-weight-bold">@place.Locality</span>
 							}
 							else
 							{
-								<a href="@CartoViewModel.GetEditUrl(locality.Key)">@p.Locality</a>
+								<div class="h6">
+									<a href="@PlaceViewModel.GetDisplayUrl(locality.Key)">@IconHelper.PlaceIcon @place.Locality</a>
+								</div>
 							}
 						}
 					</td>
-					<td>@(p.Region == null ? "" : p.Region.RegionName)</td>
+					<td>@(place.Region == null ? "" : place.Region.RegionName)</td>
 					<td>
-						<a href="@CartoViewModel.GetCountryUrl(p.Country)">@p.Country.Name</a>
+						<a href="@CartoViewModel.GetCountryUrl(place.Country)">@place.Country.Name</a>
 					</td>
-					<td>
-						<a class="btn btn-sm btn-primary" href="@CartoViewModel.GetEditUrl(p.Key)">Manage</a>
-						<a class="btn btn-sm btn-outline-danger js-confirm" href="@CartoViewModel.GetDeleteUrl(p.Key)">Delete</a>
+					<td class="text-nowrap">
+						<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetUpdateUrl(place.Key)">@IconHelper.EditIcon Update</a>
+						<a class="btn btn-sm btn-outline-danger js-confirm" href="@PlaceViewModel.GetDeleteUrl(place)">@IconHelper.RemoveIcon Delete</a>
 					</td>
 				</tr>
 			}
