@@ -287,15 +287,15 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(create.PlaceKey)) throw new Exception($"CreatePlace request should not have PlaceKey {create.PlaceKey} set!");
 			create.PlaceKey = Graffiti.Crypto.GetNewHash();
 
-			var response = ValidatePlace(create);
+			var validate = ValidatePlace(create);
 
-			if (response.OK)
+			if (validate.OK)
 			{
-				_cache.Add(response.Data);
+				_cache.Add(validate.Data);
 				_dirty = true;
 			}
 
-			return response;
+			return validate;
 		}
 
 		public ValidationServiceResponse<CartoPlaceInfo> UpdatePlace(CartoPlaceUpdateRequest update)
@@ -307,6 +307,7 @@ namespace MetaGraffiti.Base.Services
 			if (response.OK)
 			{
 				var place = response.Data;
+				place.GetData().Updated = DateTime.Now;
 				_cache.Update(place.Key, place); // TODO: REFACTOR: make this use ICacheEntity
 				_dirty = true;
 			}
@@ -390,6 +391,7 @@ namespace MetaGraffiti.Base.Services
 					sheet.Cells[row, cell++].Value = "PlaceID";
 					sheet.Cells[row, cell++].Value = "PlaceKey";
 					sheet.Cells[row, cell++].Value = "PlaceType";
+					sheet.Cells[row, cell++].Value = "PlaceTags";
 					sheet.Cells[row, cell++].Value = "GoogleKey";
 
 					// geo political
@@ -418,6 +420,10 @@ namespace MetaGraffiti.Base.Services
 					sheet.Cells[row, cell++].Value = "WestLongitude";
 					sheet.Cells[row, cell++].Value = "EastLongitude";
 
+					// created/updated
+					sheet.Cells[row, cell++].Value = "Created";
+					sheet.Cells[row, cell++].Value = "Updated";
+
 					// add location rows
 					var id = 1;
 					var places = ListPlaces();
@@ -430,6 +436,7 @@ namespace MetaGraffiti.Base.Services
 						sheet.Cells[row, cell++].Value = id++;
 						sheet.Cells[row, cell++].Value = place.Key;
 						sheet.Cells[row, cell++].Value = place.PlaceType;
+						sheet.Cells[row, cell++].Value = place.PlaceTags;
 						sheet.Cells[row, cell++].Value = place.GoogleKey;
 
 						// geo political
@@ -457,6 +464,11 @@ namespace MetaGraffiti.Base.Services
 						sheet.Cells[row, cell++].Value = (place.Bounds?.SouthEast.Latitude ?? 0.0);
 						sheet.Cells[row, cell++].Value = (place.Bounds?.NorthWest.Longitude ?? 0.0);
 						sheet.Cells[row, cell++].Value = (place.Bounds?.SouthEast.Longitude ?? 0.0);
+
+						// created/updated
+						var data = place.GetData();
+						sheet.Cells[row, cell++].Value = data.Created ?? DateTime.Now;
+						sheet.Cells[row, cell++].Value = data.Updated;
 					}
 
 					// return built worksheet
@@ -474,10 +486,6 @@ namespace MetaGraffiti.Base.Services
 	{
 		public string Key { get; set; }
 	}
-
-
-
-
 
 	public class CartoPlaceReportRequest : IGeoPoliticalData
 	{

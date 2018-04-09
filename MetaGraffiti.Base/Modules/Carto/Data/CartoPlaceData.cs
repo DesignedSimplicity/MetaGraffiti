@@ -44,5 +44,9 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 		public double SouthLatitude { get; set; }
 		public double WestLongitude { get; set; }
 		public double EastLongitude { get; set; }
+
+
+		public DateTime? Created { get; set; }
+		public DateTime? Updated { get; set; }
 	}
 }

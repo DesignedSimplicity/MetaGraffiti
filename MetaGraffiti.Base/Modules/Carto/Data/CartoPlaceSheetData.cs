@@ -9,7 +9,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
     public class CartoPlaceSheetData
     {
 		private static string[] _columns = {
-			"PlaceKey", "PlaceType",
+			"PlaceKey", "PlaceType", "PlaceTags",
 			"GoogleKey", "IconKey", 
 			"Timezone", "Country", "Region",
 
@@ -19,7 +19,9 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 
 			"CenterLatitude", "CenterLongitude",
 			"NorthLatitude", "SouthLatitude",
-			"WestLongitude", "EastLongitude"
+			"WestLongitude", "EastLongitude",
+
+			"Created", "Updated"
 		};
 
 
@@ -65,7 +67,8 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 				if (!String.IsNullOrWhiteSpace(place.PlaceKey))
 				{
 					place.PlaceType = ExtractText(row, "PlaceType");
-					
+					place.PlaceTags = ExtractText(row, "PlaceTags");
+
 					place.GoogleKey = ExtractText(row, "GoogleKey");
 					place.IconKey = ExtractText(row, "IconKey");
 
@@ -90,6 +93,9 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 					place.SouthLatitude = ExtractDouble(row, "SouthLatitude");
 					place.WestLongitude = ExtractDouble(row, "WestLongitude");
 					place.EastLongitude = ExtractDouble(row, "EastLongitude");
+
+					place.Created = ExtractDateTime(row, "Created");
+					place.Updated = ExtractDateTime(row, "Updated");
 
 					_rows.Add(place);
 				}
@@ -117,6 +123,17 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 			}
 			else
 				return 0;
+		}
+
+		private DateTime? ExtractDateTime(XlsRowData row, string column)
+		{
+			if (ColumnIndex.ContainsKey(column))
+			{
+				var index = ColumnIndex[column];
+				return TypeConvert.ToDateTimeNull(row.Cells[index]);
+			}
+			else
+				return null;
 		}
 
 		private void IndexColumns()

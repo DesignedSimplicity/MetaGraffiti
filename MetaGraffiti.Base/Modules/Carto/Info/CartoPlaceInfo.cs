@@ -23,6 +23,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 
 		public string GoogleKey => _data.GoogleKey;
 		public string PlaceType => _data.PlaceType;
+		public string PlaceTags => _data.PlaceTags;
 
 		public string Name { get { return _data.Name; } set { _data.Name = value; } }
 		public string LocalName => _data.LocalName;

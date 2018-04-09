@@ -64,13 +64,13 @@ Geo/Ortho functionality complete
 ### Carto
 * Break out search for existing places (vs search for new places to add)
 * Add ability to create a place from scratch (drop pin, set bounds, etc)
-* Build out report page and add filters/sorting
+* Add sorting to place report page
 * Add PlaceTags/IconKey/Created/Update fields and remove PlaceFlags from CartoPlaceInfo/Form/etc
 * Add page to list unsaved changed
-* Fix empty enter/blank preview on google place search widget
+** Fix empty enter/blank preview on google place search widget
 * Optimize and expand FindLocalityPlace functionality
 * Add auto-persist warning/functionality and update backup file copy pattern
-* Add filters to global place map, change url and revert icons back to markers (from types)
+* Add filters/sorting to global place map, change url and revert icons back to markers (from types)
 * Build simple place read only/display page which includes nearby/containing/contained places
 * Update backend to use google place details: https://maps.googleapis.com/maps/api/place/details/json
 * Update backend to use google place search: https://developers.google.com/places/web-service/search
