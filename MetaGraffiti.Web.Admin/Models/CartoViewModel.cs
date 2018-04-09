@@ -25,6 +25,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public List<GeoCountryInfo> SourceCountries { get; set; }
 
 		public GeoCountryInfo SelectedCountry { get; set; }
+		public string SelectedPlaceType { get; set; }
 
 		public List<CartoPlaceInfo> ReportPlaces { get; set; }
 

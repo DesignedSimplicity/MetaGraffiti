@@ -1,0 +1,16 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CountryFilterModel
+
+<div class="form-group">
+	<div class="form-check form-check-inline @(Model.SelectedCountry == null ? "" : Model.CssClass)">
+		<input class="form-check-input" type="radio" name="country" id="CountryAll" value="" @(Model.SelectedCountry == null ? "checked" : "")>
+		<label class="form-check-label" for="CountryAll">Any Country</label>
+	</div>
+	@foreach (var country in Model.Countries)
+	{
+		<div class="form-check form-check-inline @(Model.IsSelected(country) ? "" : Model.CssClass)">
+			<input class="form-check-input" type="radio" name="country" id="Country@(country.ISO2)" value="@country.ISO2" @(Model.IsSelected(country) ? "checked" : "")>
+			<label class="form-check-label" for="Country@(country.ISO2)">@country.Name</label>
+		</div>
+	}
+</div>

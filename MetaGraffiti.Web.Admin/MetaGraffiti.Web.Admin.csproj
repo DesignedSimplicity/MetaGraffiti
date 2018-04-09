@@ -321,6 +321,8 @@
     <Compile Include="Models\OrthoPlacesViewModel.cs" />
     <Compile Include="Models\OrthoSheetsViewModel.cs" />
     <Compile Include="Models\OrthoTracksViewModel.cs" />
+    <Compile Include="Models\Partials\SimpleFilterModel.cs" />
+    <Compile Include="Models\Partials\CountryFilterModel.cs" />
     <Compile Include="Models\Partials\TopoStatsPillsModel.cs" />
     <Compile Include="Models\Partials\TopoTrailFormModel.cs" />
     <Compile Include="Models\TopoViewModel.cs" />
@@ -384,6 +386,8 @@
     <Content Include="Views\Shared\Alerts\SuccessConfirm.cshtml" />
     <Content Include="Views\Place\Update.cshtml" />
     <Content Include="Views\Place\_PlaceForm.cshtml" />
+    <Content Include="Views\Shared\Widgets\CountryFilter.cshtml" />
+    <Content Include="Views\Shared\Widgets\SimpleFilter.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

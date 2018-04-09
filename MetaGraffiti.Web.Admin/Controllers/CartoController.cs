@@ -77,6 +77,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
+			var political = new GeoPolitical(report);
+			model.SelectedCountry = political.Country;
+			model.SelectedPlaceType = report.PlaceType;
+
 			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report);
 
 			return View(model);

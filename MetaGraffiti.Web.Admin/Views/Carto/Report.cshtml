@@ -3,7 +3,23 @@
 
 @Html.Partial("_Nav")
 
+<script>
+	$(document).ready(function () {
+		$("input").click(function () {
+			$("form").submit();
+		});
+	});
+</script>
+
 <div class="h2">Places Report</div>
+<form>
+	<div class="h4">
+		<hr />
+		@Html.Partial("Widgets/CountryFilter", new CountryFilterModel(Model.Countries, Model.SelectedCountry, "carto-color"))
+		<hr />
+		@Html.Partial("Widgets/SimpleFilter", new SimpleFilterModel("PlaceType", "Type", Model.PlaceTypes, Model.SelectedPlaceType, "carto-color"))
+	</div>
+</form>
 <br />
 <table class="table table-striped table-bordered">
 	<thead class="thead-dark">

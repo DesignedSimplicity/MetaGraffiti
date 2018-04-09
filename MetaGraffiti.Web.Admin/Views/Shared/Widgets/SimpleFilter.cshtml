@@ -1,0 +1,16 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model SimpleFilterModel
+
+<div class="form-group">
+	<div class="form-check form-check-inline @(String.IsNullOrWhiteSpace(Model.SelectedOption) ? "" : Model.CssClass)">
+		<input class="form-check-input" type="radio" name="@(Model.Field)" id="@(Model.Field)All" value="" @(String.IsNullOrWhiteSpace(Model.SelectedOption) ? "checked" : "")>
+		<label class="form-check-label" for="@(Model.Field)All">Any @(Model.Name)</label>
+	</div>
+	@foreach (var option in Model.Options)
+	{
+		<div class="form-check form-check-inline @(Model.IsSelected(option) ? "" : Model.CssClass)">
+			<input class="form-check-input" type="radio" name="@(Model.Field)" id="@(Model.GetOptionID(option))" value="@option" @(Model.IsSelected(option) ? "checked" : "")>
+			<label class="form-check-label" for="@(Model.GetOptionID(option))">@option</label>
+		</div>
+	}
+</div>

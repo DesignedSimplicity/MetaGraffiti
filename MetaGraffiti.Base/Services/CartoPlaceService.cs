@@ -201,8 +201,10 @@ namespace MetaGraffiti.Base.Services
 			var region = GeoRegionInfo.Find(request.Region);
 			if (region != null) query = query.Where(x => x.Region.RegionID == region.RegionID);
 
+			/*
 			var locality = request.Locality;
 			if (!String.IsNullOrWhiteSpace(locality)) query = query.Where(x => String.Compare(x.Locality, locality, true) == 0);
+			*/
 
 			var name = request.Name;
 			if (!String.IsNullOrWhiteSpace(name))
@@ -477,7 +479,7 @@ namespace MetaGraffiti.Base.Services
 
 
 
-	public class CartoPlaceReportRequest
+	public class CartoPlaceReportRequest : IGeoPoliticalData
 	{
 		/// <summary>
 		/// Supports a , or ; seperated list for multiple types
@@ -499,7 +501,7 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public string Country { get; set; }
 		public string Region { get; set; }
-		public string Locality { get; set; }
+		public string Timezone { get; set; }
 
 		public string Sort { get; set; }
 	}
