@@ -13,7 +13,7 @@
 
 		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
 
-		drawCartoPlaces(2, true);
+		drawCartoPlaces(1, false); //drawCartoPlaces(2, true);
 		showWorld();
 
 		initActionRows(actionCartoPlaceBounceMarkerAndDrawBounds, actionCartoPlaceToFitBounds);
@@ -22,6 +22,10 @@
 			showWorld();
 			drawCartoPlaceBounds(-1);
 			bounceCartoPlaceMarker(-1);
+		});
+
+		$("input").click(function () {
+			$("form").submit();
 		});
 	});
 </script>
@@ -33,14 +37,16 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div class="row">
-			<div class="col-sm-8">
-				<div class="h2">All Places</div>
-			</div>
-			<div class="col-sm-4 text-right">
+		<div>
+			<span class="h2">Places Map</span>
+			<div class="float-right">
+				<a class="btn btn-primary" href="@CartoViewModel.GetReportUrl(Model.ReportFilters)">@IconHelper.ReportIcon Report Mode</a>
+				<a class="btn btn-outline-warning" href="@CartoViewModel.GetPlacesUrl()">@IconHelper.CancelIcon Reset Filters</a>
 				@Html.Partial("Buttons/ResetView")
 			</div>
 		</div>
+		<div class="clearfix"></div>
+		@Html.Partial("_Filters")
 		<br />
 		<table class="table table-sm table-striped">
 			<thead class="thead-dark">
@@ -55,21 +61,21 @@
 			</thead>
 			<tbody>
 				@{
-					var count = 0;
-					foreach (var p in Model.Places)
-					{
-						<tr class="js-mappable-row">
-							<td class="text-center h5">@(++count)</td>
-							<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(p.PlaceType) @p.PlaceType</td>
-							<td>
-								<a class="font-weight-bold" href="@PlaceViewModel.GetDisplayUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a>
-								<span class="font-italic">@p.DisplayAs</span>
-							</td>
-							<td>@p.Locality</td>
-							<td>@(p.Region?.RegionName ?? "")</td>
-							<td>@p.Country.Name</td>
-						</tr>
-					}
+				var count = 0;
+				foreach (var p in Model.Places)
+				{
+					<tr class="js-mappable-row">
+						<td class="text-center h5">@(++count)</td>
+						<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(p.PlaceType) @p.PlaceType</td>
+						<td>
+							<a class="font-weight-bold" href="@PlaceViewModel.GetDisplayUrl(p.Key)">@IconHelper.PlaceIcon @p.Name</a>
+							<span class="font-italic">@p.DisplayAs</span>
+						</td>
+						<td>@p.Locality</td>
+						<td>@(p.Region?.RegionName ?? "")</td>
+						<td>@p.Country.Name</td>
+					</tr>
+			}
 				}
 			</tbody>
 		</table>

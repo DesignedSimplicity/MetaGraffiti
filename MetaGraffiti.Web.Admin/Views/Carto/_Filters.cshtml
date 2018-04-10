@@ -1,0 +1,11 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model CartoViewModel
+
+<form>
+	<div class="h4">
+		<hr />
+		@Html.Partial("Widgets/CountryFilter", new CountryFilterModel(Model.Countries, Model.SelectedCountry, "carto-color"))
+		<hr />
+		@Html.Partial("Widgets/SimpleFilter", new SimpleFilterModel("PlaceType", "Type", Model.PlaceTypes, Model.SelectedPlaceType, "carto-color"))
+	</div>
+</form>

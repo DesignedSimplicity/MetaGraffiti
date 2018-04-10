@@ -4,6 +4,7 @@ using System.Linq;
 
 using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Services;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -28,6 +29,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public string SelectedPlaceType { get; set; }
 
 		public List<CartoPlaceInfo> ReportPlaces { get; set; }
+		public CartoPlaceReportRequest ReportFilters { get; set; }
 
 
 		// ==================================================
@@ -55,8 +57,23 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetPersistUrl(string url = "") { return $"/carto/persist/?url={url}"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 
-		public static string GetPlacesUrl() { return $"/carto/places/"; }
-		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
+
+		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetPlacesUrl(CartoPlaceReportRequest filter) { return GetReportUrl(filter, "places"); }
+
+		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?PlaceType={placeType}"; }
+		public static string GetReportUrl(CartoPlaceReportRequest filter, string mode = "report")
+		{
+			var url = $"/carto/{mode}/?";
+
+			if (!String.IsNullOrWhiteSpace(filter.PlaceType)) url += $"PlaceType={filter.PlaceType}&";
+			if (!String.IsNullOrWhiteSpace(filter.Country)) url += $"Country={filter.Country}&";
+			if (!String.IsNullOrWhiteSpace(filter.Region)) url += $"Region={filter.Region}&";
+			if (!String.IsNullOrWhiteSpace(filter.Name)) url += $"Name={filter.Name}&";
+
+			return url;
+		}
+		
 	}
 }

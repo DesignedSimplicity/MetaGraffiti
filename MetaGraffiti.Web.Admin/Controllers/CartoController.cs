@@ -82,6 +82,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedCountry = political.Country;
 			model.SelectedPlaceType = report.PlaceType;
 
+			model.ReportFilters = report;
 			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report);
 
 			return View(model);
@@ -98,6 +99,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SelectedCountry = political.Country;
 			model.SelectedPlaceType = report.PlaceType;
 
+			model.ReportFilters = report;
 			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report);
 
 			return View(model);

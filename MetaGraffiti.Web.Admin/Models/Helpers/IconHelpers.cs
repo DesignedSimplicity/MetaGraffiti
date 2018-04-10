@@ -43,6 +43,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString RecycleIcon { get { return GetFontAwesomeIcon("fas fa-recycle"); } }
 		public static HtmlString ExtractIcon { get { return GetFontAwesomeIcon("fas fa-edit"); } }
 		public static HtmlString PreviewIcon { get { return GetFontAwesomeIcon("fas fa-eye"); } }
+		public static HtmlString ReportIcon { get { return GetFontAwesomeIcon("fas fa-list"); } }
+		public static HtmlString MapIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }
 
 
 		// ==================================================
@@ -51,7 +53,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString BoundsIcon { get { return GetFontAwesomeIcon("fas fa-expand"); } }
 		public static HtmlString StartIcon { get { return GetFontAwesomeIcon("fas fa-sign-out-alt"); } }
 		public static HtmlString FinishIcon { get { return GetFontAwesomeIcon("fas fa-sign-in-alt"); } }
-
+		
 
 		// ==================================================
 		// Entity Types
