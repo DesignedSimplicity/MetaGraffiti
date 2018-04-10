@@ -47,7 +47,7 @@
 			{
 				<tr class="@Model.GetStatusCss(row)">
 					<td class="text-center">@(++count)</td>
-					<td><a href="@CartoViewModel.GetImportUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
+					<td><a href="@PlaceViewModel.GetImportUrl(row.Data.Name, row.Data.Country)">@row.Data.Name</a></td>
 					<td>@row.Data.Region</td>
 					<td>@row.Data.Country</td>
 					<td>

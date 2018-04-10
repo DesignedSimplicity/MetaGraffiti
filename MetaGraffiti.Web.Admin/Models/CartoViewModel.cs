@@ -55,19 +55,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetPersistUrl(string url = "") { return $"/carto/persist/?url={url}"; }
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 
-
-
 		public static string GetPlacesUrl() { return $"/carto/places/"; }
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?placeType={placeType}"; }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
-
-		public static string GetDeleteUrl(string key) { return $"/place/delete/{key}/"; }
-
-		public static string GetImportUrl(string country, string name) { return $"/place/search/?name={name}&country={country}"; }
-
-
-		// TODO: CARTO: RC1: move these
-		public static string GetEditUrl(string key) { return PlaceViewModel.GetUpdateUrl(key); }
-		
 	}
 }

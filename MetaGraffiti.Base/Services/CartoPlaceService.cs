@@ -29,6 +29,7 @@ namespace MetaGraffiti.Base.Services
 		private static BasicCacheService<CartoPlaceInfo> _cache = new BasicCacheService<CartoPlaceInfo>();
 		private GoogleApiService _google = null;
 
+
 		// ==================================================
 		// Constructors
 		public CartoPlaceService(GoogleApiService google)
@@ -77,6 +78,9 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
+		/// <summary>
+		/// Writes all records to the local spreadsheet cache
+		/// </summary>
 		public void Save()
 		{
 			lock (_cache)
@@ -95,12 +99,17 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-
+		/// <summary>
+		/// Get a distinct list of place types in use
+		/// </summary>
 		public List<string> ListPlaceTypes()
 		{
 			return _cache.All.Select(x => x.PlaceType).Distinct().OrderBy(x => x).ToList();
 		}
 
+		/// <summary>
+		/// Get a distinct list of countries in use
+		/// </summary>
 		public List<GeoCountryInfo> ListCountries()
 		{
 			return GeoCountryInfo.ListAsDistinct(_cache.All.Select(x => x.Country.ISO2).Distinct());
@@ -114,45 +123,73 @@ namespace MetaGraffiti.Base.Services
 			return _cache.All;
 		}
 
+		/// <summary>
+		/// Checks the cache to see if a place exists
+		/// </summary>
 		public bool HasPlace(string key)
 		{
 			return GetPlace(key) != null;
 		}
 
+		/// <summary>
+		/// Gets the place record given a key
+		/// </summary>
 		public CartoPlaceInfo GetPlace(string key)
 		{
 			return _cache[key.ToUpperInvariant()];
 		}
 
+		/// <summary>
+		/// Locates a place given the Google place_id
+		/// </summary>
 		public CartoPlaceInfo FindByGooglePlaceID(string googlePlaceID)
 		{
 			return _cache.All.FirstOrDefault(x => x.GoogleKey == googlePlaceID);
 		}
 
+		/// <summary>
+		/// Removes a place from the cache
+		/// </summary>
 		public void DeletePlace(string key)
 		{
 			_cache.RemoveOrIgnore(key.ToUpperInvariant());
 		}
 
+		/// <summary>
+		/// Finds the place which is nearest to the given point
+		/// </summary>
 		public CartoPlaceInfo NearestPlace(IGeoLatLon point)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(point)).OrderBy(x => GeoDistance.BetweenPoints(point, x.Center).Meters).FirstOrDefault();
 		}
+
+		/// <summary>
+		/// Lists all places where the bounds contains the point
+		/// </summary>
 		public List<CartoPlaceInfo> ListPlacesByContainingPoint(IGeoLatLon point)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(point)).ToList();
 		}
 
+		/// <summary>
+		/// Lists all places where the bounds overlap
+		/// </summary>
 		public List<CartoPlaceInfo> ListPlacesContainingBounds(IGeoPerimeter bounds)
 		{
 			return _cache.All.Where(x => x.Bounds.Contains(bounds)).ToList();
 		}
 
+		/// <summary>
+		/// List all places which are within the given bounds
+		/// </summary>
 		public List<CartoPlaceInfo> ListPlacesContainedInBounds(IGeoPerimeter bounds)
 		{
 			return _cache.All.Where(x => bounds.Contains(x.Bounds)).ToList();
 		}
 
+		/// <summary>
+		/// Find a the best matching place in a given country
+		/// </summary>
 		public CartoPlaceInfo FindPlace(GeoCountryInfo country, string name, bool deep = false)
 		{
 			var search = _cache.All.Where(x => x.Country.CountryID == country.CountryID);
@@ -160,6 +197,9 @@ namespace MetaGraffiti.Base.Services
 			return search.FirstOrDefault();
 		}
 
+		/// <summary>
+		/// Find a the best matching place in a given region
+		/// </summary>
 		public CartoPlaceInfo FindPlace(GeoRegionInfo region, string name, bool deep = false)
 		{
 			var search = _cache.All.Where(x => x.Region != null && x.Region.RegionID == region.RegionID);
@@ -167,17 +207,9 @@ namespace MetaGraffiti.Base.Services
 			return search.FirstOrDefault();
 		}
 
-		private IEnumerable<CartoPlaceInfo> FindPlace(IEnumerable<CartoPlaceInfo> places, string name, bool deep = false)
-		{
-			if (deep)
-				return places.Where(x => (String.Compare(x.Name, name, true) == 0)
-					|| (String.Compare(x.LocalName, name, true) == 0)
-					|| (String.Compare(x.DisplayAs, name, true) == 0));
-			else
-				return places.Where(x => String.Compare(x.Name, name, true) == 0);
-		}
-
-
+		/// <summary>
+		/// Reports all places which fit the criteria
+		/// </summary>
 		public List<CartoPlaceInfo> ReportPlaces(CartoPlaceReportRequest request)
 		{
 			var query = _cache.All.AsQueryable();
@@ -235,9 +267,9 @@ namespace MetaGraffiti.Base.Services
 			return query.ToList();
 		}
 
-
-
-
+		/// <summary>
+		/// Checks existing places for match or requests the place from google
+		/// </summary>
 		public CartoPlaceInfo LookupByPlaceID(string googlePlaceID)
 		{
 			var existing = FindByGooglePlaceID(googlePlaceID);
@@ -251,6 +283,9 @@ namespace MetaGraffiti.Base.Services
 				return new CartoPlaceInfo(result);
 		}
 
+		/// <summary>
+		/// Geocodes the given location from google
+		/// </summary>
 		public List<CartoPlaceInfo> LookupLocations(string text)
 		{
 			var response = _google.RequestLocations(text);
@@ -266,6 +301,9 @@ namespace MetaGraffiti.Base.Services
 			return list;
 		}
 
+		/// <summary>
+		/// Geocodes the given location from google
+		/// </summary>
 		public List<CartoPlaceInfo> LookupLocations(IGeoLatLon point)
 		{
 			var response = _google.RequestLocations(point);
@@ -281,7 +319,9 @@ namespace MetaGraffiti.Base.Services
 			return list;
 		}
 
-
+		/// <summary>
+		/// Adds a place to the cache or returns validation errors
+		/// </summary>
 		public ValidationServiceResponse<CartoPlaceInfo> CreatePlace(CartoPlaceCreateRequest create)
 		{
 			if (!String.IsNullOrWhiteSpace(create.PlaceKey)) throw new Exception($"CreatePlace request should not have PlaceKey {create.PlaceKey} set!");
@@ -298,6 +338,9 @@ namespace MetaGraffiti.Base.Services
 			return validate;
 		}
 
+		/// <summary>
+		/// Updates an existing place in the cache or returns validatione errors
+		/// </summary>
 		public ValidationServiceResponse<CartoPlaceInfo> UpdatePlace(CartoPlaceUpdateRequest update)
 		{
 			if (!HasPlace(update.Key)) throw new Exception($"Place {update.Key} does not exist!");
@@ -315,9 +358,9 @@ namespace MetaGraffiti.Base.Services
 			return response;
 		}
 
-
-		
-
+		/// <summary>
+		/// Validates the data that will be used to create or update a place
+		/// </summary>
 		public ValidationServiceResponse<CartoPlaceInfo> ValidatePlace(CartoPlaceData data)
 		{
 			var place = CreateCleanPlaceInfo(data);
@@ -346,8 +389,22 @@ namespace MetaGraffiti.Base.Services
 		}
 
 
+		// ==================================================
+		// Helpers
+		private string GetFullTextSearch(CartoPlaceInfo place)
+		{
+			return $"{place.Name} {place.LocalName} {place.DisplayAs} {place.Address}".ToLowerInvariant();
+		}
 
-
+		private IEnumerable<CartoPlaceInfo> FindPlace(IEnumerable<CartoPlaceInfo> places, string name, bool deep = false)
+		{
+			if (deep)
+				return places.Where(x => (String.Compare(x.Name, name, true) == 0)
+					|| (String.Compare(x.LocalName, name, true) == 0)
+					|| (String.Compare(x.DisplayAs, name, true) == 0));
+			else
+				return places.Where(x => String.Compare(x.Name, name, true) == 0);
+		}
 
 		private CartoPlaceInfo CreateCleanPlaceInfo(CartoPlaceData data)
 		{
@@ -370,12 +427,6 @@ namespace MetaGraffiti.Base.Services
 			data.Sublocalities = TextMutate.TrimSafe(data.Sublocalities);
 
 			return new CartoPlaceInfo(data);
-		}
-
-
-		private string GetFullTextSearch(CartoPlaceInfo place)
-		{
-			return $"{place.Name} {place.LocalName} {place.DisplayAs} {place.Address}".ToLowerInvariant();
 		}
 
 		private byte[] BuildWorkbook()
@@ -478,6 +529,8 @@ namespace MetaGraffiti.Base.Services
 		}
 	}
 
+	// ==================================================
+	// Additionals
 	public class CartoPlaceCreateRequest : CartoPlaceData
 	{
 	}

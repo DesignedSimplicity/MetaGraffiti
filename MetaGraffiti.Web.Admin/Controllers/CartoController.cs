@@ -48,6 +48,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Actions
 
+		/// <summary>
+		/// Carto landing page
+		/// </summary>
 		public ActionResult Index()
         {
 			var model = InitModel();
@@ -55,14 +58,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		// TODO: rename this to Map
-		public ActionResult Places()
-		{
-			var model = InitModel();
-
-			return View(model);
-		}
-
+		/// <summary>
+		/// Shows a map and list of all places in a given country
+		/// </summary>
 		public ActionResult Country(string id)
 		{
 			var model = InitModel();
@@ -73,6 +71,25 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Shows a map of all places that fit the report criteria
+		/// </summary>
+		public ActionResult Places(CartoPlaceReportRequest report)
+		{
+			var model = InitModel();
+
+			var political = new GeoPolitical(report);
+			model.SelectedCountry = political.Country;
+			model.SelectedPlaceType = report.PlaceType;
+
+			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report);
+
+			return View(model);
+		}
+
+		/// <summary>
+		/// Shows a detailed report of all the places that fit the criteria
+		/// </summary>
 		public ActionResult Report(CartoPlaceReportRequest report)
 		{
 			var model = InitModel();
@@ -86,6 +103,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		/// <summary>
+		/// Saves the places to the cache file and redirects to the provided url
+		/// </summary>
 		public ActionResult Persist(string url = "")
 		{
 			_cartoPlaceService.Save();
@@ -94,6 +114,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return new RedirectResult(String.IsNullOrWhiteSpace(url) ? CartoViewModel.GetCartoUrl() : url);
 		}
 
+		/// <summary>
+		/// Reloads the places from the cache file
+		/// </summary>
+		/// <returns></returns>
 		public ActionResult Reload()
 		{
 			_cartoPlaceService.Reload();
