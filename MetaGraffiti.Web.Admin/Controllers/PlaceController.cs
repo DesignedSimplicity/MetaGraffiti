@@ -57,10 +57,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 
-			model.SearchCriteria = (search == null ? new PlaceSearchModel() : search);
+			search = search ?? new PlaceSearchModel();
+			model.SearchCriteria = search;
 			model.SearchResults = new List<CartoPlaceInfo>();
 
-			var text = search.Name + " " + search.Country;
+			var text = $"{search.Name} {search.Country}".Trim();
 			if (!String.IsNullOrWhiteSpace(text))
 			{
 				model.SearchResults = _cartoPlaceService.LookupLocations(text.Trim());
