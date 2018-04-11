@@ -3,23 +3,34 @@
 
 @Html.Partial("_Nav")
 
-<script>
-	$(document).ready(function () {
-		$("input").click(function () {
-			$("form").submit();
-		});
-	});
-</script>
-
-<div>
-	<span class="h2">Places Report</span>
-	<div class="float-right">
-		<a class="btn btn-primary" href="@CartoViewModel.GetPlacesUrl(Model.ReportFilters)">@IconHelper.MapIcon Map Mode</a>
-		<a class="btn btn-outline-warning" href="@CartoViewModel.GetReportUrl()">@IconHelper.CancelIcon Reset Filters</a>
+<form>
+	<div>
+		<span class="h2">
+			Places Report
+		</span>
+		<div class="float-right">
+			<div class="form-row">
+				<div class="col-auto">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<div class="input-group-text">Name:</div>
+						</div>
+						<input class="form-control" name="Name" value="@Model.ReportFilters.Name" />
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-primary">@IconHelper.FilterIcon</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-auto">
+					<a class="btn btn-outline-primary" href="@CartoViewModel.GetPlacesUrl(Model.ReportFilters)">@IconHelper.MapIcon Map Mode</a>
+					<a class="btn btn-outline-warning" href="@CartoViewModel.GetReportUrl()">@IconHelper.CancelIcon Reset Filters</a>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
-<div class="clearfix"></div>
-@Html.Partial("_Filters")
+	<div class="clearfix"></div>
+	@Html.Partial("_Filters")
+</form>
 <br />
 <table class="table table-striped table-bordered">
 	<thead class="thead-dark">

@@ -59,7 +59,9 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
 
-		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetSearchUrl() { return "/carto/report/"; }
+
+		public static string GetPlacesUrl() { return $"/carto/report/"; }
 		public static string GetPlacesUrl(CartoPlaceReportRequest filter) { return GetReportUrl(filter, "places"); }
 
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?PlaceType={placeType}"; }

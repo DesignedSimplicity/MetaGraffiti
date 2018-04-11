@@ -23,10 +23,6 @@
 			drawCartoPlaceBounds(-1);
 			bounceCartoPlaceMarker(-1);
 		});
-
-		$("input").click(function () {
-			$("form").submit();
-		});
 	});
 </script>
 
@@ -37,16 +33,35 @@
 
 <div class="row">
 	<div class="col-sm-6">
-		<div>
-			<span class="h2">Places Map</span>
-			<div class="float-right">
-				<a class="btn btn-primary" href="@CartoViewModel.GetReportUrl(Model.ReportFilters)">@IconHelper.ReportIcon Report Mode</a>
-				<a class="btn btn-outline-warning" href="@CartoViewModel.GetPlacesUrl()">@IconHelper.CancelIcon Reset Filters</a>
-				@Html.Partial("Buttons/ResetView")
+		<form>
+			<div>
+				<span class="h2">
+					Places Map
+				</span>
+				<div class="float-right">
+					<div class="form-row">
+						<div class="col-auto">
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text">Name:</div>
+								</div>
+								<input class="form-control" name="Name" value="@Model.ReportFilters.Name" />
+								<div class="input-group-append">
+									<button type="submit" class="btn btn-primary">@IconHelper.FilterIcon</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-auto">
+							<a class="btn btn-outline-primary" href="@CartoViewModel.GetReportUrl(Model.ReportFilters)">@IconHelper.ReportIcon Report Mode</a>
+							<a class="btn btn-outline-warning" href="@CartoViewModel.GetReportUrl()">@IconHelper.CancelIcon Reset Filters</a>
+							@Html.Partial("Buttons/ResetView")
+						</div>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="clearfix"></div>
-		@Html.Partial("_Filters")
+			<div class="clearfix"></div>
+			@Html.Partial("_Filters")
+		</form>
 		<br />
 		<table class="table table-sm table-striped">
 			<thead class="thead-dark">

@@ -10,10 +10,6 @@
 		<div class="h2"><a href="@CartoViewModel.GetReportUrl()">Report All</a></div>
 		<br />
 		<hr />
-		<div class="h2">Google</div>
-		@Html.Partial("Widgets/GooglePlaces")
-		<br />
-		<hr />
 		<div class="h2">Search</div>
 		@Html.Partial("Widgets/SearchPlaces")
 		<br />
@@ -52,6 +48,25 @@
 				<a href="@CartoViewModel.GetReportUrl(placeType)">@SvgHelper.GetIcon("places/" + placeType) @placeType</a>
 			</div>
 		}
+	</div>
+	<div class="col-sm-2">
+		<div class="h1">Create New</div>
+		<hr />
+		<div class="h2">Google</div>
+		@Html.Partial("Widgets/GooglePlaces")
+		<br />
+		<hr />
+		<div class="h2">Search</div>
+		<form method="get" action="@PlaceViewModel.GetSearchUrl()">
+			<div class="form-group">
+				<input type="text" class="form-control" name="name" placeholder="Name" />
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-block btn-primary">Search</button>
+			</div>
+		</form>
+		<br />
+		<hr />
 	</div>
 	<div class="col-sm-1">
 		<div class="h5">Import From</div>

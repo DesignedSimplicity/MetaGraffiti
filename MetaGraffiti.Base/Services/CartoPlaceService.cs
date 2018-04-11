@@ -242,13 +242,14 @@ namespace MetaGraffiti.Base.Services
 			if (!String.IsNullOrWhiteSpace(name))
 			{
 				name = name.Replace("%", "*");
+				if (!name.Contains("*")) name = "*" + name + "*"; // default to contains search
 				var n = name.Trim('*').ToLowerInvariant();
 				if (name.StartsWith("*") && name.EndsWith("*"))
 					query = query.Where(x => x.Name.ToLowerInvariant().Contains(n));
-				else if (name.StartsWith("*"))
-					query = query.Where(x => x.Name.ToLowerInvariant().StartsWith(n));
 				else if (name.EndsWith("*"))
 					query = query.Where(x => x.Name.ToLowerInvariant().EndsWith(n));
+				else if (name.StartsWith("*"))
+					query = query.Where(x => x.Name.ToLowerInvariant().StartsWith(n));
 				else
 					query = query.Where(x => x.Name.ToLowerInvariant() == n);
 			}
