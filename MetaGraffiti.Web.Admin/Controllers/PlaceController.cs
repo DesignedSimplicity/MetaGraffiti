@@ -64,7 +64,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var text = $"{search.Name} {search.Country}".Trim();
 			if (!String.IsNullOrWhiteSpace(text))
 			{
-				model.SearchResults = _cartoPlaceService.LookupLocations(text.Trim());
+				model.SearchResults = _cartoPlaceService.LookupPlaces(text.Trim());
 			}
 			else if (search.Latitude.HasValue && search.Longitude.HasValue)
 			{

@@ -277,8 +277,8 @@ namespace MetaGraffiti.Base.Services
 			var existing = FindByGooglePlaceID(googlePlaceID);
 			if (existing != null) return existing;
 
-			var response = _google.RequestLocation(googlePlaceID);
-			var result = response.Results.FirstOrDefault();
+			var response = _google.RequestPlace(googlePlaceID);
+			var result = response.Result;
 			if (result == null)
 				return null;
 			else
@@ -288,15 +288,19 @@ namespace MetaGraffiti.Base.Services
 		/// <summary>
 		/// Geocodes the given location from google
 		/// </summary>
-		public List<CartoPlaceInfo> LookupLocations(string text)
+		public List<CartoPlaceInfo> LookupPlaces(string text)
 		{
-			var response = _google.RequestLocations(text);
+			var response = _google.RequestPlaces(text);
 
 			var list = new List<CartoPlaceInfo>();
-			foreach (var result in response.Results)
+			foreach (var placeID in response.Results)
 			{
-				var place = FindByGooglePlaceID(result.PlaceID);
-				if (place == null) place = new CartoPlaceInfo(result);
+				var place = FindByGooglePlaceID(placeID);
+				if (place == null)
+				{
+					var result = _google.RequestPlace(placeID).Result;
+					place = new CartoPlaceInfo(result);
+				}
 				list.Add(place);
 			}
 
@@ -411,6 +415,7 @@ namespace MetaGraffiti.Base.Services
 		private CartoPlaceInfo CreateCleanPlaceInfo(CartoPlaceData data)
 		{
 			data.PlaceType = TextMutate.TrimSafe(data.PlaceType);
+			data.PlaceTags = TextMutate.FixKeywords(data.PlaceTags);
 
 			data.Timezone = TextMutate.TrimSafe(data.Timezone);
 			data.Country = TextMutate.TrimSafe(data.Country);
@@ -426,7 +431,7 @@ namespace MetaGraffiti.Base.Services
 			data.Postcode = TextMutate.TrimSafe(data.Postcode);
 
 			data.Subregions = TextMutate.TrimSafe(data.Subregions);
-			data.Sublocalities = TextMutate.TrimSafe(data.Sublocalities);
+			data.Sublocalities = TextMutate.TrimSafe(data.Sublocalities);			
 
 			return new CartoPlaceInfo(data);
 		}

@@ -46,7 +46,7 @@ A 4 dimensional space time framework to process geographic and topographic data 
 * Carto/Place functionality complete
 
 ### RC3
-Geo/Ortho functionality complete
+* Geo/Ortho functionality complete
 
 ### V1.0
 
@@ -62,8 +62,6 @@ Geo/Ortho functionality complete
 
 
 ### Carto
-* Add PlaceTags field and remove PlaceFlags from CartoPlaceInfo/Form/etc
-* Break out search for existing places (vs search for new places to add)
 * Add ability to create a place from scratch (drop pin, set bounds, etc)
 * Add sorting to place report page
 * Add page to list unsaved changed
@@ -71,8 +69,7 @@ Geo/Ortho functionality complete
 * Add auto-persist warning/functionality and update backup file copy pattern
 * Add filters/sorting to global place map, change url and revert icons back to markers (from types)
 * Build simple place read only/display page which includes nearby/containing/contained places
-* Update backend to use google place details: https://maps.googleapis.com/maps/api/place/details/json
-* Update backend to use google place search: https://developers.google.com/places/web-service/search
+
 
 ### Topo
 * Fix existing trail files with incorrect local date filename

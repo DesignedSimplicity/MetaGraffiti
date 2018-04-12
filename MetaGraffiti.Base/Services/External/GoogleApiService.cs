@@ -15,6 +15,8 @@ namespace MetaGraffiti.Base.Services.External
 		private string _apiKey;
 
 		//TODO: refactor this to use basic cache classes
+		private Dictionary<string, GooglePlacesSearchReponse> _cacheSearch = new Dictionary<string, GooglePlacesSearchReponse>();
+		private Dictionary<string, GooglePlaceDetailReponse> _cachePlace = new Dictionary<string, GooglePlaceDetailReponse>();
 		private Dictionary<string, GoogleLocationResponse> _cacheLocation = new Dictionary<string, GoogleLocationResponse>();
 		private Dictionary<string, GoogleTimezoneResponse> _cacheTimezone = new Dictionary<string, GoogleTimezoneResponse>();
 		private Dictionary<string, GoogleElevationResponse> _cacheElevation = new Dictionary<string, GoogleElevationResponse>();
@@ -71,6 +73,25 @@ namespace MetaGraffiti.Base.Services.External
 			return response.Data;
 		}
 
+		public GooglePlaceDetailReponse RequestPlace(string place_id)
+		{
+			var key = place_id;
+			if (_cachePlace.ContainsKey(key)) return _cachePlace[key];
+
+			var client = new RestClient("https://maps.googleapis.com");
+			var request = new RestRequest("maps/api/place/details/json", Method.GET);
+
+			request.AddParameter("key", _apiKey);
+			request.AddParameter("place_id", place_id);
+
+			var response = client.Execute(request);
+			var data = new GooglePlaceDetailReponse(response.Content);
+
+			lock (_cachePlace) { if (!_cachePlace.ContainsKey(key)) _cachePlace.Add(key, data); }
+			return data;
+		}
+
+
 		public GoogleLocationResponse RequestLocation(string place_id)
 		{
 			var key = place_id;
@@ -89,7 +110,25 @@ namespace MetaGraffiti.Base.Services.External
 			return data;
 		}
 
-		// TODO: also implement this ias https://developers.google.com/places/web-service/search
+		// https://developers.google.com/places/web-service/search
+		public GooglePlacesSearchReponse RequestPlaces(string text)
+		{
+			var key = text.Trim().ToLowerInvariant();
+			if (_cacheSearch.ContainsKey(key)) return _cacheSearch[key];
+
+			var client = new RestClient("https://maps.googleapis.com");
+			var request = new RestRequest("maps/api/place/textsearch/json", Method.GET);
+
+			request.AddParameter("key", _apiKey);
+			request.AddParameter("query", text);
+
+			var response = client.Execute(request);
+			var data = new GooglePlacesSearchReponse(response.Content);
+
+			lock (_cacheSearch) { if (!_cacheSearch.ContainsKey(key)) _cacheSearch.Add(key, data); }
+			return data;
+		}
+
 		public GoogleLocationResponse RequestLocations(string text)
 		{
 			var key = text.Trim().ToLowerInvariant();

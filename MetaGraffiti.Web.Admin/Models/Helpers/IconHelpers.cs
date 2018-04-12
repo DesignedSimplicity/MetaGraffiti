@@ -39,6 +39,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString SearchIcon { get { return GetFontAwesomeIcon("fas fa-search"); } }
 		public static HtmlString FilterIcon { get { return GetFontAwesomeIcon("fas fa-filter"); } }
 		public static HtmlString LookupIcon { get { return GetFontAwesomeIcon("fas fa-magnet"); } }
+		public static HtmlString GeocodeIcon { get { return GetFontAwesomeIcon("fas fa-crosshairs"); } }
 		public static HtmlString ImportIcon { get { return GetFontAwesomeIcon("fas fa-database"); } }
 		public static HtmlString ExportIcon { get { return GetFontAwesomeIcon("fas fa-download"); } }
 		public static HtmlString RecycleIcon { get { return GetFontAwesomeIcon("fas fa-recycle"); } }

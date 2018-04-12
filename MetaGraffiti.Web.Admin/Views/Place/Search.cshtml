@@ -48,7 +48,7 @@
 						<div class="input-group">
 							<input type="text" class="form-control" name="Name" placeholder="Name" value="@Model.SearchCriteria.Name">
 							<div class="input-group-append">
-								<button class="btn btn-primary" type="submit">Search</button>
+								<button class="btn btn-primary" type="submit">@IconHelper.SearchIcon Search</button>
 							</div>
 						</div>
 					</div>
@@ -72,7 +72,7 @@
 							<input type="text" class="form-control" name="Latitude" placeholder="Latitude" value="@Model.SearchCriteria.Latitude">
 							<input type="text" class="form-control" name="Longitude" placeholder="Longitude" value="@Model.SearchCriteria.Longitude">
 							<div class="input-group-append">
-								<button class="btn btn-info" type="submit">Geocode</button>
+								<button class="btn btn-info" type="submit">@IconHelper.GeocodeIcon Geocode</button>
 							</div>
 						</div>
 					</div>
@@ -86,8 +86,6 @@
 				<tr>
 					<th class="text-center">#</th>
 					<th>Name</th>
-					<th>Local Name</th>
-					<th>Display</th>
 					<th>Type</th>
 					<th>Locality</th>
 					<th>Region</th>
@@ -101,9 +99,9 @@
 					foreach (var p in Model.SearchResults)
 					{
 						var existing = (p.Key != p.GoogleKey);
-						<tr class="js-mappable-row @(existing ? " table-success" : "" )">
+						<tr class="js-mappable-row @(existing ? " table-primary" : "" )">
 							<td class="text-center h5">@(++count)</td>
-							<td>
+							<td class="h5">
 								@if (existing)
 								{
 									<a href="@PlaceViewModel.GetDisplayUrl(p.Key)">@p.Name</a>
@@ -113,14 +111,12 @@
 									<a href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@p.Name</a>
 								}
 							</td>
-							<td>@p.LocalName</td>
-							<td>@p.DisplayAs</td>
 							<td>@p.PlaceType</td>
 							<td>@p.Locality</td>
 							<td>@(p.Region?.RegionName ?? "")</td>
-							<td>@p.Country.ISO2</td>
+							<td>@p.Country.Name</td>
 							<td>
-								<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">Preview</a>
+								<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetPreviewUrl(p.GoogleKey, Model.SearchCriteria.Name)">@IconHelper.PreviewIcon Preview</a>
 							</td>
 						</tr>
 					}

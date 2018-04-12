@@ -9,6 +9,43 @@ using MetaGraffiti.Base.Common;
 
 namespace MetaGraffiti.Base.Services.External
 {
+	public class GooglePlacesSearchReponse
+	{
+		private string _data;
+
+		public GooglePlacesSearchReponse(string data)
+		{
+			_data = data;
+
+			dynamic d = JsonConvert.DeserializeObject(_data);
+			Results = new List<string>();
+			foreach (var result in d.results)
+			{
+				string placeID = result.place_id;
+				Results.Add(placeID);
+			}
+		}
+
+		public string Status { get; set; }
+		public List<string> Results { get; private set; }
+	}
+
+	public class GooglePlaceDetailReponse
+	{
+		private string _data;
+
+		public GooglePlaceDetailReponse(string data)
+		{
+			_data = data;
+
+			dynamic d = JsonConvert.DeserializeObject(_data);
+			Result = new GoogleLocationResult(d.result);
+		}
+
+		public string Status { get; set; }
+		public GoogleLocationResult Result { get; private set; }
+	}
+
 	// https://developers.google.com/maps/documentation/geocoding/start
 	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
 	// https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
@@ -257,6 +294,17 @@ namespace MetaGraffiti.Base.Services.External
 				this.TypedName = this.ShortName;
 				this.TypedNameSource = "Lodging";
 			}
+
+			// override all for place detail datasets
+			var placeName = _data?.name;
+			if (placeName != null)
+			{
+				this.ShortName = _data.name;
+				this.LongName = "";
+				this.TypedName = _data.name;
+				this.TypedNameSource = "PlaceDetail";
+			}
+
 			#endregion
 
 			#region Perimeter
