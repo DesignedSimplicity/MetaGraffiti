@@ -9,7 +9,7 @@
 	$(document).ready(function () {
 		initMap();
 
-		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
+		initCartoPlaces(_places, '@PlaceViewModel.GetPreviewUrl("{key}", Model.SearchCriteria.Name)');
 
 		drawCartoPlaces(2);
 		fitCartoPlaces();
