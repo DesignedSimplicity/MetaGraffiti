@@ -12,14 +12,14 @@ namespace MetaGraffiti.Base.Common
 		/// </summary>
 		/// <param name="o"></param>
 		/// <returns></returns>
-		public static int ToInt(object o, int d = 0)
+		public static int ToInt(object o, int defaultValue = 0)
 		{
 			if (o != null)
 			{
-				try { return Convert.ToInt32(o); }
-				catch { }
+				int r;
+				return int.TryParse(o.ToString(), out r) ? r : defaultValue;
 			}
-			return d;
+			return defaultValue;
 		}
 
 
@@ -30,24 +30,13 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static int? ToIntNull(object o)
 		{
-			int? value;
+			int? value = null;
 
 			//check for null
-			if (o == null)
+			if (o != null)
 			{
-				value = null;
-			}
-			else
-			{
-				try
-				{
-					value = Convert.ToInt32(o);
-
-				}
-				catch //(InvalidCastException) //TODO RICH remove the InvalidCastException from eveywhere in common
-				{
-					value = null;
-				}
+				int r;
+				if (int.TryParse(o.ToString(), out r)) return r;
 			}
 
 			return value;
@@ -83,6 +72,7 @@ namespace MetaGraffiti.Base.Common
 
 			return value;
 		}
+		
 		/// <summary>
 		/// Converts object to DateTime – defaults to MinDate on error.
 		/// </summary>
@@ -90,27 +80,15 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static DateTime ToDateTime(object o)
 		{
-			DateTime value;
-
-			//check for null
 			if (o == null)
-			{
-				value = DateTime.MinValue;
-			}
+				return DateTime.MinValue;
 			else
 			{
-				try
-				{
-					value = Convert.ToDateTime(o);
-
-				}
-				catch //(InvalidCastException)
-				{
-					value = DateTime.MinValue;
-				}
+				DateTime d;
+				return DateTime.TryParse(o.ToString(), out d)
+					? d
+					: DateTime.MinValue;
 			}
-
-			return value;
 		}
 
 		/// <summary>
@@ -121,27 +99,15 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static DateTime ToDateTime(object o, DateTime defaultValue)
 		{
-			DateTime value;
-
-			//check for null
 			if (o == null)
-			{
-				value = defaultValue;
-			}
+				return defaultValue;
 			else
 			{
-				try
-				{
-					value = Convert.ToDateTime(o);
-
-				}
-				catch //(InvalidCastException)
-				{
-					value = defaultValue;
-				}
+				DateTime d;
+				return DateTime.TryParse(o.ToString(), out d)
+					? d
+					: defaultValue;
 			}
-
-			return value;
 		}
 
 		/// <summary>
@@ -151,50 +117,27 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static DateTime? ToDateTimeNull(object o)
 		{
-			DateTime? value;
-
-			//check for null
 			if (o == null)
-			{
-				value = null;
-			}
+				return null;
 			else
 			{
-				try
-				{
-					value = Convert.ToDateTime(o);
-				}
-				catch //(InvalidCastException)
-				{
-					value = null;
-				}
+				DateTime d;
+				if (DateTime.TryParse(o.ToString(), out d))
+					return d;
+				else
+					return null;
 			}
-
-			return value;
 		}
 
 		public static DateTime? ToUTCDateTimeNull(object o)
 		{
-			DateTime? value;
-
-			//check for null
 			if (o == null)
-			{
-				value = null;
-			}
+				return null;
 			else
 			{
-				try
-				{
-					value = Convert.ToDateTime(o).ToUniversalTime();
-				}
-				catch //(InvalidCastException)
-				{
-					value = null;
-				}
+				var d = ToDateTimeNull(o);
+				return (d.HasValue ? d.Value.ToUniversalTime() : d);
 			}
-
-			return value;
 		}
 		#endregion
 		//================================================================================
@@ -208,26 +151,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static decimal ToDecimal(object o)
 		{
-			decimal value;
-
-			//check for null
 			if (o == null)
-			{
-				value = 0;
-			}
+				return 0;
 			else
 			{
-				try
-				{
-					value = Convert.ToDecimal(o);
-				}
-				catch //(InvalidCastException)
-				{
-					value = 0;
-				}
+				decimal d;
+				if (decimal.TryParse(o.ToString(), out d))
+					return d;
+				else
+					return 0;
 			}
-
-			return value;
 		}
 
 		/// <summary>
@@ -237,27 +170,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static decimal? ToDecimalNull(object o)
 		{
-			Decimal? value;
-
-			//check for null
 			if (o == null)
-			{
-				value = null;
-			}
+				return null;
 			else
 			{
-				try
-				{
-					value = Convert.ToDecimal(o);
-
-				}
-				catch //(InvalidCastException)
-				{
-					value = null;
-				}
+				decimal d;
+				if (decimal.TryParse(o.ToString(), out d))
+					return d;
+				else
+					return null;
 			}
-
-			return value;
 		}
 		#endregion
 		//================================================================================
@@ -271,26 +193,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static double ToDouble(object o)
 		{
-			double value;
-
-			//check for null
 			if (o == null)
-			{
-				value = 0;
-			}
+				return 0;
 			else
 			{
-				try
-				{
-					value = Convert.ToDouble(o);
-				}
-				catch //(InvalidCastException)
-				{
-					value = 0;
-				}
+				double d;
+				if (double.TryParse(o.ToString(), out d))
+					return d;
+				else
+					return 0;
 			}
-
-			return value;
 		}
 
 		/// <summary>
@@ -300,27 +212,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static double? ToDoubleNull(object o)
 		{
-			Double? value;
-
-			//check for null
 			if (o == null)
-			{
-				value = null;
-			}
+				return null;
 			else
 			{
-				try
-				{
-					value = Convert.ToDouble(o);
-
-				}
-				catch //(InvalidCastException)
-				{
-					value = null;
-				}
+				double d;
+				if (double.TryParse(o.ToString(), out d))
+					return d;
+				else
+					return null;
 			}
-
-			return value;
 		}
 		#endregion
 		//================================================================================
@@ -401,8 +302,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static bool ToBoolean(object o)
 		{
-			try { return Convert.ToBoolean(o); }
-			catch { return false; }
+			if (o == null)
+				return false;
+			else
+			{
+				bool b;
+				if (bool.TryParse(o.ToString(), out b))
+					return b;
+				else
+					return false;
+			}
 		}
 
 		/// <summary>
@@ -412,14 +321,16 @@ namespace MetaGraffiti.Base.Common
 		/// <returns></returns>
 		public static bool? ToBooleanNull(object o)
 		{
-			try
+			if (o == null)
+				return null;
+			else
 			{
-				if (o == null)
-					return null;
+				bool b;
+				if (bool.TryParse(o.ToString(), out b))
+					return b;
 				else
-					return Convert.ToBoolean(o);
+					return null;
 			}
-			catch { return null; }
 		}
 
 		#endregion
@@ -430,8 +341,10 @@ namespace MetaGraffiti.Base.Common
 
 		public static string ToString(object s)
 		{
-			try { return Convert.ToString(s); }
-			catch { return ""; }
+			if (s == null)
+				return "";
+			else
+				return s.ToString();
 		}
 
 		#endregion

@@ -37,6 +37,7 @@
 		<tr>
 			<th class="text-center">#</th>
 			<th>Type</th>
+			<th>Tags</th>
 			<th>Name</th>
 			<th>Display As <small>Local Name</small></th>
 			<th>Locality</th>
@@ -54,6 +55,9 @@
 					<td class="text-center h4">@(++count)</td>
 					<td class="text-nowrap">
 						<a class="carto-color" href="@CartoViewModel.GetReportUrl(place.PlaceType)">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</a>
+					</td>
+					<td>
+						@place.PlaceTags
 					</td>
 					<td>
 						<div class="h5">
@@ -91,7 +95,7 @@
 						<a href="@CartoViewModel.GetCountryUrl(place.Country)">@place.Country.Name</a>
 					</td>
 					<td class="text-nowrap">
-						<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetUpdateUrl(place.Key)">@IconHelper.EditIcon Update</a>
+						<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetUpdateUrl(place.Key)">@IconHelper.EditIcon Edit</a>
 						<a class="btn btn-sm btn-outline-danger js-confirm" href="@PlaceViewModel.GetDeleteUrl(place)">@IconHelper.RemoveIcon Delete</a>
 					</td>
 				</tr>

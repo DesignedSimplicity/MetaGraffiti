@@ -262,7 +262,8 @@ namespace MetaGraffiti.Base.Services
 			}
 
 			// apply sort
-			query = query.OrderBy(x => x.Country.Name).ThenBy(x => (x.Region == null ? "" : x.Region.RegionName)).ThenBy(x => x.Name);
+			if (country == null || region == null) query = query.OrderBy(x => x.Country.Name).ThenBy(x => (x.Region == null ? "" : x.Region.RegionName));
+			query = query.OrderBy(x => x.Name);
 
 			// return list
 			return query.ToList();

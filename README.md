@@ -62,12 +62,11 @@ Geo/Ortho functionality complete
 
 
 ### Carto
+* Add PlaceTags field and remove PlaceFlags from CartoPlaceInfo/Form/etc
 * Break out search for existing places (vs search for new places to add)
 * Add ability to create a place from scratch (drop pin, set bounds, etc)
 * Add sorting to place report page
-* Add PlaceTags/IconKey/Created/Update fields and remove PlaceFlags from CartoPlaceInfo/Form/etc
 * Add page to list unsaved changed
-** Fix empty enter/blank preview on google place search widget
 * Optimize and expand FindLocalityPlace functionality
 * Add auto-persist warning/functionality and update backup file copy pattern
 * Add filters/sorting to global place map, change url and revert icons back to markers (from types)
