@@ -10,16 +10,7 @@ namespace MetaGraffiti.Web.Admin.Models
 {
 	public class CartoPlaceFormModel
 	{
-		public CartoPlaceFormModel(CartoPlaceInfo place) { Place = place; }
-
-		public CartoPlaceInfo Place { get; set; }
-
-		public bool IsPreview { get { return Place.GoogleKey == Place.Key; } }
-	}
-
-	public class CartoPlaceFormModel2
-	{
-		public CartoPlaceFormModel2(CartoPlaceInfo place, CartoPlaceData data = null)
+		public CartoPlaceFormModel(CartoPlaceInfo place, CartoPlaceData data = null)
 		{
 			Place = place;
 			Data = data ?? place.GetData();

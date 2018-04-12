@@ -37,6 +37,8 @@
 			</span>
 			<div class="float-right">
 				<a class="btn btn-outline-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)">@IconHelper.PlaceIcon Import New Places</a>
+				<a class="btn btn-outline-primary" href="@CartoViewModel.GetReportUrl(Model.SelectedCountry)">@IconHelper.ReportIcon</a>
+				<a class="btn btn-outline-primary" href="@CartoViewModel.GetPlacesUrl(Model.SelectedCountry)">@IconHelper.MapIcon</a>
 				<div class="btn-group">
 					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(Model.SelectedCountry)">@IconHelper.GeoIcon</a>
 					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(Model.SelectedCountry.ISO2)">@IconHelper.TopoIcon</a>

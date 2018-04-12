@@ -97,7 +97,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				// TODO: backfill country and region if they are not set
 				model.SelectedPlace = _cartoPlaceService.LookupByPlaceID(id);
 			}
-			model.Edit = new CartoPlaceFormModel2(model.SelectedPlace);
+			model.Edit = new CartoPlaceFormModel(model.SelectedPlace);
 
 			return View("Create", model);
 		}
@@ -125,7 +125,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				var model = InitModel();
 
 				model.SelectedPlace = response.Data;
-				model.Edit = new CartoPlaceFormModel2(response.Data, request);
+				model.Edit = new CartoPlaceFormModel(response.Data, request);
 				model.AddValidationErrors(response.ValidationErrors);
 
 				return View("Create", model);
@@ -141,7 +141,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var place = _cartoPlaceService.GetPlace(id);
-			model.Edit = new CartoPlaceFormModel2(place);
+			model.Edit = new CartoPlaceFormModel(place);
 			model.SelectedPlace = place;
 			model.SelectedCountry = place.Country;
 
@@ -166,12 +166,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			if (response.OK)
 			{
 				model.HasChanges = true;
-				model.Edit = new CartoPlaceFormModel2(place);
+				model.Edit = new CartoPlaceFormModel(place);
 				model.ConfirmMessage = $"Place {request.PlaceKey} updated at {DateTime.Now}";
 			}
 			else
 			{
-				model.Edit = new CartoPlaceFormModel2(place, request);
+				model.Edit = new CartoPlaceFormModel(place, request);
 				model.AddValidationErrors(response.ValidationErrors);
 			}
 

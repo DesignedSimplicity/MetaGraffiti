@@ -63,11 +63,11 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 ### Carto
 * Add ability to create a place from scratch (drop pin, set bounds, etc)
-* Add sorting to place report page
+* Add toggle to global places map to use markers vs place type icons on map
+* Add sorting to place report/map pages
 * Add page to list unsaved changed
 * Optimize and expand FindLocalityPlace functionality
 * Add auto-persist warning/functionality and update backup file copy pattern
-* Add filters/sorting to global place map, change url and revert icons back to markers (from types)
 * Build simple place read only/display page which includes nearby/containing/contained places
 
 
@@ -83,16 +83,19 @@ A 4 dimensional space time framework to process geographic and topographic data 
 * Consolidate ITopoTrailData, ITopoTrailUpdateRequest, TrackEditModel
 * Change track edit manage page to show details using TopoTrackInfo
 
+
 ### Ortho
 * Remove usage of GpxFileInfo from browse tracks
 * Update GpxExtensionsData to read/write internal ID/key
 * Fix implementation of UrlText and UrlLink for GPX v1.1
+
 
 ### Geo
 * Base RegionID off of CountryID * (1000 ^ Division)
 * Add Local Name data for non-English regions
 * Move Region and Country metadata to reference file/array
 * Add Japan level 1 and level 2 region data
+
 
 ### Tests
 * Unit tests for Gpx and Kml writer classes

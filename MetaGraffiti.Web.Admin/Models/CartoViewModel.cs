@@ -34,6 +34,8 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Helpers
+		public bool IsFiltered { get { return ReportPlaces != null && Places.Count() != ReportPlaces.Count(); } }
+
 		public CartoPlaceInfo FindLocalityPlace(CartoPlaceInfo place)
 		{
 			if (String.IsNullOrWhiteSpace(place.Locality)) return null;
@@ -61,10 +63,12 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static string GetSearchUrl() { return "/carto/report/"; }
 
-		public static string GetPlacesUrl() { return $"/carto/report/"; }
+		public static string GetPlacesUrl() { return $"/carto/places/"; }
+		public static string GetPlacesUrl(GeoCountryInfo country) { return $"/carto/places/?Country={country.Name}"; }
 		public static string GetPlacesUrl(CartoPlaceReportRequest filter) { return GetReportUrl(filter, "places"); }
 
 		public static string GetReportUrl(string placeType = "") { return $"/carto/report/?PlaceType={placeType}"; }
+		public static string GetReportUrl(GeoCountryInfo country) { return $"/carto/report/?Country={country.Name}"; }
 		public static string GetReportUrl(CartoPlaceReportRequest filter, string mode = "report")
 		{
 			var url = $"/carto/{mode}/?";

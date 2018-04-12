@@ -19,7 +19,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Optional
-		public CartoPlaceFormModel2 Edit { get; set; }
+		public CartoPlaceFormModel Edit { get; set; }
 		public GeoCountryInfo SelectedCountry { get; set; }
 		public CartoPlaceInfo SelectedPlace { get; set; }
 		public PlaceSearchModel SearchCriteria { get; set; }
@@ -49,20 +49,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetSearchUrl(string name, string country = "") { return $"/place/search/?name={name}&country={country}"; }
 
 		public static string GetImportUrl(string country, string name) { return $"/place/search/?name={name}&country={country}"; }
-	}
-
-
-
-
-
-
-
-
-
-	public class PlaceReportModel //TODO: deprecate
-	{
-		public CartoPlaceData Data { get; set; }
-		public CartoPlaceInfo Place { get; set; }
 	}
 
 	public class PlaceSearchModel
