@@ -48,7 +48,7 @@
 					{
 						<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name, trail.Region.RegionISO)">@trail.Region.RegionName</a><span>,</span>
 					}
-					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name)">@trail.Country.Name</a>
+					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(trail.Country.Name)">@FlagHelper.GetFlagIcon(trail.Country)@trail.Country.Name</a>
 				</div>
 				<div class="h5">
 					@foreach (var place in trail.Places)

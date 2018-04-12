@@ -33,7 +33,7 @@
 	<div class="col-sm-6">
 		<div>
 			<span class="h2">
-				@Model.SelectedCountry.Name
+				@FlagHelper.GetFlagIcon(Model.SelectedCountry) @Model.SelectedCountry.Name
 			</span>
 			<div class="float-right">
 				<a class="btn btn-outline-secondary" href="@OrthoViewModel.GetPlacesUrl(Model.SelectedCountry.Name)">@IconHelper.PlaceIcon Import New Places</a>
@@ -59,39 +59,39 @@
 			</thead>
 			<tbody>
 				@{
-					var count = 0;
-					foreach (var place in Model.Places)
-					{
-						<tr class="js-mappable-row">
-							<td class="text-center h5">@(++count)</td>
-							<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</td>
-							<td class="font-weight-bold"><a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a></td>
-							<td>
-								@{
-									var locality = Model.FindLocalityPlace(place);
-									if (locality == null)
-									{
-										<span>@place.Locality</span>
-									}
-									else if (locality.Name == place.Name)
-									{
-										<span></span>
-									}
-									else if (locality.Key == place.Key)
-									{
-										<span class="font-italic">@place.Locality</span>
-									}
-									else
-									{
-										<a href="@PlaceViewModel.GetDisplayUrl(locality.Key)">@place.Locality</a>
-									}
-								}
-							</td>
-							<td>
-								@(place.Region == null ? "" : place.Region.RegionName)
-							</td>
-						</tr>
+				var count = 0;
+				foreach (var place in Model.Places)
+				{
+					<tr class="js-mappable-row">
+						<td class="text-center h5">@(++count)</td>
+						<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</td>
+						<td class="font-weight-bold"><a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a></td>
+						<td>
+							@{
+							var locality = Model.FindLocalityPlace(place);
+							if (locality == null)
+							{
+								<span>@place.Locality</span>
+						}
+						else if (locality.Name == place.Name)
+						{
+							<span></span>
 					}
+					else if (locality.Key == place.Key)
+					{
+						<span class="font-italic">@place.Locality</span>
+				}
+				else
+				{
+					<a href="@PlaceViewModel.GetDisplayUrl(locality.Key)">@place.Locality</a>
+			}
+							}
+						</td>
+						<td>
+							@(place.Region == null ? "" : place.Region.RegionName)
+						</td>
+					</tr>
+			}
 				}
 			</tbody>
 		</table>

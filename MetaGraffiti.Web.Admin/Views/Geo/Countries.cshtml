@@ -39,7 +39,7 @@
 				<td>@c.ISO2</td>
 				<td class="font-weight-bold">@c.ISO3</td>
 				<td class="h4">
-					<a class="text-@Model.AreaCss" href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
+					<a class="text-@Model.AreaCss" href="@GeoViewModel.GetCountryUrl(c)">@FlagHelper.GetFlagIcon(c)@c.Name</a>
 				</td>
 				<td class="small">@c.NameLong</td>
 				<td class="font-italic">

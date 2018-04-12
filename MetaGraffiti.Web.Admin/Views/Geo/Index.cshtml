@@ -36,7 +36,7 @@
 		@foreach (var c in Model.Visited)
 		{
 			<div class="h4">
-				<a class="geo-color" href="@GeoViewModel.GetCountryUrl(c)">@c.Name</a>
+				<a class="geo-color" href="@GeoViewModel.GetCountryUrl(c)">@FlagHelper.GetFlagIcon(c)@c.Name</a>
 			</div>
 		}
 	</div>

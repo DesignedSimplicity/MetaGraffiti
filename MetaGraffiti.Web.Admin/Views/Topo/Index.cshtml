@@ -4,28 +4,28 @@
 @Html.Partial("_Nav")
 
 <div class="row">
-	<div class="col-sm-2">
+	<div class="col-sm-3">
 		<div class="h2">Countries</div>
 		<hr />
 
 		@foreach (var country in Model.Countries)
-	{
-		<div class="h3">
-			<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.Name)">
-				@country.Name
-			</a>
-			<div class="h5 float-right">
-				<span class="badge badge-secondary">@Model.GetTrailCount(country)</span>
+		{
+			<div class="h3">
+				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.Name)">
+					@FlagHelper.GetFlagIcon(country)@country.Name
+				</a>
+				<div class="h5 float-right">
+					<span class="badge badge-secondary">@Model.GetTrailCount(country)</span>
+				</div>
 			</div>
-		</div>
 
-}
+		}
 		<br />
 		<hr />
 		<a class="btn btn-block btn-outline-secondary" href="@OrthoViewModel.GetBrowseTracksUrl()">@IconHelper.TrackIcon Import New Tracks</a>
 		<a class="btn btn-block btn-outline-success" href="@TopoViewModel.GetRefreshUrl()">@IconHelper.RecycleIcon Recycle Trail Cache</a>
 	</div>
-	<div class="col-sm-4">
+	<div class="col-sm-5">
 		<div class="h2">Calendar</div>
 		<table class="table table-bordered">
 			<thead class="thead-dark">

@@ -34,7 +34,7 @@
 					}
 					<tr class="table-secondary">
 						<td colspan="9" class="h3">
-							<a class="text-@Model.AreaCss" id="@(r.Country.ISO3)" href="@GeoViewModel.GetCountryUrl(r.Country)">@r.Country.Name</a>
+							<a class="text-@Model.AreaCss" id="@(r.Country.ISO3)" href="@GeoViewModel.GetCountryUrl(r.Country)">@FlagHelper.GetFlagIcon(r.Country)@r.Country.Name</a>
 						</td>
 					</tr>
 				}

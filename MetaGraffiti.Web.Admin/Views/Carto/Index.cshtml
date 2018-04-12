@@ -36,7 +36,7 @@
 		@foreach (var country in Model.Countries)
 		{
 			<div class="h4">
-				<a href="@CartoViewModel.GetCountryUrl(country)">@country.Name</a>
+				<a href="@CartoViewModel.GetCountryUrl(country)">@FlagHelper.GetFlagIcon(country)@country.Name</a>
 			</div>
 		}
 	</div>

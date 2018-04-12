@@ -22,8 +22,9 @@ namespace MetaGraffiti.Web.Admin
 						.Include("~/Content/bootstrap.css")
 						.Include("~/Content/bootstrap-responsive.css")
 						.Include("~/Content/font-awesome.css")
+						.Include("~/Content/flags.css")
 						.Include("~/Content/_graffiti/common.css")
-						.Include("~/Content/_graffiti/typeahead.css")						
+						.Include("~/Content/_graffiti/typeahead.css")
 						);
 		}
 	}

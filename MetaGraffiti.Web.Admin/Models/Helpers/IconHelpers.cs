@@ -74,6 +74,15 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	}
 
+	public class FlagHelper
+	{
+		public static HtmlString GetFlagIcon(GeoCountryInfo country)
+		{
+			var css = "flag flag-" + country.ISO2.ToLowerInvariant();
+			return new HtmlString($"<img src='/images/sprites/blank.gif' class='flag flag-" + css + "' />");
+		}
+	}
+
 	// TODO: migrate to helper folder and IconHelper name
 	public class SvgHelper
 	{

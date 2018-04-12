@@ -225,6 +225,8 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\flags.css" />
+    <Content Include="Content\flags.min.css" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\_graffiti\common.css" />
@@ -237,6 +239,8 @@
     <Content Include="Images\Icons\ortho.svg" />
     <Content Include="Images\Icons\topo.svg" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\Sprites\blank.gif" />
+    <Content Include="Images\Sprites\flags.png" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bloodhound.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />

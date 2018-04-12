@@ -82,21 +82,21 @@
 		<div>
 			@if (region == null)
 			{
-				<span class="h2">@country.Name</span>
+				<span class="h2">@FlagHelper.GetFlagIcon(country)@country.Name</span>
 			}
 			else
 			{
 				<span class="h2">
-					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country)">@country.Name</a><span class="h3"> \ @region.RegionName</span>
+					<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country)">@FlagHelper.GetFlagIcon(country)@country.Name</a><span class="h3"> \ @region.RegionName</span>
 				</span>
 			}
-				<div class="float-right">
-					<div class="btn-group">
-						<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(country)">@IconHelper.GeoIcon</a>
-						<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">@IconHelper.CartoIcon</a>
-						@Html.Partial("Buttons/ResetView")
-					</div>
+			<div class="float-right">
+				<div class="btn-group">
+					<a class="btn btn-outline-info" href="@GeoViewModel.GetCountryUrl(country)">@IconHelper.GeoIcon</a>
+					<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">@IconHelper.CartoIcon</a>
+					@Html.Partial("Buttons/ResetView")
 				</div>
+			</div>
 		</div>
 		<br />
 		<table class="table table-sm table-striped">
