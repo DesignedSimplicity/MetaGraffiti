@@ -92,7 +92,7 @@
 					</td>
 					<td>@(place.Region == null ? "" : place.Region.RegionName)</td>
 					<td>
-						<a href="@CartoViewModel.GetCountryUrl(place.Country)">@place.Country.Name</a>
+						<a href="@CartoViewModel.GetCountryUrl(place.Country)">@FlagHelper.GetFlagIcon(place.Country)@place.Country.ISO2</a>
 					</td>
 					<td class="text-nowrap">
 						<a class="btn btn-sm btn-primary" href="@PlaceViewModel.GetUpdateUrl(place.Key)">@IconHelper.EditIcon Edit</a>

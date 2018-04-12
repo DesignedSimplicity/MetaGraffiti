@@ -57,9 +57,6 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 ## Backlogs
 
-### Bugs
-* Fix missing flag icon for antartica
-
 ### Api
 * Migrate away from using the new API Controller model or spend time to build it properly
 
