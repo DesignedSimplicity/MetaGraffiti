@@ -331,12 +331,12 @@ namespace MetaGraffiti.Base.Services
 		public ValidationServiceResponse<CartoPlaceInfo> CreatePlace(CartoPlaceCreateRequest create)
 		{
 			if (!String.IsNullOrWhiteSpace(create.PlaceKey)) throw new Exception($"CreatePlace request should not have PlaceKey {create.PlaceKey} set!");
-			create.PlaceKey = Graffiti.Crypto.GetNewHash();
 
 			var validate = ValidatePlace(create);
 
 			if (validate.OK)
 			{
+				create.PlaceKey = Graffiti.Crypto.GetNewHash();
 				_cache.Add(validate.Data);
 				_dirty = true;
 			}

@@ -62,20 +62,20 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 
 ### Carto
-* Add ability to create a place from scratch (drop pin, set bounds, etc)
-* Add toggle to global places map to use markers vs place type icons on map
+** Build simple place read only/display page which includes nearby/containing/contained places
+** Add toggle to global places map to use markers vs place type icons on map
+** Add ability to create a place from scratch (drop pin, set bounds, etc)
 * Add sorting to place report/map pages
 * Add page to list unsaved changed
 * Optimize and expand FindLocalityPlace functionality
 * Add auto-persist warning/functionality and update backup file copy pattern
-* Build simple place read only/display page which includes nearby/containing/contained places
 
 
 ### Topo
-* Fix existing trail files with incorrect local date filename
-* Create options to split import track into multiple edit segments
-* Update import new trail to auto-discover country, region, timezone
-* Add country, region, timezone autocomplete/lookup to trail form
+** Fix existing trail files with incorrect local date filename
+** Add country, region, timezone autocomplete/lookup to trail form
+** Create options to split import track into multiple edit segments
+** Update import new trail to auto-discover country, region, timezone
 * Change TopoTrailService to use internal ID in GPX as trail key
 * Build keyword autocomplete/selector and select icons for display
 * Fix fragile implementation and duplicate code for trail import
@@ -85,13 +85,13 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 
 ### Ortho
+** Fix implementation of UrlText and UrlLink for GPX v1.1
 * Remove usage of GpxFileInfo from browse tracks
 * Update GpxExtensionsData to read/write internal ID/key
-* Fix implementation of UrlText and UrlLink for GPX v1.1
 
 
 ### Geo
-* Base RegionID off of CountryID * (1000 ^ Division)
+** Base RegionID off of CountryID * (1000 ^ Division)
 * Add Local Name data for non-English regions
 * Move Region and Country metadata to reference file/array
 * Add Japan level 1 and level 2 region data

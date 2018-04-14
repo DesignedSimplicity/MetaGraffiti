@@ -4,7 +4,7 @@
 @Html.Partial("_Nav")
 
 <script>
-	var _countries = @JsonHelper.GetJson(Model.Countries);
+	var _countries = @JsonHelper.GetJson(Model.Visited);
 
 	$(document).ready(function () {
 		initMap();
