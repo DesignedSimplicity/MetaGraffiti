@@ -50,16 +50,44 @@
 		}
 	</div>
 	<div class="col-sm-2">
-		<div class="h2">Google Create</div>
+		<div class="h2">Google</div>
 		@Html.Partial("Widgets/GooglePlaces")
 		<br />
 		<hr />
-		<div class="h2">Manual Create</div>
-		<form method="get" action="@PlaceViewModel.GetSearchUrl()">
-			<div class="input-group">
-				<input class="form-control" name="name" placeholder="Name" />
-				<div class="input-group-append">
-					<button type="submit" class="btn btn-primary">@IconHelper.SearchIcon</button>
+		<div class="h2">
+			<a href="@PlaceViewModel.GetSearchUrl()">Search</a>
+		</div>
+		<form method="post" action="@PlaceViewModel.GetSearchUrl()">
+			<div class="form-group">
+				<label for="name">Place</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Name" placeholder="Name" />
+					<div class="input-group-append">
+						<button class="btn btn-primary" type="submit">@IconHelper.SearchIcon</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form method="post" action="@PlaceViewModel.GetSearchUrl()">
+			<div class="form-group">
+				<label for="name">Location</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Location" placeholder="Text" />
+					<div class="input-group-append">
+						<button class="btn btn-info" type="submit">@IconHelper.GeocodeIcon</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		<form method="post" action="@PlaceViewModel.GetSearchUrl()">
+			<div class="form-group">
+				<label for="timezone">Position</label>
+				<div class="input-group">
+					<input type="text" class="form-control" name="Latitude" placeholder="Latitude" />
+					<input type="text" class="form-control" name="Longitude" placeholder="Longitude" />
+					<div class="input-group-append">
+						<button class="btn btn-info" type="submit">@IconHelper.GeocodeIcon</button>
+					</div>
 				</div>
 			</div>
 		</form>

@@ -63,7 +63,7 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 ### Carto
 ** Build simple place read only/display page which includes nearby/containing/contained places
-** Add toggle to global places map to use markers vs place type icons on map
+***** Add toggle to global places map to use markers vs place type icons on map
 ** Add ability to create a place from scratch (drop pin, set bounds, etc)
 * Add sorting to place report/map pages
 * Add page to list unsaved changed

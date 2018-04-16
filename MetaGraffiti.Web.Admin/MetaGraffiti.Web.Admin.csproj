@@ -392,6 +392,7 @@
     <Content Include="Views\Shared\Widgets\CountryFilter.cshtml" />
     <Content Include="Views\Shared\Widgets\SimpleFilter.cshtml" />
     <None Include="Views\Carto\_Filters.cshtml" />
+    <Content Include="Views\Place\Display.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

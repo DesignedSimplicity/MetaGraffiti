@@ -286,10 +286,11 @@ namespace MetaGraffiti.Base.Services
 		}
 
 		/// <summary>
-		/// Geocodes the given location from google
+		/// Google places search with name and optional country
 		/// </summary>
-		public List<CartoPlaceInfo> LookupPlaces(string text)
+		public List<CartoPlaceInfo> LookupPlaces(string name, string country = "")
 		{
+			var text = $"{name} {country}".Trim(); // TODO: HACK: make this acually use the correct country filter mechanism
 			var response = _google.RequestPlaces(text);
 
 			var list = new List<CartoPlaceInfo>();
@@ -301,6 +302,24 @@ namespace MetaGraffiti.Base.Services
 					var result = _google.RequestPlace(placeID).Result;
 					place = new CartoPlaceInfo(result);
 				}
+				list.Add(place);
+			}
+
+			return list;
+		}
+
+		/// <summary>
+		/// Geocodes the given location from google
+		/// </summary>
+		public List<CartoPlaceInfo> LookupLocations(string text)
+		{
+			var response = _google.RequestLocations(text);
+
+			var list = new List<CartoPlaceInfo>();
+			foreach (var result in response.Results)
+			{
+				var place = FindByGooglePlaceID(result.PlaceID);
+				if (place == null) place = new CartoPlaceInfo(result);
 				list.Add(place);
 			}
 

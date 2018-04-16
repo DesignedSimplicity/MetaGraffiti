@@ -43,8 +43,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var place = _cartoPlaceService.GetPlace(id);
+
 			model.SelectedPlace = place;
 			model.SelectedCountry = place.Country;
+
+			model.NearbyPlaces = _cartoPlaceService.ListPlacesContainingBounds(place.Bounds);
+			model.ContainedPlaces = _cartoPlaceService.ListPlacesContainedInBounds(place.Bounds);
 
 			return View(model);
 		}
@@ -61,10 +65,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.SearchCriteria = search;
 			model.SearchResults = new List<CartoPlaceInfo>();
 
-			var text = $"{search.Name} {search.Country}".Trim();
-			if (!String.IsNullOrWhiteSpace(text))
+			if (!String.IsNullOrWhiteSpace(search.Location))
 			{
-				model.SearchResults = _cartoPlaceService.LookupPlaces(text.Trim());
+				model.SearchResults = _cartoPlaceService.LookupLocations(search.Location.Trim());
+			}
+			else if (!String.IsNullOrWhiteSpace(search.Name))
+			{
+				model.SearchResults = _cartoPlaceService.LookupPlaces(search.Name, search.Country);
 			}
 			else if (search.Latitude.HasValue && search.Longitude.HasValue)
 			{

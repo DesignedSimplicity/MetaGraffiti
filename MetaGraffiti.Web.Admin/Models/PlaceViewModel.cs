@@ -25,10 +25,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		public PlaceSearchModel SearchCriteria { get; set; }
 		public List<CartoPlaceInfo> SearchResults { get; set; }
 
+		public List<CartoPlaceInfo> NearbyPlaces { get; set; }
+		public List<CartoPlaceInfo> ContainedPlaces { get; set; }
+
 
 		// ==================================================
 		// Helpers
-		
+
 
 
 		// ==================================================
@@ -53,12 +56,16 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	public class PlaceSearchModel
 	{
+		// used for place search
 		public string Name { get; set; }
 
-		public string Region { get; set; }
-
+		// used to limit country in place search
 		public string Country { get; set; }
 
+		// used for location search
+		public string Location { get; set; }
+
+		// used for reverse geocoding
 		public double? Latitude { get; set; }
 		public double? Longitude { get; set; }
 	}

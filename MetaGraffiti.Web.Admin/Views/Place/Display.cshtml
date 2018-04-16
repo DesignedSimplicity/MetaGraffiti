@@ -1,0 +1,81 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model PlaceViewModel
+
+@Html.Partial("_Nav")
+
+@{
+	var place = Model.SelectedPlace;
+}
+
+<script>
+	var _place = @JsonHelper.GetJson(place);
+	var _marker = null;
+	var _bounds = null;
+
+	$(document).ready(function () {
+		initMap();
+
+		markPlace(_place);
+		drawBounds(_place);
+
+		// TODO: add click support for place marker (edit page)
+
+		// TODO: add nearby places makers
+		// TODO: add contained places markers
+
+		// TODO: add hover support for nearby/contained places
+		// TODO: add click support for nearby/contained places
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div>
+			<span class="h2">
+				<a href="@CartoViewModel.GetCountryUrl(Model.SelectedCountry)">@Model.SelectedCountry.Name</a>
+				<span class="h3">\</span>
+				<span class="h3"> @(place.Name)</span>
+			</span>
+			<div class="float-right">
+				<a class="btn btn-outline-primary" href="@PlaceViewModel.GetUpdateUrl(place)">@IconHelper.EditIcon Edit Place</a>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+		<hr />
+		<a class="btn btn-outline-primary" href="@PlaceViewModel.GetUpdateUrl(place)">@IconHelper.EditIcon Edit Place</a>
+		<hr />
+		<div class="row h4">
+			<div class="col-sm-2">
+				<i class="far fa-object-ungroup"></i> Nearby
+			</div>
+			<div class="col-sm-8">
+				@foreach (var p in Model.NearbyPlaces)
+				{
+					<div class="pb-2">
+						<span class="p-1 h3 carto-color js-show-nearby js-show-bounds">@IconHelper.BoundsIcon</span>
+						<a href="@PlaceViewModel.GetDisplayUrl(p.Key)">@p.Name</a>
+					</div>
+				}
+			</div>
+		</div>
+		<div class="row h4">
+			<div class="col-sm-2">
+				<i class="far fa-object-group"></i> Contains
+			</div>
+			<div class="col-sm-8">
+				@foreach (var p in Model.ContainedPlaces)
+				{
+					<div class="pb-2">
+						<span class="p-1 h3 carto-color js-show-contains js-show-bounds">@IconHelper.BoundsIcon</span>
+						<a href="@PlaceViewModel.GetDisplayUrl(p.Key)">@p.Name</a>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+</div>
