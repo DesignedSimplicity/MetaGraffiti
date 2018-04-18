@@ -1,6 +1,18 @@
 # MetaGraffiti
 A 4 dimensional space time framework to process geographic and topographic data for map building and visualizations
 
+
+## KevinAndEarth
+* Glowbub - globe with glowing dots for places and hover info
+* Bushline - all gpx walk/bike trails on a detailed NZ map
+* Hex-a-gone - hexonagonal heat map for time spent at location
+* Know Where - Linked nodes for places/transits by foot/land/sea/air
+* Time Laps - auto sequenced map transitions 
+
+
+
+
+
 ## Inspiration
 **Geography** is a field of science devoted to the study of the lands, the features, the inhabitants, and the phenomena of Earth.
 * Seeks an understanding of the Earth and its human and natural complexities—not merely where objects are, but how they have changed and come to be.
