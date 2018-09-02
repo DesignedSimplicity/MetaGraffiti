@@ -102,7 +102,17 @@ namespace MetaGraffiti.Base.Services
 		/// </summary>
 		public TopoTrackInfo FindTrackSource_TODO(string uri)
 		{
-			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => x.Source == Path.GetFileNameWithoutExtension(uri));
+			var key = GetSourceNameKey(uri);
+			return _trails.All.SelectMany(x => x.TopoTracks).FirstOrDefault(x => GetSourceNameKey(x.Source) == key);
+		}
+		private string GetSourceNameKey(string source)
+		{
+			var index = source.LastIndexOf(@"\");
+			if (index > 0) source = source.Substring(index + 1);
+			index = source.LastIndexOf(".");
+			if (index > 0) source = source.Substring(0, index);
+			//System.Diagnostics.Debug.WriteLine(source);
+			return source.Trim();
 		}
 
 		/// <summary>
