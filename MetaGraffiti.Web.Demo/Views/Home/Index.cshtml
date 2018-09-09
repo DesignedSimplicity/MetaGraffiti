@@ -1,0 +1,104 @@
+﻿<style type="text/css">
+	#mapD3 {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+
+	#head2 {
+		position: absolute;
+		top: 0px;
+		width: 100%;
+		height: 100px;
+	}
+
+	#logo {
+		float: left;
+		width: 100%;
+		text-align: center;
+		font-size: 80px;
+		max-width: 460px;
+		font-family: 'Amatic SC', cursive;
+		background: rgba(0, 0, 0, 0.5);
+		text-decoration: none;
+		color: #fff;
+	}
+
+		#logo > img {
+			width: 95%;
+			margin: 2% 3%;
+			display: none;
+		}
+
+	#info {
+		float: right;
+		height: 100px;
+		text-align: right;
+		font-family: 'Amatic SC', cursive;
+	}
+
+		#info span {
+			font-size: 3rem;
+		}
+
+		#info img {
+			height: 40px;
+			padding: 4px 8px;
+			float: right;
+		}
+
+	#info2 {
+		float: right;
+		font-size: 1rem;
+	}
+
+		#info2 span {
+			font-size: 1.5rem;
+			padding: 2px 4px;
+			background: rgba(0, 0, 0, 0.5);
+		}
+</style>
+
+<link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
+
+<div id="mapD3">
+</div>
+<div id="head2">
+	<a id="logo" href="/">Kevin &amp; Earth<img src="~/images/logo.png" /></a>
+	<div id="info">
+	</div>
+</div>
+
+
+<script>
+	// load country and regions for navigation metadata
+	var _geo = null;
+	var states = [];
+	var places = [];
+	var visited = [392, 352, 10, 32, 76, 152, 36, 40, 56, 156, 250, 276, 344, 356, 372, 380, 388, 484, 496, 528, 554, 643, 702, 724, 826, 840];
+	//var planned = [];
+
+	// initialize event handers
+	$(document).ready(function () {
+		// create initial geo object
+		_geo = new GeoGraffiti();
+		_geo.setVisitedCountries(visited);
+		//_geo.setPlannedCountries(planned);
+		//_geo.setRegions(states);
+		_geo.setPlaces(places);
+
+		// deal with dynamic resize for map objects
+		$(window).resize(_where.onResize);
+
+		// add click handlers to nav bar places
+		$(".geonav").click(_where.onClickGeoNav);
+		$(".geonav").mouseover(_where.onHoverGeoNav);
+
+		// initalize where model with display mode
+		_where.selectedCountryID = 0;
+		_where.start("3d");
+		// _where.start("2d");
+		_where.show();
+	});
+
+</script>

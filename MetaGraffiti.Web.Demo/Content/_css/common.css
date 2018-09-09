@@ -1,0 +1,175 @@
+﻿/* padding + margin: top, right, bottom, left */
+
+
+
+/* Icon sizes */
+.ico32 {
+    width: 32px;
+    height: 32px;
+}
+
+.ico24 {
+    width: 24px;
+    height: 24px;
+}
+
+.ico16 {
+    width: 16px;
+    height: 16px;
+}
+
+/* Padding and spacers */
+.pad4 {
+    padding: 4px;
+}
+
+.space5 {
+    width: 5px;
+    height: 5px;
+}
+.space10 {
+    width: 10px;
+    height: 10px;
+}
+
+/* Text styles */
+.black {
+    color: #000;
+}
+
+.error {
+    color: #c00;
+}
+
+/* Element control */
+.clear {
+    clear: both;
+}
+
+.hide {
+    display: none;
+}
+
+.none {
+    text-decoration: none;
+}
+
+.hand {
+    cursor: pointer;
+}
+
+.txtr {
+    text-align: right;
+}
+
+.iblk {
+    display: inline-block;
+}
+
+.vmid {
+    vertical-align: middle;
+}
+
+.vtop {
+    vertical-align: top;
+}
+
+/* Box sizes */
+.boxgolden {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 59.5%;
+}
+
+.box16x10 {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 62.5%;
+}
+
+.box16x9 {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 56.25%;
+}
+
+.box4x3 {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 75%;
+}
+
+.box3x2 {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 66.67%;
+}
+
+.box1x1 {
+    height: 0;
+    width: 100%;
+    float: left;
+    position: relative;
+    padding-bottom: 100%;
+}
+
+.box {
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+/* Text sizes */
+
+.h1 {
+    font-size: 16px;
+}
+
+.h2 {
+    font-size: 14px;
+}
+
+.h3 {
+    font-size: 12px;
+}
+
+.h4 {
+    font-size: 10px;
+}
+
+.h5 {
+    font-size: 8px;
+}
+
+@media screen and (min-width: 980px) {
+    .h1 {
+        font-size: 22px;
+    }
+
+    .h2 {
+        font-size: 20px;
+    }
+
+    .h3 {
+        font-size: 18px;
+    }
+
+    .h4 {
+        font-size: 16px;
+    }
+
+    .h5 {
+        font-size: 14px;
+    }
+}

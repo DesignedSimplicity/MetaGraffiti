@@ -1,0 +1,209 @@
+﻿/* ========================= */
+/* Navigation Styles         */
+/* ========================= */
+
+NAV A {
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    height: 100%;
+    width: 100%;
+}
+
+NAV UL {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+NAV LI {
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================= */
+/* Tree Styles               */
+/* ========================= */
+
+NAV UL.nav1 LI {
+    padding: 2px 4px 2px 4px;
+}
+
+NAV UL.nav2 LI {
+    padding: 0px 0px 2px 4px;
+}
+
+NAV UL.nav3 LI {
+    padding: 2px 0px 2px 0px;
+}
+
+NAV UL.navi LI {
+    float: left;
+    min-height: 10px;
+    min-width: 10px;
+    display: inline-block;
+}
+
+NAV UL.navidual LI {
+    float: left;
+    min-height: 10px;
+    min-width: 132px;
+    display: inline-block;
+}
+
+NAV .navishort {
+	display: none;
+}
+NAV .navilong {
+	display: inline;
+}
+
+@media screen and (max-width: 980px) {
+	NAV UL.naviabbr LI {
+		min-width: 42px;
+	}
+	NAV .navishort {
+		display: inline;
+	}
+	NAV .navilong {
+		display: none;
+	}
+}
+
+NAV LI.navtoggle:hover {
+    background: rgba(0,0,0,0.75);
+}
+
+/* ========================= */
+/* Icon Styles               */
+/* ========================= */
+
+
+NAV IMG {
+    border: 0;
+    width: 16px;
+    height: 16px;
+    padding-right: 4px;
+    vertical-align: text-bottom;
+}
+
+NAV .img1 {
+	width: 24px;
+	height: 24px;
+}
+
+@media screen and (min-width: 980px) {
+    NAV IMG {
+        width: 24px;
+        height: 24px;
+    }
+
+	NAV .img1 {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+/* ========================= */
+/* Text Styles               */
+/* ========================= */
+
+NAV .nav1 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+NAV .nav2 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+NAV .nav3 {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+NAV .nav3 {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+NAV .nav5 {
+    font-size: 10px;
+    font-weight: normal;
+}
+
+@media screen and (min-width: 980px) {
+    NAV .nav1 {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    NAV .nav2 {
+        font-size: 20px;
+        font-weight: normal;
+    }
+
+    NAV .nav3 {
+        font-size: 16px;
+    }
+
+    NAV .nav4 {
+        font-size: 14px;
+    }
+
+    NAV .nav5 {
+        font-size: 12px;
+    }
+}
+
+
+/* ========================= */
+/* Sub Menu Styles           */
+/* ========================= */
+/*
+NAV .menu {
+    height: 24px;
+}
+
+NAV .menu A {
+    float: left;
+    display: block;
+    padding: 2px;
+    height: 20px;
+    width: 96px;
+}
+    NAV .menu A:hover {
+        background: #000;
+    }
+
+NAV .menu A IMG {
+    width: 16px;
+    height: 16px;
+    padding: 2px;
+    vertical-align: middle;
+}
+
+NAV .menu A SPAN {
+    font-size: 8px;
+    font-weight: bold;
+}
+
+@media screen and (min-width: 980px) {
+    NAV .menu {
+        height: 40px;
+    }
+    NAV .menu A {
+        height: 36px;
+        width: 96px;
+    }
+    NAV .menu A IMG {
+        width: 32px;
+        height: 32px;
+        padding: 2px 4px;
+    }
+    NAV .menu A SPAN {
+        font-size: 16px;
+    }
+}
+*/

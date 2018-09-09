@@ -1,0 +1,65 @@
+﻿
+.geonav {
+}
+
+	.geonav:hover {
+		color: #c93;
+	}
+	.geonav:active {
+		color: #fb5;
+	}
+	.geonav.selected {
+		color: #da4;
+	}
+
+.geonone {
+    fill: none;
+}
+
+.geoshape {
+	fill: #000;
+    stroke: #999;
+    stroke-width: 1px;
+}
+
+.geotrace {
+	fill: none;
+	stroke: #ccc;
+}
+
+.geodot {
+    fill: #fff;
+}
+
+.geohex {
+    fill: #009;
+    stroke: #ccc;
+}
+
+.geohex:hover {
+    fill: #960;
+}
+
+.geogrid {
+    fill: none;
+    stroke: #ccc;
+}
+
+.geoshape.selected {
+	fill: #f00 !important;
+}
+
+.geoshape.unknown  { fill: #333; stroke: #555; opacity: 1; }
+.geoshape.unknowns { fill: #666; }
+.geoshape.unknowna { fill: #777; }
+.geoshape.unknownh { fill: #888; }
+
+.geoshape.visited  { fill: #250; stroke: #361; }
+.geoshape.visiteds { fill: #583; }
+.geoshape.visiteda { fill: #693; }
+.geoshape.visitedh { fill: #7a4; }
+
+.geoshape.planned  { fill: #472; stroke: #583; }
+.geoshape.planneds { fill: #583; }
+.geoshape.planneda { fill: #693; }
+.geoshape.plannedh { fill: #7a4; }
