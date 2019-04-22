@@ -51,7 +51,12 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="text-center">#</th>
-					<th>Type</th>
+					<th>
+						Type
+						<a href="@CartoViewModel.GetCountryUrl(Model.SelectedCountry)">
+							All
+						</a>
+					</th>
 					<th class="w-50">Name</th>
 					<th>Location</th>
 					<th>Region</th>
@@ -64,7 +69,11 @@
 				{
 					<tr class="js-mappable-row">
 						<td class="text-center h5">@(++count)</td>
-						<td class="text-nowrap">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</td>
+						<td class="text-nowrap">
+							<a href="@CartoViewModel.GetCountryUrl(Model.SelectedCountry, place.PlaceType)">
+								@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType
+							</a>
+						</td>
 						<td class="font-weight-bold"><a href="@PlaceViewModel.GetDisplayUrl(place.Key)">@IconHelper.PlaceIcon @place.Name</a></td>
 						<td>
 							@{

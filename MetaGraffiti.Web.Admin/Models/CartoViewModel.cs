@@ -60,6 +60,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetReloadUrl() { return $"/carto/reload/"; }
 
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/carto/country/{country.Name}/"; }
+		public static string GetCountryUrl(GeoCountryInfo country, string types) { return $"/carto/country/{country.Name}/?types={types}"; }
+
 
 		public static string GetSearchUrl() { return "/carto/report/"; }
 
