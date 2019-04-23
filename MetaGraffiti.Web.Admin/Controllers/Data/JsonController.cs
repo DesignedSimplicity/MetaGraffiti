@@ -51,5 +51,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			return Json(all, JsonRequestBehavior.AllowGet);
 		}
+
+
+		public ActionResult Places()
+		{
+			return AllLegacyReport();
+		}
 	}
 }

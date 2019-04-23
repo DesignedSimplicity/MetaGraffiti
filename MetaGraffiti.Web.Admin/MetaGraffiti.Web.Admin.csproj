@@ -229,6 +229,7 @@
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\_graffiti\common.css" />
+    <Content Include="Content\_graffiti\demo.css" />
     <Content Include="Content\_graffiti\typeahead.css" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
@@ -251,6 +252,8 @@
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\d3\d3.js" />
+    <Content Include="Scripts\d3\d3.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -269,6 +272,10 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\d3\README.md" />
+    <Content Include="Scripts\d3\LICENSE" />
+    <Content Include="Scripts\d3\CHANGES.md" />
+    <Content Include="Scripts\d3\API.md" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -286,7 +293,12 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\_graffiti\api.js" />
     <Content Include="Scripts\_graffiti\geo.js" />
+    <Content Include="Scripts\_graffiti\demo.js" />
+    <Content Include="Scripts\_graffiti\demo\d3-geo-projection.v2.min.js" />
+    <Content Include="Scripts\_graffiti\demo\d3.v4.min.js" />
+    <Content Include="Scripts\_graffiti\demo\topojson.v2.min.js" />
     <Content Include="Scripts\_graffiti\topo.js" />
     <Content Include="Scripts\_graffiti\carto.js" />
     <Content Include="Scripts\_graffiti\meta.js" />
@@ -303,6 +315,7 @@
     <Compile Include="Controllers\Api\TimezonesController.cs" />
     <Compile Include="Controllers\CartoController.cs" />
     <Compile Include="Controllers\Data\JsonController.cs" />
+    <Compile Include="Controllers\DemoController.cs" />
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Data\IconController.cs" />
@@ -315,6 +328,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\DemoViewModel.cs" />
     <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
@@ -391,8 +405,11 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Topo\world.json" />
     <None Include="Views\Carto\_Filters.cshtml" />
     <Content Include="Views\Place\Display.cshtml" />
+    <Content Include="Views\Demo\Index.cshtml" />
+    <Content Include="Views\Demo\Globe.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

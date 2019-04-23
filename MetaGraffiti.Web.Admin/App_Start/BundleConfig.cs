@@ -13,9 +13,10 @@ namespace MetaGraffiti.Web.Admin
 						.Include("~/Scripts/_graffiti/carto.js")
 						.Include("~/Scripts/_graffiti/meta.js")
 						.Include("~/Scripts/_graffiti/maps.js")
-						.Include("~/Scripts/_graffiti/geo.js")
 						.Include("~/Scripts/_graffiti/topo.js")
-						.Include("~/Scripts/_graffiti/carto.js")
+						.Include("~/Scripts/_graffiti/api.js")
+						.Include("~/Scripts/_graffiti/geo.js")
+						.Include("~/Scripts/_graffiti/demo.js")
 						);
 
 			bundles.Add(new StyleBundle("~/bundle/css")
@@ -23,6 +24,7 @@ namespace MetaGraffiti.Web.Admin
 						.Include("~/Content/bootstrap-responsive.css")
 						.Include("~/Content/font-awesome.css")
 						.Include("~/Content/flags.css")
+						.Include("~/Content/_graffiti/demo.css")
 						.Include("~/Content/_graffiti/common.css")
 						.Include("~/Content/_graffiti/typeahead.css")
 						);

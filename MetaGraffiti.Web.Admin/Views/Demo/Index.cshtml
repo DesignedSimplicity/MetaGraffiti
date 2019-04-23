@@ -1,0 +1,74 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model DemoViewModel
+
+@Html.Partial("_Nav")
+
+<script>
+	var _filtered = @Model.IsFiltered.ToString().ToLowerInvariant();
+	var _typeFiltered = @((!String.IsNullOrEmpty(Model.ReportFilters.PlaceType)).ToString().ToLowerInvariant());
+	var _places = @JsonHelper.GetJson(Model.ReportPlaces);
+	var _bounds = null;
+	var _all = null;
+
+	$(document).ready(function () {
+		initMap();
+
+		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
+
+		drawCartoPlaces(1, false);
+
+		showWorld();
+
+		initActionRows(actionCartoPlaceBounceMarkerAndDrawBounds, actionCartoPlaceToFitBounds);
+
+		$(".js-reset-view").click(function () {
+			if (_filtered)
+				fitCartoPlaces();
+			else
+				showWorld();
+			drawCartoPlaceBounds(-1);
+			bounceCartoPlaceMarker(-1);
+		});
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<table class="table table-sm table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Continent</th>
+					<th>Country</th>
+					<th>Region</th>
+					<th>Type</th>
+					<th>Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					foreach (var p in Model.ReportPlaces)
+					{
+				<tr class="js-mappable-row">
+					<td class="text-center h5">@(++count)</td>
+					<td>@p.Country.Continent</td>
+					<td><a href="@CartoViewModel.GetCountryUrl(p.Country)">@FlagHelper.GetFlagIcon(p.Country)@p.Country.ISO2</a></td>
+					<td>@(p.Region?.RegionName ?? "")</td>
+					<td>@SvgHelper.GetPlaceTypeIcon(p.PlaceType)</td>
+					<td>
+						<a class="font-weight-bold" href="@PlaceViewModel.GetDisplayUrl(p.Key)">@p.Name</a>
+						<span class="font-italic">@p.DisplayAs</span>
+					</td>
+				</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
