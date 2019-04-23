@@ -406,10 +406,13 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Topo\world.json" />
+    <Content Include="Topo\america.json" />
+    <Content Include="Topo\oceania.json" />
     <None Include="Views\Carto\_Filters.cshtml" />
     <Content Include="Views\Place\Display.cshtml" />
     <Content Include="Views\Demo\Index.cshtml" />
     <Content Include="Views\Demo\Globe.cshtml" />
+    <Content Include="Views\Demo\Country.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

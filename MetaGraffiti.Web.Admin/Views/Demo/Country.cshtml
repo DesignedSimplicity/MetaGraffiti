@@ -53,44 +53,13 @@
 	_geo._visited = [858, 392, 124, 10, 32, 76, 152, 36, 40, 56, 156, 250, 276, 344, 356, 372, 380, 388, 484, 496, 528, 554, 643, 702, 724, 826, 840];
 
 	_mapD3.start(_geo);
-	_mapD3.show("globe");
+	_mapD3.show("@(Model.SelectedCountry?.ISO2 ?? "world")");
 
 
 	_mapD3.onDone = function () {
 		$.getJSON("/json/places", function (data) {
 			places = data;
-			//_mapD3.drawPoints(places);
+			_mapD3.drawPoints(places);
 		});
-	};
-
-	_mapD3.onClick = function (d) {
-		if (d === undefined) {
-			//$("#info").html("");
-			$("#mapD3 .geodot").remove();
-			_mapD3.selectShape(null);
-			_mapD3.zoomReset();
-		} else {
-			var id = d.id;
-
-			var c = _geo.getCountry(id);
-			//$("#info").html("<img src='/flags/" + c.key + ".svg' />" + "<span>" + c.name + "</span>");
-
-			$("#mapD3 .geodot").remove();
-			var dots = [];
-			var list = "";
-			for (var i = 0; i < places.length; i++) {
-				var p = places[i];
-				if (p.country === id) {
-					list += "<span>" + p.name + "</span>, ";
-					dots.push(p);
-				}
-			}
-			$("#list").html(list);
-
-			_mapD3.drawPoints(dots);
-
-			_mapD3.selectShape(id);
-			_mapD3.zoomTo(d);
-		}
 	};
 </script>

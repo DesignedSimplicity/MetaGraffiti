@@ -64,22 +64,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Globe()
 		{
 			var model = InitModel();
+			return View(model);
+		}
 
-			/*
-			var political = new GeoPolitical(report);
-			model.SelectedCountry = political.Country;
-			model.SelectedPlaceType = report.PlaceType;
-
-			model.ReportFilters = report;
-			model.ReportPlaces = _cartoPlaceService.ReportPlaces(report)
-				.OrderBy(x => x.Country.Continent)
-				.ThenBy(x => x.Country.Name)
-				.ThenBy(x => x.Region?.RegionName ?? "")
-				.ThenBy(x => x.PlaceType.ToString())
-				.ThenBy(x => x.Name)
-				.ToList();
-			*/
-
+		public ActionResult Country(string id)
+		{
+			var model = InitModel();
+			model.SelectedCountry = model.Countries.Where(x => String.Compare(x.ISO2, id, true) == 0).FirstOrDefault();
 			return View(model);
 		}
 	}

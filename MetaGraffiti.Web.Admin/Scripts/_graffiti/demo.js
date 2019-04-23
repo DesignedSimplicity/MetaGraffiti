@@ -149,7 +149,7 @@ mapD3.prototype.show = function (map) {
 	if (data != null)
 		_mapD3.draw();
 	else
-		d3.json("/topo/world.json", this.load);
+		d3.json("/topo/" + topo + ".json", this.load);
 
 	// return self for chaining
 	return this;
@@ -997,7 +997,7 @@ mapD3.prototype.isAmerica = function () {
 
 // returns the safe topo name from topo or proj
 mapD3.prototype.getTopoName = function (proj) {
-	switch (proj) {
+	switch (proj.toLowerCase()) {
 		case "us":
 		case "840":
 		case "america":
@@ -1041,7 +1041,6 @@ mapD3.prototype.getProjName = function (map) {
 		case "america":
 		case "united states":
 			return "us";
-			break;
 		default:
 			return "world";
 	}
