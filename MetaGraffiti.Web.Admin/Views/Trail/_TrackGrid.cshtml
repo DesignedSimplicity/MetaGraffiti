@@ -3,6 +3,7 @@
 
 <script>
 	var _tracks = @JsonHelper.GetJson(Model.Tracks);
+	var _places = @JsonHelper.GetJson(Model.Places);
 	var _bounds = null;
 	var _start = null;
 	var _finish = null;
@@ -11,6 +12,11 @@
 	$(document).ready(function () {
 		initMap();
 
+		// add places if exists
+		initCartoPlaces(_places, '');
+		drawCartoPlaces(1, false);
+
+		// do topo map
 		_bounds = new google.maps.LatLngBounds();
 		for (index = 0; index < _tracks.length; index++) {
 			var color = getMapColor(index);

@@ -51,7 +51,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Displays all of the TopoTrailInfo GPX data files in a list and on a map for a given country with optional region filter
 		/// </summary>
-		public ActionResult Country(string id, string region, string sort)
+		public ActionResult Country(string id, string region, string sort, string tag)
 		{
 			var model = InitModel();
 
@@ -79,6 +79,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					model.SelectedCountry = c;
 					model.Trails = _trailDataService.ListByCountry(c);
 				}
+			}
+
+			if (!String.IsNullOrWhiteSpace(tag))
+			{
+				model.Trails = model.Trails.Where(x => !String.IsNullOrWhiteSpace(x.Keywords) && x.Keywords.ToLowerInvariant().Contains(tag.ToLowerInvariant())).ToList();
 			}
 
 			return View(model);

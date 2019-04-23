@@ -17,10 +17,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private TrackEditService _trackEditService;
 		private TopoTrailService _topoTrailService;
+		private CartoPlaceService _cartoPlaceService;
 		private static TopoTrailInfo _editing;
 
 		public TrailController()
 		{
+			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_topoTrailService = ServiceConfig.TopoTrailService;
 			_trackEditService = new TrackEditService();
 		}
@@ -49,6 +51,13 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		public ActionResult Display(string id)
 		{
 			var model = InitModel(id);
+
+			// load places
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest()
+			{
+				Country = model.Trail.Country.ISO2,
+			});
+
 
 			return View(model);
 		}

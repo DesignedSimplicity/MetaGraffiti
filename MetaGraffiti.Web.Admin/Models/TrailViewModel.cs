@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
-
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Topo;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -23,6 +23,10 @@ namespace MetaGraffiti.Web.Admin.Models
 		public IEnumerable<TopoTrackInfo> Tracks { get; set; }
 		public ITopoTrailUpdateRequest Edit { get; set; }
 
+
+		// ==================================================
+		// Optional
+		public IEnumerable<CartoPlaceInfo> Places { get; set; }
 
 		// ==================================================
 		// Helpers

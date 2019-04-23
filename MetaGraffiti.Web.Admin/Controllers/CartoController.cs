@@ -61,14 +61,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Shows a map and list of all places in a given country
 		/// </summary>
-		public ActionResult Country(string id, string types = "")
+		public ActionResult Country(string id, string placeType = "")
 		{
 			var model = InitModel();
 
 			model.SelectedCountry = GeoCountryInfo.Find(id);
 			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest() {
 				Country = model.SelectedCountry.ISO2,
-				PlaceType = types,
+				PlaceType = placeType,
 				Sort = "Region"
 			});
 

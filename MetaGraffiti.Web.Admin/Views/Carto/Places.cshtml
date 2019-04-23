@@ -15,7 +15,7 @@
 
 		initCartoPlaces(_places, '@PlaceViewModel.GetDisplayUrl("{key}")');
 
-		if (_typeFiltered)
+		if (_typeFiltered || !_filtered)
 			drawCartoPlaces(1, false);
 		else
 			drawCartoPlaces(2, true);
