@@ -55,11 +55,11 @@
 	_mapD3.start(_geo);
 	_mapD3.show("@(Model.SelectedCountry?.ISO2 ?? "world")");
 
-
 	_mapD3.onDone = function () {
 		$.getJSON("/json/places", function (data) {
 			places = data;
 			_mapD3.drawPoints(places);
 		});
 	};
+
 </script>

@@ -18,9 +18,9 @@
 
 
 
-// ==================================================
+// ==================================
 // D3 Vector Map Projections
-// ==================================================
+// ==================================
 
 var _mapD3 = new mapD3();
 
@@ -112,7 +112,7 @@ mapD3.prototype.start = function (geo) {
 
 	// return self for chaining
 	return this;
-}
+};
 
 // displays a vector map using topo data and set projection based on map and mode (true for 3d)
 // null/0/world: world map with zoom enabled
@@ -149,20 +149,20 @@ mapD3.prototype.show = function (map) {
 	if (data != null)
 		_mapD3.draw();
 	else
-		d3.json("/topo/" + topo + ".json", this.load);
+		d3.json("/json/" + topo, this.load);
 
 	// return self for chaining
 	return this;
-}
+};
 
 // loads and caches requested topo json data
 mapD3.prototype.load = function (data) {
 	_mapD3.log("load", data);
 
 	_mapD3.data(data);
-	if (data.objects.countries === undefined) {
-		if (data.objects.states === undefined) {
-			if (data.objects.subunits === undefined)
+	if (data.objects.countries == undefined) {
+		if (data.objects.states == undefined) {
+			if (data.objects.subunits == undefined)
 				_mapD3.error("load: no data found");
 			else
 				_mapD3.shapes(data.objects.subunits);
@@ -175,7 +175,7 @@ mapD3.prototype.load = function (data) {
 
 	// render loaded data
 	_mapD3.draw();
-}
+};
 
 // renders topo data on svg layer
 mapD3.prototype.draw = function () {
@@ -224,8 +224,6 @@ mapD3.prototype.draw = function () {
 mapD3.prototype.startProjection = function () {
 	_mapD3.log("startProjection");
 
-	var height = _mapD3.height;
-	var width = _mapD3.width;
 	var proj = _mapD3.getDefaultProjection(_mapD3.proj);
 	_mapD3.d3path = d3.geoPath().projection(proj);
 	_mapD3.d3proj = proj;
@@ -245,7 +243,7 @@ mapD3.prototype.startProjection = function () {
 	_mapD3.zoomMin = _mapD3.defaultScale * 10;
 	//_mapD3.zoomcall.scale(1);
 	//_mapD3.zoomcall.translate([0, 0]);
-}
+};
 
 // gets the default project for the current (or provided) projection name
 mapD3.prototype.getDefaultProjection = function (proj) {
@@ -313,7 +311,7 @@ mapD3.prototype.getDefaultProjection = function (proj) {
 
 	// center custom projection
 	return p.translate([width / 2, height / 2]).precision(1); //Math.SQRT1_2);
-}
+};
 
 // refresh projection translate, scale and center/rotate with animation
 mapD3.prototype.refreshView = function (t, s, c, duration) {
@@ -369,9 +367,7 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
 			_mapD3.fps = 1000 / ms;
 		}
 	}
-}
-
-
+};
 
 mapD3.prototype.center = function (c) {
 	if (_mapD3.isGlobe()) {
@@ -390,17 +386,16 @@ mapD3.prototype.center = function (c) {
 	}
 	else
 		return [0, 0];
-}
+};
 
 mapD3.prototype.changedTranslate = function (t) {
 	return _mapD3.viewTranslate[0] != t[0] || _mapD3.viewTranslate[1] != t[1];
-}
+};
 
 mapD3.prototype.changedCenter = function (c) {
 	var cc = _mapD3.center();
 	return cc[0] != c[0] || cc[1] != c[1];
-}
-
+};
 
 // updates (or clears) path/position for all objects on svg canvas
 mapD3.prototype.refreshPath = function () {
@@ -430,7 +425,7 @@ mapD3.prototype.refreshPath = function () {
 			points[i].style("visibility", (visible ? "visible" : "hidden"));
 		}
 	}
-}
+};
 
 // updates the view scale and tranlsation after a manual zoom
 mapD3.prototype.refreshZoom = function () {
@@ -452,8 +447,7 @@ mapD3.prototype.refreshZoom = function () {
 	//_mapD3.zoomcall.scale(1);
 	//_mapD3.zoomcall.translate([0, 0]);
 	//d3svg.attr("transform", d3.event.transform);
-}
-
+};
 
 // --------------------------------------------------
 // Zoom and drag implementation
@@ -498,7 +492,7 @@ mapD3.prototype.doDrag = function (start) {
 			//d3.event.stopPropagation();
 		}
 	}
-}
+};
 
 // handles zoom call event when in flat projection
 mapD3.prototype.doZoom = function () {
@@ -548,7 +542,7 @@ mapD3.prototype.doZoom = function () {
 			_mapD3.refreshPath();
 		}
 	}
-}
+};
 
 // executes the optimal zoom for a given projection
 mapD3.prototype.zoomTo = function (d, duration) {
@@ -556,8 +550,7 @@ mapD3.prototype.zoomTo = function (d, duration) {
 		_mapD3.zoomToLevel(d, duration);
 	else
 		_mapD3.zoomToShape(d, duration);
-}
-
+};
 
 // center map and zoom to a specific level
 mapD3.prototype.zoomToLevel = function (d, duration) {
@@ -570,9 +563,9 @@ mapD3.prototype.zoomToLevel = function (d, duration) {
 		var toS = _mapD3.defaultScale * _mapD3.zoomStep;
 
 		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+		_mapD3.refreshView(toT, toS, toC, (duration == undefined ? _mapD3.tweenTime : duration));
 	}
-}
+};
 
 // zoom and center to shape fill the entire window with padding
 mapD3.prototype.zoomToShape = function (d, duration) {
@@ -598,9 +591,9 @@ mapD3.prototype.zoomToShape = function (d, duration) {
 		if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // double padding for globe
 
 		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+		_mapD3.refreshView(toT, toS, toC, (duration == undefined ? _mapD3.tweenTime : duration));
 	}
-}
+};
 
 // center map and zoom to a custom projection
 mapD3.prototype.zoomToCustom = function (d, duration) {
@@ -619,7 +612,7 @@ mapD3.prototype.zoomToCustom = function (d, duration) {
 		//if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // add padding
 
 		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+		_mapD3.refreshView(toT, toS, toC, (duration == undefined ? _mapD3.tweenTime : duration));
 
 
 		/*
@@ -635,10 +628,10 @@ mapD3.prototype.zoomToCustom = function (d, duration) {
 		if (_mapD3.isGlobe()) toS = toS * 2; // double zoom
 
 		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+		_mapD3.refreshView(toT, toS, toC, (duration == undefined ? _mapD3.tweenTime : duration));
 		*/
 	}
-}
+};
 
 // zoom and center bounds fill the entire window with padding
 mapD3.prototype.zoomToBounds = function (b, duration) {
@@ -668,9 +661,9 @@ mapD3.prototype.zoomToBounds = function (b, duration) {
 
 
 		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+		_mapD3.refreshView(toT, toS, toC, (duration == undefined ? _mapD3.tweenTime : duration));
 	}
-}
+};
 
 // resets the zoom to the default for the current projection
 mapD3.prototype.zoomReset = function (duration) {
@@ -680,7 +673,7 @@ mapD3.prototype.zoomReset = function (duration) {
 		if (_mapD3.tweenTime > 0) {
 			var r = _mapD3.d3proj.rotate();
 			r[0] = -r[0]; r[1] = -r[1];
-			_mapD3.refreshView(_mapD3.d3proj.translate(), _mapD3.defaultScale, r, (duration === undefined ? _mapD3.tweenTime : duration));
+			_mapD3.refreshView(_mapD3.d3proj.translate(), _mapD3.defaultScale, r, (duration == undefined ? _mapD3.tweenTime : duration));
 		}
 		else {
 			var toS = _mapD3.d3proj.scale(_mapD3.viewScale);
@@ -690,15 +683,14 @@ mapD3.prototype.zoomReset = function (duration) {
 	else {
 		if (_mapD3.tweenTime > 0) {
 			var p = _mapD3.getDefaultProjection();
-			_mapD3.refreshView(p.translate(), p.scale(), p.center(), (duration === undefined ? _mapD3.tweenTime : duration));
+			_mapD3.refreshView(p.translate(), p.scale(), p.center(), (duration == undefined ? _mapD3.tweenTime : duration));
 		}
 		else {
 			_mapD3.startProjection();
 			_mapD3.refreshPath();
 		}
 	}
-}
-
+};
 
 // calculates the desired zoom based on the bounds
 mapD3.prototype.zoomGetForBounds = function (b) {
@@ -709,8 +701,7 @@ mapD3.prototype.zoomGetForBounds = function (b) {
 	var mw = _mapD3.width / bw;
 	var mh = _mapD3.height / bh;
 	return (mw < mh ? mw : mh);
-}
-
+};
 
 // --------------------------------------------------
 // Draw points
@@ -742,8 +733,7 @@ mapD3.prototype.drawPoints = function (places) {
 
 		_mapD3.points.push(point);
 	}
-}
-
+};
 
 // renders places as icons on map
 mapD3.prototype.drawPlaces = function (places) {
@@ -773,18 +763,10 @@ mapD3.prototype.drawPlaces = function (places) {
 
 		_mapD3.points.push(point);
 	}
-}
-
-
-
-
-
+};
 
 mapD3.prototype.onDone = function () {
-}
-
-
-
+};
 
 // --------------------------------------------------
 // Feature Event Handlers
@@ -796,12 +778,12 @@ mapD3.prototype.isPlaceVisible = function (place) {
 		return (_mapD3.geo.calculateDistance(-_mapD3.viewCenter[0], -_mapD3.viewCenter[1], place.lng, place.lat) <= 10000);
 	else
 		return true; // assume true for world perspective
-}
+};
 
 // gets the specified feature given an id
 mapD3.prototype.getShapeByID = function (id) {
 	return _mapD3.features().filter(function (d) { return d.id == id; })[0];
-}
+};
 
 // sets the desired css style on the shape by id
 mapD3.prototype.selectShape = function (id) {
@@ -809,14 +791,14 @@ mapD3.prototype.selectShape = function (id) {
 		var p = d3.select(this);
 		_mapD3.setCssStyle(p, "--select", d.id == id);
 	});
-}
+};
 
 mapD3.prototype.hoverShape = function (id) {
 	_mapD3.d3g.selectAll(".geoshape").each(function (d) {
 		var p = d3.select(this);
 		_mapD3.setCssStyle(p, "--hover", d.id == id);
 	});
-}
+};
 
 
 // gets the css class based on input parameters
@@ -825,14 +807,14 @@ mapD3.prototype.getCssStyle = function (flags) {
 		return "visited";
 	else
 		return "unknown";
-}
+};
 
 // sets the desired css style on the shape instance
 mapD3.prototype.setCssStyle = function (p, state, on) {
 	p.classed("unknown" + state, on && p.classed("unknown"));
 	p.classed("visited" + state, on && p.classed("visited"));
 	p.classed("planned" + state, on && p.classed("planned"));
-}
+};
 
 // sets the desired css style on the shape by id
 mapD3.prototype.setCssStyleByID = function (id, state, on) {
@@ -843,7 +825,7 @@ mapD3.prototype.setCssStyleByID = function (id, state, on) {
 			_mapD3.setCssStyle(p, state, on);
 		}
 	});
-}
+};
 
 // styles geo shape objects when added to svg
 mapD3.prototype.onStyle = function (p, d) {
@@ -875,7 +857,7 @@ mapD3.prototype.onStyleAmerica = function (p, d) {
 	var r = _mapD3.geo.getRegion(d.id);
 	p.classed(_mapD3.getCssStyle(r.flags), true);
 	p.append("svg:title").text(r.name);
-}
+};
 
 // special styles for austrila and new zealand
 mapD3.prototype.onStyleOceania = function (p, d) {
@@ -890,8 +872,7 @@ mapD3.prototype.onStyleOceania = function (p, d) {
 		name = "Tasmania";
 	p.classed("visited", true);
 	p.append("svg:title").text(name);
-}
-
+};
 
 // --------------------------------------------------
 // Mouse Event Handlers
@@ -900,7 +881,7 @@ mapD3.prototype.onStyleOceania = function (p, d) {
 // starts the time for click events
 mapD3.prototype.zoomStart = function () {
 	return _mapD3.clickStart(true);
-}
+};
 
 // starts the time for click events
 mapD3.prototype.clickStart = function (start) {
@@ -908,11 +889,11 @@ mapD3.prototype.clickStart = function (start) {
 	//console.log("clickStart(" + now + ")");
 	if (start) this.eventstart = now;
 	return (now - this.eventstart);
-}
+};
 
 mapD3.prototype.onClick = function (d) {
 
-}
+};
 
 // click event handler for shapes and base layer
 mapD3.prototype.doClick = function (d) {
@@ -922,8 +903,8 @@ mapD3.prototype.doClick = function (d) {
 	}
 
 	// hacky fix for default svg click bubble in firefox
-	if (!(d == null || d === undefined)) d3.event.stopPropagation();
-}
+	if (!(d == null || d == undefined)) d3.event.stopPropagation();
+};
 
 // click event handler for points as circles
 mapD3.prototype.doClickCircle = function () {
@@ -933,10 +914,7 @@ mapD3.prototype.doClickCircle = function () {
 		//console.log(d);
 		_mapD3.doClick(d);
 	}
-}
-
-
-
+};
 
 // default mouse over for geoshape
 mapD3.prototype.onMouseOver = function (d) {
@@ -950,25 +928,25 @@ mapD3.prototype.onMouseOver = function (d) {
 		_mapD3.onHoverCountry(id, true);
 		_mapD3.hoverPrev = p;
 	}
-}
+};
 
 // default mouse out for geoshape
 mapD3.prototype.onMouseOut = function (d) {
-}
+};
 
 mapD3.prototype.onHoverHexabin = function (d) {
-}
+};
 
 mapD3.prototype.onSelectPosition = function (lat, lng, country, places) {
-}
+};
 
 // special click handler for when a country is selected
 mapD3.prototype.onSelectCountry = function (id) {
-}
+};
 
 // special click handler for when a country is selected
 mapD3.prototype.onHoverCountry = function (id, on) {
-}
+};
 
 
 // --------------------------------------------------
@@ -978,22 +956,22 @@ mapD3.prototype.onHoverCountry = function (id, on) {
 // has the start method been called yet
 mapD3.prototype.isStarted = function () {
 	return _mapD3.geo != null;
-}
+};
 
 // easy way to check the topo file
 mapD3.prototype.isWorld = function () {
 	return _mapD3.proj == "world";
-}
+};
 
 // easy way to check the projection
 mapD3.prototype.isGlobe = function () {
 	return _mapD3.proj == "globe";
-}
+};
 
 // easy way to check the projection
 mapD3.prototype.isAmerica = function () {
 	return _mapD3.topo == "america";
-}
+};
 
 // returns the safe topo name from topo or proj
 mapD3.prototype.getTopoName = function (proj) {
@@ -1011,7 +989,7 @@ mapD3.prototype.getTopoName = function (proj) {
 		default:
 			return "world";
 	}
-}
+};
 
 // returns the safe projection name from map or proj
 mapD3.prototype.getProjName = function (map) {
@@ -1044,7 +1022,7 @@ mapD3.prototype.getProjName = function (map) {
 		default:
 			return "world";
 	}
-}
+};
 
 // maps topo name to cache index
 mapD3.prototype.getCacheKey = function () {
@@ -1056,7 +1034,7 @@ mapD3.prototype.getCacheKey = function () {
 		default:
 			return 0;
 	}
-}
+};
 
 // gets/sets current shapes for topo in cache
 mapD3.prototype.data = function (set) {
@@ -1064,7 +1042,7 @@ mapD3.prototype.data = function (set) {
 		return _mapD3.cacheData[_mapD3.getCacheKey()];
 	else
 		_mapD3.cacheData[_mapD3.getCacheKey()] = set;
-}
+};
 
 // gets/sets current shapes for topo in cache
 mapD3.prototype.shapes = function (set) {
@@ -1072,7 +1050,7 @@ mapD3.prototype.shapes = function (set) {
 		return _mapD3.cacheShapes[_mapD3.getCacheKey()];
 	else
 		_mapD3.cacheShapes[_mapD3.getCacheKey()] = set;
-}
+};
 
 // gets/sets current features for topo in cache
 mapD3.prototype.features = function (set) {
@@ -1080,19 +1058,19 @@ mapD3.prototype.features = function (set) {
 		return _mapD3.cacheFeatures[_mapD3.getCacheKey()];
 	else
 		_mapD3.cacheFeatures[_mapD3.getCacheKey()] = set;
-}
+};
 
 // shows an error message regardless of debug mode
 mapD3.prototype.error = function (msg) {
 	//console.log("mapD3.ERROR." + msg);
-}
+};
 
 // logs to console if debugging enabled
 mapD3.prototype.log = function (msg, obj) {
 	if (_mapD3.debug) {
-		if (obj === undefined)
+		if (obj == undefined)
 			console.log("mapD3." + msg);
 		else
 			console.log("mapD3." + msg + "(" + obj + ")");
 	}
-}
+};

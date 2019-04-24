@@ -57,5 +57,21 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			return AllLegacyReport();
 		}
+
+		public ActionResult World()
+		{
+			return File(Server.MapPath(@"\App_Data\TOPO\world.json"), "text/json", "world");
+		}
+
+		public ActionResult America()
+		{
+			return File(Server.MapPath(@"\App_Data\TOPO\america.json"), "text/json", "america");
+		}
+
+		public ActionResult Oceania()
+		{
+			return File(Server.MapPath(@"\App_Data\TOPO\oceania.json"), "text/json", "oceania");
+		}
+
 	}
 }
