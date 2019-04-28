@@ -2,95 +2,145 @@
 @model DemoViewModel
 
 <style>
-	#mapD3 {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		right: 100%;
-		bottom: 100%;
-		width: 100%;
-		height: 100%;
-		background: #000;
-		z-index: 0;
-	}
+    #mapD3 {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 100%;
+        bottom: 100%;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 0;
+    }
 
-	.geodot {
-		fill: #fff;
-	}
+    .geodot {
+        fill: #fff;
+    }
 
-	.geoshape {
-		fill: #222;
-		stroke: #777;
-	}
+    .geoshape {
+        fill: #222;
+        stroke: #777;
+    }
 
-	.visited {
-		fill: #030;
-		stroke: #060;
-	}
+    .visited {
+        fill: #030;
+        stroke: #060;
+    }
 
-	.visited--select {
-		fill: #060;
-		stroke: #090;
-	}
+    .visited--select {
+        fill: #060;
+        stroke: #090;
+    }
 
-	.visited--hover {
-		fill: #090;
-		stroke: #0c0;
-	}
+    .visited--hover {
+        fill: #090;
+        stroke: #0c0;
+    }
+
+    #logo {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        color: #fff;
+        font-size: 3rem;
+        font-weight: bold;
+        padding: 0.1rem 1rem;
+        background: rgba(0,0,0,0.5);
+    }
+
+    #info {
+        position: absolute;
+        top: 0px;
+        left: 80%;
+        background: #060;
+        color: #fff;
+        font-size: 2rem;
+        font-weight: bold;
+        padding: 0.1rem 1rem;
+    }
+
+    #list {
+        position: absolute;
+        top: 100px;
+        bottom: 100%;
+        height: 100%;
+        left: 80%;
+        background: #060;
+        color: #fff;
+        font-size: 1rem;
+        padding: 0.1rem 1rem;
+    }
 </style>
 
 <div id="mapD3">
 </div>
+
+<div id="info">
+    INFO
+</div>
+
+<div id="list">
+    LIST
+</div>
+
+<div id="logo">
+    Kevin &amp; Earth
+</div>
+
 
 <script src="/scripts/_graffiti/demo/d3.v4.min.js"></script>
 <script src="/scripts/_graffiti/demo/d3-geo-projection.v2.min.js"></script>
 <script src="/scripts/_graffiti/demo/topojson.v2.min.js"></script>
 
 <script>
-	var places = [];
+    var places = [];
 
-	var _geo = new GeoGraffiti();
-	_geo._visited = [858, 392, 124, 10, 32, 76, 152, 36, 40, 56, 156, 250, 276, 344, 356, 372, 380, 388, 484, 496, 528, 554, 643, 702, 724, 826, 840];
+    var _geo = new GeoGraffiti();
+    _geo._visited = [858, 392, 124, 10, 32, 76, 152, 36, 40, 56, 156, 250, 276, 344, 356, 372, 380, 388, 484, 496, 528, 554, 643, 702, 724, 826, 840];
 
-	_mapD3.start(_geo);
-	_mapD3.show("globe");
+    _mapD3.start(_geo);
+    _mapD3.show("globe");
 
 
-	_mapD3.onDone = function () {
-		$.getJSON("/json/places", function (data) {
-			places = data;
-			//_mapD3.drawPoints(places);
-		});
-	};
+    _mapD3.onDone = function () {
+        $.getJSON("/json/places", function (data) {
+            places = data;
+            //_mapD3.drawPoints(places);
+        });
+    };
 
-	_mapD3.onClick = function (d) {
-		if (d === undefined) {
-			//$("#info").html("");
-			$("#mapD3 .geodot").remove();
-			_mapD3.selectShape(null);
-			_mapD3.zoomReset();
-		} else {
-			var id = d.id;
+    _mapD3.onClick = function (d) {
+        if (d === undefined) {
+            $("#info").html("");
+            $("#mapD3 .geodot").remove();
+            _mapD3.selectShape(null);
+            _mapD3.zoomReset();
+        } else {
+            var id = d.id;
 
-			var c = _geo.getCountry(id);
-			//$("#info").html("<img src='/flags/" + c.key + ".svg' />" + "<span>" + c.name + "</span>");
+            var c = _geo.getCountry(id);
+            //$("#info").html("<img src='/images/sprites/blank.gif' class='flag flag-flag flag-" + c.key.toLowerCase() + "' />" + "<span>" + c.name + "</span>");
+            var html = "<img src='/images/sprites/blank.gif' class='flag flag-flag flag-" + c.key.toLowerCase() + "' />" + "<span>" + c.name + "</span>";
+            $("#info").html(html);
 
-			$("#mapD3 .geodot").remove();
-			var dots = [];
-			var list = "";
-			for (var i = 0; i < places.length; i++) {
-				var p = places[i];
-				if (p.country === id) {
-					list += "<span>" + p.name + "</span>, ";
-					dots.push(p);
-				}
-			}
-			$("#list").html(list);
+            $("#mapD3 .geodot").remove();
+            var dots = [];
+            var list = "";
+            for (var i = 0; i < places.length; i++) {
+                var p = places[i];
+                if (p.country === id) {
+                    list += "<span>" + p.name + "</span>, ";
+                    dots.push(p);
+                }
+            }
 
-			_mapD3.drawPoints(dots);
+            $("#list").html(list);
 
-			_mapD3.selectShape(id);
-			_mapD3.zoomTo(d);
-		}
-	};
+            _mapD3.drawPoints(dots);
+
+            _mapD3.selectShape(id);
+            _mapD3.zoomTo(d);
+        }
+    };
 </script>
