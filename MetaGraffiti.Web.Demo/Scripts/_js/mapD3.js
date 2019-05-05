@@ -451,8 +451,10 @@ mapD3.prototype.refreshPath = function () {
 		for (var i = 0; i < points.length; i++) {
 			var p = _mapD3.d3proj([places[i].lng, places[i].lat]);
 			points[i].attr("cx", p[0]).attr("cy", p[1]);
-			var visible = _mapD3.isPlaceVisible(places[i]);
-			points[i].style("opacity", (visible ? 1 : 0.1));
+
+            var visible = _mapD3.isPlaceVisible(places[i]);
+            points[i].style("display", (visible ? "inline" : "none"));
+			//points[i].style("opacity", (visible ? 1 : 0.1));
 		}
 	}
 
@@ -516,18 +518,8 @@ mapD3.prototype.doDrag = function (start) {
 			var x = mouse[0] - _mapD3.dragmouse[0];
 			var y = mouse[1] - _mapD3.dragmouse[1];
 			var point = [_mapD3.dragpoint[0] + (mouse[0] - _mapD3.dragmouse[0]) / 4, _mapD3.dragpoint[1] + (_mapD3.dragmouse[1] - mouse[1]) / 4];
-			/*
-			if (touch) {
-				var r = _mapD3.d3proj.rotate();
-				if (x < 10) x = 0;
-				if (y < 10) y = 0;
-				r[0] += (x < 0 ? -1 : 1) * 45;
-				r[1] += (y < 0 ? -1 : 1) * 45;
-				_mapD3.d3proj.rotate(r);
-			} else*/
 			_mapD3.d3proj.rotate([point[0], point[1]]);
 			_mapD3.refreshPath();
-			//d3.event.stopPropagation();
 		}
 	}
 }
@@ -767,8 +759,9 @@ mapD3.prototype.drawPoints = function (places) {
 
 		point.append("svg:title").text(places[i].name);
 
-		var visible = _mapD3.isPlaceVisible(places[i]);
-		if (!visible) point.style("opacity", 0.1);
+        var visible = _mapD3.isPlaceVisible(places[i]);
+		//if (!visible) point.style("opacity", 0.1);
+        if (!visible) point.style("display", "none");
 
 		_mapD3.points.push(point);
 	}

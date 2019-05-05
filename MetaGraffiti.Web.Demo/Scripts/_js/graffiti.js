@@ -8,7 +8,7 @@
 }
 
 GeoGraffiti.prototype.setCountries = function (countries) {
-    if (countries != null) GeoGraffiti._countries = countries;
+    if (countries) GeoGraffiti._countries = countries;
     return GeoGraffiti.prototype._countries;
 }
 
@@ -23,13 +23,13 @@ GeoGraffiti.prototype.getCountries = function (ids) {
 GeoGraffiti.prototype.getCountry = function (id) {
 	if (Number(id)) {
 		for (i = 0; i < _geo._countries.length; i++) {
-			if (_geo._countries[i].id == id) return _geo._countries[i];
+			if (_geo._countries[i].id === id) return _geo._countries[i];
 		}
 	}
-	else if (id != null && id.length > 0) {
+	else if (id) {
 		id = id.toLowerCase();
 		for (i = 0; i < _geo._countries.length; i++) {
-			if (_geo._countries[i].key.toLowerCase() == id) return _geo._countries[i];
+			if (_geo._countries[i].key.toLowerCase() === id) return _geo._countries[i];
 		}
 	}
 	return this.getNullPlace();
@@ -166,21 +166,21 @@ GeoGraffiti.prototype.getRegionBounds = function (id) {
 
 
 GeoGraffiti.prototype.setPlaces = function (places) {
-	if (places != null) _geo._places = places;
-	return _geo._places;
-}
+    if (places) _geo._places = places;
+    return _geo._places;
+};
 
 GeoGraffiti.prototype.getPlaces = function () {
-	return _geo._places;
-}
+    return _geo._places;
+};
 
 GeoGraffiti.prototype.getPlace = function (id) {
-	var count = _geo._places ? _geo._places.length : 0;
+    var count = _geo._places ? _geo._places.length : 0;
     for (i = 0; i < count; i++) {
-    	if (_geo._places[i].id == id) return _geo._places[i];
+        if (_geo._places[i].id === id) return _geo._places[i];
     }
     return _geo.getNullPlace();
-}
+};
 
 
 GeoGraffiti.prototype.getPlaceTypeName = function (type) {
@@ -208,7 +208,7 @@ GeoGraffiti.prototype.getPlaceTypeName = function (type) {
 /* Internal Methods */
 GeoGraffiti.prototype.getNullPlace = function () {
     return { "id": 0, "type": 0, "flags": 0, "key": "", "name": "", "lat": null, "lng": null };
-}
+};
 
 
 
@@ -216,16 +216,16 @@ GeoGraffiti.prototype.getNullPlace = function () {
 
 // calulates the distance in km between two points
 GeoGraffiti.prototype.calculateDistance = function (lon1, lat1, lon2, lat2) {
-	var radlat1 = Math.PI * lat1 / 180
-	var radlat2 = Math.PI * lat2 / 180
-	var radlon1 = Math.PI * lon1 / 180
-	var radlon2 = Math.PI * lon2 / 180
-	var theta = lon1 - lon2
-	var radtheta = Math.PI * theta / 180
+    var radlat1 = Math.PI * lat1 / 180;
+    var radlat2 = Math.PI * lat2 / 180;
+    var radlon1 = Math.PI * lon1 / 180;
+    var radlon2 = Math.PI * lon2 / 180;
+    var theta = lon1 - lon2;
+    var radtheta = Math.PI * theta / 180;
 	var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-	dist = Math.acos(dist)
-	dist = dist * 180 / Math.PI
-	dist = dist * 60 * 1.1515
+    dist = Math.acos(dist);
+    dist = dist * 180 / Math.PI;
+    dist = dist * 60 * 1.1515;
 
 	return dist * 1.609344; // km
 	//return dist * 0.8684; // miles
