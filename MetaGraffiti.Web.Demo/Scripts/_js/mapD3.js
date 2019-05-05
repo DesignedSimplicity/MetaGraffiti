@@ -36,12 +36,10 @@ function mapD3() {
 	this.dragDelay = 250;			// time in ms to cancel the click for a drag or zoom
 	this.eventstart = null;			// time in ms when click for drag or zoom started
 
-
 	this.tweenTime = 1000;			// time in ms for animated zoom tweens
 
 	this.d3hexbin = null;
 	this.d3hexrad = null;
-
 
 	// config zoom behavior
 	this.zoom = true;				// toggles mouse wheel zoom and drag
@@ -80,7 +78,7 @@ mapD3.prototype.start = function (geo) {
 	this.geo = geo;
 
 	// do default settings
-	this.drag = !isMobile();
+    this.drag = true;//!isMobile();
 
 	// read element dimensions less padding 
 	this.width = $("#mapD3").width();
@@ -103,16 +101,6 @@ mapD3.prototype.start = function (geo) {
 	this.dragmouse = null;
 	this.dragpoint = null;
     if (this.drag) {
-        /*
-		this.dragcall = d3.behavior.drag()
-			.on("dragstart", function () { _mapD3.doDrag(true); })
-			.on("drag", function () { _mapD3.doDrag(false); })
-			.on("dragend", function () {
-				_mapD3.done = true;
-				//_mapD3.onDone();
-			});
-		this.d3map.call(this.dragcall); // this needs to be on the base object
-        */
         this.dragcall = d3.drag()
             .on("start", function () { _mapD3.doDrag(true); })
             .on("drag", function () { _mapD3.doDrag(false); })
@@ -125,12 +113,13 @@ mapD3.prototype.start = function (geo) {
 
 	// configure zoom
 	//this.zoomcall = d3.behavior.zoom().on("zoomstart", function () { _mapD3.clickStart(true); }).on("zoom", this.doZoom).on("zoomend", function () { _mapD3.refreshZoom(); _mapD3.refreshDone(); });
-    this.zoomcall = d3.zoom()
+    this.zoomcall = d3.zoom();
+    this.zoomcall
         .on("start", this.zoomStart)
         .on("zoom", this.doZoom)
         .on("end", this.refreshZoom);
 
-	//this.d3map.call(_mapD3.zoomcall).on("dblclick.zoom", null); // disable double click zoom
+	//TODO: this.d3map.call(_mapD3.zoomcall).on("dblclick.zoom", null); // disable double click zoom
 
 	// return self for chaining
 	return this;
@@ -155,12 +144,12 @@ mapD3.prototype.show = function (map) {
 	// check default/existing values
 	var topo = "";
 	var proj = "";
-	if (map == null || map == 0 || map == "") {
-		topo = (_mapD3.topo != null ? _mapD3.topo : "world");
-		proj = (_mapD3.proj != null ? _mapD3.proj : "world");
+	if (map) {
+        topo = _mapD3.getTopoName(map);
+        proj = _mapD3.getProjName(map);
 	} else {
-		topo = _mapD3.getTopoName(map);
-		proj = _mapD3.getProjName(map);
+        topo = (_mapD3.topo ? _mapD3.topo : "world");
+        proj = (_mapD3.proj ? _mapD3.proj : "world");
 	}
 
 	// redraw on projection change
@@ -168,7 +157,7 @@ mapD3.prototype.show = function (map) {
 	_mapD3.proj = proj;
 	_mapD3.startProjection();
 	var data = _mapD3.data();
-	if (data != null)
+	if (data !== null)
 		_mapD3.draw();
 	else
 		d3.json("/content/_topo/" + topo + ".json", this.load);
@@ -213,7 +202,7 @@ mapD3.prototype.draw = function () {
 
 	// check feature cache or create data
 	var features = _mapD3.features();
-	if (features == null) {
+	if (features === null) {
 		features = topojson.feature(data, shapes).features;
 		_mapD3.features(features);
 	}
@@ -246,8 +235,6 @@ mapD3.prototype.draw = function () {
 mapD3.prototype.startProjection = function () {
 	_mapD3.log("startProjection");
 
-	var height = _mapD3.height;
-	var width = _mapD3.width;
 	var proj = _mapD3.getDefaultProjection(_mapD3.proj);
     _mapD3.d3path = d3.geoPath().projection(proj);
     _mapD3.d3proj = proj;
@@ -264,17 +251,19 @@ mapD3.prototype.startProjection = function () {
 
 	// reset zoom translate and scale
 	_mapD3.zoomMax = _mapD3.defaultScale;
-	_mapD3.zoomMin = _mapD3.defaultScale * 10;
-	//_mapD3.zoomcall.scaleExtent([_mapD3.zoomMin, _mapD3.zoomMax]);
-	//_mapD3.zoomcall.scale(1);
-	//_mapD3.zoomcall.translate([0, 0]);
+    _mapD3.zoomMin = _mapD3.defaultScale * 10;
+    /* TODO-fix 2d zoom
+	_mapD3.zoomcall.scaleExtent([_mapD3.zoomMin, _mapD3.zoomMax]);
+	_mapD3.zoomcall.scale(1);
+	_mapD3.zoomcall.translate([0, 0]);
+    */
 }
 
 // gets the default project for the current (or provided) projection name
 mapD3.prototype.getDefaultProjection = function (proj) {
 	_mapD3.log("getDefaultProjection", proj);
 
-	if (proj == null || proj == "") proj = this.proj;
+	if (proj === null || proj === "") proj = this.proj;
 	var height = _mapD3.height;
 	var width = _mapD3.width;
 	var max = (width > height ? width : height);
@@ -289,47 +278,47 @@ mapD3.prototype.getDefaultProjection = function (proj) {
 		switch (proj) {
 			case "us":
 				_mapD3.maxScale = width;
-				p = d3.geo.albersUsa().scale(_mapD3.maxScale);
+				p = d3.geoAlbersUsa().scale(_mapD3.maxScale);
 				break;
 			case "nz":
 				_mapD3.maxScale = width * 2;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([174, -41]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([174, -41]);
 				break;
 			case "au":
 				_mapD3.maxScale = width * 0.90;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([135, -29.5]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([135, -29.5]);
 				break;
 			case "ru":
 				_mapD3.maxScale = width * 0.37;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([100, 65]);
+                p = d3.geoMercator().scale(_mapD3.maxScale).center([100, 65]);
 				break;
 			case "oceania":
 				_mapD3.maxScale = width * 0.75;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([146, -30]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([146, -30]);
 				break;
 			case "europe":
 				_mapD3.maxScale = width;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([5, 48.5]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([5, 48.5]);
 				break;
 			case "south":
 				_mapD3.maxScale = width * 0.45;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([-60, -30]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([-60, -30]);
 				break;
 			case "north":
 				_mapD3.maxScale = width * 0.4;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([-100, 50]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([-100, 50]);
 				break;
 			case "asia":
 				_mapD3.maxScale = width * 0.4;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([95, 40]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([95, 40]);
 				break;
 			case "africa":
 				_mapD3.maxScale = width * 0.6;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([25, 0]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([25, 0]);
 				break;
 			default:
 				_mapD3.maxScale = width * 0.158;
-				p = d3.geo.mercator().scale(_mapD3.maxScale).center([0, 0]);
+				p = d3.geoMercator().scale(_mapD3.maxScale).center([0, 0]);
 				break;
 		}
 	}
@@ -343,11 +332,11 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
 	_mapD3.log("refreshView");
 
 	// check if we are changing view
-	if (c == null) c = _mapD3.center();
+	if (c === null) c = _mapD3.center();
 	if (s > _mapD3.zoomMin) s = _mapD3.zoomMin;
 	var dT = _mapD3.changedTranslate(t);
 	var dC = _mapD3.changedCenter(c);
-	var dS = _mapD3.viewScale != s;
+	var dS = _mapD3.viewScale !== s;
 	if (dT || dS || dC) {
 		// check animation mode
 		if (duration > 1) {
@@ -363,7 +352,7 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
                     };
                 })
                 .transition(); //.each("end", function () { _mapD3.refreshDone(); });
-		} else if (duration == 1) {
+		} else if (duration === 1) {
 			_mapD3.log("refreshView.fade");
 			// fade out, wait to refresh and then fade back in
 			$("#mapD3").fadeOut(_mapD3.zoomFade);
@@ -401,30 +390,32 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
 
 mapD3.prototype.center = function (c) {
 	if (_mapD3.isGlobe()) {
-		if (c == null) {
-			c = _mapD3.viewCenter;
-			return [-c[0], -c[1]];
-		}
-		else
-			_mapD3.d3proj.rotate([-c[0], -c[1]]);
+        if (c) {
+            _mapD3.d3proj.rotate([-c[0], -c[1]]);
+        }
+        else {
+            c = _mapD3.viewCenter;
+            return [-c[0], -c[1]];
+        }
+			
 	}
 	else if (!_mapD3.isAmerica()) {
-		if (c == null)
-			return _mapD3.d3proj.center();
+		if (c)
+            _mapD3.d3proj.center(c);
 		else
-			_mapD3.d3proj.center(c);
+            return _mapD3.d3proj.center();
 	}
 	else
 		return [0, 0];
 }
 
 mapD3.prototype.changedTranslate = function (t) {
-	return _mapD3.viewTranslate[0] != t[0] || _mapD3.viewTranslate[1] != t[1];
+	return _mapD3.viewTranslate[0] !== t[0] || _mapD3.viewTranslate[1] !== t[1];
 }
 
 mapD3.prototype.changedCenter = function (c) {
 	var cc = _mapD3.center();
-	return cc[0] != c[0] || cc[1] != c[1];
+	return cc[0] !== c[0] || cc[1] !== c[1];
 }
 
 
@@ -432,7 +423,7 @@ mapD3.prototype.refreshDone = function () {
 	_mapD3.log("refreshDone", _mapD3.fps);
 
 	// redraw hexabin if they are configured
-	if (_mapD3.hexabin != null) {
+	if (_mapD3.hexabin) {
 		_mapD3.drawHexabin(_mapD3.places);
 	}
 
@@ -444,7 +435,7 @@ mapD3.prototype.refreshPath = function () {
 	_mapD3.log("refreshPath");
 
 	// redraw shapes
-	window.onerror = null;
+	//window.onerror = null;
     var path = d3.geoPath().projection(_mapD3.d3proj);
 	_mapD3.d3g.selectAll(".geoshape").attr("d", path);
 	_mapD3.d3path = path;
@@ -455,7 +446,7 @@ mapD3.prototype.refreshPath = function () {
 	var hexgrid = _mapD3.hexgrid;
 
 	// redraw points if enabled
-	if (points != null) {
+	if (points) {
 		if (_mapD3.isGlobe()) _mapD3.viewCenter = _mapD3.d3proj.rotate();
 		for (var i = 0; i < points.length; i++) {
 			var p = _mapD3.d3proj([places[i].lng, places[i].lat]);
@@ -466,7 +457,7 @@ mapD3.prototype.refreshPath = function () {
 	}
 
 	// redraw hexes if enabled
-	if (hexabin != null) {
+	if (hexabin) {
 		// update hexagons if there are present
 		_mapD3.d3g.selectAll(".geohex").each(function (d) {
 			var p = _mapD3.d3proj(d.center);
@@ -507,7 +498,7 @@ mapD3.prototype.doDrag = function (start) {
 	if (_mapD3.drag && _mapD3.isGlobe()) {
 		var mouse = [d3.event.sourceEvent.pageX, d3.event.sourceEvent.pageY];
 		var touch = false;
-		if (d3.event.sourceEvent.changedTouches != null && d3.event.sourceEvent.changedTouches.length > 0) {
+		if (d3.event.sourceEvent.changedTouches && d3.event.sourceEvent.changedTouches.length > 0) {
 			touch = true;
 			mouse = [d3.event.sourceEvent.changedTouches[0].pageX, d3.event.sourceEvent.changedTouches[0].pageY];
 			//d3.event.stopPropagation();
@@ -603,64 +594,63 @@ mapD3.prototype.zoomTo = function (d, duration) {
 // center map and zoom to a specific level
 mapD3.prototype.zoomToLevel = function (d, duration) {
 	_mapD3.log("zoomToLevel", d);
-	if (d == null)
-		_mapD3.zoomReset(duration);
-	else {
-		var toC = d3.geoCentroid(d);
-		var toT = _mapD3.defaultTranslate;
-		var toS = _mapD3.defaultScale * _mapD3.zoomStep;
+    if (d) {
+        var toC = d3.geoCentroid(d);
+        var toT = _mapD3.defaultTranslate;
+        var toS = _mapD3.defaultScale * _mapD3.zoomStep;
 
-		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+        // set view, refresh path, update zoom
+        _mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+    }
+	else {
+        _mapD3.zoomReset(duration);
 	}
 }
 
 // zoom and center to shape fill the entire window with padding
 mapD3.prototype.zoomToShape = function (d, duration) {
 	_mapD3.log("zoomToShape", d);
-	if (d == null)
-		_mapD3.zoomReset(duration);
-	else {
-		// resize by width and height
-		var proj = _mapD3.getDefaultProjection();
-		if (_mapD3.isGlobe()) proj = proj.clipAngle(180); // reset clip angle for projection
-		var b = _mapD3.d3path.projection(proj).bounds(d);
+    if (d) {
+        // resize by width and height
+        var proj = _mapD3.getDefaultProjection();
+        if (_mapD3.isGlobe()) proj = proj.clipAngle(180); // reset clip angle for projection
+        var b = _mapD3.d3path.projection(proj).bounds(d);
 		/*var bw = b[0][0] - b[1][0];
 		var bh = b[0][1] - b[1][1];
 		if (bw < 0) bw = -bw;
 		if (bh < 0) bh = -bh;
 		var mw = _mapD3.width / bw;
 		var mh = _mapD3.height / bh;*/
-		var zs = _mapD3.zoomGetForBounds(b);
+        var zs = _mapD3.zoomGetForBounds(b);
 
-		var toC = d3.geo.centroid(d);
-		var toT = _mapD3.defaultTranslate;
-		var toS = _mapD3.defaultScale * zs * _mapD3.zoomPad;
-		if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // double padding for globe
+        var toC = d3.geoCentroid(d);
+        var toT = _mapD3.defaultTranslate;
+        var toS = _mapD3.defaultScale * zs * _mapD3.zoomPad;
+        if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // double padding for globe
 
-		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
-	}
+        // set view, refresh path, update zoom
+        _mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+    } else {
+        _mapD3.zoomReset(duration);
+    }
 }
 
 // center map and zoom to a custom projection
 mapD3.prototype.zoomToCustom = function (d, duration) {
 	_mapD3.log("zoomToCustom", d);
 
-	if (d == null)
-		_mapD3.zoomReset(duration);
-	else {
-		var c = _mapD3.geo.getContinentName(d.id);
-		var b = _mapD3.geo.getContinentBounds(c);		
-		var zs = _mapD3.zoomGetForBounds(b);
+    if (d) {
+        var c = _mapD3.geo.getContinentName(d.id);
+        var b = _mapD3.geo.getContinentBounds(c);
+        var zs = _mapD3.zoomGetForBounds(b);
 
-		var toC = d3.geo.centroid(d);
-		var toT = _mapD3.defaultTranslate;
-		var toS = _mapD3.defaultScale / 4 * zs;
-		//if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // add padding
+        var toC = d3.geo.centroid(d);
+        var toT = _mapD3.defaultTranslate;
+        var toS = _mapD3.defaultScale / 4 * zs;
+        //if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // add padding
 
-		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+        // set view, refresh path, update zoom
+        _mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
 
 
 		/*
@@ -678,16 +668,16 @@ mapD3.prototype.zoomToCustom = function (d, duration) {
 		// set view, refresh path, update zoom
 		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
 		*/
-	}
+    } else {
+        _mapD3.zoomReset(duration);
+    }
 }
 
 // zoom and center bounds fill the entire window with padding
 mapD3.prototype.zoomToBounds = function (b, duration) {
 	_mapD3.log("zoomToBounds", b);
-	if (b == null)
-		_mapD3.zoomReset(duration);
-	else {
-		// resize by width and height
+    if (b) {
+        // resize by width and height
 		/*var bw = b[0][0] - b[1][0];
 		var bh = b[0][1] - b[1][1];
 		if (bw < 0) bw = -bw;
@@ -695,19 +685,22 @@ mapD3.prototype.zoomToBounds = function (b, duration) {
 		var mw = _mapD3.width / bw;
 		var mh = _mapD3.height / bh;
 		var zs = (mw < mh ? mw : mh);*/
-		var zs = _mapD3.zoomGetForBounds(b);
-		
-		var cx = (b[0][0] + b[1][0]) / 2;
-		var cy = (b[0][1] + b[1][1]) / 2;
+        var zs = _mapD3.zoomGetForBounds(b);
 
-		var toC = [cx, cy];
-		var toT = _mapD3.defaultTranslate;
-		var toS = _mapD3.defaultScale / 4 * zs;
-		if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // add padding
+        var cx = (b[0][0] + b[1][0]) / 2;
+        var cy = (b[0][1] + b[1][1]) / 2;
 
-		// set view, refresh path, update zoom
-		_mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
-	}
+        var toC = [cx, cy];
+        var toT = _mapD3.defaultTranslate;
+        var toS = _mapD3.defaultScale / 4 * zs;
+        if (_mapD3.isGlobe()) toS = toS * _mapD3.zoomPad; // add padding
+
+        // set view, refresh path, update zoom
+        _mapD3.refreshView(toT, toS, toC, (duration === undefined ? _mapD3.tweenTime : duration));
+    }
+    else {
+        _mapD3.zoomReset(duration);
+    }
 }
 
 // resets the zoom to the default for the current projection
@@ -793,13 +786,13 @@ mapD3.prototype.drawHexabin = function (places) {
 	for (var i = 0; i < places.length; i++) {
 		if (!_mapD3.isGlobe() || _mapD3.isPlaceVisible(places[i])) {
 			var p = _mapD3.d3proj([places[i].lng, places[i].lat]);
-			if (p == null) {
-				places[i].x = 0;
-				places[i].y = 0;
+			if (p) {
+                places[i].x = p[0]; //lon
+                places[i].y = p[1]; //lat
 			}
 			else {
-				places[i].x = p[0]; //lon
-				places[i].y = p[1]; //lat
+                places[i].x = 0;
+                places[i].y = 0;
 			}
 			hexes.push(places[i]);
 		}
@@ -896,7 +889,7 @@ mapD3.prototype.drawHexgrid = function (places) {
 
 		}
 		rows++;
-		if ((rows % 2) == 1) {
+		if ((rows % 2) === 1) {
 			dx = h / 2;
 		}
 		else {
@@ -940,7 +933,7 @@ mapD3.prototype.drawHexgrid = function (places) {
 		//.attr("stroke-width", "1px")
 		.attr("fill", "#f00")
 		.attr("opacity", function (d) {
-			if (d.length == 1)
+			if (d.length === 1)
 				return "0.1";
 			else {
 				return "1";
@@ -948,24 +941,24 @@ mapD3.prototype.drawHexgrid = function (places) {
 		})
 		.attr("fill-rule", "evenodd")
 		.style("fill", function (d) {
-			if (d.length == 1)
+			if (d.length === 1)
 				return "none";
 			else {
 				var c = color(d.length);
 				var i = Math.round(Number(c), 0);
 				//var h = String.fromCharCode(97 + i - 1);
 				var h = i.toString();
-				if (i == 10)
+				if (i === 10)
 					h = "a";
-				else if (i == 11)
+				else if (i === 11)
 					h = "b";
-				else if (i == 12)
+				else if (i === 12)
 					h = "c";
-				else if (i == 13)
+				else if (i === 13)
 					h = "d";
-				else if (i == 14)
+				else if (i === 14)
 					h = "e";
-				else if (i == 15)
+				else if (i === 15)
 					h = "f";
 				return "#00" + h;
 			}
@@ -998,7 +991,7 @@ mapD3.prototype.drawHexgrid = function (places) {
 
 
 mapD3.prototype.onDone = function () {
-}
+};
 
 
 
@@ -1017,21 +1010,21 @@ mapD3.prototype.isPlaceVisible = function (place) {
 
 // gets the specified feature given an id
 mapD3.prototype.getShapeByID = function (id) {
-	return _mapD3.features().filter(function (d) { return d.id == id; })[0];
+	return _mapD3.features().filter(function (d) { return d.id === id; })[0];
 }
 
 // sets the desired css style on the shape by id
 mapD3.prototype.selectShape = function (id) {
 	_mapD3.d3g.selectAll(".geoshape").each(function (d) {
 		var p = d3.select(this);
-		_mapD3.setCssStyle(p, "s", d.id == id);
+		_mapD3.setCssStyle(p, "s", d.id === id);
 	});
 }
 
 mapD3.prototype.hoverShape = function (id) {
 	_mapD3.d3g.selectAll(".geoshape").each(function (d) {
 		var p = d3.select(this);
-		_mapD3.setCssStyle(p, "h", d.id == id);
+		_mapD3.setCssStyle(p, "h", d.id === id);
 	});
 }
 
@@ -1055,7 +1048,7 @@ mapD3.prototype.setCssStyle = function (p, state, on) {
 mapD3.prototype.setCssStyleByID = function (id, state, on) {
 	_mapD3.d3g.selectAll(".geoshape").each(function (d) {
 		//console.log(d.id);
-		if (d.id == id) {
+		if (d.id === id) {
 			var p = d3.select(this);
 			_mapD3.setCssStyle(p, state, on);
 		}
@@ -1064,11 +1057,11 @@ mapD3.prototype.setCssStyleByID = function (id, state, on) {
 
 // styles geo shape objects when added to svg
 mapD3.prototype.onStyle = function (p, d) {
-	if (_mapD3.topo == "america" && mapD3.prototype.onStyleAmerica)
+	if (_mapD3.topo === "america" && mapD3.prototype.onStyleAmerica)
 		_mapD3.onStyleAmerica(p, d);
-	else if (_mapD3.topo == "oceania" && mapD3.prototype.onStyleOceania)
+	else if (_mapD3.topo === "oceania" && mapD3.prototype.onStyleOceania)
 		_mapD3.onStyleOceania(p, d);
-	else if (_mapD3.topo == "world")
+	else if (_mapD3.topo === "world")
 		_mapD3.onStyleCountry(p, d);
 	else if (mapD3.prototype.onStyleRegion)
 		_mapD3.onStyleRegion(p, d);
@@ -1097,13 +1090,13 @@ mapD3.prototype.onStyleAmerica = function (p, d) {
 // special styles for austrila and new zealand
 mapD3.prototype.onStyleOceania = function (p, d) {
 	var name = "";
-	if (d.id == "NZN")
+	if (d.id === "NZN")
 		name = "North Island";
-	else if (d.id == "NZS")
+	else if (d.id === "NZS")
 		name = "South Island";
-	else if (d.id == "AUZ")
+	else if (d.id === "AUZ")
 		name = "Australia";
-	else if (d.id == "AUA")
+	else if (d.id === "AUA")
 		name = "Tasmania";
 	p.classed("visited", true);
 	p.append("svg:title").text(name);
@@ -1113,6 +1106,11 @@ mapD3.prototype.onStyleOceania = function (p, d) {
 // --------------------------------------------------
 // Mouse Event Handlers
 // --------------------------------------------------
+
+// starts the time for zoom events
+mapD3.prototype.zoomStart = function () {
+    return _mapD3.clickStart(true);
+};
 
 // starts the time for click events
 mapD3.prototype.clickStart = function (start) {
@@ -1134,13 +1132,13 @@ mapD3.prototype.doClick = function (d) {
 	}
 
 	// hacky fix for default svg click bubble in firefox
-	if (!(d == null || d === undefined)) d3.event.stopPropagation();
+	if (!(d === null || d === undefined)) d3.event.stopPropagation();
 }
 
 // click event handler for points as circles
 mapD3.prototype.doClickCircle = function () {
 	var c = $(this).attr("country");
-	if (c != null && c != "") {
+	if (c) {
 		var d = _mapD3.getShapeByID(Number(c));
 		//console.log(d);
 		_mapD3.doClick(d);
@@ -1163,7 +1161,7 @@ mapD3.prototype.onMouseOver = function (d) {
 		_mapD3.onHoverHexabin(d);
 	} else if (id > 0 && id < 1000) {
 		var p = d3.select(this);
-		if (_mapD3.hoverPrev != null && p != _mapD3.hoverPrev) {
+		if (_mapD3.hoverPrev && p !== _mapD3.hoverPrev) {
 			_mapD3.setCssStyle(_mapD3.hoverPrev, "h", 0);
 		}
 		_mapD3.setCssStyle(p, "h", 1);
@@ -1208,116 +1206,115 @@ mapD3.prototype.onHoverCountry = function (id, on) {
 
 // has the start method been called yet
 mapD3.prototype.isStarted = function () {
-	return _mapD3.geo != null;
-}
+    return (_mapD3.geo !== undefined && _mapD3.geo !== null);
+};
 
 // easy way to check the topo file
 mapD3.prototype.isWorld = function () {
-	return _mapD3.proj == "world";
-}
+    return _mapD3.proj === "world";
+};
 
 // easy way to check the projection
 mapD3.prototype.isGlobe = function () {
-	return _mapD3.proj == "globe";
-}
+    return _mapD3.proj === "globe";
+};
 
 // easy way to check the projection
 mapD3.prototype.isAmerica = function () {
-	return _mapD3.topo == "america";
-}
+    return _mapD3.topo === "america";
+};
 
 // returns the safe topo name from topo or proj
 mapD3.prototype.getTopoName = function (proj) {
-	switch (proj) {
-		case "us":
-		case "840":
-		case "america":
-			return "america";
-		case "au":
-		case "36":
-		case "nz":
-		case "554":
-		case "oceania":
-			return "oceania";
-		default:
-			return "world";
-	}
-}
+    switch (proj) {
+        case "us":
+        case "840":
+        case "america":
+            return "america";
+        case "au":
+        case "36":
+        case "nz":
+        case "554":
+        case "oceania":
+            return "oceania";
+        default:
+            return "world";
+    }
+};
 
 // returns the safe projection name from map or proj
 mapD3.prototype.getProjName = function (map) {
-	switch (map.toString().toLowerCase()) {
-		case "world":
-		case "globe":
-		case "asia":
-		case "north":
-		case "south":
-		case "europe":
-		case "africa":
-		case "oceania":
-			return map.toLowerCase();
-		case "au":
-		case "36":
-			return "au";
-		case "nz":
-		case "554":
-			return "nz";
-		case "ru":
-		case "643":
-		case "russia":
-			return "ru";
-		case "us":
-		case "usa":
-		case "840":
-		case "america":
-		case "united states":
-			return "us";
-			break;
-		default:
-			return "world";
-	}
-}
+    switch (map.toString().toLowerCase()) {
+        case "world":
+        case "globe":
+        case "asia":
+        case "north":
+        case "south":
+        case "europe":
+        case "africa":
+        case "oceania":
+            return map.toLowerCase();
+        case "au":
+        case "36":
+            return "au";
+        case "nz":
+        case "554":
+            return "nz";
+        case "ru":
+        case "643":
+        case "russia":
+            return "ru";
+        case "us":
+        case "usa":
+        case "840":
+        case "america":
+        case "united states":
+            return "us";
+        default:
+            return "world";
+    }
+};
 
 // maps topo name to cache index
 mapD3.prototype.getCacheKey = function () {
-	switch (_mapD3.topo) {
-		case "america":
-			return 1;
-		case "oceania":
-			return 2;
-		default:
-			return 0;
-	}
-}
+    switch (_mapD3.topo) {
+        case "america":
+            return 1;
+        case "oceania":
+            return 2;
+        default:
+            return 0;
+    }
+};
 
 // gets/sets current shapes for topo in cache
 mapD3.prototype.data = function (set) {
-	if (set == null)
-		return _mapD3.cacheData[_mapD3.getCacheKey()];
-	else
-		_mapD3.cacheData[_mapD3.getCacheKey()] = set;
-}
+    if (set)
+        _mapD3.cacheData[_mapD3.getCacheKey()] = set;
+    else
+        return _mapD3.cacheData[_mapD3.getCacheKey()];
+};
 
 // gets/sets current shapes for topo in cache
 mapD3.prototype.shapes = function (set) {
-	if (set == null)
-		return _mapD3.cacheShapes[_mapD3.getCacheKey()];
-	else
-		_mapD3.cacheShapes[_mapD3.getCacheKey()] = set;
-}
+    if (set)
+        _mapD3.cacheShapes[_mapD3.getCacheKey()] = set;
+    else
+        return _mapD3.cacheShapes[_mapD3.getCacheKey()];
+};
 
 // gets/sets current features for topo in cache
 mapD3.prototype.features = function (set) {
-	if (set == null)
-		return _mapD3.cacheFeatures[_mapD3.getCacheKey()];
-	else
-		_mapD3.cacheFeatures[_mapD3.getCacheKey()] = set;
-}
+    if (set)
+        _mapD3.cacheFeatures[_mapD3.getCacheKey()] = set;
+    else
+        return _mapD3.cacheFeatures[_mapD3.getCacheKey()];
+};
 
 // shows an error message regardless of debug mode
 mapD3.prototype.error = function (msg) {
-	//console.log("mapD3.ERROR." + msg);
-}
+    //console.log("mapD3.ERROR." + msg);
+};
 
 // logs to console if debugging enabled
 mapD3.prototype.log = function (msg, obj) {
