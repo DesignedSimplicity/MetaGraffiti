@@ -39,6 +39,14 @@ namespace MetaGraffiti.Web.Demo
 				"~/Scripts/_js/where.js"
 				));
 
+            bundles.Add(new ScriptBundle("~/js/maps").Include(
+                "~/Scripts/_js/map/OpenLayers.js",
+                "~/Scripts/_js/map/d3.v4.min.js",
+                "~/Scripts/_js/map/d3-geo-projection.v2.min.js",
+                "~/Scripts/_js/map/d3.hexbin.v0.min.js",
+                "~/Scripts/_js/map/topojson.v2.min.js"
+                ));
+            /*
 			bundles.Add(new ScriptBundle("~/js/maps").Include(
 				"~/Scripts/_js/map/OpenLayers.js",
 				"~/Scripts/_js/map/d3.v3.min.js",
@@ -46,8 +54,8 @@ namespace MetaGraffiti.Web.Demo
 				"~/Scripts/_js/map/d3.hexbin.v0.min.js",
 				"~/Scripts/_js/map/topojson.v1.min.js"
 				));
-
-			bundles.Add(new StyleBundle("~/css/base").Include(
+            */
+            bundles.Add(new StyleBundle("~/css/base").Include(
 				"~/Content/_css/normalize.css",
 				"~/Content/_css/common.css",
 				"~/Content/_css/main.css",

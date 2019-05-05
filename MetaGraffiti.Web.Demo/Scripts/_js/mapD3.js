@@ -102,7 +102,8 @@ mapD3.prototype.start = function (geo) {
 	this.dragstart = null;
 	this.dragmouse = null;
 	this.dragpoint = null;
-	if (this.drag) {
+    if (this.drag) {
+        /*
 		this.dragcall = d3.behavior.drag()
 			.on("dragstart", function () { _mapD3.doDrag(true); })
 			.on("drag", function () { _mapD3.doDrag(false); })
@@ -111,11 +112,25 @@ mapD3.prototype.start = function (geo) {
 				//_mapD3.onDone();
 			});
 		this.d3map.call(this.dragcall); // this needs to be on the base object
+        */
+        this.dragcall = d3.drag()
+            .on("start", function () { _mapD3.doDrag(true); })
+            .on("drag", function () { _mapD3.doDrag(false); })
+            .on("end", function () {
+                _mapD3.done = true;
+                _mapD3.refreshZoom();
+            });
+        this.d3map.call(this.dragcall); // this needs to be on the base object
 	}
 
 	// configure zoom
-	this.zoomcall = d3.behavior.zoom().on("zoomstart", function () { _mapD3.clickStart(true); }).on("zoom", this.doZoom).on("zoomend", function () { _mapD3.refreshZoom(); _mapD3.refreshDone(); });
-	this.d3map.call(_mapD3.zoomcall).on("dblclick.zoom", null); // disable double click zoom
+	//this.zoomcall = d3.behavior.zoom().on("zoomstart", function () { _mapD3.clickStart(true); }).on("zoom", this.doZoom).on("zoomend", function () { _mapD3.refreshZoom(); _mapD3.refreshDone(); });
+    this.zoomcall = d3.zoom()
+        .on("start", this.zoomStart)
+        .on("zoom", this.doZoom)
+        .on("end", this.refreshZoom);
+
+	//this.d3map.call(_mapD3.zoomcall).on("dblclick.zoom", null); // disable double click zoom
 
 	// return self for chaining
 	return this;
@@ -234,8 +249,8 @@ mapD3.prototype.startProjection = function () {
 	var height = _mapD3.height;
 	var width = _mapD3.width;
 	var proj = _mapD3.getDefaultProjection(_mapD3.proj);
-	_mapD3.d3path = d3.geo.path().projection(proj);
-	_mapD3.d3proj = proj;
+    _mapD3.d3path = d3.geoPath().projection(proj);
+    _mapD3.d3proj = proj;
 
 	// get initial translate and scale
 	_mapD3.defaultTranslate = _mapD3.viewTranslate = proj.translate();
@@ -251,8 +266,8 @@ mapD3.prototype.startProjection = function () {
 	_mapD3.zoomMax = _mapD3.defaultScale;
 	_mapD3.zoomMin = _mapD3.defaultScale * 10;
 	//_mapD3.zoomcall.scaleExtent([_mapD3.zoomMin, _mapD3.zoomMax]);
-	_mapD3.zoomcall.scale(1);
-	_mapD3.zoomcall.translate([0, 0]);
+	//_mapD3.zoomcall.scale(1);
+	//_mapD3.zoomcall.translate([0, 0]);
 }
 
 // gets the default project for the current (or provided) projection name
@@ -269,7 +284,7 @@ mapD3.prototype.getDefaultProjection = function (proj) {
 	_mapD3.maxScale = height;
 	if (_mapD3.isGlobe()) {
 		_mapD3.maxScale = min / 2.1;
-		p = d3.geo.orthographic().scale(_mapD3.maxScale).clipAngle(90).rotate([40, 0]);
+		p = d3.geoOrthographic().scale(_mapD3.maxScale).clipAngle(90).rotate([40, 0]);
 	} else {
 		switch (proj) {
 			case "us":
@@ -338,16 +353,16 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
 		if (duration > 1) {
 			_mapD3.log("refreshView.tween", duration);
 			// create tween for the duration specified
-			d3.transition().duration(duration)
-				.tween("animate", function () {
-					var iT = d3.interpolate(_mapD3.d3proj.translate(), t);
-					var iC = d3.interpolate(_mapD3.center(), c);
-					var iS = d3.interpolate(_mapD3.d3proj.scale(), s);
-					return function (i) {
-						_mapD3.refreshView(iT(i), iS(i), iC(i));
-					};
-				})
-				.transition().each("end", function () { _mapD3.refreshDone(); });
+            d3.transition().duration(duration)
+                .tween("animate", function () {
+                    var iT = d3.interpolate(_mapD3.d3proj.translate(), t);
+                    var iC = d3.interpolate(_mapD3.center(), c);
+                    var iS = d3.interpolate(_mapD3.d3proj.scale(), s);
+                    return function (i) {
+                        _mapD3.refreshView(iT(i), iS(i), iC(i));
+                    };
+                })
+                .transition(); //.each("end", function () { _mapD3.refreshDone(); });
 		} else if (duration == 1) {
 			_mapD3.log("refreshView.fade");
 			// fade out, wait to refresh and then fade back in
@@ -364,8 +379,8 @@ mapD3.prototype.refreshView = function (t, s, c, duration) {
 			_mapD3.frameStart = new Date().getTime();
 
 			// update current projection
-			_mapD3.d3proj.translate(t)
-			_mapD3.center(c)
+            _mapD3.d3proj.translate(t);
+            _mapD3.center(c);
 			_mapD3.d3proj.scale(s);
 
 			// redraw objects on canvas
@@ -430,7 +445,7 @@ mapD3.prototype.refreshPath = function () {
 
 	// redraw shapes
 	window.onerror = null;
-	var path = d3.geo.path().projection(_mapD3.d3proj);
+    var path = d3.geoPath().projection(_mapD3.d3proj);
 	_mapD3.d3g.selectAll(".geoshape").attr("d", path);
 	_mapD3.d3path = path;
 
@@ -476,8 +491,8 @@ mapD3.prototype.refreshZoom = function () {
 	_mapD3.viewTranslate = proj.translate();
 
 	// update zoom event
-	_mapD3.zoomcall.scale(1);
-	_mapD3.zoomcall.translate([0, 0]);
+	//_mapD3.zoomcall.scale(1);
+	//_mapD3.zoomcall.translate([0, 0]);
 }
 
 
@@ -591,7 +606,7 @@ mapD3.prototype.zoomToLevel = function (d, duration) {
 	if (d == null)
 		_mapD3.zoomReset(duration);
 	else {
-		var toC = d3.geo.centroid(d);
+		var toC = d3.geoCentroid(d);
 		var toT = _mapD3.defaultTranslate;
 		var toS = _mapD3.defaultScale * _mapD3.zoomStep;
 

@@ -23,8 +23,8 @@ where.prototype.start = function (mode) {
 	mapD3.prototype.onHoverCountry = _where.showPlaceInfo;
 	mapD3.prototype.onHoverHexabin = _where.hoverHex;
 	mapD3.prototype.onClick = function (d) {
-		console.log("onClick");
-		console.log(d);
+		//console.log("onClick");
+		//console.log(d);
 		if (d != null && d.id > 0)
 			_where.selectCountry(d.id);
 		else

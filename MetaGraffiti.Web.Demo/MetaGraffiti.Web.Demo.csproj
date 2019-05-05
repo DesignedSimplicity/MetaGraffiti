@@ -212,13 +212,16 @@
     <Content Include="Scripts\_js\graffiti.js" />
     <Content Include="Scripts\_js\mapD3.js" />
     <Content Include="Scripts\_js\mapOL.js" />
+    <Content Include="Scripts\_js\map\d3-geo-projection.v2.min.js" />
     <Content Include="Scripts\_js\map\d3.geo.projection.v0.min.js" />
     <Content Include="Scripts\_js\map\d3.hexbin.v0.min.js" />
     <Content Include="Scripts\_js\map\d3.v3.min.js" />
+    <Content Include="Scripts\_js\map\d3.v4.min.js" />
     <Content Include="Scripts\_js\map\hex.js" />
     <Content Include="Scripts\_js\map\OpenLayers.js" />
     <Content Include="Scripts\_js\map\queue.v1.min.js" />
     <Content Include="Scripts\_js\map\topojson.v1.min.js" />
+    <Content Include="Scripts\_js\map\topojson.v2.min.js" />
     <Content Include="Scripts\_js\where.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
