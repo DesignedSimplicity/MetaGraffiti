@@ -5,9 +5,8 @@ namespace MetaGraffiti.Web.Admin
 {
 	public class AutoConfig
 	{
-		private const string _configRoot = @"C:\Code\";
-
-		public static string RootConfigUri { get { return _configRoot; } }
+		private const string _configRoot = @"D:\Drives\Dropbox\Data\CODE\";
+        public static string RootConfigUri { get { return _configRoot; } }
 
 		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Gpx\Tracks\");
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Gpx\Trails\");
