@@ -1,4 +1,4 @@
-﻿using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
@@ -111,6 +111,11 @@ namespace MetaGraffiti.Web.Admin.Models
 		}
 		public static HtmlString GetJson(IEnumerable<CartoPlaceInfo> places)
 		{
+			if (places == null)
+			{
+				return new HtmlString("[]");
+			}
+			
 			var json = "";
 			foreach (var place in places)
 			{
