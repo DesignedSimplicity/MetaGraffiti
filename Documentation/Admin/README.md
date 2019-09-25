@@ -15,9 +15,8 @@ The landing page provides direct access to each of the 4 major modules of the ad
 This is the primary workhorse of the application and leverages the data maintained in the additional modules to combine multiple GPX tracks, place data from Google Maps and manually entered metadata.
 
 #### Topo
-![Topo](./Topo.png)
-
 The initial screen shows a matrix of each country where GPX tracks have been imported from alongside a calendar.  These provide deep links to the Map and Report pages respectively.
+![Topo](./Topo.png)
 
 #### Map
 ![Topo Map](./Topo-Map.png)
