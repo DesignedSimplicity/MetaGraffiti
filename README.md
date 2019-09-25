@@ -15,7 +15,7 @@ A 4 dimensional space time framework to process geographic and topographic data 
 
 ## Inspiration
 **Geography** is a field of science devoted to the study of the lands, the features, the inhabitants, and the phenomena of Earth.
-* Seeks an understanding of the Earth and its human and natural complexities—not merely where objects are, but how they have changed and come to be.
+* Seeks an understanding of the Earth and its human and natural complexitiesâ€”not merely where objects are, but how they have changed and come to be.
 * Human geography deals with the study of people and their communities, cultures, economies and interactions with the environment by studying their relations with and across space and place.
 * Physical geography deals with the study of processes and patterns in the natural environment like the atmosphere, hydrosphere, biosphere, and geosphere.
 * Spatial analyses of natural and the human phenomena.
@@ -182,26 +182,9 @@ __Range, Space, District, Zone, Transit, Trek, Journey, Odessey, Excursion, Expe
 
 ## Utilities
 
-### GpxGraffiti
-**A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth**
+### [GpxGraffiti](./Documentation/GpxGraffiti/README.md)
 
-`GpxGraffiti	-merge		// Combines multiple gpx files into a single file - used for geotagging in Lightroom`
-
-`GpxGraffiti	-fix		// Removes bad data points from a gpx file - cleans up a file with a poor gps signal`
-
-`GpxGraffiti	-kml		// Converts a gpx file to a kml file - prepares file for visualizing in Google Earth`
-
-__Process__
-1. Read and parse GPX file to perform distance calculations
-2. Remove points with low signial quality or errors
-3. Resegment tracks and add metadata/notes
-4. Save data back into GPX file
-5. Convert to KML file
-6. Save as CSV file
-7. Save to database
-
-
-
+#### A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth
 
 
 
