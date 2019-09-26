@@ -1,4 +1,4 @@
-# MetaGraffiti Admin
+# MetaGraffiti Administration Portal
 
 ### Web based administration portal to manage geographical metadata
 
