@@ -1,13 +1,8 @@
 # MetaGraffiti
-A 4 dimensional space time framework to process geographic and topographic data for map building and visualizations
+A 4th dimensional framework space/time to process geographic and topographic data for map building and visualizations
 
 
-## KevinAndEarth
-* Glowbub - globe with glowing dots for places and hover info
-* Bushline - all gpx walk/bike trails on a detailed NZ map
-* Hex-a-gone - hexonagonal heat map for time spent at location
-* Know Where - Linked nodes for places/transits by foot/land/sea/air
-* Time Laps - auto sequenced map transitions 
+
 
 
 
@@ -182,9 +177,18 @@ __Range, Space, District, Zone, Transit, Trek, Journey, Odessey, Excursion, Expe
 
 ## Utilities
 
-### [GpxGraffiti](./Documentation/GpxGraffiti/README.md)
+### GpxGraffiti `.NET Framework, C#, WinForms`
 
-#### A simple windows application to pre-process gpx files to use in Adobe Lightroom and Google Earth
+#### A Windows application to batch process gpx files
+
+1. Read and parse GPX file to perform distance calculations
+2. Remove points with low signial quality or errors
+3. Resegment tracks and add metadata/notes
+4. Save data into a single GPX file
+5. Convert to unified KML file
+
+![GpxGraffiti](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/GpxGraffiti/Main.png)
+
 
 
 
