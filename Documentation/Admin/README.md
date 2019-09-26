@@ -75,19 +75,41 @@ Using the Google Maps API, every place documented in the system can be filtered 
 
 #### Places Report
 
-It is easy to toggle between the Map and Report modes while retaining selected filter criteria.
+It is easy to toggle between the Map and the detailed Report while retaining selected filter criteria.
 
 ![Carto Report](./Carto-Report.png)
 
+#### Places Search
+
+The search feature shows you matching places on a map with a direct link to the existing record, if it exists, or a Preview button to easily add a new record.
+
 ![Carto Search](./Carto-Search.png)
+
+#### Places Edit
+
+Editing an existing or adding a new Place to the repository allows you to modify or augment the metadata and easy change the bounding box and center location used for map view position.  A button to search Wikipedia allows for easy access to additional information that may be needed to complete the form.
 
 ![Carto Edit](./Carto-Edit.png)
 
 ### Ortho
 
+The primary source of data comes from the Ortho module which crawls a local directory to discover GPX track files and text files that contain a list of places visited in a given year.
+
+Linking into either module shows a report of the data and the import status for the record.  The button allows the cache to be reset if the file system has changed since it was loaded and parsed.
+
 ![Ortho](./Ortho.png)
-![Ortho Places](./Ortho-Places.png)
+
+#### Tracks Source
+
+Every GPX track source is loaded and parsed to display a high-level overview to make identification easy.  Time and distance statistics are calculated along-side a list of inventoried Places that the track passes through.  This data feeds the Topo module.
+
 ![Ortho Tracks](./Ortho-Tracks.png)
+
+#### Places Source
+
+A list of places visited each year is maintained in a simple text file which is loaded, parsed and matched to existing places in the repository.  This makes it easy to identify and import any new places not yet inventoried. This data feeds the Carto module.
+
+![Ortho Places](./Ortho-Places.png)
 
 ### Geo
 
