@@ -30,7 +30,7 @@ The data for these pages is loaded from a directory of self-contained GPX files 
 
 ### Tracks
 
-Trails files are created in a workflow process which allows one or more GPX files to be combined or split to create a multi-segmented file with additional metadata.
+Trails files are created in a workflow process which allows one or more GPX tracks to be combined to create a multi-segmented file with additional metadata.
 
 #### Track Preview
 The first step involves selecting a GPX track file from the Ortho Track Import page and extracting the data into the application cache for manipulation.
@@ -43,7 +43,7 @@ Once extracted, the track data can be viewed in extensive detail and manipulated
 ![Topo Track Modify](./Topo-Track-Modify.png)
 
 #### Track Manage
-This process can be repeated for multiple tracks until the entire multi-segment trail has been assembled.
+This process can be repeated for additional tracks until the entire multi-segment trail has been assembled.
 
 ![Topo Track Manage](./Topo-Track-Manage.png)
 
@@ -59,11 +59,29 @@ Once imported, the trail is easy recalled and all metadata is displayed alongsid
 
 ### Carto
 
+This module maintains the list of geological places and their additional metadata.  Places are added using data from the Google Places API and stored in an Excel file which allows for easy batch editing or other manipulation.
+
+Each place is associated with their own geographic bounds and center point which is used to determine if a track starts, ends or passes through it.  Places also have associated types and additional metadata fields.
+
+The starting page for the Carto module includes multiple starting points for adding new places or querying existing places.  Direct links to the Map and Report pages allow for streamlined navigation.
+
 ![Carto](./Carto.png)
-![Carto Edit](./Carto-Edit.png)
+
+#### Places Map
+
+Using the Google Maps API, every place documented in the system can be filtered and displayed.
+
 ![Carto Map](./Carto-Map.png)
+
+#### Places Report
+
+It is easy to toggle between the Map and Report modes while retaining selected filter criteria.
+
 ![Carto Report](./Carto-Report.png)
+
 ![Carto Search](./Carto-Search.png)
+
+![Carto Edit](./Carto-Edit.png)
 
 ### Ortho
 
