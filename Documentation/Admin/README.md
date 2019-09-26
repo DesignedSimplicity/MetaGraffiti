@@ -113,7 +113,19 @@ A list of places visited each year is maintained in a simple text file which is 
 
 ### Geo
 
+The core module is Geo and based on a previous framework called GeoGraffiti used to build my [Panograffiti.com](https://panograffiti.com) website.  Here the standard reference data of Timezones, Countries and Regions can be viewed and maintained.
+
+Timezone data is used to adjust the GPX track recordings from UTC to local time.  Country and Region data are both stored in the Places repository so that they can be maintained easily and utilize the same core functionality.
+
 ![Geo](./Geo.png)
+
+#### Geo Timezones
+
 ![Geo Timezones](./Geo-Timezones.png)
+
+#### Geo Countries
+
 ![Geo Countries](./Geo-Countries.png)
+
+#### Geo Regions
 ![Geo Regions](./Geo-Regions.png)
