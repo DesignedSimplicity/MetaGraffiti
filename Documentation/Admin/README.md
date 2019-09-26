@@ -1,4 +1,4 @@
-# MetaGraffiti.Web.Admin
+# MetaGraffiti Admin
 
 ### Web based administration portal to manage geographical metadata
 
@@ -6,13 +6,13 @@ The purpose of this application is to consolidate geographical data from multipl
 
 The primary objective was to allow me to inventory the numerous hiking trips I have completed in New Zealand in order to tabulate statistics about elevation, distance, time, etc.  Many of the GPX tracks recorded on these adventures have some poor-quality data points which throw off the calculations and look bad when rendered on a map.
 
-## MetaGraffiti
+## Admin
 
 The landing page provides direct access to each of the 4 major modules of the admin portal.  Each module depends heavily on the data managed by the layer below.
 
 ![Admin](./Admin.png)
 
-## TopoGraffiti
+## Topo
 
 This is the primary workhorse of the application and leverages the data maintained in the additional modules to combine multiple GPX tracks, place data from Google Maps and manually entered metadata.
 
@@ -56,7 +56,6 @@ Now the trail is ready to be tagged, have meta-data added and finally imported i
 Once imported, the trail is easy recalled and all metadata is displayed alongside the map.
 
 ![Topo Track Trail](./Topo-Track-Trail.png)
-
 
 ### Carto
 
