@@ -1,37 +1,12 @@
-# MetaGraffiti
-A 4th dimensional framework space/time to process geographic and topographic data for map building and visualizations
+# MetaGraffiti Framework
 
-
-
-
-
-
-
+### A 4th dimensional space/time framework to process geographic and topographic data for map building and visualizations
 
 ## Inspiration
-**Geography** is a field of science devoted to the study of the lands, the features, the inhabitants, and the phenomena of Earth.
-* Seeks an understanding of the Earth and its human and natural complexities—not merely where objects are, but how they have changed and come to be.
-* Human geography deals with the study of people and their communities, cultures, economies and interactions with the environment by studying their relations with and across space and place.
-* Physical geography deals with the study of processes and patterns in the natural environment like the atmosphere, hydrosphere, biosphere, and geosphere.
-* Spatial analyses of natural and the human phenomena.
-* Area studies of places and regions.
-* Studies of human-land relationships.
-* Earth Sciences.
 
-**Topography** is the study of the shape and features of the surface of the Earth
-* The recording of relief or terrain, the three-dimensional quality of the surface, and the identification of specific landforms. 
-* Generation of elevation data in digital form. 
-* Graphic representation of the landform on a map by a variety of techniques, including contour lines, hypsometric tints, and relief shading.
+## Framework
 
-**Cartography** is the study and practice of making maps. 
-* Set the map's agenda and select traits of the object to be mapped. This is the concern of map editing. Traits may be physical, such as roads or land masses, or may be abstract, such as toponyms or political boundaries.
-* Represent the terrain of the mapped object on flat media. This is the concern of map projections.
-* Eliminate characteristics of the mapped object that are not relevant to the map's purpose. This is the concern of generalization.
-* Reduce the complexity of the characteristics that will be mapped. This is also the concern of generalization.
-* Orchestrate the elements of the map to best convey its message to its audience. This is the concern of map design.
-
-**Orthography** is a set of conventions for writing a language
-* Includes norms of spelling, hyphenation, capitalization, word breaks, emphasis, and punctuation.
+## Applications
 
 ## Releases
 
@@ -174,35 +149,3 @@ __Range, Space, District, Zone, Transit, Trek, Journey, Odessey, Excursion, Expe
 
 
 
-
-## Utilities
-
-### GpxGraffiti `.NET Framework, C#, WinForms`
-
-#### A Windows application to batch process gpx files
-
-1. Read and parse GPX file to perform distance calculations
-2. Remove points with low signial quality or errors
-3. Resegment tracks and add metadata/notes
-4. Save data into a single GPX file
-5. Convert to unified KML file
-
-![GpxGraffiti](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/GpxGraffiti/Main.png)
-
-
-
-
-
-
-## Ideas
-
-*Chronography: an arrangement of past events
-*Chorography: The study of provinces, regions, cities, etc., as opposed to larger-scale geography.
-
-*Biography
-*Iconography: the visual images and symbols used in a work of art or the study or interpretation of these.
-
-Lexicography: The art or craft of compiling, writing and editing dictionaries.
-Glossography: The writing of glossaries or glosses; The study of ancient words or languages.
-Diplography: double writing; the writing of something twice or in two forms.
-Ideography: a branch of lexicography, specifically creating ideographic or conceptual dictionaries.
