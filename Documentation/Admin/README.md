@@ -10,7 +10,7 @@ The primary objective was to allow me to inventory the numerous hiking trips I h
 
 The landing page provides direct access to each of the 4 major modules of the admin portal.  Each module depends heavily on the data managed by the layer below.
 
-![Admin](./Admin.png)
+![Admin](./Admin.png?raw=true)
 
 ## Topo
 
