@@ -1,4 +1,4 @@
-![MetaGraffiti](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/MetaGraffiti.png)
+[![MetaGraffiti Framework](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/MetaGraffiti.png)](https://github.com/DesignedSimplicity/MetaGraffiti/wiki)
 
 ## 4th dimensional repository to record moments of space and time
 
