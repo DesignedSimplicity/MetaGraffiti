@@ -1,8 +1,6 @@
-# MetaGraffiti Framework
-
-## 4th dimensional repository to record moments of space and time
-
 ![MetaGraffiti](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/MetaGraffiti.png)
+
+# 4th dimensional repository to record moments of space and time
 
 **A software development framework to process geographic and topographic data for map building and visualizations**
 
