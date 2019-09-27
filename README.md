@@ -12,7 +12,11 @@
 
 ## Demonstration
 
+### [PanoGraffiti.com](https://Panograffiti.com) demonstrates some of core functionality provided by the framework
+
 [![Panograffiti Website](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Panograffiti-2015.png)](https://Panograffiti.com)
+
+### [The Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
 
 ## Inspiration
 
