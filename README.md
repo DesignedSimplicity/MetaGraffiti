@@ -2,7 +2,7 @@
 
 ## 4th dimensional repository to record moments of space and time
 
-**MetaGraffiti is a software development framework to process geographic and topographic data for map building and visualizations**
+**A .NET software development framework to process geographic and topographic data for map building and visualizations**
 
 ## Implementation
 
