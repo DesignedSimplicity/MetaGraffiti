@@ -9,8 +9,8 @@
 ## Documentation
 
 ### ![Read an overview of the Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
-### ![Jump into the wiki for a technical description](https://github.com/DesignedSimplicity/MetaGraffiti/wiki)
-### ![Check the project backlog for features in development](https://github.com/DesignedSimplicity/MetaGraffiti/projects/2)
+### ![Jump into the wiki for a detailed technical description](https://github.com/DesignedSimplicity/MetaGraffiti/wiki)
+### ![Check the project backlog for new features in development](https://github.com/DesignedSimplicity/MetaGraffiti/projects/2)
 
 ## Inspiration
 
