@@ -4,15 +4,15 @@
 
 **A .NET software development framework to process geographic and topographic data for map visualizations**
 
-## Demonstration
-
-# [![Panograffiti Website](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Panograffiti-2015.png)](https://Panograffiti.com)
-
 ## Documentation
 
 ### ![See an overview of the Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
 ### ![Jump into the wiki for a detailed technical description](https://github.com/DesignedSimplicity/MetaGraffiti/wiki)
 ### ![Check the project backlog for new features in development](https://github.com/DesignedSimplicity/MetaGraffiti/projects/2)
+
+## Demonstration
+
+[![Panograffiti Website](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Panograffiti-2015.png)](https://Panograffiti.com)
 
 ## Inspiration
 
