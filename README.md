@@ -16,7 +16,9 @@
 
 [![Panograffiti Website](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Panograffiti-2015.png)](https://Panograffiti.com)
 
-### [Administration Portal Documentation](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md) provides an overview of the backend functionality and the enhancements to support GPX tracks
+### [Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md) documentation provides an overview of the backend functionality and the enhancements to support GPX tracks
+
+[![Administration Portal](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Admin/Admin.png)](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
 
 ## Inspiration
 
