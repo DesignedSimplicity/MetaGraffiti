@@ -4,17 +4,19 @@
 
 **A .NET software development framework to process geographic and topographic data for map visualizations**
 
-## Implementation
+## Demonstration
+
+# [![Panograffiti Website](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/Panograffiti-2015.png)](https://Panograffiti.com)
 
 ## Documentation
 
-### ![Read an overview of the Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
+### ![See an overview of the Administration Portal](https://github.com/DesignedSimplicity/MetaGraffiti/blob/master/Documentation/Admin/README.md)
 ### ![Jump into the wiki for a detailed technical description](https://github.com/DesignedSimplicity/MetaGraffiti/wiki)
 ### ![Check the project backlog for new features in development](https://github.com/DesignedSimplicity/MetaGraffiti/projects/2)
 
 ## Inspiration
 
-The inspiration for MetaGraffiti originated from a travel blog I started when I set off on a trip to circumnavigate the planet in 2010.  I wanted to keep track of the places I visited, and more importantly, geotag my photos so they could be displayed on a map and show a progress of my adventures.
+Genesis of and motivation for the development of MetaGraffiti originated from a travel blog I started when I set off on a trip to circumnavigate the planet in 2010.  I wanted to keep track of the places I visited, and more importantly, geotag my photos so they could be displayed on a map and show a progress of my adventures.
 
 ![KevinAndEarth.com Circa 2010](https://raw.githubusercontent.com/DesignedSimplicity/MetaGraffiti/master/Documentation/KevinAndEarth-2010.png)
 
