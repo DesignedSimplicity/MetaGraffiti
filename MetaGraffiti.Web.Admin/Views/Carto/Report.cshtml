@@ -37,6 +37,7 @@
 		<tr>
 			<th class="text-center">#</th>
 			<th>Type</th>
+			<th>Slug</th>
 			<th>Tags</th>
 			<th>Name</th>
 			<th>Display As <small>Local Name</small></th>
@@ -55,6 +56,9 @@
 					<td class="text-center h4">@(++count)</td>
 					<td class="text-nowrap">
 						<a class="carto-color" href="@CartoViewModel.GetReportUrl(place.PlaceType)">@SvgHelper.GetPlaceTypeIcon(place.PlaceType) @place.PlaceType</a>
+					</td>
+					<td>
+						@place.PlaceSlug
 					</td>
 					<td>
 						@place.PlaceTags

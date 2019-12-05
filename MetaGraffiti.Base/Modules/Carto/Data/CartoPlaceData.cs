@@ -10,9 +10,10 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 		public string PlaceKey { get; set; }
 		public string PlaceType { get; set; }
 		public string PlaceTags { get; set; } // TODO: CARTO: RC2 implement
+		public string PlaceSlug { get; set; }   // unqiue human readable abberviation; ex: Airport code
 
 		public string GoogleKey { get; set; } // TODO: REFACTOR: change this to GoogleID
-		public string IconKey { get; set; } 
+		public string IconKey { get; set; }
 
 		public string Name { get; set; }
 		public string LocalName { get; set; }

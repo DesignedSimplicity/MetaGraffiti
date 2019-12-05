@@ -20,6 +20,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Info
 		private string _raw;
 
 		public string Key => _data.PlaceKey;
+		public string PlaceSlug => _data.PlaceSlug;
 
 		public string GoogleKey => _data.GoogleKey;
 		public string PlaceType => _data.PlaceType;

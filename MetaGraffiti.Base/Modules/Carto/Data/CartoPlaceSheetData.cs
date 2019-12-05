@@ -9,7 +9,7 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
     public class CartoPlaceSheetData
     {
 		private static string[] _columns = {
-			"PlaceKey", "PlaceType", "PlaceTags",
+			"PlaceKey", "PlaceType", "PlaceSlug", "PlaceTags",
 			"GoogleKey", "IconKey", 
 			"Timezone", "Country", "Region",
 
@@ -68,9 +68,10 @@ namespace MetaGraffiti.Base.Modules.Carto.Data
 				{
 					place.PlaceType = ExtractText(row, "PlaceType");
 					place.PlaceTags = ExtractText(row, "PlaceTags");
+					place.PlaceSlug = ExtractText(row, "PlaceSlug");
 
 					place.GoogleKey = ExtractText(row, "GoogleKey");
-					place.IconKey = ExtractText(row, "IconKey");
+					place.IconKey = ExtractText(row, "IconKey");					
 
 					place.Timezone = ExtractText(row, "Timezone");
 					place.Country = ExtractText(row, "Country");

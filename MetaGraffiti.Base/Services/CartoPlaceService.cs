@@ -468,6 +468,7 @@ namespace MetaGraffiti.Base.Services
 					sheet.Cells[row, cell++].Value = "PlaceID";
 					sheet.Cells[row, cell++].Value = "PlaceKey";
 					sheet.Cells[row, cell++].Value = "PlaceType";
+					sheet.Cells[row, cell++].Value = "PlaceSlug";
 					sheet.Cells[row, cell++].Value = "PlaceTags";
 					sheet.Cells[row, cell++].Value = "GoogleKey";
 
@@ -513,6 +514,7 @@ namespace MetaGraffiti.Base.Services
 						sheet.Cells[row, cell++].Value = id++;
 						sheet.Cells[row, cell++].Value = place.Key;
 						sheet.Cells[row, cell++].Value = place.PlaceType;
+						sheet.Cells[row, cell++].Value = place.PlaceSlug;
 						sheet.Cells[row, cell++].Value = place.PlaceTags;
 						sheet.Cells[row, cell++].Value = place.GoogleKey;
 
