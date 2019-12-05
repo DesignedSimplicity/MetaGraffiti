@@ -1,0 +1,21 @@
+{
+    "name": "metagraffiti-web-client",
+    "version": "1.0.0",
+    "devDependencies": {
+        "@types/d3": "^5.7.2",
+        "del": "5.1.0",
+        "gulp": "4.0.2",
+        "live-server": "^1.2.1",
+        "source-map-loader": "^0.2.4"
+    },
+    "dependencies": {
+        "@types/d3": "^5.7.2",
+        "@types/core-js": "^2.5.2",
+        "core-js": "^3.4.5",
+        "d3": "^5.14.2",
+        "ts-polyfill": "^3.5.3"
+    },
+    "scripts": {
+        "serve": "live-server --watch=*.html,scripts/js/*.js,styles/*.css"
+    }
+}

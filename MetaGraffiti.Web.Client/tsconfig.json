@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "outDir": "./scripts/js",
+        "noEmitOnError": true,
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "module": "es6",
+        "target": "es6"
+    },
+    "include": [
+        "./scripts/ts/"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "compileOnSave": true
+}
