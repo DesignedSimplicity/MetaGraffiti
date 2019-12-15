@@ -185,7 +185,7 @@
 		<div class="row h5">
 			<div class="col-sm-2">Country:</div>
 			<div class="col-sm-8">
-				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@track.Trail.Country.Name</a>
+				<a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country)">@(track.Trail.Country?.Name)</a>
 				@if (track.Trail.Region != null)
 				{
 					<span> \ <a class="topo-color" href="@TopoViewModel.GetCountryUrl(track.Trail.Country.Name, track.Trail.Region.RegionName)">@track.Trail.Region.RegionName</a></span>
