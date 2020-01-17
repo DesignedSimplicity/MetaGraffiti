@@ -39,6 +39,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTrailUrl(string key) { return $"/trail/display/{key}/"; }
 		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 
+		public static string GetRenderUrl(ITopoTrailInfo trail) { return $"/trail/render/{trail.Key}/"; }
 		public static string GetUpdateUrl(ITopoTrailInfo trail) { return $"/trail/update/{trail.Key}/"; }
 		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}/"; }
 		public static string GetModifyUrl(ITopoTrailInfo trail, MergeConfirmTypes confirm) { return $"/trail/modify/{trail.Key}/?confirm={confirm}"; }

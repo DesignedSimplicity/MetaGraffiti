@@ -309,6 +309,16 @@
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
+    <Content Include="Scripts\leaflet\images\layers-2x.png" />
+    <Content Include="Scripts\leaflet\images\layers.png" />
+    <Content Include="Scripts\leaflet\images\marker-icon-2x.png" />
+    <Content Include="Scripts\leaflet\images\marker-icon.png" />
+    <Content Include="Scripts\leaflet\images\marker-shadow.png" />
+    <Content Include="Scripts\leaflet\leaflet-providers.js" />
+    <Content Include="Scripts\leaflet\leaflet-src.esm.js" />
+    <Content Include="Scripts\leaflet\leaflet-src.js" />
+    <Content Include="Scripts\leaflet\leaflet.css" />
+    <Content Include="Scripts\leaflet\leaflet.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
@@ -337,6 +347,7 @@
     <Compile Include="Controllers\Api\RegionsController.cs" />
     <Compile Include="Controllers\Api\TimezonesController.cs" />
     <Compile Include="Controllers\CartoController.cs" />
+    <Compile Include="Controllers\Data\FileController.cs" />
     <Compile Include="Controllers\Data\JsonController.cs" />
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -426,8 +437,13 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Scripts\leaflet\leaflet-src.esm.js.map" />
+    <Content Include="Scripts\leaflet\leaflet-src.js.map" />
+    <Content Include="Scripts\leaflet\leaflet.js.map" />
     <None Include="Views\Carto\_Filters.cshtml" />
     <Content Include="Views\Place\Display.cshtml" />
+    <Content Include="Views\Trail\Render.cshtml" />
+    <Content Include="Views\Trail\_TrailLeaf.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

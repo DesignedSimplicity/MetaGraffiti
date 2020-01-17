@@ -57,34 +57,35 @@
             this.cmdSaveKml});
 			this.toolbar.Location = new System.Drawing.Point(0, 0);
 			this.toolbar.Name = "toolbar";
-			this.toolbar.Size = new System.Drawing.Size(702, 25);
+			this.toolbar.Size = new System.Drawing.Size(702, 26);
 			this.toolbar.TabIndex = 0;
 			this.toolbar.Text = "toolStrip1";
 			// 
 			// lblPath
 			// 
 			this.lblPath.Name = "lblPath";
-			this.lblPath.Size = new System.Drawing.Size(40, 22);
+			this.lblPath.Size = new System.Drawing.Size(44, 23);
 			this.lblPath.Text = "Path: ";
 			// 
 			// txtPath
 			// 
+			this.txtPath.Font = new System.Drawing.Font("Segoe UI", 10.5F);
 			this.txtPath.Name = "txtPath";
-			this.txtPath.Size = new System.Drawing.Size(200, 25);
+			this.txtPath.Size = new System.Drawing.Size(200, 26);
 			// 
 			// cmdPath
 			// 
 			this.cmdPath.Image = ((System.Drawing.Image)(resources.GetObject("cmdPath.Image")));
 			this.cmdPath.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cmdPath.Name = "cmdPath";
-			this.cmdPath.Size = new System.Drawing.Size(57, 22);
+			this.cmdPath.Size = new System.Drawing.Size(59, 23);
 			this.cmdPath.Text = "Load";
 			this.cmdPath.Click += new System.EventHandler(this.cmdPath_Click);
 			// 
 			// separator1
 			// 
 			this.separator1.Name = "separator1";
-			this.separator1.Size = new System.Drawing.Size(6, 25);
+			this.separator1.Size = new System.Drawing.Size(6, 26);
 			// 
 			// cmdFix
 			// 
@@ -94,28 +95,29 @@
 			this.cmdFix.Image = ((System.Drawing.Image)(resources.GetObject("cmdFix.Image")));
 			this.cmdFix.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cmdFix.Name = "cmdFix";
-			this.cmdFix.Size = new System.Drawing.Size(43, 22);
+			this.cmdFix.Size = new System.Drawing.Size(45, 23);
 			this.cmdFix.Text = "Fix";
 			// 
 			// separator2
 			// 
 			this.separator2.Name = "separator2";
-			this.separator2.Size = new System.Drawing.Size(6, 25);
+			this.separator2.Size = new System.Drawing.Size(6, 26);
 			// 
 			// cmdSaveGpx
 			// 
 			this.cmdSaveGpx.Image = ((System.Drawing.Image)(resources.GetObject("cmdSaveGpx.Image")));
 			this.cmdSaveGpx.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cmdSaveGpx.Name = "cmdSaveGpx";
-			this.cmdSaveGpx.Size = new System.Drawing.Size(83, 22);
+			this.cmdSaveGpx.Size = new System.Drawing.Size(87, 23);
 			this.cmdSaveGpx.Text = "Save GPX";
+			this.cmdSaveGpx.Click += new System.EventHandler(this.cmdSaveGpx_Click);
 			// 
 			// cmdSaveKml
 			// 
 			this.cmdSaveKml.Image = ((System.Drawing.Image)(resources.GetObject("cmdSaveKml.Image")));
 			this.cmdSaveKml.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cmdSaveKml.Name = "cmdSaveKml";
-			this.cmdSaveKml.Size = new System.Drawing.Size(85, 22);
+			this.cmdSaveKml.Size = new System.Drawing.Size(89, 23);
 			this.cmdSaveKml.Text = "Save KML";
 			// 
 			// listFiles

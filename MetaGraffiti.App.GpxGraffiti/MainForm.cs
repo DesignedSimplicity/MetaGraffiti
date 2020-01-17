@@ -90,5 +90,10 @@ namespace MetaGraffiti.App.GpxGraffiti
 			if (listFiles.Items.Count == 0)
 				MessageBox.Show("Path does not contain gpx files", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
+
+		private void cmdSaveGpx_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }

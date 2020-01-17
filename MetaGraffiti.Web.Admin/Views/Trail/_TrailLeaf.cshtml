@@ -1,0 +1,95 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+<link href="~/Scripts/leaflet/leaflet.css" rel="stylesheet" />
+<link href="~/Scripts/leaflet/awesome-markers/leaflet.awesome-markers.css" rel="stylesheet" />
+<style>
+	.awesome-marker i {
+        font-size: 20px;
+        margin-top: 16px;
+		margin-left: 8px;
+    }
+</style>
+<script src="~/Scripts/leaflet/leaflet.js"></script>
+<script src="~/Scripts/leaflet/awesome-markers/leaflet.awesome-markers.js"></script>
+<script src="~/Scripts/leaflet/gpx/gpx.js"></script>
+<script>
+	var _tracks = @JsonHelper.GetJson(Model.Tracks);
+	var _places = @JsonHelper.GetJson(Model.Places);
+	var _bounds = null;
+	var _start = null;
+	var _finish = null;
+	var _graphs = null;
+
+	$(document).ready(function () {
+		// init defaults
+		var startMarker = L.AwesomeMarkers.icon({
+			markerColor: "green",
+			prefix: "fa",
+			icon: "play",
+		});
+		var endMarker = L.AwesomeMarkers.icon({
+			markerColor: "red",
+			prefix: "fa",
+			icon: "flag-checkered",
+		});
+
+		// init leaflet
+		var leaflet = L.map("map", {});
+
+		// add base tile layer
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
+		}).addTo(leaflet);
+
+		// load and show gpx file
+		var uri = "/file/gpx/@(Model.Trail.Key)";
+		var gpx = new L.GPX(uri,
+			{
+				async: true,
+				marker_options: {
+					startIcon: null, //startMarker,
+					endIcon: null, //endMarker,
+					/*
+					startIconUrl: "/Scripts/leaflet/gpx/pin-icon-start.png",
+					endIconUrl: "/Scripts/leaflet/gpx/pin-icon-end.png",
+					shadowUrl: "" //"/Scripts/leaflet/gpx/pin-shadow.png"
+					*/
+				}
+			}).on("loaded", function (e) {
+			leaflet.fitBounds(e.target.getBounds());
+		}).addTo(leaflet);
+
+		/*
+		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+				'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+			id: 'mapbox/streets-v11'
+		}).addTo(leaflet);
+		*/
+
+
+		/*
+		initMap();
+
+		// add places if exists
+		initCartoPlaces(_places, '');
+		drawCartoPlaces(1, false);
+
+		// do topo map
+		_bounds = new google.maps.LatLngBounds();
+		for (index = 0; index < _tracks.length; index++) {
+			var color = getMapColor(index);
+			showTrack(_tracks[index].points, color);
+
+			var points = _tracks[index].points;
+			for (var i = 0; i < points.length; i++) {
+				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+			}
+		}
+		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
+		*/
+	});
+</script>

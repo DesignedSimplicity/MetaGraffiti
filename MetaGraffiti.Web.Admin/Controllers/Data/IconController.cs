@@ -16,7 +16,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
         public ActionResult PlaceType(string id)
         {
-			var root = @"C:\Code\KnE\Icons\Places\";
+			var root = AutoConfig.IconSourceUri;
 			var path = Path.Combine(root, id + ".svg");
 			if (!System.IO.File.Exists(path)) path = Path.Combine(root, "place.svg");
 

@@ -10,6 +10,7 @@ namespace MetaGraffiti.Web.Admin
 
 		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Gpx\Tracks\");
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Gpx\Trails\");
+		public static string IconSourceUri = Path.Combine(_configRoot, @"KnE\Icons\Places\");
 
 		public static string CartoPlaceData = Path.Combine(RootConfigUri, @"KnE\CartoPlaceData.xlsx");
 		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"KnE\ConsolidatedTrips.xlsx");

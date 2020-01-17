@@ -63,6 +63,22 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		}
 
 		/// <summary>
+		/// Renders a trail with detailed information
+		/// </summary>
+		public ActionResult Render(string id)
+		{
+			var model = InitModel(id);
+
+			// load places
+			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest()
+			{
+				Country = model.Trail.Country.ISO2,
+			});
+
+			return View(model);
+		}
+
+		/// <summary>
 		/// Displays trail profile for editing
 		/// </summary>
 		[HttpGet]

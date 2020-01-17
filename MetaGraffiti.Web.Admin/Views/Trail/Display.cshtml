@@ -23,6 +23,7 @@
 				<div class="h2">@trail.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
+				<a class="btn btn-primary" target="_blank" href="@TrailViewModel.GetRenderUrl(trail)">@IconHelper.RenderIcon Render</a>
 				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit Trail</a>
 				<div class="btn-group">
 					@Html.Partial("Buttons/ResetView")

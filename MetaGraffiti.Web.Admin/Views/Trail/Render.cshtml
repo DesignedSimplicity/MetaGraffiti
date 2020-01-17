@@ -1,0 +1,13 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@{
+	var trail = Model.Trail;
+}
+
+<div id="map-container-full">
+	<div id="map">
+	</div>
+</div>
+
+@Html.Partial("_TrailLeaf")
