@@ -56,7 +56,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString BoundsIcon { get { return GetFontAwesomeIcon("fas fa-expand"); } }
 		public static HtmlString StartIcon { get { return GetFontAwesomeIcon("fas fa-sign-out-alt"); } }
 		public static HtmlString FinishIcon { get { return GetFontAwesomeIcon("fas fa-sign-in-alt"); } }
-		
+		public static HtmlString ElevationIcon { get { return GetFontAwesomeIcon("fas fa-chart-area"); } }
+
 
 		// ==================================================
 		// Entity Types
@@ -68,6 +69,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Namespace Types
+		public static HtmlString BioIcon { get { return GetFontAwesomeIcon("fas fa-heartbeat"); } }
 		public static HtmlString GeoIcon { get { return GetFontAwesomeIcon("fas fa-globe"); } }
 		public static HtmlString TopoIcon { get { return GetFontAwesomeIcon("fas fa-code-branch"); } }
 		public static HtmlString CartoIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }

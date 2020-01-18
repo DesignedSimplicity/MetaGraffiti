@@ -5,6 +5,7 @@
 
 @{
 	var trail = Model.Trail;
+	var stats = trail.Stats;
 }
 
 <div id="map-container">
@@ -20,11 +21,11 @@
 		}
 		<div class="row">
 			<div class="col-sm-8">
-				<div class="h2">@trail.Name</div>
+				<div class="h3">@trail.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
 				<a class="btn btn-primary" target="_blank" href="@TrailViewModel.GetRenderUrl(trail)">@IconHelper.RenderIcon Render</a>
-				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit Trail</a>
+				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit</a>
 				<div class="btn-group">
 					@Html.Partial("Buttons/ResetView")
 				</div>
@@ -71,11 +72,16 @@
 				<div>
 					@trail.Timezone.Name <small>(@trail.Timezone.DisplayOffsetUTC)</small>
 				</div>
+				@if (Model.HasElevation)
+				{
+					stats = Model.Elevation.Stats;
+					<div class="h6 mt-2">@IconHelper.ElevationIcon Elevation Data</div>
+				}
 			</div>
 		</div>
 		<hr />
 		<div class="pt-1">
-			<div class="h3">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(trail.Stats, true, true))</div>
+			<div class="h4">@Html.Partial("Widgets/TopoStatsPills", new TopoStatsPillsModel(stats, true, true))</div>
 		</div>
 		<br />
 		@Html.Partial("_TrackGrid")

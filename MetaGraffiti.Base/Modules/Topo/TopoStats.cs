@@ -47,7 +47,7 @@ namespace MetaGraffiti.Base.Modules.Topo
 			stats.EstimatedMetersDescent = descent;
 			stats.SecondsBetweenPoints = (hours * 60 * 60) / points;
 			stats.PointCount = points;
-			stats.DayCount = finish.DayOfYear - start.DayOfYear;
+			stats.DayCount = (finish.DayOfYear - start.DayOfYear) + 1;
 
 			return stats;
 		}

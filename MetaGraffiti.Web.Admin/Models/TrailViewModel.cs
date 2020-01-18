@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using MetaGraffiti.Base.Modules.Carto.Info;
+using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Topo;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -27,11 +28,24 @@ namespace MetaGraffiti.Web.Admin.Models
 		// ==================================================
 		// Optional
 		public IEnumerable<CartoPlaceInfo> Places { get; set; }
+		public TopoTrailInfo Elevation { get; set; }
+
 
 		// ==================================================
 		// Helpers
 		public bool HasTracks { get { return (Tracks?.Count() ?? 0) > 0; } }
+		public bool HasElevation { get { return Elevation != null; } }
 		public string GetSourceName(ITopoTrackInfo track) { return Path.GetFileNameWithoutExtension(track.Source); }
+
+		public TopoStats GetTopoStats(TopoTrackInfo track)
+		{
+			if (!HasElevation)
+				return track.Stats;
+			else
+			{
+				return Elevation.TopoTracks.FirstOrDefault(x => x.Name == track.Name)?.Stats ?? track.Stats;
+			}
+		}
 
 
 		// ==================================================

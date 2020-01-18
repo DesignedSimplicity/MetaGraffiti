@@ -23,6 +23,9 @@ namespace MetaGraffiti.Web.Admin
 		private static System.Object _lockTopo = new System.Object();
 		private static TopoTrailService _topoTrailService;
 
+		private static System.Object _lockDem = new System.Object();
+		private static DemElevationService _demElevationService;
+
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 		private static GoogleLookupService _googleLookupService = new GoogleLookupService(_googleApiService);
 		
@@ -146,6 +149,29 @@ namespace MetaGraffiti.Web.Admin
 					// update shared static resource
 					_cartoPlaceService = service;
 					return _cartoPlaceService;
+				}
+			}
+		}
+
+		public static DemElevationService DemElevationService
+		{
+			get
+			{
+				// unlocked check again current cache
+				if (_demElevationService != null) return _demElevationService;
+
+				lock (_lockDem)
+				{
+					// recheck after lock expires
+					if (_demElevationService != null) return _demElevationService;
+
+					// create and initalize service as needed
+					var service = new DemElevationService();
+					service.Init(AutoConfig.ElevationSourceUri);
+
+					// update shared static resource
+					_demElevationService = service;
+					return _demElevationService;
 				}
 			}
 		}

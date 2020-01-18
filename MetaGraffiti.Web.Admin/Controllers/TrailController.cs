@@ -18,12 +18,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		private TrackEditService _trackEditService;
 		private TopoTrailService _topoTrailService;
 		private CartoPlaceService _cartoPlaceService;
+		private DemElevationService _demElevationService;
 		private static TopoTrailInfo _editing;
 
 		public TrailController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_topoTrailService = ServiceConfig.TopoTrailService;
+			_demElevationService = ServiceConfig.DemElevationService;
 			_trackEditService = new TrackEditService();
 		}
 
@@ -33,9 +35,23 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			if (!String.IsNullOrWhiteSpace(id))
 			{
+				// load the trail
 				var trail = _topoTrailService.GetTrail(id);
 				model.Trail = trail;
 				model.Tracks = trail.TopoTracks;
+
+				// search for elevation data
+				var elevation = _demElevationService.GetElevationData(trail);
+				if (elevation.OK)
+				{
+					// add data if available
+					model.Elevation = elevation.Data;
+				}
+				else
+				{
+					// show error message
+					model.ErrorMessages.Add(elevation.Message);
+				}
 			}
 
 			return model;

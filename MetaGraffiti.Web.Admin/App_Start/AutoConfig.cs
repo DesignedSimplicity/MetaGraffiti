@@ -11,8 +11,10 @@ namespace MetaGraffiti.Web.Admin
 		public static string PolarSourceUri = Path.Combine(RootConfigUri, @"Bio\Polar\");
 		public static string StravaSourceUri = Path.Combine(RootConfigUri, @"Bio\Strava\");
 
+		public static string ElevationSourceUri = Path.Combine(RootConfigUri, @"Topo\Elevation\");
 		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Topo\Tracks\");
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Topo\Trails\");
+
 		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\Places\");
 
 		public static string CartoPlaceData = Path.Combine(RootConfigUri, @"Carto\CartoPlaceData.xlsx");

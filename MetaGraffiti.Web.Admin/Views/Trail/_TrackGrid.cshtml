@@ -89,7 +89,7 @@
 			var count = 0;
 			foreach (var track in Model.Tracks)
 			{
-				var stats = track.Stats;
+				var stats = Model.GetTopoStats(track);
 				<tr class="js-mappable-row">
 					<td rowspan="3" class="text-center font-weight-bold h3">@(++count)</td>
 					<td colspan="3">
@@ -118,7 +118,7 @@
 							}
 						</div>
 					</td>
-					<td class="h5">
+					<td class="h6">
 						<div class="text-nowrap">
 							@track.StartLocal.ToString("hh:mm:ss tt") <small>@track.StartLocal.ToString("yyyy-MM-dd")</small>
 						</div>
@@ -129,7 +129,7 @@
 							}
 						</div>
 					</td>
-					<td class="h5">
+					<td class="h6">
 						<div class="text-nowrap">
 							@track.FinishLocal.ToString("hh:mm:ss tt") <small>@track.FinishLocal.ToString("yyyy-MM-dd")</small>
 						</div>

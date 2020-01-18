@@ -59,7 +59,6 @@ namespace MetaGraffiti.Base.Services
 			}
 		}
 
-
 		/// <summary>
 		/// Lists all loaded GPX files
 		/// </summary>
