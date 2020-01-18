@@ -26,7 +26,7 @@
 				foreach (var p in t.Points)
 				{
 					count++;
-					<text>[new Date("@(p.Timestamp)")</text><text>, @p.Elevation</text><text>],</text>
+					<text>[@(count)</text><text>, @p.Elevation</text><text>],</text>
 					}
 			}
 			}
