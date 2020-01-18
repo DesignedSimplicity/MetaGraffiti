@@ -15,16 +15,19 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		private CartoPlaceService _cartoPlaceService;
 		private TrackEditService _trackEditService;
 		private TopoTrailService _topoTrailService;
-		private CartoPlaceService _cartoPlaceService;
+		private BioHealthService _bioHealthService;
 		private DemElevationService _demElevationService;
-		private static TopoTrailInfo _editing;
+		
+  private static TopoTrailInfo _editing;
 
 		public TrailController()
 		{
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;
 			_topoTrailService = ServiceConfig.TopoTrailService;
+			_bioHealthService = ServiceConfig.BioHealthService;
 			_demElevationService = ServiceConfig.DemElevationService;
 			_trackEditService = new TrackEditService();
 		}
@@ -52,6 +55,10 @@ namespace MetaGraffiti.Web.Admin.Controllers
 					// show error message
 					model.ErrorMessages.Add(elevation.Message);
 				}
+
+				// search for health data
+				model.Training = _bioHealthService.GetTrainingInfo(trail.StartLocal, trail.FinishLocal);
+
 			}
 
 			return model;
@@ -81,15 +88,19 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// Renders a trail with detailed information
 		/// </summary>
-		public ActionResult Render(string id)
+		public ActionResult Elevation(string id)
 		{
 			var model = InitModel(id);
 
-			// load places
-			model.Places = _cartoPlaceService.ReportPlaces(new CartoPlaceReportRequest()
-			{
-				Country = model.Trail.Country.ISO2,
-			});
+			return View(model);
+		}
+
+		/// <summary>
+		/// Renders a trail with detailed information
+		/// </summary>
+		public ActionResult Render(string id)
+		{
+			var model = InitModel(id);
 
 			return View(model);
 		}

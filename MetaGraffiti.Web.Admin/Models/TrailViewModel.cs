@@ -29,12 +29,13 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Optional
 		public IEnumerable<CartoPlaceInfo> Places { get; set; }
 		public TopoTrailInfo Elevation { get; set; }
-
+		public List<PolarTrainingInfo> Training { get; set; }
 
 		// ==================================================
 		// Helpers
 		public bool HasTracks { get { return (Tracks?.Count() ?? 0) > 0; } }
 		public bool HasElevation { get { return Elevation != null; } }
+		public bool HasTraining { get { return (Training?.Count() ?? 0) > 0; } }
 		public string GetSourceName(ITopoTrackInfo track) { return Path.GetFileNameWithoutExtension(track.Source); }
 
 		public TopoStats GetTopoStats(TopoTrackInfo track)
@@ -53,12 +54,14 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetTrailUrl(string key) { return $"/trail/display/{key}/"; }
 		public static string GetTrailUrl(ITopoTrailInfo trail) { return GetTrailUrl(trail.Key); }
 
-		public static string GetRenderUrl(ITopoTrailInfo trail) { return $"/trail/render/{trail.Key}/"; }
 		public static string GetUpdateUrl(ITopoTrailInfo trail) { return $"/trail/update/{trail.Key}/"; }
 		public static string GetModifyUrl(ITopoTrailInfo trail) { return $"/trail/modify/{trail.Key}/"; }
 		public static string GetModifyUrl(ITopoTrailInfo trail, MergeConfirmTypes confirm) { return $"/trail/modify/{trail.Key}/?confirm={confirm}"; }
 
 		public static string GetImportUrl() { return $"/trail/import/"; }
 		public static string GetDiscardUrl() { return $"/trail/discard/"; }
+
+		public static string GetElevationUrl(ITopoTrailInfo trail) { return $"/trail/elevation/{trail.Key}/"; }
+		public static string GetRenderUrl(ITopoTrailInfo trail) { return $"/trail/render/{trail.Key}/"; }
 	}
 }

@@ -296,6 +296,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\chart\chart.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -459,6 +460,7 @@
     <Content Include="Views\Place\Display.cshtml" />
     <Content Include="Views\Trail\Render.cshtml" />
     <Content Include="Views\Trail\_TrailLeaf.cshtml" />
+    <Content Include="Views\Trail\Elevation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

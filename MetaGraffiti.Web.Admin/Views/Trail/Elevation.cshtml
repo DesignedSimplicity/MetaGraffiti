@@ -1,0 +1,88 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+<div class="h3">@Model.Trail.Name</div>
+
+<style>
+	#chart-container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	#chart {
+	}
+</style>
+
+<div id="chart-container">
+	<canvas id="chart"></canvas>
+</div>
+
+<script src="~/Scripts/chart/chart.js"></script>
+<script>
+	var elevation = [
+		@foreach (var t in Model.Elevation.TopoTracks)
+		{
+			foreach (var p in t.Points)
+			{
+				<text>@p.Elevation</text><text>,</text>
+			}
+		}
+	];
+	var points = [
+		@for (var p = 1; p <= Model.Elevation.Stats.PointCount; p++)
+		{
+			<text>@p</text><text>,</text>
+		}
+	];
+	var config = {
+		type: 'line',
+		responsive: true,
+		data: {
+			labels: points,
+			datasets: [{
+				label: 'Elevation',
+				backgroundColor: '#090',
+				borderColor: '#090',
+				data: elevation,
+				fill: false,
+			}]
+		},
+		options: {
+			responsive: true,
+			title: {
+				display: false,
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				xAxes: [{
+					display: true,
+					scaleLabel: {
+						display: false,
+					}
+				}],
+				yAxes: [{
+					display: true,
+					scaleLabel: {
+						display: true,
+						labelString: 'Meters'
+					}
+				}]
+			}
+		}
+	};
+
+	window.onload = function() {
+		var context = document.getElementById("chart").getContext("2d");
+		var chart = new Chart(context, config);
+	};
+</script>

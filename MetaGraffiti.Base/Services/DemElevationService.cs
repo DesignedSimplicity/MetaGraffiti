@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using MetaGraffiti.Base.Common;
-using MetaGraffiti.Base.Modules.Carto.Info;
-using MetaGraffiti.Base.Modules.Geo;
-using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Modules.Ortho;
-using MetaGraffiti.Base.Modules.Ortho.Data;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services.Internal;
 
@@ -19,7 +15,6 @@ namespace MetaGraffiti.Base.Services
 		// Internals
 		private static string _rootUri = "";
 		private static object _init = false;
-		private static BasicCacheService<TopoTrailInfo> _elevations;
 
 		public DemElevationService()
 		{

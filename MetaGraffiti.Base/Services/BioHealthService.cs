@@ -17,6 +17,8 @@ namespace MetaGraffiti.Base.Services
 	public class PolarTrainingInfo : ICacheEntity
 	{
 		public string Key { get; set; }
+		public string Uri { get; set; }
+		public DateTime Timestamp { get; set; }
 		public TcxFileData Data { get; set; }
 	}
 
@@ -27,7 +29,6 @@ namespace MetaGraffiti.Base.Services
 		private static string _rootUri = "";
 		private static object _init = false;
 		private static BasicCacheService<PolarTrainingInfo> _polar;
-		private CartoPlaceService _cartoPlaceService;
 
 		public BioHealthService()
 		{
@@ -53,7 +54,20 @@ namespace MetaGraffiti.Base.Services
 				{
 					foreach (var file in year.EnumerateFiles("*.zip"))
 					{
-						var training = LoadTraining(file);
+						var filename = Path.GetFileNameWithoutExtension(file.Name);
+
+						// cache file list for later
+						var training = new PolarTrainingInfo();
+						training.Uri = file.FullName;
+						training.Key = filename.ToUpperInvariant();
+
+						// parse out datetime
+						var index = filename.Length - 19;
+						var parts = filename.Substring(index).Split('_');
+						var time = parts[1].Replace("-", ":"); // + "Z";
+						training.Timestamp = DateTime.Parse(parts[0] + " " + time);
+
+						// add to partial cache
 						_polar.Add(training);
 					}
 				}
@@ -70,35 +84,38 @@ namespace MetaGraffiti.Base.Services
 			_init = false;
 		}
 
+		public List<PolarTrainingInfo> GetTrainingInfo(DateTime start, DateTime finish)
+		{
+			var list = _polar.All.Where(x => x.Timestamp >= start && x.Timestamp <= finish).ToList();
+			foreach(var item in list)
+			{
+				// load data if not yet cached
+				if (item.Data == null)
+				{
+					item.Data = LoadTrainingData(item.Uri);
+				}
+			}
+			return list;
+		}
 
 		// ==================================================
 		// Helpers
-		private PolarTrainingInfo LoadTraining(FileInfo file)
+		private TcxFileData LoadTrainingData(string uri)
 		{
-			var train = new PolarTrainingInfo();
-
-			using (var f = File.OpenRead(file.FullName))
+			using (var f = File.OpenRead(uri))
 			{
 				using (var zip = new ZipArchive(f, ZipArchiveMode.Read))
 				{
-					foreach (var entry in zip.Entries)
+					var entry = zip.Entries.First();
+					using (var stream = entry.Open())
 					{
-						using (var stream = entry.Open())
-						{
-							// load tcx data
-							var reader = new TcxFileReader(stream);
-							var data = reader.ReadFile();
-							train.Data = data;
-
-							// setup trail details
-							var filename = Path.GetFileNameWithoutExtension(file.Name);
-							train.Key = filename.ToUpperInvariant();
-						}
+						// load tcx data
+						var reader = new TcxFileReader(stream);
+						var data = reader.ReadFile();
+						return data;
 					}
 				}
 			}
-
-			return train;
 		}
 	}
 }

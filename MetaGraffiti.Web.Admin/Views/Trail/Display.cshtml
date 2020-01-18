@@ -72,11 +72,17 @@
 				<div>
 					@trail.Timezone.Name <small>(@trail.Timezone.DisplayOffsetUTC)</small>
 				</div>
-				@if (Model.HasElevation)
-				{
-					stats = Model.Elevation.Stats;
-					<div class="h6 mt-2">@IconHelper.ElevationIcon Elevation Data</div>
-				}
+				<div class="btn-group mt-2">
+					@if (Model.HasElevation)
+					{
+						stats = Model.Elevation.Stats;
+						<a class="btn btn-sm btn-outline-secondary" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.ElevationIcon Elevation</a>
+					}
+					@if (Model.HasTraining)
+					{
+						<a class="btn btn-sm btn-outline-danger" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.BioIcon Training</a>
+					}
+				</div>
 			</div>
 		</div>
 		<hr />
