@@ -47,7 +47,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static HtmlString PreviewIcon { get { return GetFontAwesomeIcon("fas fa-eye"); } }
 		public static HtmlString ReportIcon { get { return GetFontAwesomeIcon("fas fa-list"); } }
 		public static HtmlString MapIcon { get { return GetFontAwesomeIcon("fas fa-map"); } }
-		public static HtmlString RenderIcon { get { return GetFontAwesomeIcon("fas fa-seedling"); } }
+		public static HtmlString RenderIcon { get { return GetFontAwesomeIcon("far fa-newspaper"); } } //fa-seedling
 
 
 		// ==================================================

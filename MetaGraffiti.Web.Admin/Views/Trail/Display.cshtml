@@ -5,7 +5,7 @@
 
 @{
 	var trail = Model.Trail;
-	var stats = trail.Stats;
+	var stats = Model.HasElevation ? Model.Elevation.Stats : trail.Stats;
 }
 
 <div id="map-container">
@@ -24,9 +24,17 @@
 				<div class="h3">@trail.Name</div>
 			</div>
 			<div class="col-sm-4 text-right">
-				<a class="btn btn-primary" target="_blank" href="@TrailViewModel.GetRenderUrl(trail)">@IconHelper.RenderIcon Render</a>
 				<a class="btn btn-success" href="@TrailViewModel.GetUpdateUrl(trail)">@IconHelper.EditIcon Edit</a>
 				<div class="btn-group">
+					<a class="btn btn-outline-primary" title="Render" target="_blank" href="@TrailViewModel.GetRenderUrl(trail)">@IconHelper.RenderIcon</a>
+					@if (Model.HasElevation)
+					{
+						<a class="btn btn-outline-info" title="Elevation" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.ElevationIcon</a>
+					}
+					@if (Model.HasTraining)
+					{
+						<a class="btn btn-outline-danger" title="Training" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.BioIcon</a>
+					}
 					@Html.Partial("Buttons/ResetView")
 				</div>
 			</div>
@@ -71,17 +79,6 @@
 				</div>
 				<div>
 					@trail.Timezone.Name <small>(@trail.Timezone.DisplayOffsetUTC)</small>
-				</div>
-				<div class="btn-group mt-2">
-					@if (Model.HasElevation)
-					{
-						stats = Model.Elevation.Stats;
-						<a class="btn btn-sm btn-outline-secondary" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.ElevationIcon Elevation</a>
-					}
-					@if (Model.HasTraining)
-					{
-						<a class="btn btn-sm btn-outline-danger" target="_blank" href="@TrailViewModel.GetElevationUrl(trail)">@IconHelper.BioIcon Training</a>
-					}
 				</div>
 			</div>
 		</div>
