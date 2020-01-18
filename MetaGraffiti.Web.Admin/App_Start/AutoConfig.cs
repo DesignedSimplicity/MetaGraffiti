@@ -8,6 +8,9 @@ namespace MetaGraffiti.Web.Admin
 		private const string _configRoot = @"D:\Drives\Dropbox\Earth\Data\";
         public static string RootConfigUri { get { return _configRoot; } }
 
+		public static string PolarSourceUri = Path.Combine(RootConfigUri, @"Bio\Polar\");
+		public static string StravaSourceUri = Path.Combine(RootConfigUri, @"Bio\Strava\");
+
 		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Topo\Tracks\");
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Topo\Trails\");
 		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\Places\");

@@ -72,6 +72,7 @@
     <Compile Include="Ortho\GpxFileReaderTests.cs" />
     <Compile Include="Ortho\GpxFileInfoTests.cs" />
     <Compile Include="Ortho\GpxFileWriterTests.cs" />
+    <Compile Include="Ortho\TcxFileReaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestsHelper.cs" />
   </ItemGroup>
@@ -88,6 +89,7 @@
     <None Include="Data\Gpx\Example3.gpx" />
     <None Include="Data\Gpx\Example2.gpx" />
     <None Include="Data\Gpx\Waypoints.gpx" />
+    <None Include="Data\Tcx\PolarBeat.tcx" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
