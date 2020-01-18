@@ -540,6 +540,7 @@
     <Content Include="Views\Trail\Render.cshtml" />
     <Content Include="Views\Trail\_TrailLeaf.cshtml" />
     <Content Include="Views\Trail\Elevation.cshtml" />
+    <Content Include="Views\Trail\Elevation-Chartist.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
