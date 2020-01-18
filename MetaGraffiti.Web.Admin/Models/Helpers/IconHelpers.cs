@@ -18,6 +18,21 @@ namespace MetaGraffiti.Web.Admin.Models
 			return new HtmlString($"<i class='{faName}'></i>");
 		}
 
+		public static HtmlString GetPlaceTypeIconSvg(string placeType)
+		{
+			string path = GetPlaceTypeIconUri(placeType);
+			return new HtmlString(File.ReadAllText(path));
+		}
+		public static string GetPlaceTypeIconUri(string placeType)
+		{
+			var path = Path.Combine(AutoConfig.IconSourceUri, "Places", placeType + ".svg");
+			if (File.Exists(path))
+				return path;
+			else
+				return Path.Combine(AutoConfig.IconSourceUri, "Places", "place.svg");
+		}
+
+
 		// ==================================================
 		// Alert Messages
 		public static HtmlString ConfirmationMessageIcon { get { return GetFontAwesomeIcon("fas fa-thumbs-up"); } }
@@ -102,8 +117,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public static HtmlString GetPlaceTypeIcon(string placeType)
 		{
-			var root = @"C:\Code\KnE\Icons\Places\";
-			string path = Path.Combine(root, placeType + ".svg");
+			string path = Path.Combine(AutoConfig.IconSourceUri, "places", placeType + ".svg");
 			if (File.Exists(path))
 				return new HtmlString(File.ReadAllText(path));
 			else

@@ -15,7 +15,7 @@ namespace MetaGraffiti.Web.Admin
 		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Topo\Tracks\");
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Topo\Trails\");
 
-		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\Places\");
+		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\");
 
 		public static string CartoPlaceData = Path.Combine(RootConfigUri, @"Carto\CartoPlaceData.xlsx");
 		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"Carto\AnnualTravelLog.xlsx");

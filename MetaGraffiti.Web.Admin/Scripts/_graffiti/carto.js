@@ -22,7 +22,7 @@ function drawCartoPlaces(scale, types) {
 		var color = getMapColor(index);
 
 		var icon = getPlaceIcon(color, scale);
-		if (types) icon = getCartoPlaceTypeIcon(place.type, scale);
+		if (types) icon = getCartoPlaceTypeIcon(place.type, scale, color);
 		place.marker = markPlace(place, icon, _cartoPlaceUrl);
 		var center = new google.maps.LatLng(place.center.lat, place.center.lng);
 		_cartoPlacesBounds.extend(center);
@@ -30,23 +30,20 @@ function drawCartoPlaces(scale, types) {
 	return _cartoPlacesBounds;
 }
 
-
 function fitCartoPlaces() {
 	fitBounds(_cartoPlacesBounds);
 }
 
-
-
-function getCartoPlaceTypeIcon(type, scale) {
+function getCartoPlaceTypeIcon(type, scale, color) {
 	if (!scale) scale = 1;
+	if (!color) color = "fff";
 	var icon = {
-		url: "/icon/placetype/" + type,
+		url: "/icon/placetype/" + type + "?color=" + color,
 		size: new google.maps.Size(24, 24),
 		anchor: new google.maps.Point(12, 24),
 	};
 	return icon;
 }
-
 
 function initCartoPlaceTypeLookup(field) {
 	$(field).typeahead({
@@ -61,7 +58,6 @@ function initCartoPlaceTypeLookup(field) {
 			})
 		});
 }
-
 
 
 

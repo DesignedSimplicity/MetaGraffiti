@@ -111,7 +111,14 @@
 						Trail&nbsp;
 						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Name")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Name"))"><i class="fas fa-sort-alpha-down"></i></a>
 					</th>
-					<th>Tags</th>
+					<th>
+						Tags&nbsp;
+						<small>
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), Model.SelectedSort, "Tramp")">Tramp</a>
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), Model.SelectedSort, "Hike")">Hike</a>
+							<a class="topo-color" href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), Model.SelectedSort, "Walk")">Walk</a>
+						</small>
+					</th>
 					<th class="text-right text-nowrap">
 						Date&nbsp;
 						<a href="@TopoViewModel.GetCountryUrl(country.ISO2, (region?.RegionISO??""), "Newest")" class="@CssHelper.GetSortCss(Model.IsSortSelected("Newest"))"><i class="fas fa-sort-amount-down"></i></a>

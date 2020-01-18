@@ -59,6 +59,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetReportUrl() { return "/topo/report/"; }
 		public static string GetReportUrl(int year, int? month = null) { return $"/topo/report/?year={year}" + (month.HasValue ? $"&month={month}" : ""); }
 		public static string GetCountryUrl(GeoCountryInfo country) { return $"/topo/country/{country?.ISO2}/"; }
-		public static string GetCountryUrl(string country, string region = "", string sort = "") { return $"/topo/country/{country}/?region={region}&sort={sort}".Replace("?region=&", "?"); }
+		public static string GetCountryUrl(string country, string region = "", string sort = "", string tag = "") { return $"/topo/country/{country}/?region={region}&sort={sort}&tag={tag}".Replace("?region=&", "?"); }
 	}
 }

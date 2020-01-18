@@ -14,21 +14,37 @@ namespace MetaGraffiti.Web.Admin.Controllers
 {
     public class IconController : Controller
     {
-        public ActionResult PlaceType(string id)
+		public ActionResult PlaceType(string id, bool svg = false, string color = "")
         {
-			var root = AutoConfig.IconSourceUri;
-			var path = Path.Combine(root, id + ".svg");
-			if (!System.IO.File.Exists(path)) path = Path.Combine(root, "place.svg");
-
-			using (var stream = new MemoryStream())
+			var path = IconHelper.GetPlaceTypeIconUri(id);
+			var svgContent = System.IO.File.ReadAllText(path);
+			
+			if (svg)
 			{
-				var svgDocument = SvgDocument.Open(path);
-				using (var bitmap = svgDocument.Draw())
+				/*
+				if (argb.HasValue)
 				{
-					bitmap.Save(stream, ImageFormat.Png);
-					stream.Position = 0;
-					var bytes = stream.ToArray();
-					return new FileContentResult(bytes, "image/png");
+					svgContent = svgContent.Replace("<svg", "svg fill='" + argb + "'");
+				}
+				*/
+				return Content(svgContent, "image/svg+xml; charset=utf-8");
+			}
+			else
+			{
+				using (var stream = new MemoryStream())
+				{
+					var svgDocument = SvgDocument.Open(path);
+					if (!String.IsNullOrEmpty(color))
+					{
+						svgDocument.Fill = new SvgColourServer(System.Drawing.ColorTranslator.FromHtml("#" + color));
+					}
+					using (var bitmap = svgDocument.Draw())
+					{
+						bitmap.Save(stream, ImageFormat.Png);
+						stream.Position = 0;
+						var bytes = stream.ToArray();
+						return new FileContentResult(bytes, "image/png");
+					}
 				}
 			}
 		}

@@ -8,6 +8,7 @@
 	var _start = null;
 	var _finish = null;
 	var _graphs = null;
+	var _template = 3;
 
 	$(document).ready(function () {
 		initMap();
@@ -27,8 +28,8 @@
 				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
 			}
 
-			$("table > tbody > tr").eq(index * 3).css('background-color', getInfoColor(index));
-			$("table > tbody > tr").eq(index * 3).children().eq(0).css('background-color', color);
+			$("table > tbody > tr").eq(index * _template).css('background-color', getInfoColor(index));
+			$("table > tbody > tr").eq(index * _template).children().eq(0).css('background-color', color);
 		}
 		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 
@@ -36,7 +37,7 @@
 			if (_start) _start.setMap(null);
 			if (_finish) _finish.setMap(null);
 
-			var index = $(this).index() / 3;
+			var index = $(this).index() / _template;
 
 			var points = _tracks[index].points;
 			var start = points[0];
@@ -47,13 +48,14 @@
 		});
 
 		$(".js-mappable-row").click(function () {
-			var index = $(this).index() / 3;
+			var index = $(this).index() / _template;
 
+			/*
 			if (_graphs) $(_graphs).hide();
-			_graphs = $("table > tbody > tr").eq((index * 3) + 2).children().first();
+			_graphs = $("table > tbody > tr").eq((index * _template) + _template - 1).children().first();
 			if (_graphs.hasClass("d-none")) _graphs.hide().removeClass("d-none");
 			_graphs.show();
-
+			*/
 
 			var points = _tracks[index].points;
 			var bounds = new google.maps.LatLngBounds();
