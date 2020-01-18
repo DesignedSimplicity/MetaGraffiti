@@ -1,6 +1,21 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
 @model TrailViewModel
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+<style>
+	.ct-chart svg {
+		margin: 1px;
+		vertical-align: text-bottom;
+	}
+
+	.ct-series-a .ct-line,
+	.ct-series-a .ct-bar {
+		stroke: red;
+		stroke-width: 1px;
+	}
+</style>
+
 <script>
 	var _tracks = @JsonHelper.GetJson(Model.Tracks);
 	var _places = @JsonHelper.GetJson(Model.Places);
@@ -23,13 +38,28 @@
 			var color = getMapColor(index);
 			showTrack(_tracks[index].points, color);
 
+			var elevations = [];
 			var points = _tracks[index].points;
 			for (var i = 0; i < points.length; i++) {
 				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
+				elevations.push(points[i].ele);
 			}
 
 			$("table > tbody > tr").eq(index * _template).css('background-color', getInfoColor(index));
 			$("table > tbody > tr").eq(index * _template).children().eq(0).css('background-color', color);
+
+			var sparkOptions = {
+				height:'1em',
+				width:'100%',
+				showPoint: false,
+				fullWidth: true,
+				chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
+				axisX: {showGrid: false, showLabel: false, offset: 0},
+				axisY: {showGrid: false, showLabel: false, offset: 0}
+			}
+
+			new Chartist.Line('#spark' + (index + 1) , {series: [elevations]}, sparkOptions);
+
 		}
 		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 
@@ -153,9 +183,7 @@
 				</tr>
 				<tr>
 					<td colspan="5">
-						<b>Elevation/Training sparklines</b>
-						<!--https://betterdashboards.wordpress.com/2010/02/21/how-to-create-a-sparkline-chart-in-asp-net/-->
-						
+						<span id="spark@(count)" class="ct-chart line"></span>
 					</td>
 				</tr>
 			}

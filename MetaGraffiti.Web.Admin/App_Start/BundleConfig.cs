@@ -8,6 +8,7 @@ namespace MetaGraffiti.Web.Admin
 		{
 			bundles.Add(new ScriptBundle("~/bundle/js")
 						.Include("~/Scripts/jquery-{version}.js")
+						//.Include("~/Scripts/jquery.sparkline.js")
 						.Include("~/Scripts/bootstrap.js")
 						.Include("~/Scripts/typeahead.bundle.js")						
 						.Include("~/Scripts/_graffiti/carto.js")
