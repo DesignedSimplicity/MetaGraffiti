@@ -19,12 +19,14 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
+		//private BioHealthService _bioHealthService;
 		private TopoTrailService _trailDataService;
 		private TripSheetService _tripSheetService;
 		private CartoPlaceService _cartoPlaceService;
 
 		public OrthoController()
 		{
+			//_bioHealthService = ServiceConfig.BioHealthService;
 			_tripSheetService = ServiceConfig.TripSheetService;
 			_trailDataService = ServiceConfig.TopoTrailService;
 			_cartoPlaceService = ServiceConfig.CartoPlaceService;

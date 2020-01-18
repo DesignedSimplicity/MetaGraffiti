@@ -11,6 +11,9 @@ namespace MetaGraffiti.Web.Admin
 {
 	public class ServiceConfig
 	{
+		private static System.Object _lockBio = new System.Object();
+		private static BioHealthService _bioHealthService;
+
 		private static System.Object _lockCarto = new System.Object();
 		private static CartoPlaceService _cartoPlaceService;
 
@@ -23,11 +26,41 @@ namespace MetaGraffiti.Web.Admin
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 		private static GoogleLookupService _googleLookupService = new GoogleLookupService(_googleApiService);
 		
-	
-
 		public static GoogleLookupService GoogleLookupService
 		{
 			get { return _googleLookupService; }
+		}
+
+		public static void ResetBioHealth()
+		{
+			// clear out existing cache if necessary
+			if (_bioHealthService != null) _bioHealthService.ResetCache();
+
+			// create and initalize service as needed
+			var service = new BioHealthService();
+			service.Init(AutoConfig.PolarSourceUri);
+
+			// update shared static resource
+			_bioHealthService = service;
+		}
+
+		public static BioHealthService BioHealthService
+		{
+			get
+			{
+				// unlocked check again current cache
+				if (_bioHealthService != null) return _bioHealthService;
+
+				lock (_lockBio)
+				{
+					// recheck after lock expires
+					if (_bioHealthService != null) return _bioHealthService;
+
+					ResetBioHealth();
+
+					return _bioHealthService;
+				}
+			}
 		}
 
 		public static void ResetTopoTrail()

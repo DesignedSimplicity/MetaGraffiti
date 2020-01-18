@@ -105,33 +105,43 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 					// read heart rate parameters
 					var xavg = xl.SelectSingleNode("tc:AverageHeartRateBpm", _ns);
-					l.AverageHeartRateBpm = ReadInteger(xavg, "Value") ?? 0;
+					if (xavg != null)
+					{
+						l.AverageHeartRateBpm = ReadInteger(xavg, "Value") ?? 0;
+					}
 					var xmax = xl.SelectSingleNode("tc:MaximumHeartRateBpm", _ns);
-					l.MaximumHeartRateBpm = ReadInteger(xmax, "Value") ?? 0;
+					if (xmax != null)
+					{
+						l.MaximumHeartRateBpm = ReadInteger(xmax, "Value") ?? 0;
+					}
 
 					l.Tracks = new List<TcxTrackData>();
-					foreach (XmlNode xp in xl.SelectSingleNode("tc:Track", _ns).SelectNodes("tc:Trackpoint", _ns))
+					var xtk = xl.SelectSingleNode("tc:Track", _ns);
+					if (xtk != null)
 					{
-						// position data
-						var t = new TcxTrackData();
-						l.Tracks.Add(t);
-
-						// read expected data
-						t.Timestamp = ReadDateTime(xp, "Time").Value;
-						t.SensorState = ReadString(xp, "SensorState");
-						t.DistanceMeters = ReadDecimal(xp, "DistanceMeters");
-						
-						var xhr = xp.SelectSingleNode("tc:HeartRateBpm", _ns);
-						if (xhr != null)
+						foreach (XmlNode xp in xtk.SelectNodes("tc:Trackpoint", _ns))
 						{
-							t.HeartRateBpm = ReadInteger(xhr, "Value");
-						}
+							// position data
+							var t = new TcxTrackData();
+							l.Tracks.Add(t);
 
-						var xpos = xp.SelectSingleNode("tc:Position", _ns);
-						if (xpos != null)
-						{
-							t.Latitude = ReadDouble(xpos, "LatitudeDegrees");
-							t.Longitude = ReadDouble(xpos, "LongitudeDegrees");
+							// read expected data
+							t.Timestamp = ReadDateTime(xp, "Time").Value;
+							t.SensorState = ReadString(xp, "SensorState");
+							t.DistanceMeters = ReadDecimal(xp, "DistanceMeters");
+
+							var xhr = xp.SelectSingleNode("tc:HeartRateBpm", _ns);
+							if (xhr != null)
+							{
+								t.HeartRateBpm = ReadInteger(xhr, "Value");
+							}
+
+							var xpos = xp.SelectSingleNode("tc:Position", _ns);
+							if (xpos != null)
+							{
+								t.Latitude = ReadDouble(xpos, "LatitudeDegrees");
+								t.Longitude = ReadDouble(xpos, "LongitudeDegrees");
+							}
 						}
 					}
 				}
