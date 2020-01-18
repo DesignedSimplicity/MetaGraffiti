@@ -1,29 +1,13 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
 @model TrailViewModel
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
-<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
-<style>
-	.ct-chart svg {
-		margin: 1px;
-		vertical-align: text-bottom;
-	}
-
-	.ct-series-a .ct-line,
-	.ct-series-a .ct-bar {
-		stroke: red;
-		stroke-width: 1px;
-	}
-</style>
-
 <script>
 	var _tracks = @JsonHelper.GetJson(Model.Tracks);
 	var _places = @JsonHelper.GetJson(Model.Places);
 	var _bounds = null;
 	var _start = null;
 	var _finish = null;
-	var _graphs = null;
-	var _template = 3;
+	var _rowspan = 2;
 
 	$(document).ready(function () {
 		initMap();
@@ -38,28 +22,13 @@
 			var color = getMapColor(index);
 			showTrack(_tracks[index].points, color);
 
-			var elevations = [];
 			var points = _tracks[index].points;
 			for (var i = 0; i < points.length; i++) {
 				_bounds.extend(new google.maps.LatLng(points[i].lat, points[i].lng));
-				elevations.push(points[i].ele);
 			}
 
-			$("table > tbody > tr").eq(index * _template).css('background-color', getInfoColor(index));
-			$("table > tbody > tr").eq(index * _template).children().eq(0).css('background-color', color);
-
-			var sparkOptions = {
-				height:'1em',
-				width:'100%',
-				showPoint: false,
-				fullWidth: true,
-				chartPadding: {top: 0, right: 0, bottom: 0, left: 0},
-				axisX: {showGrid: false, showLabel: false, offset: 0},
-				axisY: {showGrid: false, showLabel: false, offset: 0}
-			}
-
-			new Chartist.Line('#spark' + (index + 1) , {series: [elevations]}, sparkOptions);
-
+			$("table > tbody > tr").eq(index * _rowspan).css('background-color', getInfoColor(index));
+			$("table > tbody > tr").eq(index * _rowspan).children().eq(0).css('background-color', color);
 		}
 		if (_tracks.length > 0) _mapGoogle.fitBounds(_bounds);
 
@@ -67,7 +36,7 @@
 			if (_start) _start.setMap(null);
 			if (_finish) _finish.setMap(null);
 
-			var index = $(this).index() / _template;
+			var index = $(this).index() / _rowspan;
 
 			var points = _tracks[index].points;
 			var start = points[0];
@@ -78,15 +47,7 @@
 		});
 
 		$(".js-mappable-row").click(function () {
-			var index = $(this).index() / _template;
-
-			/*
-			if (_graphs) $(_graphs).hide();
-			_graphs = $("table > tbody > tr").eq((index * _template) + _template - 1).children().first();
-			if (_graphs.hasClass("d-none")) _graphs.hide().removeClass("d-none");
-			_graphs.show();
-			*/
-
+			var index = $(this).index() / _rowspan;
 			var points = _tracks[index].points;
 			var bounds = new google.maps.LatLngBounds();
 			for (var i = 0; i < points.length; i++) {
@@ -96,7 +57,6 @@
 		});
 
 		$(".js-reset-view").click(function () {
-			if (_graphs) $(_graphs).hide();
 			if (_start) _start.setMap(null);
 			if (_finish) _finish.setMap(null);
 
@@ -123,7 +83,7 @@
 			{
 				var stats = Model.GetTopoStats(track);
 				<tr class="js-mappable-row">
-					<td rowspan="3" class="text-center font-weight-bold h3">@(++count)</td>
+					<td rowspan="2" class="text-center font-weight-bold h3">@(++count)</td>
 					<td colspan="3">
 						<span class="h4">@track.Name</span>
 						<span class="small">@track.Description</span>
@@ -179,11 +139,6 @@
 						<div class="text-success">@stats.EstimatedMetersAscent.ToString("#,##0") m</div>
 						<div class="mt-2"></div>
 						<div class="text-danger">@stats.EstimatedMetersDescent.ToString("#,##0") m</div>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="5">
-						<span id="spark@(count)" class="ct-chart line"></span>
 					</td>
 				</tr>
 			}

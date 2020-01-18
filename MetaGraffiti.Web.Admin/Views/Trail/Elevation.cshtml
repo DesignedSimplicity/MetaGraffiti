@@ -5,84 +5,31 @@
 
 <div class="h3">@Model.Trail.Name</div>
 
-<style>
-	#chart-container {
-		position: relative;
-		width: 100%;
-		height: 100%;
-	}
+<script src="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />
 
-	#chart {
+<style>
+	#elevation {
+		width: 100%;
+		height: 400px;
 	}
 </style>
 
-<div id="chart-container">
-	<canvas id="chart"></canvas>
-</div>
-
-<script src="~/Scripts/chart/chart.js"></script>
+<div id="elevation"></div>
+<!--http://dygraphs.com/-->
 <script>
 	var elevation = [
-		@foreach (var t in Model.Elevation.TopoTracks)
-		{
-			foreach (var p in t.Points)
+		@{
+			var count = 0;
+			foreach (var t in Model.Elevation.TopoTracks)
 			{
-				<text>@p.Elevation</text><text>,</text>
-			}
-		}
-	];
-	var points = [
-		@for (var p = 1; p <= Model.Elevation.Stats.PointCount; p++)
-		{
-			<text>@p</text><text>,</text>
-		}
-	];
-	var config = {
-		type: 'line',
-		responsive: true,
-		data: {
-			labels: points,
-			datasets: [{
-				label: 'Elevation',
-				backgroundColor: '#090',
-				borderColor: '#090',
-				data: elevation,
-				fill: false,
-			}]
-		},
-		options: {
-			responsive: true,
-			title: {
-				display: false,
-			},
-			tooltips: {
-				mode: 'index',
-				intersect: false,
-			},
-			hover: {
-				mode: 'nearest',
-				intersect: true
-			},
-			scales: {
-				xAxes: [{
-					display: true,
-					scaleLabel: {
-						display: false,
+				foreach (var p in t.Points)
+				{
+					count++;
+					<text>[new Date("@(p.Timestamp)")</text><text>, @p.Elevation</text><text>],</text>
 					}
-				}],
-				yAxes: [{
-					display: true,
-					scaleLabel: {
-						display: true,
-						labelString: 'Meters'
-					}
-				}]
 			}
-		}
-	};
-
-	window.onload = function() {
-		var context = document.getElementById("chart").getContext("2d");
-		var chart = new Chart(context, config);
-	};
+			}
+	];
+	new Dygraph(document.getElementById("elevation"), elevation);
 </script>

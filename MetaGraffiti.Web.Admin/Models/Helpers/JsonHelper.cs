@@ -53,7 +53,7 @@ namespace MetaGraffiti.Web.Admin.Models
 				dynamic p = new JObject();
 				p.lat = point.Latitude;
 				p.lng = point.Longitude;
-				p.ele = point.Elevation;
+				//p.ele = point.Elevation;
 				t.points.Add(p);
 			}
 			return t;

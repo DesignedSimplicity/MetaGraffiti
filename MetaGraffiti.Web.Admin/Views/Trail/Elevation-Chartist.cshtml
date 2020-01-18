@@ -1,0 +1,43 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model TrailViewModel
+
+@Html.Partial("_Nav")
+
+<div class="h3">@Model.Trail.Name</div>
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+<script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+
+<div class="ct-chart ct-perfect-fourth"></div>
+
+
+<script>
+	var elevation = [
+		@foreach (var t in Model.Elevation.TopoTracks)
+		{
+			foreach (var p in t.Points)
+			{
+				<text>@p.Elevation</text><text>,</text>
+			}
+		}
+	];
+	var data = {
+		//labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+	  series: [
+		elevation
+	  ]
+	};
+
+	var options = {
+		showPoint: false,
+		lineSmooth: false,
+		axisY: {
+			type: Chartist.FixedScaleAxis,
+			high: 2000,
+			low: 0,
+			divisor: 20,
+		}
+	}
+
+	new Chartist.Line('.ct-chart', data, options);
+</script>
