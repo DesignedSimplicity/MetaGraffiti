@@ -5,15 +5,15 @@ namespace MetaGraffiti.Web.Admin
 {
 	public class AutoConfig
 	{
-		private const string _configRoot = @"D:\Drives\Dropbox\Data\CODE\";
+		private const string _configRoot = @"D:\Drives\Dropbox\Earth\Data\";
         public static string RootConfigUri { get { return _configRoot; } }
 
-		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Gpx\Tracks\");
-		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Gpx\Trails\");
-		public static string IconSourceUri = Path.Combine(_configRoot, @"KnE\Icons\Places\");
+		public static string TrackSourceUri = Path.Combine(RootConfigUri, @"Topo\Tracks\");
+		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Topo\Trails\");
+		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\Places\");
 
-		public static string CartoPlaceData = Path.Combine(RootConfigUri, @"KnE\CartoPlaceData.xlsx");
-		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"KnE\ConsolidatedTrips.xlsx");
+		public static string CartoPlaceData = Path.Combine(RootConfigUri, @"Carto\CartoPlaceData.xlsx");
+		public static string PlaceDataUri = Path.Combine(RootConfigUri, @"Carto\AnnualTravelLog.xlsx");
 
 
 		private static string _googleMapsApiKey = "";
@@ -21,7 +21,7 @@ namespace MetaGraffiti.Web.Admin
 		{
 			get
 			{
-				if (String.IsNullOrWhiteSpace(_googleMapsApiKey)) _googleMapsApiKey = File.ReadAllText(Path.Combine(_configRoot, "GoogleMapsApiKey.txt"));
+				if (String.IsNullOrWhiteSpace(_googleMapsApiKey)) _googleMapsApiKey = File.ReadAllText(Path.Combine(_configRoot, "Crypto", "GoogleMapsApiKey.txt"));
 				return _googleMapsApiKey;
 			}
 		}

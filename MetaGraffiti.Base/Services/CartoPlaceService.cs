@@ -89,7 +89,7 @@ namespace MetaGraffiti.Base.Services
 				var data = BuildWorkbook();
 
 				// backup existing file
-				if (File.Exists(_uri)) File.Move(_uri, _uri.Replace(".xlsx", "." + DateTime.Now.Ticks + ".xlsx"));
+				if (File.Exists(_uri)) File.Move(_uri, _uri.Replace(".xlsx", "_" + DateTime.Now.ToString("yyyyddMM-HHmmss") + ".xlsx"));
 
 				// write updated file
 				File.WriteAllBytes(_uri, data);
