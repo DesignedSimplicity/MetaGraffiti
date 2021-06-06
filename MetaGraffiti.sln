@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.App.GpxGraffit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Demo", "MetaGraffiti.Web.Demo\MetaGraffiti.Web.Demo.csproj", "{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Broken", "MetaGraffiti.Web.Broken\MetaGraffiti.Web.Broken.csproj", "{20E5C844-2E91-4866-B272-7A1745408BBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20E5C844-2E91-4866-B272-7A1745408BBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20E5C844-2E91-4866-B272-7A1745408BBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20E5C844-2E91-4866-B272-7A1745408BBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20E5C844-2E91-4866-B272-7A1745408BBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
