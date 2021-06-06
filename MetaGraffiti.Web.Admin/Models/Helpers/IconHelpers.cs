@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using Newtonsoft.Json.Linq;
+using Microsoft.AspNetCore.Html;
+using AlloyTemplates;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
@@ -106,7 +107,7 @@ namespace MetaGraffiti.Web.Admin.Models
 	{
 		public static HtmlString GetIcon(string name)
 		{
-			var root = HttpContext.Current.Server.MapPath(@"\Images\Icons");
+			var root = ""; // HttpContextHelper.Current.Server.MapPath(@"\Images\Icons");
 			if (name.Contains("/")) root = @"C:\Code\KnE\Icons\";
 			string path = Path.Combine(root, name + ".svg");
 			if (File.Exists(path))

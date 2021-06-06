@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\css\common.css" />
+    <Content Remove="wwwroot\css\flags.css" />
+    <Content Remove="wwwroot\css\font-awesome.css" />
+    <Content Remove="wwwroot\css\font-awesome.min.css" />
+    <Content Remove="wwwroot\fonts\fontawesome-webfont.eot" />
+    <Content Remove="wwwroot\fonts\fontawesome-webfont.svg" />
+    <Content Remove="wwwroot\fonts\fontawesome-webfont.ttf" />
+    <Content Remove="wwwroot\fonts\fontawesome-webfont.woff" />
+    <Content Remove="wwwroot\fonts\fontawesome-webfont.woff2" />
+    <Content Remove="wwwroot\fonts\FontAwesome.otf" />
+    <Content Remove="wwwroot\images\Icons\carto.svg" />
+    <Content Remove="wwwroot\images\Icons\geo.svg" />
+    <Content Remove="wwwroot\images\Icons\meta.svg" />
+    <Content Remove="wwwroot\images\Icons\ortho.svg" />
+    <Content Remove="wwwroot\images\Icons\topo.svg" />
+    <Content Remove="wwwroot\images\logo.png" />
+    <Content Remove="wwwroot\images\Sprites\blank.gif" />
+    <Content Remove="wwwroot\images\Sprites\flags.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\css\common.css" />
+    <None Include="wwwroot\css\flags.css" />
+    <None Include="wwwroot\css\font-awesome.css" />
+    <None Include="wwwroot\css\font-awesome.min.css" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.eot" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.svg" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.ttf" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.woff" />
+    <None Include="wwwroot\fonts\fontawesome-webfont.woff2" />
+    <None Include="wwwroot\fonts\FontAwesome.otf" />
+    <None Include="wwwroot\images\Icons\carto.svg" />
+    <None Include="wwwroot\images\Icons\geo.svg" />
+    <None Include="wwwroot\images\Icons\meta.svg" />
+    <None Include="wwwroot\images\Icons\ortho.svg" />
+    <None Include="wwwroot\images\Icons\topo.svg" />
+    <None Include="wwwroot\images\logo.png" />
+    <None Include="wwwroot\images\Sprites\blank.gif" />
+    <None Include="wwwroot\images\Sprites\flags.png" />
+    <None Include="wwwroot\js\carto.js" />
+    <None Include="wwwroot\js\geo.js" />
+    <None Include="wwwroot\js\maps.js" />
+    <None Include="wwwroot\js\meta.js" />
+    <None Include="wwwroot\js\topo.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.6" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MetaGraffiti.Base\MetaGraffiti.Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Home\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -8,8 +8,20 @@
 	<title>@Model.PageTitle@(String.IsNullOrWhiteSpace(Model.PageTitle) ? "" : " | ")MetaGraffiti</title>
 	<script src="https://maps.googleapis.com/maps/api/js?key=@(AutoConfig.GoogleMapsApiKey)&libraries=places"></script>
 	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" crossorigin="anonymous"></script>
-	@System.Web.Optimization.Scripts.Render("~/bundle/js")
-	@System.Web.Optimization.Styles.Render("~/bundle/css")
+	<script src="~/Scripts/jquery-3.4.1.js"></script>
+	<script src="~/Scripts/jquery.sparkline.js"></script>
+	<script src="~/Scripts/bootstrap.js"></script>
+	<script src="~/Scripts/typeahead.bundle.js"></script>
+	<script src="~/Scripts/_graffiti/carto.js"></script>
+	<script src="~/Scripts/_graffiti/meta.js"></script>
+	<script src="~/Scripts/_graffiti/maps.js"></script>
+	<script src="~/Scripts/_graffiti/geo.js"></script>
+	<script src="~/Scripts/_graffiti/topo.js"></script>
+	<link href="~/Content/bootstrap.css" rel="stylesheet" />
+	<link href="~/Content/font-awesome.css" rel="stylesheet" />
+	<link href="~/Content/flags.css" rel="stylesheet" />
+	<link href="~/Content/_graffiti/common.css" rel="stylesheet" />
+	<link href="~/Content/_graffiti/typeahead.css" rel="stylesheet" />
 </head>
 <body>
 	<div class="container-fluid">

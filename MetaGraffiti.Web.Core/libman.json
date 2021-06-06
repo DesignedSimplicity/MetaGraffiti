@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery-sparklines@2.1.2",
+      "destination": "wwwroot/lib/jquery-sparklines/"
+    },
+    {
+      "library": "typeahead.js@0.11.1",
+      "destination": "wwwroot/lib/typeahead.js/"
+    }
+  ]
+}

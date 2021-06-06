@@ -1,0 +1,12 @@
+﻿@using MetaGraffiti.Web.Core.Models
+@model AdminViewModel
+
+@if (Model.IsAreaPage)
+{
+	<div class="h1"><a class="@CssHelper.GetAreaCss(Model.Area)" href="/">Graffiti</a> <span class="h2">\ <a class="@CssHelper.GetAreaCss(Model.Area)" href="/@(Model.Area)">@Model.Area</a></span> <span class="h3">\ @Model.PageName</span></div>
+}
+else if (!Model.IsHome)
+{
+	<div class="h1"><a class="@CssHelper.GetAreaCss(Model.Area)" href="/">Graffiti</a> <span class="h2">\ @Model.Area</span></div>
+}
+<hr />

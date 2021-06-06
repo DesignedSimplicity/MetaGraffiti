@@ -1,40 +1,15 @@
-﻿<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" />
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MetaGraffiti.Web.Admin</RootNamespace>
-    <AssemblyName>MetaGraffiti.Web.Admin</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>Exe</OutputType>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWPF>true</UseWPF>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
     <TypeScriptModuleKind />
@@ -51,500 +26,23 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
-    </Reference>
-    <Reference Include="Fizzler, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
-      <HintPath>..\packages\Fizzler.1.2.0\lib\netstandard2.0\Fizzler.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Extensions.Configuration, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.3.1.1\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.3.1.1\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Options, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Options.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Extensions.Primitives, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Extensions.Primitives.3.1.1\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationCore" />
-    <Reference Include="RestSharp, Version=106.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\packages\RestSharp.106.10.1\lib\net452\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Svg, Version=3.0.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
-      <HintPath>..\packages\Svg.3.0.102\lib\net452\Svg.dll</HintPath>
-    </Reference>
-    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.7.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Console, Version=4.0.1.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Console.4.3.1\lib\net46\System.Console.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.7.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Globalization.Calendars, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Globalization.Calendars.4.3.0\lib\net46\System.Globalization.Calendars.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
-      <Private>True</Private>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Net.Sockets, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Net.Sockets.4.3.0\lib\net46\System.Net.Sockets.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security" />
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.1\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.2\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.3\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.1\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Web.Infrastructure">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\bootstrap-grid.css" />
-    <Content Include="Content\bootstrap-grid.min.css" />
-    <Content Include="Content\bootstrap-reboot.css" />
-    <Content Include="Content\bootstrap-reboot.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\flags.css" />
-    <Content Include="Content\font-awesome.css" />
-    <Content Include="Content\font-awesome.min.css" />
-    <Content Include="Content\_graffiti\common.css" />
-    <Content Include="Content\_graffiti\typeahead.css" />
-    <Content Include="fonts\fontawesome-webfont.svg" />
-    <Content Include="Global.asax" />
-    <Content Include="Images\Icons\carto.svg" />
-    <Content Include="Images\Icons\geo.svg" />
-    <Content Include="Images\Icons\meta.svg" />
-    <Content Include="Images\Icons\ortho.svg" />
-    <Content Include="Images\Icons\topo.svg" />
-    <Content Include="Images\logo.png" />
-    <Content Include="Images\Sprites\blank.gif" />
-    <Content Include="Images\Sprites\flags.png" />
-    <Content Include="Scripts\bloodhound.js" />
-    <Content Include="Scripts\bloodhound.min.js" />
-    <Content Include="fonts\FontAwesome.otf" />
-    <Content Include="fonts\fontawesome-webfont.woff2" />
-    <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="fonts\fontawesome-webfont.ttf" />
-    <Content Include="fonts\fontawesome-webfont.eot" />
-    <Content Include="Scripts\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap.bundle.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\chart\chart.js" />
-    <Content Include="Scripts\esm\popper-utils.js" />
-    <Content Include="Scripts\esm\popper-utils.min.js" />
-    <Content Include="Scripts\esm\popper.js" />
-    <Content Include="Scripts\esm\popper.min.js" />
-    <Content Include="Scripts\index.js.flow" />
-    <Content Include="Scripts\esm\popper.min.js.map" />
-    <Content Include="Scripts\esm\popper.js.map" />
-    <Content Include="Scripts\esm\popper-utils.min.js.map" />
-    <Content Include="Scripts\esm\popper-utils.js.map" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
-    <None Include="Scripts\jquery-3.4.1.intellisense.js" />
-    <Content Include="Scripts\jquery-3.4.1.js" />
-    <Content Include="Scripts\jquery-3.4.1.min.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.js" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <Content Include="Scripts\jquery.sparkline.js" />
-    <Content Include="Scripts\jquery.sparkline.min.js" />
     <Content Include="Scripts\leaflet\awesome-markers\images\markers-matte%402x.png" />
-    <Content Include="Scripts\leaflet\awesome-markers\images\markers-matte.png" />
-    <Content Include="Scripts\leaflet\awesome-markers\images\markers-plain.png" />
     <Content Include="Scripts\leaflet\awesome-markers\images\markers-shadow%402x.png" />
-    <Content Include="Scripts\leaflet\awesome-markers\images\markers-shadow.png" />
     <Content Include="Scripts\leaflet\awesome-markers\images\markers-soft%402x.png" />
-    <Content Include="Scripts\leaflet\awesome-markers\images\markers-soft.png" />
-    <Content Include="Scripts\leaflet\awesome-markers\leaflet.awesome-markers.css" />
-    <Content Include="Scripts\leaflet\awesome-markers\leaflet.awesome-markers.js" />
-    <Content Include="Scripts\leaflet\awesome-markers\leaflet.awesome-markers.min.js" />
-    <Content Include="Scripts\leaflet\gpx\gpx.js" />
-    <Content Include="Scripts\leaflet\images\layers-2x.png" />
-    <Content Include="Scripts\leaflet\images\layers.png" />
-    <Content Include="Scripts\leaflet\images\marker-icon-2x.png" />
-    <Content Include="Scripts\leaflet\images\marker-icon.png" />
-    <Content Include="Scripts\leaflet\images\marker-shadow.png" />
-    <Content Include="Scripts\leaflet\leaflet-providers.js" />
-    <Content Include="Scripts\leaflet\leaflet-src.esm.js" />
-    <Content Include="Scripts\leaflet\leaflet-src.js" />
-    <Content Include="Scripts\leaflet\leaflet.css" />
-    <Content Include="Scripts\leaflet\leaflet.js" />
-    <Content Include="Scripts\leaflet\gpx\pin-icon-end.png" />
-    <Content Include="Scripts\leaflet\gpx\pin-icon-start.png" />
-    <Content Include="Scripts\leaflet\gpx\pin-icon-wpt.png" />
-    <Content Include="Scripts\leaflet\gpx\pin-shadow.png" />
-    <Content Include="Scripts\popper-utils.js" />
-    <Content Include="Scripts\popper-utils.min.js" />
-    <Content Include="Scripts\popper.js" />
-    <Content Include="Scripts\popper.min.js" />
-    <Content Include="Scripts\src\index.js" />
-    <Content Include="Scripts\src\methods\defaults.js" />
-    <Content Include="Scripts\src\methods\destroy.js" />
-    <Content Include="Scripts\src\methods\disableEventListeners.js" />
-    <Content Include="Scripts\src\methods\enableEventListeners.js" />
-    <Content Include="Scripts\src\methods\placements.js" />
-    <Content Include="Scripts\src\methods\update.js" />
-    <Content Include="Scripts\src\modifiers\applyStyle.js" />
-    <Content Include="Scripts\src\modifiers\arrow.js" />
-    <Content Include="Scripts\src\modifiers\computeStyle.js" />
-    <Content Include="Scripts\src\modifiers\flip.js" />
-    <Content Include="Scripts\src\modifiers\hide.js" />
-    <Content Include="Scripts\src\modifiers\index.js" />
-    <Content Include="Scripts\src\modifiers\inner.js" />
-    <Content Include="Scripts\src\modifiers\keepTogether.js" />
-    <Content Include="Scripts\src\modifiers\offset.js" />
-    <Content Include="Scripts\src\modifiers\preventOverflow.js" />
-    <Content Include="Scripts\src\modifiers\shift.js" />
-    <Content Include="Scripts\src\utils\clockwise.js" />
-    <Content Include="Scripts\src\utils\computeAutoPlacement.js" />
-    <Content Include="Scripts\src\utils\debounce.js" />
-    <Content Include="Scripts\src\utils\find.js" />
-    <Content Include="Scripts\src\utils\findCommonOffsetParent.js" />
-    <Content Include="Scripts\src\utils\findIndex.js" />
-    <Content Include="Scripts\src\utils\getBordersSize.js" />
-    <Content Include="Scripts\src\utils\getBoundaries.js" />
-    <Content Include="Scripts\src\utils\getBoundingClientRect.js" />
-    <Content Include="Scripts\src\utils\getClientRect.js" />
-    <Content Include="Scripts\src\utils\getFixedPositionOffsetParent.js" />
-    <Content Include="Scripts\src\utils\getOffsetParent.js" />
-    <Content Include="Scripts\src\utils\getOffsetRect.js" />
-    <Content Include="Scripts\src\utils\getOffsetRectRelativeToArbitraryNode.js" />
-    <Content Include="Scripts\src\utils\getOppositePlacement.js" />
-    <Content Include="Scripts\src\utils\getOppositeVariation.js" />
-    <Content Include="Scripts\src\utils\getOuterSizes.js" />
-    <Content Include="Scripts\src\utils\getParentNode.js" />
-    <Content Include="Scripts\src\utils\getPopperOffsets.js" />
-    <Content Include="Scripts\src\utils\getReferenceNode.js" />
-    <Content Include="Scripts\src\utils\getReferenceOffsets.js" />
-    <Content Include="Scripts\src\utils\getRoot.js" />
-    <Content Include="Scripts\src\utils\getRoundedOffsets.js" />
-    <Content Include="Scripts\src\utils\getScroll.js" />
-    <Content Include="Scripts\src\utils\getScrollParent.js" />
-    <Content Include="Scripts\src\utils\getStyleComputedProperty.js" />
-    <Content Include="Scripts\src\utils\getSupportedPropertyName.js" />
-    <Content Include="Scripts\src\utils\getViewportOffsetRectRelativeToArtbitraryNode.js" />
-    <Content Include="Scripts\src\utils\getWindow.js" />
-    <Content Include="Scripts\src\utils\getWindowSizes.js" />
-    <Content Include="Scripts\src\utils\includeScroll.js" />
-    <Content Include="Scripts\src\utils\index.js" />
-    <Content Include="Scripts\src\utils\isBrowser.js" />
-    <Content Include="Scripts\src\utils\isFixed.js" />
-    <Content Include="Scripts\src\utils\isFunction.js" />
-    <Content Include="Scripts\src\utils\isIE.js" />
-    <Content Include="Scripts\src\utils\isModifierEnabled.js" />
-    <Content Include="Scripts\src\utils\isModifierRequired.js" />
-    <Content Include="Scripts\src\utils\isNumeric.js" />
-    <Content Include="Scripts\src\utils\isOffsetContainer.js" />
-    <Content Include="Scripts\src\utils\removeEventListeners.js" />
-    <Content Include="Scripts\src\utils\runModifiers.js" />
-    <Content Include="Scripts\src\utils\setAttributes.js" />
-    <Content Include="Scripts\src\utils\setStyles.js" />
-    <Content Include="Scripts\src\utils\setupEventListeners.js" />
-    <Content Include="Scripts\typeahead.bundle.js" />
-    <Content Include="Scripts\typeahead.bundle.min.js" />
-    <Content Include="Scripts\typeahead.jquery.js" />
-    <Content Include="Scripts\typeahead.jquery.min.js" />
-    <Content Include="Scripts\umd\popper-utils.js" />
-    <Content Include="Scripts\umd\popper-utils.min.js" />
-    <Content Include="Scripts\umd\popper.js" />
-    <Content Include="Scripts\umd\popper.min.js" />
-    <Content Include="Scripts\_graffiti\geo.js" />
-    <Content Include="Scripts\_graffiti\topo.js" />
-    <Content Include="Scripts\_graffiti\carto.js" />
-    <Content Include="Scripts\_graffiti\meta.js" />
-    <Content Include="Scripts\_graffiti\maps.js" />
-    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AutoConfig.cs" />
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\ServiceConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\Api\RegionsController.cs" />
-    <Compile Include="Controllers\Api\TimezonesController.cs" />
-    <Compile Include="Controllers\CartoController.cs" />
-    <Compile Include="Controllers\Data\FileController.cs" />
-    <Compile Include="Controllers\Data\JsonController.cs" />
-    <Compile Include="Controllers\GeoController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Data\IconController.cs" />
-    <Compile Include="Controllers\OrthoController.cs" />
-    <Compile Include="Controllers\PlaceController.cs" />
-    <Compile Include="Controllers\TopoController.cs" />
-    <Compile Include="Controllers\TrackController.cs" />
-    <Compile Include="Controllers\TrailController.cs" />
-    <Compile Include="Global.asax.cs">
+    <Compile Update="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AdminViewModel.cs" />
-    <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
-    <Compile Include="Models\CartoViewModel.cs" />
-    <Compile Include="Models\GeoViewModel.cs" />
-    <Compile Include="Models\Helpers\CssHelper.cs" />
-    <Compile Include="Models\Helpers\JsonHelper.cs" />
-    <Compile Include="Models\Helpers\TextHelper.cs" />
-    <Compile Include="Models\OrthoPlacesViewModel.cs" />
-    <Compile Include="Models\OrthoSheetsViewModel.cs" />
-    <Compile Include="Models\OrthoTracksViewModel.cs" />
-    <Compile Include="Models\Partials\SimpleFilterModel.cs" />
-    <Compile Include="Models\Partials\CountryFilterModel.cs" />
-    <Compile Include="Models\Partials\TopoStatsPillsModel.cs" />
-    <Compile Include="Models\Partials\TopoTrailFormModel.cs" />
-    <Compile Include="Models\TopoViewModel.cs" />
-    <Compile Include="Models\TrailViewModel.cs" />
-    <Compile Include="Models\Helpers\IconHelpers.cs" />
-    <Compile Include="Models\PlaceViewModel.cs" />
-    <Compile Include="Models\TrackViewModel.cs" />
-    <Compile Include="Models\OrthoViewModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
-    <None Include="packages.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Geo\Index.cshtml" />
-    <Content Include="Views\Geo\Regions.cshtml" />
-    <Content Include="Views\Geo\Country.cshtml" />
-    <Content Include="Views\Geo\Timezones.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_Nav.cshtml" />
-    <Content Include="Views\Geo\Countries.cshtml" />
-    <Content Include="Views\Track\Preview.cshtml" />
-    <Content Include="Views\Carto\Index.cshtml" />
-    <Content Include="Views\Carto\Places.cshtml" />
-    <Content Include="Views\Ortho\Sheets.cshtml" />
-    <Content Include="Views\Place\Search.cshtml" />
-    <Content Include="Views\Place\Create.cshtml" />
-    <Content Include="Views\Carto\Report.cshtml" />
-    <Content Include="Views\Carto\Country.cshtml" />
-    <Content Include="Views\Shared\Widgets\GooglePlaces.cshtml" />
-    <Content Include="Views\Shared\Widgets\SearchPlaces.cshtml" />
-    <Content Include="Views\Ortho\Places.cshtml" />
-    <Content Include="Views\Ortho\Index.cshtml" />
-    <Content Include="Views\Ortho\Tracks.cshtml" />
-    <Content Include="Views\Topo\Index.cshtml" />
-    <Content Include="Views\Topo\Country.cshtml" />
-    <Content Include="Views\Topo\Report.cshtml" />
-    <Content Include="Views\Trail\Update.cshtml" />
-    <Content Include="Views\Track\Modify.cshtml" />
-    <Content Include="Views\Track\Manage.cshtml" />
-    <Content Include="Views\Shared\Widgets\TopoStatsPills.cshtml" />
-    <Content Include="Views\Shared\Buttons\ResetView.cshtml" />
-    <Content Include="Views\Trail\Display.cshtml" />
-    <Content Include="Views\Trail\Modify.cshtml" />
-    <Content Include="Views\Trail\_TrackGrid.cshtml" />
-    <Content Include="Views\Trail\Import.cshtml" />
-    <Content Include="Views\Trail\_TrailForm.cshtml" />
-    <Content Include="Views\Shared\Alerts\ErrorMessages.cshtml" />
-    <Content Include="Views\Shared\Alerts\SuccessConfirm.cshtml" />
-    <Content Include="Views\Place\Update.cshtml" />
-    <Content Include="Views\Place\_PlaceForm.cshtml" />
-    <Content Include="Views\Shared\Widgets\CountryFilter.cshtml" />
-    <Content Include="Views\Shared\Widgets\SimpleFilter.cshtml" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
-    <Content Include="Scripts\leaflet\leaflet-src.esm.js.map" />
-    <Content Include="Scripts\leaflet\leaflet-src.js.map" />
-    <Content Include="Scripts\leaflet\leaflet.js.map" />
-    <Content Include="Scripts\umd\popper.min.js.map" />
-    <Content Include="Scripts\umd\popper.js.map" />
-    <Content Include="Scripts\umd\popper.js.flow" />
-    <Content Include="Scripts\umd\popper-utils.min.js.map" />
-    <Content Include="Scripts\umd\popper-utils.js.map" />
-    <Content Include="Scripts\README.md" />
-    <Content Include="Scripts\popper.min.js.map" />
-    <Content Include="Scripts\popper.js.map" />
-    <Content Include="Scripts\popper-utils.min.js.map" />
-    <Content Include="Scripts\popper-utils.js.map" />
-    <None Include="Views\Carto\_Filters.cshtml" />
-    <Content Include="Views\Place\Display.cshtml" />
-    <Content Include="Views\Trail\Render.cshtml" />
-    <Content Include="Views\Trail\_TrailLeaf.cshtml" />
-    <Content Include="Views\Trail\Elevation.cshtml" />
-    <Content Include="Views\Trail\Elevation-Chartist.cshtml" />
-    <None Include="Web.Debug.config">
+    <None Update="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
+    <None Update="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
@@ -555,22 +53,47 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MetaGraffiti.Base\MetaGraffiti.Base.csproj">
-      <Project>{3d18de52-5844-475c-b842-4dd8e94335d6}</Project>
-      <Name>MetaGraffiti.Base</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\MetaGraffiti.Base\MetaGraffiti.Base.csproj" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.4.1" />
+    <PackageReference Include="FontAwesome" Version="4.7.0" />
+    <PackageReference Include="jQuery" Version="3.4.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
+    <PackageReference Include="Svg" Version="3.2.3" />
+    <PackageReference Include="System.AppContext" Version="4.3.0" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Console" Version="4.3.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.1" />
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
+    <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="System.Threading.Timer" Version="4.3.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
+    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    <PackageReference Include="Twitter.Typeahead" Version="0.11.1" />
+    <PackageReference Include="Antlr4" Version="4.6.6" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.6" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
@@ -589,20 +112,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props'))" />
-  </Target>
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

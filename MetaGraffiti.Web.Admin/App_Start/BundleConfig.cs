@@ -1,9 +1,9 @@
-﻿using System.Web.Optimization;
-
+﻿
 namespace MetaGraffiti.Web.Admin
 {
 	public class BundleConfig
 	{
+		/*
 		public static void RegisterBundles(BundleCollection bundles)
 		{
 			bundles.Add(new ScriptBundle("~/bundle/js")
@@ -28,5 +28,6 @@ namespace MetaGraffiti.Web.Admin
 						.Include("~/Content/_graffiti/typeahead.css")
 						);
 		}
+		*/
 	}
 }

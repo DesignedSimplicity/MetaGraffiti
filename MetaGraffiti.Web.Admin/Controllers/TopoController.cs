@@ -1,11 +1,10 @@
 ﻿using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Web.Admin.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {

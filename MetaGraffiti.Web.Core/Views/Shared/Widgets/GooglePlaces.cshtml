@@ -1,0 +1,26 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+
+<script>
+	// client side search: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+	$(document).ready(function () {
+		var searchField = document.getElementById("SearchPlace");
+		var searchBox = new google.maps.places.SearchBox(searchField);
+		searchBox.addListener('places_changed', function () {
+			var places = searchBox.getPlaces();
+
+			if (places.length == 0) {
+				return;
+			}
+
+			var place = places[0];
+			if (place.place_id) {
+				var url = '@PlaceViewModel.GetPreviewUrl("{googlePlaceID}")'.replace('{googlePlaceID}', place.place_id);
+				window.location = url;
+			}
+		});
+	});
+</script>
+
+<div class="form-group">
+	<input type="text" class="form-control" id="SearchPlace" placeholder="Search" />
+</div>

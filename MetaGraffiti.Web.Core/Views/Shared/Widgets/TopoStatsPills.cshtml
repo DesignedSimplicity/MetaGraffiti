@@ -1,0 +1,42 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model TopoStatsPillsModel
+
+<span class="@(Model.AlignJustify ? "d-flex justify-content-between" : "")">
+	<span class="badge badge-pill badge-dark">
+		<i class="far fa-dot-circle"></i>
+		@Model.Stats.PointCount pts
+	</span>
+	@if (Model.ShowDetails)
+	{
+		<span class="badge badge-pill badge-secondary">
+			<i class="fas fa-stopwatch"></i>
+			@Model.Stats.SecondsBetweenPoints.ToString("0") sec
+		</span>
+	}
+	<span class="badge badge-pill badge-primary">
+		<i class="fas fa-ruler-horizontal"></i>
+		@Model.Stats.EstimatedKM.ToString("#,##0.0") km
+	</span>
+	@if (Model.ShowDetails)
+	{
+		<span class="badge badge-pill badge-success">
+			<i class="fas fa-level-up-alt"></i>
+			@Model.Stats.EstimatedMetersAscent.ToString("#,##0") m
+		</span>
+		<span class="badge badge-pill badge-danger">
+			<i class="fas fa-level-down-alt"></i>
+			@Model.Stats.EstimatedMetersDescent.ToString("#,##0") m
+		</span>
+	}
+	<span class="badge badge-pill badge-info">
+		<i class="fas fa-clock"></i>
+		@TextHelper.GetElapsedTime(Model.Stats.ElapsedTime)
+	</span>
+	@if (Model.ShowDetails)
+	{
+		<span class="badge badge-pill badge-warning">
+			<i class="fas fa-calendar-alt"></i>
+			@TextHelper.GetTotalDays(Model.Stats.DayCount)
+		</span>
+	}
+</span>

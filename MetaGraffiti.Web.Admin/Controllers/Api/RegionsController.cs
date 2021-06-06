@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Http;
 using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers.Api
 {
-    public class RegionsController : ApiController
+    public class RegionsController : ControllerBase
     {
 		/*
 		public IEnumerable<GeoRegionInfo> GetAllRegions()
@@ -21,29 +20,29 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 		*/
 
 		[HttpGet]
-		public IHttpActionResult GetRegion(string id)
+		public IActionResult GetRegion(string id)
 		{
 			var region = GeoRegionInfo.Find(id);
 			return ReturnRegion(region);
 		}
 
 		[HttpGet]
-		public IHttpActionResult FindRegionByPoint(double lat, double lng)
+		public IActionResult FindRegionByPoint(double lat, double lng)
 		{
 			var regions = Graffiti.Geo.NearbyRegions(new GeoPosition(lat, lng));
 			return ReturnRegions(regions);
 		}
 
-		private IHttpActionResult ReturnRegion(GeoRegionInfo region)
+		private IActionResult ReturnRegion(GeoRegionInfo region)
 		{
-			if (region == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+			if (region == null) return new NotFoundResult();
 
 			var d = MapRegion(region);
 			return Ok(d);
 		}
-		private IHttpActionResult ReturnRegions(IEnumerable<GeoRegionInfo> regions)
+		private IActionResult ReturnRegions(IEnumerable<GeoRegionInfo> regions)
 		{
-			if (regions == null || regions.Count() == 0) throw new HttpResponseException(HttpStatusCode.NotFound);
+			if (regions == null || regions.Count() == 0) return new NotFoundResult();
 
 			var a = new List<dynamic>();
 			foreach (var region in regions)

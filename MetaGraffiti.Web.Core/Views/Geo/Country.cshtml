@@ -1,0 +1,115 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model GeoViewModel
+
+@Html.Partial("_Nav")
+@{
+	var country = Model.SelectedCountry;
+	var regions = country.Regions.OrderBy(x => x.RegionName);
+}
+
+<script>
+	var _popup = null;
+	var _editor = null;
+	var _country = @JsonHelper.GetJson(country);
+	var _regions = @JsonHelper.GetJson(regions);
+
+	$(document).ready(function () {
+		initMap();
+
+		for (i = 0; i < _regions.length; i++) {
+			var color = getMapColor(i);
+
+			showBounds(_regions[i].bounds, color);
+
+			$("table > tbody > tr").eq(i).children().eq(0).css('background-color', color); // TODO: consoldiate table row color feature
+		}
+
+		showBounds(_country.bounds, null, 0);
+		markPoint(_country.center.lat, _country.center.lng, _country.name)
+
+		$(".js-reset-view").click(function (e) {
+			e.preventDefault();
+
+			if (_editor) _editor.setMap(null);
+			if (_popup) _popup.close();
+
+			showBounds(_country.bounds, null, 0);
+		});
+
+		$(".js-mappable-row").click(function () {
+			if (_editor) _editor.setMap(null);
+			if (_popup) _popup.close();
+
+			var i = $(this).index();
+			_editor = editBounds(_regions[i].bounds);
+			_editor.addListener('bounds_changed', showWindow);
+		});
+
+		function showWindow() {
+			if (!_popup) _popup = new google.maps.InfoWindow();
+
+			var ne = _editor.getBounds().getNorthEast();
+			var sw = _editor.getBounds().getSouthWest();
+
+			var content = 'North West: ' + ne.lat().toFixed(6) + ' x ' + sw.lng().toFixed(6) + '<br />' + 'South East: ' + sw.lat().toFixed(6) + ' x ' + ne.lng().toFixed(6);
+			_popup.setContent(content);
+
+			var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+			_popup.setPosition(nw);
+
+			_popup.open(_mapGoogle);
+		}
+	});
+</script>
+
+<div id="map-container">
+	<div id="map">
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-sm-6">
+		<div>
+			<span class="h2">
+				<a class="geo-color" href="/geo/countries/">Countries</a>
+				<span class="h3"> \ @FlagHelper.GetFlagIcon(country)@country.Name</span>
+			</span>
+			<div class="float-right">
+				<div class="btn-group">
+					<a class="btn btn-outline-success" href="@TopoViewModel.GetCountryUrl(country.ISO2)">@IconHelper.TopoIcon</a>
+					<a class="btn btn-outline-primary" href="@CartoViewModel.GetCountryUrl(country)">@IconHelper.CartoIcon</a>
+					@Html.Partial("Buttons/ResetView")
+				</div>
+			</div>
+		</div>
+		<br />
+		<table class="table table-sm table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th class="text-center">#</th>
+					<th>Abbr</th>
+					<th>Name</th>
+					<th>Center</th>
+					<th>North West</th>
+					<th>South East</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var count = 0;
+					foreach (var r in regions)
+					{
+						<tr class="js-mappable-row">
+							<td class="text-center">@(++count)</td>
+							<td>@r.RegionAbbr</td>
+							<td class="font-weight-bold">@r.RegionName</td>
+							<td class="small">@r.Center.Latitude.ToString("0.0000"), @r.Center.Longitude.ToString("0.0000")</td>
+							<td class="small">@r.Bounds.NorthWest.Latitude.ToString("0.0000"), @r.Bounds.NorthWest.Longitude.ToString("0.0000")</td>
+							<td class="small">@r.Bounds.SouthEast.Latitude.ToString("0.0000"), @r.Bounds.SouthEast.Longitude.ToString("0.0000")</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

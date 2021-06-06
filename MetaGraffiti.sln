@@ -5,18 +5,20 @@ VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.Base", "MetaGraffiti.Base\MetaGraffiti.Base.csproj", "{3D18DE52-5844-475C-B842-4DD8E94335D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Base.Tests", "MetaGraffiti.Base.Tests\MetaGraffiti.Base.Tests.csproj", "{FFEECCFB-2FEE-469A-9D96-0A1197AD4A7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.Base.Tests", "MetaGraffiti.Base.Tests\MetaGraffiti.Base.Tests.csproj", "{FFEECCFB-2FEE-469A-9D96-0A1197AD4A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Admin", "MetaGraffiti.Web.Admin\MetaGraffiti.Web.Admin.csproj", "{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.Web.Admin", "MetaGraffiti.Web.Admin\MetaGraffiti.Web.Admin.csproj", "{6A28254A-80A7-4D9E-B1BB-F5FB0ABBBEBF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{B10C4EC7-8042-479C-AAA1-C989953A80E3}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.App.GpxGraffiti", "MetaGraffiti.App.GpxGraffiti\MetaGraffiti.App.GpxGraffiti.csproj", "{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.App.GpxGraffiti", "MetaGraffiti.App.GpxGraffiti\MetaGraffiti.App.GpxGraffiti.csproj", "{8B159DC8-C118-4252-A7BD-A9AE0BB84FCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Demo", "MetaGraffiti.Web.Demo\MetaGraffiti.Web.Demo.csproj", "{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaGraffiti.Web.Demo", "MetaGraffiti.Web.Demo\MetaGraffiti.Web.Demo.csproj", "{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetaGraffiti.Web.Core", "MetaGraffiti.Web.Core\MetaGraffiti.Web.Core.csproj", "{1877C0E0-C0BA-4F1D-A9F3-446A0F003A7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E7C885C-5DD5-4BC9-9805-58DD4F57A943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1877C0E0-C0BA-4F1D-A9F3-446A0F003A7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1877C0E0-C0BA-4F1D-A9F3-446A0F003A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1877C0E0-C0BA-4F1D-A9F3-446A0F003A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1877C0E0-C0BA-4F1D-A9F3-446A0F003A7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

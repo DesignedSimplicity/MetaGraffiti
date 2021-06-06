@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo.Info;
@@ -15,6 +13,7 @@ using MetaGraffiti.Base.Modules.Carto.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Common;
 using MetaGraffiti.Base.Modules.Topo;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -150,7 +149,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			var model = InitModel();
 
 			var track = _trackEditService.GetTrack(id);
-			if (track == null) throw new HttpException(404, $"Track {id} not found!");
+			if (track == null) return new NotFoundResult(); //$"Track {id} not found!");
 
 			model.EditTrack = InitEditModel(track);
 

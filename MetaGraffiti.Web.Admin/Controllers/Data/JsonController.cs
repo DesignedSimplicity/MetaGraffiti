@@ -1,11 +1,10 @@
 ﻿using MetaGraffiti.Base.Modules.Geo.Info;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers
 {
@@ -13,12 +12,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
     {
 		public ActionResult PlaceTypes()
 		{
-			return Json(ServiceConfig.CartoPlaceService.ListPlaceTypes(), JsonRequestBehavior.AllowGet);
+			return Json(ServiceConfig.CartoPlaceService.ListPlaceTypes()); //, JsonRequestBehavior.AllowGet);
 		}
 
 		public ActionResult Countries()
 		{
-			return Json(GeoCountryInfo.All.Select(x => x.Name), JsonRequestBehavior.AllowGet);
+			return Json(GeoCountryInfo.All.Select(x => x.Name)); //,  JsonRequestBehavior.AllowGet);
 		}
 
 
@@ -65,7 +64,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				all.Add(one);
 			}
 
-			return Json(all, JsonRequestBehavior.AllowGet);
+			return Json(all); //,  JsonRequestBehavior.AllowGet);
 		}
 
 		public ActionResult ListCountries()
@@ -91,7 +90,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				all.Add(one);
 			}
 
-			return Json(all, JsonRequestBehavior.AllowGet);
+			return Json(all); //, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

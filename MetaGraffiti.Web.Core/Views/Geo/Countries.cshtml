@@ -1,0 +1,64 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model GeoViewModel
+
+@Html.Partial("_Nav")
+
+<table class="table table-sm table-striped">
+	<thead class="thead-dark">
+		<tr>
+			<th>ID</th>
+			<th class="text-center">Continent</th>
+			<th>DIV</th>
+			<th>OC</th>
+			<th>ISO2</th>
+			<th>ISO3</th>
+			<th>Name</th>
+			<th>Long Name</th>
+			<th>Local Name</th>
+			<th>Abbr 10</th>
+			<th>Abbr 15</th>
+			<th>Abbr 30</th>
+			<th>Center</th>
+			<th>NW</th>
+			<th>SE</th>
+			<th>Regions</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var c in Model.Countries.OrderBy(x => x.Continent).ThenBy(x => x.Name))
+		{
+			<tr class="@(Model.IsVisited(c) ? "table-info" : "")">
+				<td>@c.CountryID</td>
+				<td class="text-center">
+					<span class="badge badge-@(CssHelper.GetContinentCss(c.Continent))">
+						@c.Continent.ToString().Replace("America", " America")
+					</span>
+				</td>
+				<td class="text-center">@c.Division</td>
+				<td>@c.OC</td>
+				<td>@c.ISO2</td>
+				<td class="font-weight-bold">@c.ISO3</td>
+				<td class="h4">
+					<a class="text-@Model.AreaCss" href="@GeoViewModel.GetCountryUrl(c)">@FlagHelper.GetFlagIcon(c)@c.Name</a>
+				</td>
+				<td class="small">@c.NameLong</td>
+				<td class="font-italic">
+					@c.NameLocal
+					<div class="small">@c.NameLocalLong</div>
+				</td>
+				<td>@c.Abbr10</td>
+				<td>@c.Abbr15</td>
+				<td>@c.Abbr30</td>
+				<td class="small">@c.Center.Latitude.ToString("0.0000"), @c.Center.Longitude.ToString("0.0000")</td>
+				<td class="small">@c.Bounds.NorthWest.Latitude.ToString("0.0000"), @c.Bounds.NorthWest.Longitude.ToString("0.0000")</td>
+				<td class="small">@c.Bounds.SouthEast.Latitude.ToString("0.0000"), @c.Bounds.SouthEast.Longitude.ToString("0.0000")</td>
+				<td class="text-center h4">
+					@if (c.HasRegions)
+					{
+						<a class="text-@Model.AreaCss" href="@GeoViewModel.GetRegionsUrl(c)">@c.Regions.Count()</a>
+					}
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using AlloyTemplates;
 using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
@@ -94,7 +95,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		public string UrlPath
 		{
-			get { return HttpContext.Current.Request.Url.AbsolutePath; }
+			get { return HttpContextHelper.Current.Request.Path; }// .Url.AbsolutePath; }
 		}
 	}
 }

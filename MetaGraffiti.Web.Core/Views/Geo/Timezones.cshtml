@@ -1,0 +1,43 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model GeoViewModel
+
+@Html.Partial("_Nav")
+
+<table id="timezones" class="table table-sm table-striped table-bordered">
+	<thead class="thead-dark">
+		<tr>
+			<th>Type</th>
+			<th>GeoTZID</th>
+			<th>Is Default</th>
+			<th>Offset UTC</th>
+			<th>Offset DST</th>
+			<th>Has DST</th>
+			<th>Key</th>
+			<th>Name</th>
+			<th>TZID</th>
+			<th>WinTZ</th>
+			<th>Display As</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var t in Model.Timezones.OrderBy(x => x.TimezoneType).ThenBy(x => x.OffsetUTC).ThenBy(x => x.OffsetDST))
+		{
+			<tr>
+				<td>
+					<a id="@t.GeoTZID"></a>
+					@t.TimezoneType
+				</td>
+				<td>@t.GeoTZID</td>
+				<td>@t.IsDefault</td>
+				<td>@t.OffsetUTC</td>
+				<td>@t.OffsetDST</td>
+				<td>@t.HasDST</td>
+				<td class="font-weight-bold">@t.Key</td>
+				<td>@t.Name</td>
+				<td>@t.TZID</td>
+				<td>@t.WinTZ</td>
+				<td>@t.DisplayAs</td>
+			</tr>
+		}
+	</tbody>
+</table>

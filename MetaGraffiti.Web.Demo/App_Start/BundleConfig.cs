@@ -1,6 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
-
+﻿
 namespace MetaGraffiti.Web.Demo
 {
 	public class BundleConfig

@@ -1,0 +1,56 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model GeoViewModel
+
+@Html.Partial("_Nav")
+
+<table class="table table-sm table-striped">
+	<thead class="thead-dark">
+		<tr>
+			<th>Region ID</th>
+			<th>Division</th>
+			<th>ISO</th>
+			<th>Abbr</th>
+			<th>Name</th>
+			<th>Name Local</th>
+			<th>Center</th>
+			<th>North West</th>
+			<th>South East</th>
+		</tr>
+	</thead>
+	<tbody>
+		@{
+			var countryID = 0;
+			foreach (var r in Model.Regions.OrderBy(x => x.Country.Name).ThenBy(x => x.RegionName))
+			{
+				if (countryID != r.CountryID)
+				{
+					if (countryID != 0)
+					{
+						<tr>
+							<td colspan="9">
+								<hr />
+							</td>
+						</tr>
+					}
+					<tr class="table-secondary">
+						<td colspan="9" class="h3">
+							<a class="text-@Model.AreaCss" id="@(r.Country.ISO3)" href="@GeoViewModel.GetCountryUrl(r.Country)">@FlagHelper.GetFlagIcon(r.Country)@r.Country.Name</a>
+						</td>
+					</tr>
+				}
+				<tr>
+					<td>@r.RegionID</td>
+					<td>@r.RegionDiv</td>
+					<td>@r.RegionISO</td>
+					<td>@r.RegionAbbr</td>
+					<td class="h4">@r.RegionName</td>
+					<td>@r.RegionNameLocal</td>
+					<td class="small">@r.Center.Latitude.ToString("0.0000"), @r.Center.Longitude.ToString("0.0000")</td>
+					<td class="small">@r.Bounds.NorthWest.Latitude.ToString("0.0000"), @r.Bounds.NorthWest.Longitude.ToString("0.0000")</td>
+					<td class="small">@r.Bounds.SouthEast.Latitude.ToString("0.0000"), @r.Bounds.SouthEast.Longitude.ToString("0.0000")</td>
+				</tr>
+				countryID = r.CountryID;
+			}
+		}
+	</tbody>
+</table>

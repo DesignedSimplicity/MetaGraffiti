@@ -1,0 +1,7 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model AdminViewModel
+
+@if (Model.HasConfirmation)
+{
+	<div class="alert alert-success">@IconHelper.ConfirmationMessageIcon @Model.ConfirmMessage</div>
+}

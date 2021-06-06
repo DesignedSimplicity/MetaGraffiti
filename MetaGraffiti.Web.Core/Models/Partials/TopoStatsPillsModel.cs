@@ -1,0 +1,33 @@
+﻿using MetaGraffiti.Base.Modules.Topo;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace MetaGraffiti.Web.Core.Models
+{
+	public class TopoStatsPillsModel
+	{
+		// ==================================================
+		// Required
+		public TopoStats Stats { get; set; }
+		public bool ShowDetails { get; set; }
+		public bool AlignJustify { get; set; }
+
+		
+		// ==================================================
+		// Constructors
+		public TopoStatsPillsModel(TopoStats stats, bool showDetails = false, bool alignJustify = false)
+		{
+			Stats = stats;
+			ShowDetails = showDetails;
+			AlignJustify = alignJustify;
+		}
+
+		public TopoStatsPillsModel(IEnumerable<ITopoTrackInfo> tracks, bool showDetails = false, bool fixedWidth = false)
+		{
+			Stats = TopoStats.FromTracks(tracks);
+			ShowDetails = showDetails;
+			AlignJustify = fixedWidth;
+		}
+	}
+}

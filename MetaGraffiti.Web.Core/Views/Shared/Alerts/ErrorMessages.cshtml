@@ -1,0 +1,12 @@
+﻿@using MetaGraffiti.Web.Core.Models;
+@model AdminViewModel
+
+@if (Model.HasError)
+{
+	<div class="alert alert-danger">
+		@foreach (var error in Model.ErrorMessages)
+		{
+			<div>@IconHelper.ErrorMessageIcon @error</div>
+		}
+	</div>
+}

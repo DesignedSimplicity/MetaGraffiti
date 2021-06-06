@@ -4,32 +4,32 @@ using System.Dynamic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Web.Http;
 using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
 using MetaGraffiti.Base.Services;
 using MetaGraffiti.Base.Services.External;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MetaGraffiti.Web.Admin.Controllers.Api
 {
-	public class TimezonesController : ApiController
-	{
-		private IHttpActionResult GetTimezone(string id)
+	public class TimezonesController : ControllerBase
+    {
+		private IActionResult GetTimezone(string id)
 		{
 			var t = GeoTimezoneInfo.Find(id);
 			if (t == null)
 			{
 				t = Graffiti.Geo.FindTimezone(id);
 			}
-			if (t == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+			if (t == null) return new NotFoundResult();
 
 			var d = MapTimezone(t);
 			return Ok(d);
 		}
 
 		[HttpGet]
-		public IHttpActionResult FindTimezoneByPoint(double lat, double lng)
+		public IActionResult FindTimezoneByPoint(double lat, double lng)
 		{
 			var service = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
 
@@ -39,7 +39,7 @@ namespace MetaGraffiti.Web.Admin.Controllers.Api
 		}
 
 		[HttpGet]
-		public IHttpActionResult FindTimezoneByLocation(string name)
+		public IActionResult FindTimezoneByLocation(string name)
 		{
 			var timezone = Graffiti.Geo.GuessTimezone(GeoRegionInfo.Find(name));
 			if (timezone != null) return GetTimezone(timezone?.TZID ?? "");

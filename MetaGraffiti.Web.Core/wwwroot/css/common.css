@@ -1,0 +1,134 @@
+﻿html {
+	overflow-y: scroll;
+}
+
+
+#map-container {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	right: 100%;
+	bottom: 100%;
+	height: 100%;
+	width: 50%;
+}
+
+#map-container-full {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 100%;
+	bottom: 100%;
+	height: 100%;
+	width: 100%;
+}
+
+	#map {
+		width: 100%;
+		height: 100%;
+	}
+
+
+.flag {
+	margin-bottom: 6px;
+	margin-right: 6px;
+}
+
+
+
+
+.js-mappable-row:hover {
+	cursor: crosshair;
+	color: #900;
+	background-color: #fee !important;
+}
+
+
+
+
+/****************************************/
+/* table row sort icons */
+
+.thead-sort a {
+	margin-right: 0.2rem;
+}
+
+
+
+/****************************************/
+/* svg icon links */
+
+.icon-link > * {
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+.icon-link > svg {
+	width: 1em;
+	height: 1em;
+	margin-right: 0.1em;
+}
+
+
+
+
+/****************************************/
+/* module color selection */
+
+.carto-color {
+	color: #0b7efb;
+	fill: #0b7efb;
+}
+
+	.carto-color:hover {
+		color: #0859af;
+		fill: #0859af;
+	}
+
+.topo-color {
+	color: #2da44c;
+	fill: #2da44c;
+}
+
+	.topo-color:hover {
+		color: #247c3b;
+		fill: #247c3b;
+	}
+
+.geo-color {
+	color: #1fa1c6;
+	fill: #1fa1c6;
+}
+
+	.geo-color:hover {
+		color: #1a7989;
+		fill: #1a7989;
+	}
+
+.ortho-color {
+	color: #6c757d;
+	fill: #6c757d;
+}
+
+	.ortho-color:hover {
+		color: #555c62;
+		fill: #555c62;
+	}
+
+
+
+
+.display-meta {
+	font-size: 150px !important;
+}
+
+	.display-meta > * {
+		display: inline-block;
+		vertical-align: middle;
+
+	}
+
+	.display-meta img {
+		height: 128px;
+		margin-top: 16px;
+	}
