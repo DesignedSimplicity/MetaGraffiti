@@ -11,7 +11,6 @@ namespace MetaGraffiti.Base.Modules.Foto
 
 	public interface IFotoExif
 	{
-		Exception Error { get; set; }
 		string Camera { get; set; } //= FotoCamera.Unknown;
 		DateTime DateTaken { get; set; } //= DateTime.Now;
 		int Width { get; set; }
@@ -37,5 +36,6 @@ namespace MetaGraffiti.Base.Modules.Foto
 		bool Portrait { get; }
 		bool Landscape { get; }
 		decimal Megapixels { get; }
+		Exception Error { get; set; }
 	}
 }

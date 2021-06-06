@@ -40,4 +40,41 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		decimal? Course { get; }
 		string Source { get; }
 	}
+
+
+	public interface IImgMetaData
+	{
+		int PixelsX { get; }
+		int PixelsY { get; }
+
+		DateTime? DateTaken { get; }
+
+		string Title { get; }
+		string Comment { get; }
+		string Copyright { get; }
+		string Description { get; }
+		string CameraMake { get; }
+		string CameraModel { get; }
+
+		decimal? ShutterSpeed { get; }
+		decimal? ExposureTime { get; }      // seconds
+		decimal? FocalLength { get; }       // on lens
+		decimal? FocalEquivalence { get; }  // at 35 equ
+		decimal? Aperture { get; }          // f1/a
+		decimal? FNumber { get; }           // f
+		decimal? Altitude { get; }
+		decimal? Longitude { get; }
+		decimal? Latitude { get; }
+
+		int? Orientation { get; }
+		long? ISO { get; }
+
+		/*
+		// Xmp:Aux
+		string Lens { get; }
+		string SerialNumber { get; }
+		string LensSerialNumber { get; }
+		string FlashCompensation { get; }
+		*/
+	}
 }

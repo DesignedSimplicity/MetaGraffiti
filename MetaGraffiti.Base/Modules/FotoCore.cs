@@ -9,7 +9,8 @@ namespace MetaGraffiti.Base.Modules
 	{
 		private const string _xiamoi = "Xiamoi";
 		private const string _huawei = "Huawei";
-		private const string _olympus = "Olympus";		
+		private const string _olympus = "Olympus";
+		//motorola Moto G (5) Plus
 
 		public List<FotoCamera> ListCameras()
 		{

@@ -99,6 +99,11 @@ _Range, Space, District, Zone, Transit, Trek, Journey, Odyssey, Excursion, Exped
 
 ### Fotograffiti Addition
 
+Ortho.JpgFileReader
+Ortho.JpgFileWriter
+Ortho.XmpFileReader
+
+
 Exif Reader
 Image Resizer
 

@@ -6,5 +6,6 @@ namespace MetaGraffiti.Base.Modules.Foto
 {
 	public class FotoPath
 	{
+		public string RootUri { get; set; }
 	}
 }
