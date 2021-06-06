@@ -51,6 +51,7 @@
 					<td class="text-center">Time</td>
 					<td>Country</td>
 					<td>Region</td>
+					<td>Camera</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -70,6 +71,7 @@
 							<td class="text-center">@source.Foto.Exif.DateTaken.ToShortTimeString()</td>
 							<td>@(source.Country?.Name)</td>
 							<td>@(source.Region?.RegionName)</td>
+							<td>@source.Foto.Exif.CameraMake @source.Foto.Exif.CameraModel</td>
 						</tr>
 						index++;
 					}
