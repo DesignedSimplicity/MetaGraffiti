@@ -75,6 +75,16 @@
 /****************************************/
 /* module color selection */
 
+.foto-color {
+	color: #ffc107;
+	fill: #ffc107;
+}
+
+	.foto-color:hover {
+		color: #e0a800;
+		fill: #e0a800;
+	}
+
 .carto-color {
 	color: #0b7efb;
 	fill: #0b7efb;

@@ -51,6 +51,47 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		public ActionResult Photos(string path = "")
+		{
+			var service = new FotoListService();
+			var model = new OrthoPhotosViewModel();
+
+			model.PhotoSourceRoot = new DirectoryInfo(AutoConfig.PhotoSourceUri);
+
+			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PhotoSourceUri, path));
+			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
+
+			/*
+			var root = model.PhotoSourceRoot.FullName.TrimEnd('\\') + '\\';
+			if (!dir.FullName.StartsWith(root)) throw new Exception($"Path {dir.FullName} is not in root {root}");
+			*/
+
+			model.SelectedDirectory = dir;
+
+			model.Sources = new List<OrthoPhotoImportModel>();
+			foreach (var file in dir.GetFiles("*.jpg"))
+			{
+				var source = new OrthoPhotoImportModel()
+				{
+					File = file
+				};
+
+				var foto = service.LoadImage(file);
+				source.Foto = foto;
+
+				if (foto.HasCoordinates)
+				{
+					var position = new GeoPosition(foto.Exif.Latitude.Value, foto.Exif.Longitude.Value);
+					source.Country = Graffiti.Geo.NearestCountry(position);
+					source.Region = Graffiti.Geo.NearestRegion(position);
+				}
+
+				model.Sources.Add(source);
+			}
+
+			return View(model);
+		}
+
 		public ActionResult Places(int? year, string country = "")
 		{
 			var model = new OrthoPlacesViewModel();

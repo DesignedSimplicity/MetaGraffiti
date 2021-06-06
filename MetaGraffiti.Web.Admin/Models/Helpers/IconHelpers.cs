@@ -76,6 +76,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Entity Types
+		public static HtmlString FotoIcon { get { return GetFontAwesomeIcon("fas fa-camera"); } }
 		public static HtmlString TrailIcon { get { return GetFontAwesomeIcon("fas fa-map-signs"); } }
 		public static HtmlString TrackIcon { get { return GetFontAwesomeIcon("fas fa-paw"); } }
 		public static HtmlString PlaceIcon { get { return GetFontAwesomeIcon("fas fa-map-marker"); } }

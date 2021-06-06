@@ -10,6 +10,13 @@
 	<div class="row">
 		<div class="col-md-8">
 			<div>
+				<a href="@FotoViewModel.GetFotoUrl()" class="foto-color">
+					<div class="icon-link display-2">@SvgHelper.GetIcon("Foto")<span class="font-weight-bold">Foto</span><span>Graffiti</span> </div>
+					<div class="h2">Take Fotos</div>
+				</a>
+			</div>
+			<hr />
+			<div>
 				<a href="@TopoViewModel.GetTopoUrl()" class="topo-color">
 					<div class="icon-link display-2">@SvgHelper.GetIcon("Topo")<span class="font-weight-bold">Topo</span><span>Graffiti</span> </div>
 					<div class="h2">Make Trails</div>
@@ -39,6 +46,10 @@
 		</div>
 		<div class="col-md-4">
 			<div class="mt-2">
+				<a href="@OrthoViewModel.GetBrowsePhotosUrl(DateTime.Now.Year.ToString())" class="foto-color h1">@IconHelper.FotoIcon <span>Take Picture</span></a>
+			</div>
+			<hr />
+			<div class="mt-2">
 				<a href="@OrthoViewModel.GetBrowseTracksUrl(DateTime.Now.Year.ToString())" class="topo-color h1">@IconHelper.TrackIcon <span>Load Track</span></a>
 			</div>
 			<hr />
@@ -46,12 +57,12 @@
 				<a href="@OrthoViewModel.GetPlacesUrl(DateTime.Now.Year)" class="carto-color h1">@IconHelper.PlaceIcon <span>Add Place</span></a>
 			</div>
 			<!--
-			<div><a href="/chrono/" class="text-danger"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Build Timelines<small></small></div></a></div>
-			<hr />
-			<div><a href="/choro/" class="text-info"><div class="display-3"><span class="font-weight-bold">Choro</span>Graffiti</div><div class="h3">Describe Places <small></small></div></a></div>
-			<hr />
-			<div><a href="/bio/" class="text-dark"><div class="display-3"><span class="font-weight-bold">Bio</span>Graffiti</div><div class="h3">Document History <small></small></div></a></div>
-			-->
+	<div><a href="/chrono/" class="text-danger"><div class="display-3"><span class="font-weight-bold">Chrono</span>Graffiti</div><div class="h3">Build Timelines<small></small></div></a></div>
+	<hr />
+	<div><a href="/choro/" class="text-info"><div class="display-3"><span class="font-weight-bold">Choro</span>Graffiti</div><div class="h3">Describe Places <small></small></div></a></div>
+	<hr />
+	<div><a href="/bio/" class="text-dark"><div class="display-3"><span class="font-weight-bold">Bio</span>Graffiti</div><div class="h3">Document History <small></small></div></a></div>
+	-->
 		</div>
 	</div>
 </div>
