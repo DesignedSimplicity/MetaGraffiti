@@ -51,6 +51,7 @@
 					<td class="text-center">Time</td>
 					<td>Country</td>
 					<td>Region</td>
+					<td>Camera</td>
 					<td>Thumb</td>
 				</tr>
 			</thead>
@@ -71,6 +72,7 @@
 							<td class="text-center">@source.Image.Exif.DateTaken.ToShortTimeString()</td>
 							<td>@(source.Country?.Name)</td>
 							<td>@(source.Region?.RegionName)</td>
+							<td>@(source.Image.Exif.CameraMake) @(source.Image.Exif.CameraModel)</td>
 							<td><img src="@FotoViewModel.GetThumbUrl(source.File.FullName, 100)" /></td>
 						</tr>
 						index++;

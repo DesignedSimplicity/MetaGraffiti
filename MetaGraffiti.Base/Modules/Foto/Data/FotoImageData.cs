@@ -5,13 +5,18 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Foto.Data
 {
-	public class FotoImageData
+	public class FotoSourceData
 	{
-		public FileInfo File { get; set; }
+		public FotoFile File { get; set; }
+
+		
+		
 	}
 
 	public class FotoExifData : IFotoExif
 	{
+		public Exception Error { get; set; }
+
 		public string Camera { get; set; } //= FotoCamera.Unknown;
 		public DateTime DateTaken { get; set; } //= DateTime.Now;
 		public int Width { get; set; }

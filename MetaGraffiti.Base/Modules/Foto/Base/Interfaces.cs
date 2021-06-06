@@ -11,6 +11,7 @@ namespace MetaGraffiti.Base.Modules.Foto
 
 	public interface IFotoExif
 	{
+		Exception Error { get; set; }
 		string Camera { get; set; } //= FotoCamera.Unknown;
 		DateTime DateTaken { get; set; } //= DateTime.Now;
 		int Width { get; set; }

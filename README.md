@@ -74,6 +74,8 @@ These are potential prefixes and namespaces for future planned development modul
 * Glossography: The writing of glossaries or glosses; The study of ancient words or languages.
 * Diplography: double writing; the writing of something twice or in two forms.
 * Ideography: a branch of lexicography, specifically creating ideographic or conceptual dictionaries.
+* Orography: The study of the physical geography of mountains and mountain ranges.
+* Reprography: The process of reproducing, reprinting, or copying graphic material especially by mechanical, photographic, or electronic means.
 
 ### Entity Dictionary
 
@@ -93,3 +95,28 @@ These are potential prefixes and namespaces for future planned development modul
 #### Other
 _Range, Space, District, Zone, Transit, Trek, Journey, Odyssey, Excursion, Expedition, Voyage, Passage, Travel_
 
+
+
+### Fotograffiti Addition
+
+Exif Reader
+Image Resizer
+
+FotoImageInfo
+FotoShootInfo
+
+FotoCamera
+FotoLens
+
+FotoPath
+
+FotoSourceData: FotoImageInfo consists of one or more sources of data
+ Path: 
+ Name:
+ Type: JPG, ORF, RAW, CR2, DWG, XMP, etc
+ Size:
+ Hash:
+
+FotoThumbData: A small cachable jpg thumbnail generated from a FotoSourceData
+FotoMetaData: Contains a superset of metadata that includes Exif plus other sources
+FotoExifData: Contai

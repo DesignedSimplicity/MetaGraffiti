@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="SQLite" Version="3.13.0" />
   </ItemGroup>
 
   <ItemGroup>
