@@ -1,31 +1,31 @@
 ﻿@using MetaGraffiti.Web.Admin.Models;
-@model OrthoPhotosViewModel
+@model OrthoImagesViewModel
 
 @Html.Partial("_Nav")
 
 <div>
 	<span class="h2">
-		@if (Model.IsSelected(Model.PhotoSourceRoot))
+		@if (Model.IsSelected(Model.ImageSourceRoot))
 		{
 			<span>Photos</span>
 		}
 		else
 		{
-			<a class="ortho-color" href="@OrthoViewModel.GetBrowsePhotosUrl()">Photos</a>
+			<a class="ortho-color" href="@OrthoViewModel.GetBrowseImagesUrl()">Photos</a>
 		}
 	</span>
 	<span>
-		@foreach (var year in Model.PhotoSourceRoot.GetDirectories())
+		@foreach (var year in Model.ImageSourceRoot.GetDirectories())
 		{
 			<span class="h3">
-				\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowsePhotosUrl(year.Name)">@year.Name</a>
+				\<a class="@(Model.IsSelected(year) || Model.IsAncestor(year) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowseImagesUrl(year.Name)">@year.Name</a>
 				@if (Model.IsSelected(year) || Model.IsAncestor(year))
 				{
 					var countries = (Model.IsSelected(year) ? Model.SelectedDirectory.GetDirectories() : Model.SelectedDirectory.Parent.GetDirectories());
 					<span class="h4">
 						@foreach (var country in countries)
 						{
-							<span>\<a class="@(Model.IsSelected(country) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowsePhotosUrl(year.Name + "/" + country.Name)">@country.Name</a></span>
+							<span>\<a class="@(Model.IsSelected(country) ? "text-danger" : "ortho-color")" href="@OrthoViewModel.GetBrowseImagesUrl(year.Name + "/" + country.Name)">@country.Name</a></span>
 						}
 					</span>
 					<span>&nbsp;</span>
@@ -51,6 +51,7 @@
 					<td class="text-center">Time</td>
 					<td>Country</td>
 					<td>Region</td>
+					<td>Thumb</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -61,15 +62,16 @@
 						<tr>
 							<td>@(index + 1)</td>
 							<td>
-								<a class="foto-color" href="@TrackViewModel.GetPreviewUrl(source.File.FullName)">@source.File.Name</a>
+								<a class="foto-color" href="@FotoViewModel.GetThumbUrl(source.File.FullName)">@source.File.Name</a>
 							</td>
 							<td>@source.File.Length</td>
-							<td>@source.Foto.Exif.Width x @source.Foto.Exif.Height</td>
-							<td class="small">@(source.Foto.Exif.Latitude?.ToString("#.#####")) x @(source.Foto.Exif.Longitude?.ToString("#.#####")) @@ @(source.Foto.Exif.Altitude?.ToString("#.#####")) </td>
-							<td class="text-center">@source.Foto.Exif.DateTaken.ToString("yyyy-MM-dd")</td>
-							<td class="text-center">@source.Foto.Exif.DateTaken.ToShortTimeString()</td>
+							<td>@source.Image.Exif.Width x @source.Image.Exif.Height</td>
+							<td class="small">@(source.Image.Exif.Latitude?.ToString("#.#####")) x @(source.Image.Exif.Longitude?.ToString("#.#####")) @@ @(source.Image.Exif.Altitude?.ToString("#.#####")) </td>
+							<td class="text-center">@source.Image.Exif.DateTaken.ToString("yyyy-MM-dd")</td>
+							<td class="text-center">@source.Image.Exif.DateTaken.ToShortTimeString()</td>
 							<td>@(source.Country?.Name)</td>
 							<td>@(source.Region?.RegionName)</td>
+							<td><img src="@FotoViewModel.GetThumbUrl(source.File.FullName, 100)" /></td>
 						</tr>
 						index++;
 					}

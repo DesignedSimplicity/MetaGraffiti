@@ -17,10 +17,11 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		// ==================================================
 		// Initialization
 
-		//private CartoPlaceService _cartoPlaceService;
+		private FotoImageService _fotoImageService;
 
 		public FotoController()
 		{
+			_fotoImageService = new FotoImageService();
 			//_cartoPlaceService = ServiceConfig.CartoPlaceService;
 		}
 
@@ -44,6 +45,30 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		{
 			var model = InitModel();
 			return View(model);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ActionResult Preview(string uri)
+		{
+			var model = InitModel();
+			return View(model);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ActionResult Thumb(string uri, int size = 0)
+		{
+			if (size == 0)
+			{
+				return File(uri, "image/jpeg");
+			}
+
+			
+			var jpg = _fotoImageService.GetThumb(uri, size);
+			return new FileContentResult(jpg, "image/jpeg");
 		}
 	}
 }

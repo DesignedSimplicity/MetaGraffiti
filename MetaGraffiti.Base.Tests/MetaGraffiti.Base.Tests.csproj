@@ -51,7 +51,7 @@
   <ItemGroup>
     <Compile Include="Geo\GeoCountryInfoTests.cs" />
     <Compile Include="Geo\GeoDistanceTests.cs" />
-    <Compile Include="Geo\GoogleLookupServiceTests.cs" />
+    <Compile Include="Geo\GeoLookupServiceTests.cs" />
     <Compile Include="Geo\GeoRegionInfoTests.cs" />
     <Compile Include="Geo\GeoTimezoneInfoTests.cs" />
     <Compile Include="Geo\GeoLocationTests.cs" />

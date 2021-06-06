@@ -51,12 +51,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Photos(string path = "")
+		public ActionResult Images(string path = "")
 		{
-			var service = new FotoListService();
-			var model = new OrthoPhotosViewModel();
+			var service = new ExifMetaService();
+			var model = new OrthoImagesViewModel();
 
-			model.PhotoSourceRoot = new DirectoryInfo(AutoConfig.PhotoSourceUri);
+			model.ImageSourceRoot = new DirectoryInfo(AutoConfig.PhotoSourceUri);
 
 			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PhotoSourceUri, path));
 			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
@@ -68,16 +68,16 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 			model.SelectedDirectory = dir;
 
-			model.Sources = new List<OrthoPhotoImportModel>();
+			model.Sources = new List<OrthoImageImportModel>();
 			foreach (var file in dir.GetFiles("*.jpg"))
 			{
-				var source = new OrthoPhotoImportModel()
+				var source = new OrthoImageImportModel()
 				{
 					File = file
 				};
 
 				var foto = service.LoadImage(file);
-				source.Foto = foto;
+				source.Image = foto;
 
 				if (foto.HasCoordinates)
 				{

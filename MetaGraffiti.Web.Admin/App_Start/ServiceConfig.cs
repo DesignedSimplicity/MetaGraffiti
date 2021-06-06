@@ -27,11 +27,11 @@ namespace MetaGraffiti.Web.Admin
 		private static DemElevationService _demElevationService;
 
 		private static GoogleApiService _googleApiService = new GoogleApiService(AutoConfig.GoogleMapsApiKey);
-		private static GoogleLookupService _googleLookupService = new GoogleLookupService(_googleApiService);
+		private static GeoLookupService _geoLookupService = new GeoLookupService(_googleApiService);
 		
-		public static GoogleLookupService GoogleLookupService
+		public static GeoLookupService GeoLookupService
 		{
-			get { return _googleLookupService; }
+			get { return _geoLookupService; }
 		}
 
 		public static void ResetBioHealth()

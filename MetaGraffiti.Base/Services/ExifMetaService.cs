@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class FotoListService
+	public class ExifMetaService
 	{
 		public IList<FotoImageInfo> ListImages(string uri)
 		{
@@ -33,6 +33,9 @@ namespace MetaGraffiti.Base.Services
 			image.Exif = exif;
 			return image;
 		}
+
+
+
 
 		protected IFotoExif ParseExif(ExifReader reader)
 		{

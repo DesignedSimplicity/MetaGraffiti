@@ -12,7 +12,7 @@ using MetaGraffiti.Base.Services.External;
 
 namespace MetaGraffiti.Base.Services
 {
-	public class GoogleLookupService
+	public class GeoLookupService
 	{
 		// ==================================================
 		// Internals
@@ -21,7 +21,7 @@ namespace MetaGraffiti.Base.Services
 
 		// ==================================================
 		// Constructors
-		public GoogleLookupService(GoogleApiService google)
+		public GeoLookupService(GoogleApiService google)
 		{
 			_google = google;
 		}

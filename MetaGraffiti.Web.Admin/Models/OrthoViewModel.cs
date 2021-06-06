@@ -39,6 +39,6 @@ namespace MetaGraffiti.Web.Admin.Models
 		public static string GetPlacesUrl(int? year = null) { return $"/ortho/places/?year={year}"; }
 		public static string GetPlacesUrl(string country) { return $"/ortho/places/?country={country}"; }
 		public static string GetBrowseTracksUrl(string path = "") { return $"/ortho/tracks/?path={path}"; }
-		public static string GetBrowsePhotosUrl(string path = "") { return $"/ortho/photos/?path={path}"; }
+		public static string GetBrowseImagesUrl(string path = "") { return $"/ortho/images/?path={path}"; }
 	}
 }

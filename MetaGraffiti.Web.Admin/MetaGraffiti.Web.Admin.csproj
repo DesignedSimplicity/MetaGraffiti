@@ -74,6 +74,12 @@
     <Reference Include="Fizzler, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
       <HintPath>..\packages\Fizzler.1.2.0\lib\netstandard2.0\Fizzler.dll</HintPath>
     </Reference>
+    <Reference Include="Magick.NET-Q16-AnyCPU, Version=7.24.1.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magick.NET-Q16-AnyCPU.7.24.1\lib\net40\Magick.NET-Q16-AnyCPU.dll</HintPath>
+    </Reference>
+    <Reference Include="Magick.NET.Core, Version=7.0.1.0, Culture=neutral, PublicKeyToken=2004825badfa91ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\Magick.NET.Core.7.0.1\lib\net40\Magick.NET.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.5.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -517,7 +523,7 @@
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\FotoViewModel.cs" />
-    <Compile Include="Models\OrthoPhotosViewModel.cs" />
+    <Compile Include="Models\OrthoImagesViewModel.cs" />
     <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
@@ -610,7 +616,8 @@
     <Content Include="Views\Trail\Elevation.cshtml" />
     <Content Include="Views\Trail\Elevation-Chartist.cshtml" />
     <Content Include="Views\Foto\Index.cshtml" />
-    <Content Include="Views\Ortho\Photos.cshtml" />
+    <Content Include="Views\Ortho\Images.cshtml" />
+    <Content Include="Views\Foto\Preview.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

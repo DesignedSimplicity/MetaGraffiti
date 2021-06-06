@@ -13,12 +13,12 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public class OrthoPhotosViewModel : OrthoViewModel
+	public class OrthoImagesViewModel : OrthoViewModel
 	{
 		// ==================================================
 		// Required
-		public DirectoryInfo PhotoSourceRoot { get; set; }
-		public List<OrthoPhotoImportModel> Sources { get; set; }
+		public DirectoryInfo ImageSourceRoot { get; set; }
+		public List<OrthoImageImportModel> Sources { get; set; }
 
 
 		// ==================================================
@@ -48,13 +48,12 @@ namespace MetaGraffiti.Web.Admin.Models
 
 	// ==================================================
 	// Additional
-	public class OrthoPhotoImportModel
+	public class OrthoImageImportModel
 	{
 		public FileInfo File { get; set; }
-		public FotoImageInfo Foto { get; set; }
+		public FotoImageInfo Image { get; set; }
 
 		public GeoCountryInfo Country { get; set; }
 		public GeoRegionInfo Region { get; set; }
-		//public CartoPlaceInfo Place { get; set; }
 	}
 }
