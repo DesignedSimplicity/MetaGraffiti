@@ -8,7 +8,7 @@ using System.Web;
 
 namespace MetaGraffiti.Web.Admin.Models
 {
-	public enum AdminAreas { Home, Topo, Carto, Ortho, Geo }
+	public enum AdminAreas { Home, Foto, Topo, Carto, Ortho, Geo }
 
 	public class AdminViewModel
 	{
@@ -47,6 +47,8 @@ namespace MetaGraffiti.Web.Admin.Models
 					return AdminAreas.Topo;
 				else if (path.StartsWith("/track/"))
 					return AdminAreas.Topo;
+				else if (path.StartsWith("/foto/"))
+					return AdminAreas.Foto;
 
 				foreach (AdminAreas area in Enum.GetValues(typeof(AdminAreas)))
 				{

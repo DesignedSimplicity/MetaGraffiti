@@ -68,6 +68,9 @@
     <Reference Include="ExcelDataReader, Version=3.6.0.0, Culture=neutral, PublicKeyToken=93517dbe6a4012fa, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelDataReader.3.6.0\lib\net45\ExcelDataReader.dll</HintPath>
     </Reference>
+    <Reference Include="ExifLib.Standard, Version=1.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExifLib.Standard.1.7.0\lib\netstandard2.0\ExifLib.Standard.dll</HintPath>
+    </Reference>
     <Reference Include="Fizzler, Version=1.2.0.0, Culture=neutral, PublicKeyToken=4ebff4844e382110, processorArchitecture=MSIL">
       <HintPath>..\packages\Fizzler.1.2.0\lib\netstandard2.0\Fizzler.dll</HintPath>
     </Reference>
@@ -500,6 +503,7 @@
     <Compile Include="Controllers\CartoController.cs" />
     <Compile Include="Controllers\Data\FileController.cs" />
     <Compile Include="Controllers\Data\JsonController.cs" />
+    <Compile Include="Controllers\FotoController.cs" />
     <Compile Include="Controllers\GeoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Data\IconController.cs" />
@@ -512,6 +516,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AdminViewModel.cs" />
+    <Compile Include="Models\FotoViewModel.cs" />
+    <Compile Include="Models\OrthoPhotosViewModel.cs" />
     <Compile Include="Models\Partials\CartoPlaceFormModel.cs" />
     <Compile Include="Models\CartoViewModel.cs" />
     <Compile Include="Models\GeoViewModel.cs" />
@@ -603,6 +609,8 @@
     <Content Include="Views\Trail\_TrailLeaf.cshtml" />
     <Content Include="Views\Trail\Elevation.cshtml" />
     <Content Include="Views\Trail\Elevation-Chartist.cshtml" />
+    <Content Include="Views\Foto\Index.cshtml" />
+    <Content Include="Views\Ortho\Photos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
