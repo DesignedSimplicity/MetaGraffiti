@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Base
 {
+	// TODO:FOTO:MOVE
 	public class ImgUtilities
 	{
 		private readonly static List<int> _swapWH = new List<int> { 6 };

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
+	// TODO:FOTO:MOVE
 	public class ImgFileData : IImgBasicData
 	{
 		public string Uri { get; private set; }
@@ -13,15 +14,12 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 
 		public DateTime DateCreated { get; private set; }
 
-		public ImgJpgData Thumb { get; set; }
-		public ImgJpgData Image { get; set; }
-
 		public IImgMetaData Metadata { get; set; }
 
 		public ImgFileData(string uri, IImgBasicData metadata)
 		{
 			Uri = uri;
-			
+
 			Width = metadata.Width;
 			Height = metadata.Height;
 			DateCreated = metadata.DateCreated;
@@ -31,10 +29,10 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 		{
 			Uri = uri;
 			Metadata = metadata;
-			
+
 			Width = metadata.Width;
 			Height = metadata.Height;
-			DateCreated = metadata.DateCreated;			
+			DateCreated = metadata.DateCreated;
 		}
 	}
 }

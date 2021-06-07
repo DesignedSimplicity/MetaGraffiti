@@ -43,16 +43,17 @@
 			<thead class="table-dark">
 				<tr>
 					<td>#</td>
-					<td>File Name</td>
+					<td>File</td>
+					<td>Photo</td>
+					<td class="text-center">Date</td>
+					<td class="text-center">Time</td>
+					<td>Labels</td>
 					<td>File Size</td>
 					<td>Dimensions</td>
 					<td>Cooridiates</td>
-					<td class="text-center">Date</td>
-					<td class="text-center">Time</td>
 					<td>Country</td>
-					<td>Region</td>
-					<td>Camera</td>
-					<td>Thumb</td>
+					<td>Regions</td>
+					<td>Places</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,15 +66,26 @@
 							<td>
 								<a class="foto-color" href="@FotoViewModel.GetThumbUrl(source.File.FullName)">@source.File.Name</a>
 							</td>
-							<td>@source.File.Length</td>
-							<td>@source.Image.Exif.PixelsX x @source.Image.Exif.PixelsY</td>
-							<td class="small">@(source.Image.Exif.Latitude?.ToString("#.#####")) x @(source.Image.Exif.Longitude?.ToString("#.#####")) @@ @(source.Image.Exif.Altitude?.ToString("#.#####")) </td>
+							<td></td>
 							<td class="text-center">@(source.Image.Exif.DateTaken?.ToString("yyyy-MM-dd"))</td>
 							<td class="text-center">@(source.Image.Exif.DateTaken?.ToShortTimeString())</td>
-							<td>@(source.Country?.Name)</td>
-							<td>@(source.Region?.RegionName)</td>
 							<td>@(source.Image.Exif.CameraMake) @(source.Image.Exif.CameraModel)</td>
-							<td><img src="@FotoViewModel.GetThumbUrl(source.File.FullName, 100)" /></td>
+							<td>@String.Format("{0:0.0} MB", source.Image.File.FileSize / 1024.0 / 1024.0)</td>
+							<td>@source.Image.Dimenions.Width x @source.Image.Dimenions.Height</td>
+							<td class="small">@(source.Image.Exif?.Latitude?.ToString("#.#####")) x @(source.Image.Exif?.Longitude?.ToString("#.#####"))</td>
+							<td>@(source.Country?.Name)</td>
+							<td>
+								@foreach (var region in source.Regions)
+								{
+									<div>@region.RegionName</div>
+								}
+							</td>
+							<td>
+								@foreach (var place in source.Places)
+								{
+									<div>@place.Name</div>
+								}
+							</td>
 						</tr>
 						index++;
 					}

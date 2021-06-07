@@ -51,9 +51,12 @@ namespace MetaGraffiti.Web.Admin.Models
 	public class OrthoImageImportModel
 	{
 		public FileInfo File { get; set; }
-		public FotoImageInfo Image { get; set; }
+		public JpgFileData Image { get; set; }
 
 		public GeoCountryInfo Country { get; set; }
-		public GeoRegionInfo Region { get; set; }
+
+		public List<GeoRegionInfo> Regions { get; set; } = new List<GeoRegionInfo>();
+		public List<CartoPlaceInfo> Places { get; set; } = new List<CartoPlaceInfo>();
+		public List<CartoPlaceInfo> Nearby { get; set; } = new List<CartoPlaceInfo>();
 	}
 }

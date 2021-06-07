@@ -41,11 +41,28 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		string Source { get; }
 	}
 
-	public interface IImgBasicData
+	public interface IImgDimenions
 	{
 		int Width { get; }
 		int Height { get; }
+	}
 
+	public interface IImgFileData
+	{
+		long FileSize { get; }
+		string FileName { get; }
+
+		DateTime DateCreated { get; }
+		DateTime? DateUpdated { get; }
+	}
+
+
+
+
+
+	// TODO:FOTO:MOVE
+	public interface IImgBasicData : IImgDimenions
+	{
 		DateTime DateCreated { get; }
 	}
 

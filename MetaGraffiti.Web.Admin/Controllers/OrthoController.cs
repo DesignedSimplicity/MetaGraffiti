@@ -1,6 +1,7 @@
 ﻿using MetaGraffiti.Base.Modules;
 using MetaGraffiti.Base.Modules.Geo;
 using MetaGraffiti.Base.Modules.Geo.Info;
+using MetaGraffiti.Base.Modules.Ortho;
 using MetaGraffiti.Base.Modules.Ortho.Info;
 using MetaGraffiti.Base.Modules.Topo.Info;
 using MetaGraffiti.Base.Services;
@@ -53,12 +54,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		public ActionResult Images(string path = "")
 		{
-			var service = new ExifMetaService();
+			//var service = new ExifMetaService();
 			var model = new OrthoImagesViewModel();
 
-			model.ImageSourceRoot = new DirectoryInfo(AutoConfig.PhotoSourceUri);
+			model.ImageSourceRoot = new DirectoryInfo(AutoConfig.PanoSourceUri);
 
-			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PhotoSourceUri, path));
+			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PanoSourceUri, path));
 			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
 
 			/*
@@ -71,19 +72,19 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			model.Sources = new List<OrthoImageImportModel>();
 			foreach (var file in dir.GetFiles("*.jpg"))
 			{
-				var source = new OrthoImageImportModel()
-				{
-					File = file
-				};
+				var source = new OrthoImageImportModel();
+				source.File = file;
 
-				var foto = service.LoadImage(file);
-				source.Image = foto;
+				var jpg = new JpgFileReader(file.FullName).ReadFile();
+				source.Image = jpg;
 
-				if (foto.HasCoordinates)
+				if (jpg.Exif.Latitude.HasValue && jpg.Exif.Longitude.HasValue)
 				{
-					var position = new GeoPosition(foto.Exif.Latitude.Value, foto.Exif.Longitude.Value);
+					var position = new GeoPosition(jpg.Exif.Latitude.Value, jpg.Exif.Longitude.Value);
 					source.Country = Graffiti.Geo.NearestCountry(position);
-					source.Region = Graffiti.Geo.NearestRegion(position);
+					source.Regions = Graffiti.Geo.NearbyRegions(position);
+
+					source.Places = _cartoPlaceService.ListPlacesByContainingPoint(position).OrderBy(x => x.Bounds.Area).ToList();
 				}
 
 				model.Sources.Add(source);
@@ -160,29 +161,29 @@ namespace MetaGraffiti.Web.Admin.Controllers
 
 		private OrthoTrackImportModel InitOrthoTrackImportModel(FileInfo file)
 		{
-			var model = new OrthoTrackImportModel();
+			var source = new OrthoTrackImportModel();
 
 			// init model
-			model.File = file;
+			source.File = file;
 
 			// load raw file data
-			model.Data = new GpxFileInfo(file.FullName);
+			source.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
 			var existing = _trailDataService.FindTrackSource_TODO(file.Name);
-			model.Trail = existing?.Trail;
+			source.Trail = existing?.Trail;
 
 			// build trail preview
 			var trail = new TopoTrailInfo();
-			model.Preview = trail;
+			source.Preview = trail;
 
 			// find intersecting places
-			var points = model.Data.Tracks?.SelectMany(x => x.PointData);
+			var points = source.Data.Tracks?.SelectMany(x => x.PointData);
 			if (points != null)
 			{
 				var bounds = new GeoPerimeter(points.Select(x => new GeoPosition(x.Latitude, x.Longitude)));
-				model.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
-				model.Nearby = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+				source.Places = _cartoPlaceService.ListPlacesContainingBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
+				source.Nearby = _cartoPlaceService.ListPlacesContainedInBounds(bounds).OrderBy(x => x.Bounds.Area).ToList();
 			}
 			
 			// set trail information
@@ -195,15 +196,15 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				//trail.StartLocal = trail.Timezone.FromUTC(first.Timestamp.Value);
 
 				// discover all regions
-				model.Regions = Graffiti.Geo.NearbyRegions(first);
+				source.Regions = Graffiti.Geo.NearbyRegions(first);
 				foreach (var region in Graffiti.Geo.NearbyRegions(points.Last()))
 				{
-					if (!model.Regions.Any(x => x.RegionID == region.RegionID)) model.Regions.Add(region);
+					if (!source.Regions.Any(x => x.RegionID == region.RegionID)) source.Regions.Add(region);
 				}
 			}
 
 			// build track previews
-			foreach (var t in model.Data.Tracks)
+			foreach (var t in source.Data.Tracks)
 			{
 				var track = new TopoTrackInfo(trail, t);
 
@@ -216,7 +217,7 @@ namespace MetaGraffiti.Web.Admin.Controllers
 				trail.AddTrack_TODO_DEPRECATE(track);
 			}
 
-			return model;
+			return source;
 		}
 	}
 }

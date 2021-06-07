@@ -17,6 +17,7 @@ namespace MetaGraffiti.Web.Admin
 		public static string TrailSourceUri = Path.Combine(RootConfigUri, @"Topo\Trails\");
 
 		public static string PhotoSourceUri = Path.Combine(_imagesRoot, @"Photos\");
+		public static string PanoSourceUri = Path.Combine(_imagesRoot, @"Panos\_ANDROID");
 
 		public static string IconSourceUri = Path.Combine(_configRoot, @"Icono\");
 
