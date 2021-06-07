@@ -36,7 +36,7 @@ namespace MetaGraffiti.Base.Tests.Ortho
 		{
 			var uri = TestsHelper.GetTestDataFileUri(@"Img\Example.xmp");
 
-			var reader = new XmpDataReader(uri);
+			var reader = new XmpFileReader(uri);
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);

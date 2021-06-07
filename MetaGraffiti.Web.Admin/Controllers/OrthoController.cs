@@ -166,7 +166,9 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			source.File = file;
 
 			// load raw file data
-			source.Data = new GpxFileInfo(file.FullName);
+			var gpx = new GpxFileReader(file.FullName);
+			source.Data = gpx.ReadFile();
+			// TODO:ORTHO:REMOVE source.Data = new GpxFileInfo(file.FullName);
 
 			// match with existing trail
 			var existing = _trailDataService.FindTrackSource_TODO(file.Name);

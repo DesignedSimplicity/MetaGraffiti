@@ -50,7 +50,8 @@ namespace MetaGraffiti.Web.Admin.Models
 	public class OrthoTrackImportModel
 	{
 		public FileInfo File { get; set; }
-		public GpxFileInfo Data { get; set; }
+		public GpxFileData Data { get; set; }
+		// TODO:ORTHO:REMOVE public GpxFileInfo Data { get; set; }
 
 		public ITopoTrailInfo Trail { get; set; }
 

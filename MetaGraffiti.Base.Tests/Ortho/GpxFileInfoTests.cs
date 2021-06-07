@@ -8,6 +8,7 @@ using MetaGraffiti.Base.Modules.Ortho.Info;
 
 namespace MetaGraffiti.Base.Tests.Ortho
 {
+	// TODO:ORTHO:REMOVE - migrate to GpxFileReader
 	[TestClass]
 	public class GpxFileInfoTests
 	{

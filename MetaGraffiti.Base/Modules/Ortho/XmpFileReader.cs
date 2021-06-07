@@ -8,19 +8,19 @@ using XmpCore;
 
 namespace MetaGraffiti.Base.Modules.Ortho
 {
-	public class XmpDataReader: ImgMetaReader
+	public class XmpFileReader : ImgMetaReader
 	{
 		private string _uri;
 		private Stream _stream;
 
 		public List<Exception> Errors { get; set; } = new List<Exception>();
 
-		public XmpDataReader(string uri)
+		public XmpFileReader(string uri)
 		{
 			_uri = uri;
 		}
 
-		public XmpDataReader(Stream stream)
+		public XmpFileReader(Stream stream)
 		{
 			_stream = stream;
 		}
