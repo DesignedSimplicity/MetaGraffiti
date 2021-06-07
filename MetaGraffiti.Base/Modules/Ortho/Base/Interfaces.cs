@@ -41,17 +41,21 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		string Source { get; }
 	}
 
-
-	public interface IImgMetaData
+	public interface IImgBasicData
 	{
 		int Width { get; }
 		int Height { get; }
 
+		DateTime DateCreated { get; }
+	}
+
+	public interface IImgMetaData : IImgBasicData
+	{
 		int PixelsX { get; }
 		int PixelsY { get; }
 
-		DateTime? DateTimeOriginal { get; }
 		DateTime? DateTaken { get; }
+		DateTime? DateTimeOriginal { get; }
 
 		string Title { get; }
 		string Comment { get; }
@@ -66,9 +70,11 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		decimal? FocalEquivalence { get; }  // at 35 equ
 		decimal? Aperture { get; }          // f1/a
 		decimal? FNumber { get; }           // f
+
 		decimal? Altitude { get; }
 		decimal? Longitude { get; }
 		decimal? Latitude { get; }
+
 
 		int? Orientation { get; }
 		long? ISO { get; }

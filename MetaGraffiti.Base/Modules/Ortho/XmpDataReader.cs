@@ -1,4 +1,5 @@
 ﻿using MetaGraffiti.Base.Common;
+using MetaGraffiti.Base.Modules.Ortho.Base;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using System;
 using System.Collections.Generic;
@@ -50,9 +51,9 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				foreach (var property in reader.Properties)
 				{
-					object x;
 					switch (property.Path)
 					{
+						/*
 						case "aux:Lens":
 							data.Lens = property.Value;
 							break;
@@ -65,12 +66,22 @@ namespace MetaGraffiti.Base.Modules.Ortho
 						case "aux:FlashCompensation":
 							data.FlashCompensation = property.Value;
 							break;
-
+						*/
 						case "tiff:Make":
 							data.CameraMake = property.Value;
 							break;
 						case "tiff:Model":
 							data.CameraModel = property.Value;
+							break;
+
+						case "tiff:Orientation":
+							data.Orientation = TypeConvert.ToInt(property.Value);
+							break;
+						case "tiff:ImageWidth":
+							data.Width = TypeConvert.ToInt(property.Value);
+							break;
+						case "tiff:ImageLenght":
+							data.Height = TypeConvert.ToInt(property.Value);
 							break;
 
 						case "exif:PixelXDimension":
@@ -80,8 +91,11 @@ namespace MetaGraffiti.Base.Modules.Ortho
 							data.PixelsY = TypeConvert.ToInt(property.Value);
 							break;
 
-						case "exif:DateTimeOriginal":
+						case "exif:DateTaken":
 							data.DateTaken = ParseDateTime(property.Value);
+							break;
+						case "exif:DateTimeOriginal":
+							data.DateTimeOriginal = ParseDateTime(property.Value);
 							break;
 					}
 
@@ -114,10 +128,7 @@ namespace MetaGraffiti.Base.Modules.Ortho
 					   exif:DateTimeOriginal="2019-01-05T11:13:32"
 					   exif:PixelXDimension="4608"
 					   exif:PixelYDimension="3456"
-
 					*/
-
-					Console.WriteLine($"Path={property.Path} Namespace={property.Namespace} Value={property.Value}");
 				}
 			}
 			catch (Exception ex)
@@ -125,6 +136,9 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				this.Errors.Add(ex);
 			}
 
+			ImgUtilities.FixExifData(data);
+
+			// return metadata
 			return data;
 		}
 

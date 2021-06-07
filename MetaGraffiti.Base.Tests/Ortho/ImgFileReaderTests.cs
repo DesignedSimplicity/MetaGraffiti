@@ -23,9 +23,12 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);
+			Assert.AreEqual(3456, data.Width);
+			Assert.AreEqual(4608, data.Height);
 			Assert.AreEqual(4608, data.PixelsX);
 			Assert.AreEqual(3456, data.PixelsY);
-			Assert.AreEqual("2019-01-05 11:13:32", data.DateTaken.Value.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateCreated.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateTimeOriginal.Value.ToString("yyyy-MM-dd hh:mm:ss"));
 		}
 
 		[TestMethod]
@@ -37,9 +40,12 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);
+			Assert.AreEqual(3456, data.Width);
+			Assert.AreEqual(4608, data.Height);
 			Assert.AreEqual(4608, data.PixelsX);
 			Assert.AreEqual(3456, data.PixelsY);
-			Assert.AreEqual("2019-01-05 11:13:32", data.DateTaken.Value.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateCreated.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateTimeOriginal.Value.ToString("yyyy-MM-dd hh:mm:ss"));
 		}
 
 		[TestMethod]
@@ -51,9 +57,9 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);
-			Assert.AreEqual(4608, data.PixelsX);
-			Assert.AreEqual(3456, data.PixelsY);
-			Assert.AreEqual("2019-01-05 11:13:32", data.DateTaken.Value.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual(3456, data.Width);
+			Assert.AreEqual(4608, data.Height);
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateCreated.ToString("yyyy-MM-dd hh:mm:ss"));
 		}
 
 		[TestMethod]
@@ -65,9 +71,9 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);
-			Assert.AreEqual(4608, data.PixelsX);
-			Assert.AreEqual(3456, data.PixelsY);
-			Assert.AreEqual("2019-01-05 11:13:32", data.DateTaken.Value.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual(3456, data.Width);
+			Assert.AreEqual(4608, data.Height);
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateCreated.ToString("yyyy-MM-dd hh:mm:ss"));
 		}
 
 		[TestMethod]
@@ -79,57 +85,10 @@ namespace MetaGraffiti.Base.Tests.Ortho
 			var data = reader.ReadFile();
 
 			Assert.IsNotNull(data);
-			Assert.AreEqual(4608, data.PixelsX);
-			Assert.AreEqual(3456, data.PixelsY);
-			Assert.AreEqual("2019-01-05 11:13:32", data.DateTaken.Value.ToString("yyyy-MM-dd hh:mm:ss"));
+			Assert.AreEqual(3456, data.Width);
+			Assert.AreEqual(4608, data.Height);
+			Assert.AreEqual("2019-01-05 11:13:32", data.DateCreated.ToString("yyyy-MM-dd hh:mm:ss"));
 		}
 
-		/*
-		[TestMethod]
-		public void ImgFileReader_ReadXmpFromOrf()
-		{
-			var uri = TestsHelper.GetTestDataFileUri(@"Img\Example.orf");
-
-			using (var magik = new MagickImage(uri))
-			{
-				var xmp = magik.GetXmpProfile();
-
-				using (var reader = xmp.CreateReader())
-				{
-					XmlDocument doc = new XmlDocument();
-					doc.Load(reader);
-
-					var lens = doc.SelectSingleNode("//*:xmpmeta/*:Description/*:Lens");
-
-					//var txt = doc.OuterXml;
-					Assert.IsNotNull(lens.InnerText);
-				}
-
-				//Assert.AreEqual("Hiking", d.Activities.First().TrainingName);
-			}
-		}
-
-		[TestMethod]
-		public void ImgFileReader_ReadXmpFromXmp()
-		{
-			var uri = TestsHelper.GetTestDataFileUri(@"Img\Example.xmp");
-
-			using (var magik = new MagickImage(uri))
-			{
-				var xmp = magik.GetXmpProfile();
-
-				using (var reader = xmp.CreateReader())
-				{
-					XmlDocument doc = new XmlDocument();
-					doc.Load(reader);
-
-					var txt = doc.OuterXml;
-					Assert.IsNotNull(txt);
-				}
-
-				//Assert.AreEqual("Hiking", d.Activities.First().TrainingName);
-			}
-		}
-		*/
 	}
 }

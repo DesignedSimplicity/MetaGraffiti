@@ -30,7 +30,7 @@ namespace MetaGraffiti.Base.Services
 			var reader = new ImgFileReader(file.FullName);
 
 			var image = new FotoImageInfo();
-			image.Exif = reader.ReadFile();
+			image.Exif = reader.ReadFile().Metadata;
 			return image;
 		}
 	}
