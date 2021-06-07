@@ -7,7 +7,7 @@ namespace MetaGraffiti.Base.Modules.Foto.Info
 {
 	public class FotoImageInfo
 	{
-		public IImgMetaData Exif { get; set; }
+		public IImgExifData Exif { get; set; }
 
 		public bool HasCoordinates => Exif != null && Exif.Latitude.HasValue && Exif.Longitude.HasValue;
 	}

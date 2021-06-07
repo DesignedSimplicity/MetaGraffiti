@@ -1,6 +1,5 @@
 ﻿using ExifLib;
 using MetaGraffiti.Base.Common;
-using MetaGraffiti.Base.Modules.Ortho.Base;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using System.Text;
 
 namespace MetaGraffiti.Base.Modules.Ortho
 {
-	public class JpgExifReader
+	public class JpgExifReader : ImgMetaReader
 	{
 		private string _uri;
 		private Stream _stream;
@@ -53,32 +52,6 @@ namespace MetaGraffiti.Base.Modules.Ortho
 			{
 				object tag;
 				
-				/*
-				reader.GetTagValue(ExifTags.XPTitle, out tag);
-				if (tag != null && (tag is byte[]))
-					data.Title = Encoding.Default.GetString((byte[])tag);
-				else
-					data.Title = TypeConvert.ToString(tag).Trim();
-
-				reader.GetTagValue(ExifTags.ImageDescription, out tag);
-				if (tag != null && (tag is byte[]))
-					data.Description = Encoding.Default.GetString((byte[])tag);
-				else
-					data.Description = TypeConvert.ToString(tag).Trim();
-
-				reader.GetTagValue(ExifTags.UserComment, out tag);
-				if (tag != null && (tag is byte[]))
-					data.Comment = Encoding.Default.GetString((byte[])tag);
-				else
-					data.Comment = TypeConvert.ToString(tag).Trim();
-
-				reader.GetTagValue(ExifTags.Copyright, out tag);
-				if (tag != null && (tag is byte[]))
-					data.Copyright = Encoding.Default.GetString((byte[])tag);
-				else
-					data.Copyright = TypeConvert.ToString(tag).Trim();
-				*/
-
 				reader.GetTagValue(ExifTags.Make, out tag);
 				data.CameraMake = TypeConvert.ToString(tag).Trim();
 
@@ -106,6 +79,30 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 				reader.GetTagValue(ExifTags.PhotographicSensitivity, out tag);
 				if (tag != null) data.ISO = Convert.ToInt64(tag);
+
+				reader.GetTagValue(ExifTags.XPTitle, out tag);
+				if (tag != null && (tag is byte[]))
+					data.Title = Encoding.Default.GetString((byte[])tag);
+				else
+					data.Title = TypeConvert.ToString(tag).Trim();
+
+				reader.GetTagValue(ExifTags.ImageDescription, out tag);
+				if (tag != null && (tag is byte[]))
+					data.Description = Encoding.Default.GetString((byte[])tag);
+				else
+					data.Description = TypeConvert.ToString(tag).Trim();
+
+				reader.GetTagValue(ExifTags.UserComment, out tag);
+				if (tag != null && (tag is byte[]))
+					data.Comment = Encoding.Default.GetString((byte[])tag);
+				else
+					data.Comment = TypeConvert.ToString(tag).Trim();
+
+				reader.GetTagValue(ExifTags.Copyright, out tag);
+				if (tag != null && (tag is byte[]))
+					data.Copyright = Encoding.Default.GetString((byte[])tag);
+				else
+					data.Copyright = TypeConvert.ToString(tag).Trim();
 				*/
 
 				reader.GetTagValue(ExifTags.PixelXDimension, out tag);
@@ -124,10 +121,10 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				if (tag != null) data.Orientation = TypeConvert.ToInt(tag);
 
 				reader.GetTagValue(ExifTags.DateTimeOriginal, out tag);
-				if (tag != null) data.DateTimeOriginal = ParseDateTime(tag);
+				if (tag != null) data.DateTimeOriginal = base.ParseDateTime(tag);
 				
 				reader.GetTagValue(ExifTags.DateTime, out tag);
-				if (tag != null) data.DateTaken = ParseDateTime(tag);
+				if (tag != null) data.DateTaken = base.ParseDateTime(tag);
 
 				reader.GetTagValue(ExifTags.GPSLatitude, out tag);
 				if (tag != null)
@@ -158,23 +155,10 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				this.Errors.Add(ex);
 			}
 
-			ImgUtilities.FixExifData(data);
+			base.FixExifData(data);
 
 			// return metadata
 			return data;
-		}
-
-		protected DateTime ParseDateTime(object tag)
-		{
-			string[] parts = tag.ToString().Split(':', ' ');
-			int year = int.Parse(parts[0]);
-			int month = int.Parse(parts[1]);
-			int day = int.Parse(parts[2]);
-			int hour = int.Parse(parts[3]);
-			int minute = int.Parse(parts[4]);
-			int second = int.Parse(parts[5]);
-
-			return new DateTime(year, month, day, hour, minute, second);
 		}
 	}
 }

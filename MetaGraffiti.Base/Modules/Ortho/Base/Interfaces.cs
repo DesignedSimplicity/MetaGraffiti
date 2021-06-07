@@ -56,30 +56,23 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		DateTime? DateUpdated { get; }
 	}
 
-
-
-
-
-	// TODO:FOTO:MOVE
-	public interface IImgBasicData : IImgDimenions
-	{
-		DateTime DateCreated { get; }
-	}
-
-	public interface IImgMetaData : IImgBasicData
+	public interface IImgExifData : IImgDimenions
 	{
 		int PixelsX { get; }
 		int PixelsY { get; }
 
+		int? Orientation { get; }
+
 		DateTime? DateTaken { get; }
 		DateTime? DateTimeOriginal { get; }
 
+		string CameraMake { get; }
+		string CameraModel { get; }
+		/*
 		string Title { get; }
 		string Comment { get; }
 		string Copyright { get; }
 		string Description { get; }
-		string CameraMake { get; }
-		string CameraModel { get; }
 
 		decimal? ShutterSpeed { get; }
 		decimal? ExposureTime { get; }      // seconds
@@ -87,14 +80,12 @@ namespace MetaGraffiti.Base.Modules.Ortho
 		decimal? FocalEquivalence { get; }  // at 35 equ
 		decimal? Aperture { get; }          // f1/a
 		decimal? FNumber { get; }           // f
+		long? ISO { get; }
+		*/
 
 		decimal? Altitude { get; }
 		decimal? Longitude { get; }
 		decimal? Latitude { get; }
-
-
-		int? Orientation { get; }
-		long? ISO { get; }
 
 		/*
 		// Xmp:Aux

@@ -1,5 +1,4 @@
 ﻿using MetaGraffiti.Base.Common;
-using MetaGraffiti.Base.Modules.Ortho.Base;
 using MetaGraffiti.Base.Modules.Ortho.Data;
 using System;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ using XmpCore;
 
 namespace MetaGraffiti.Base.Modules.Ortho
 {
-	public class XmpDataReader
+	public class XmpDataReader: ImgMetaReader
 	{
 		private string _uri;
 		private Stream _stream;
@@ -92,10 +91,10 @@ namespace MetaGraffiti.Base.Modules.Ortho
 							break;
 
 						case "exif:DateTaken":
-							data.DateTaken = ParseDateTime(property.Value);
+							data.DateTaken = base.ParseDateTimeISO8601(property.Value);
 							break;
 						case "exif:DateTimeOriginal":
-							data.DateTimeOriginal = ParseDateTime(property.Value);
+							data.DateTimeOriginal = base.ParseDateTimeISO8601(property.Value);
 							break;
 					}
 
@@ -136,15 +135,10 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				this.Errors.Add(ex);
 			}
 
-			ImgUtilities.FixExifData(data);
+			base.FixExifData(data);
 
 			// return metadata
 			return data;
-		}
-
-		protected DateTime ParseDateTime(string text)
-		{
-			return DateTime.Parse(text.Replace("T", " ")); //, "yyyy-MM-dd hh:mm:ss");
 		}
 	}
 }

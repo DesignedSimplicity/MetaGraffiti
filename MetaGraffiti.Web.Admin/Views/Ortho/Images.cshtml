@@ -64,7 +64,7 @@
 						<tr>
 							<td>@(index + 1)</td>
 							<td>
-								<a class="foto-color" href="@FotoViewModel.GetThumbUrl(source.File.FullName)">@source.File.Name</a>
+								<a class="foto-color" href="@FotoViewModel.GetImportUrl(source.File.FullName)">@source.File.Name</a>
 							</td>
 							<td></td>
 							<td class="text-center">@(source.Image.Exif.DateTaken?.ToString("yyyy-MM-dd"))</td>

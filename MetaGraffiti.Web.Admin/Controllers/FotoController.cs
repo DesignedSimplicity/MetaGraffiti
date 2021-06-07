@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -50,9 +51,12 @@ namespace MetaGraffiti.Web.Admin.Controllers
 		/// <summary>
 		/// 
 		/// </summary>
-		public ActionResult Preview(string uri)
+		public ActionResult Import(string uri)
 		{
 			var model = InitModel();
+
+			model.SelectedUri = uri;
+
 			return View(model);
 		}
 
@@ -65,7 +69,6 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			{
 				return File(uri, "image/jpeg");
 			}
-
 			
 			var jpg = _fotoImageService.GetThumb(uri, size);
 			return new FileContentResult(jpg, "image/jpeg");

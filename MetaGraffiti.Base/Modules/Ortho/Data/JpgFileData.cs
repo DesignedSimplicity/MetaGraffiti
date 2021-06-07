@@ -8,6 +8,6 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 	{
 		public IImgDimenions Dimenions { get; set; }
 		public IImgFileData File { get; set; }
-		public ImgExifData Exif { get; set; }
+		public IImgExifData Exif { get; set; }
 	}
 }

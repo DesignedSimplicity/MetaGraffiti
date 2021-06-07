@@ -3,14 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MetaGraffiti.Base.Modules.Ortho.Base
+namespace MetaGraffiti.Base.Modules.Ortho
 {
-	// TODO:FOTO:MOVE
-	public class ImgUtilities
+	public abstract class ImgMetaReader
 	{
 		private readonly static List<int> _swapWH = new List<int> { 6 };
 
-		public static void FixExifData(ImgExifData data)
+		protected void FixExifData(ImgExifData data)
 		{
 			// adjust orientation
 			if (data.Width == 0) data.Width = data.PixelsX;
@@ -29,7 +28,24 @@ namespace MetaGraffiti.Base.Modules.Ortho.Base
 				data.DateCreated = data.DateTaken.Value;
 			else
 				data.DateCreated = DateTime.MinValue;
-
 		}
+
+		protected DateTime ParseDateTime(object tag)
+		{
+			string[] parts = tag.ToString().Split(':', ' ');
+			int year = int.Parse(parts[0]);
+			int month = int.Parse(parts[1]);
+			int day = int.Parse(parts[2]);
+			int hour = int.Parse(parts[3]);
+			int minute = int.Parse(parts[4]);
+			int second = int.Parse(parts[5]);
+
+			return new DateTime(year, month, day, hour, minute, second);
+		}
+		protected DateTime ParseDateTimeISO8601(string text)
+		{
+			return DateTime.Parse(text.Replace("T", " ")); //, "yyyy-MM-dd hh:mm:ss");
+		}
+
 	}
 }

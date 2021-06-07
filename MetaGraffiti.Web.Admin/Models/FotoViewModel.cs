@@ -17,6 +17,7 @@ namespace MetaGraffiti.Web.Admin.Models
 
 		// ==================================================
 		// Optional
+		public string SelectedUri { get; set; }
 
 
 		// ==================================================
@@ -27,7 +28,8 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetFotoUrl() { return "/foto/"; }
 
-		public static string GetPreviewUrl(string uri) { return $"/foto/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
+		//public static string GetPreviewUrl(string uri) { return $"/foto/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
+		public static string GetImportUrl(string uri) { return $"/foto/import/?uri={HttpUtility.UrlEncode(uri)}"; }
 		public static string GetThumbUrl(string uri, int size = 1080) { return $"/foto/thumb/?size={size}&uri={HttpUtility.UrlEncode(uri)}"; }
 	}
 }

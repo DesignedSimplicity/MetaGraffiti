@@ -42,53 +42,19 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
+		public ActionResult Reset()
+		{
+			ServiceConfig.ResetTripSheet();
+
+			return new RedirectResult(OrthoViewModel.GetOrthoUrl());
+		}
+
 		public ActionResult Sheets(string id)
 		{
 			var model = new OrthoSheetsViewModel();
 
 			model.Sheets = _tripSheetService.ListSheets();
 			model.SelectedSheet = id;
-
-			return View(model);
-		}
-
-		public ActionResult Images(string path = "")
-		{
-			//var service = new ExifMetaService();
-			var model = new OrthoImagesViewModel();
-
-			model.ImageSourceRoot = new DirectoryInfo(AutoConfig.PanoSourceUri);
-
-			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PanoSourceUri, path));
-			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
-
-			/*
-			var root = model.PhotoSourceRoot.FullName.TrimEnd('\\') + '\\';
-			if (!dir.FullName.StartsWith(root)) throw new Exception($"Path {dir.FullName} is not in root {root}");
-			*/
-
-			model.SelectedDirectory = dir;
-
-			model.Sources = new List<OrthoImageImportModel>();
-			foreach (var file in dir.GetFiles("*.jpg"))
-			{
-				var source = new OrthoImageImportModel();
-				source.File = file;
-
-				var jpg = new JpgFileReader(file.FullName).ReadFile();
-				source.Image = jpg;
-
-				if (jpg.Exif.Latitude.HasValue && jpg.Exif.Longitude.HasValue)
-				{
-					var position = new GeoPosition(jpg.Exif.Latitude.Value, jpg.Exif.Longitude.Value);
-					source.Country = Graffiti.Geo.NearestCountry(position);
-					source.Regions = Graffiti.Geo.NearbyRegions(position);
-
-					source.Places = _cartoPlaceService.ListPlacesByContainingPoint(position).OrderBy(x => x.Bounds.Area).ToList();
-				}
-
-				model.Sources.Add(source);
-			}
 
 			return View(model);
 		}
@@ -151,13 +117,46 @@ namespace MetaGraffiti.Web.Admin.Controllers
 			return View(model);
 		}
 
-		public ActionResult Reset()
+		public ActionResult Images(string path = "")
 		{
-			ServiceConfig.ResetTripSheet();
+			//var service = new ExifMetaService();
+			var model = new OrthoImagesViewModel();
 
-			return new RedirectResult(OrthoViewModel.GetOrthoUrl());
+			model.ImageSourceRoot = new DirectoryInfo(AutoConfig.PanoSourceUri);
+
+			var dir = new DirectoryInfo(Path.Combine(AutoConfig.PanoSourceUri, path));
+			if (!dir.Exists) throw new Exception($"Path {dir.FullName} does not exist");
+
+			/*
+			var root = model.PhotoSourceRoot.FullName.TrimEnd('\\') + '\\';
+			if (!dir.FullName.StartsWith(root)) throw new Exception($"Path {dir.FullName} is not in root {root}");
+			*/
+
+			model.SelectedDirectory = dir;
+
+			model.Sources = new List<OrthoImageImportModel>();
+			foreach (var file in dir.GetFiles("*.jpg"))
+			{
+				var source = new OrthoImageImportModel();
+				source.File = file;
+
+				var jpg = new JpgFileReader(file.FullName).ReadFile();
+				source.Image = jpg;
+
+				if (jpg.Exif.Latitude.HasValue && jpg.Exif.Longitude.HasValue)
+				{
+					var position = new GeoPosition(jpg.Exif.Latitude.Value, jpg.Exif.Longitude.Value);
+					source.Country = Graffiti.Geo.NearestCountry(position);
+					source.Regions = Graffiti.Geo.NearbyRegions(position);
+
+					source.Places = _cartoPlaceService.ListPlacesByContainingPoint(position).OrderBy(x => x.Bounds.Area).ToList();
+				}
+
+				model.Sources.Add(source);
+			}
+
+			return View(model);
 		}
-
 
 		private OrthoTrackImportModel InitOrthoTrackImportModel(FileInfo file)
 		{

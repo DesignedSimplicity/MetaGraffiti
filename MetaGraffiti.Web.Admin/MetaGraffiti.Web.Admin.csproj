@@ -617,7 +617,7 @@
     <Content Include="Views\Trail\Elevation-Chartist.cshtml" />
     <Content Include="Views\Foto\Index.cshtml" />
     <Content Include="Views\Ortho\Images.cshtml" />
-    <Content Include="Views\Foto\Preview.cshtml" />
+    <Content Include="Views\Foto\Import.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

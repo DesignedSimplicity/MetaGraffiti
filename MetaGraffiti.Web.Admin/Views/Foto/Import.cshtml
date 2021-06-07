@@ -1,0 +1,21 @@
+﻿@using MetaGraffiti.Web.Admin.Models;
+@model FotoViewModel
+
+@Html.Partial("_Nav")
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="h2">
+			@IconHelper.FotoIcon Preview Foto
+		</div>
+		<hr />
+	</div>
+</div>
+<div>
+	<img src="@FotoViewModel.GetThumbUrl(Model.SelectedUri)" />
+</div>
+<div class="row">
+	<div class="col-sm-6">
+		@Model.SelectedUri
+	</div>
+</div>
