@@ -6,9 +6,13 @@ namespace MetaGraffiti.Base.Modules.Ortho.Data
 {
 	public class ImgExifData : IImgMetaData
 	{
+		public int Width { get; set; }
+		public int Height { get; set; }
+
 		public int PixelsX { get; set; }
 		public int PixelsY { get; set; }
 
+		public DateTime? DateTimeOriginal { get; set; }
 		public DateTime? DateTaken { get; set; }
 
 		public string Title { get; set; }

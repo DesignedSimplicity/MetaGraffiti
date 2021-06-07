@@ -66,10 +66,10 @@
 								<a class="foto-color" href="@FotoViewModel.GetThumbUrl(source.File.FullName)">@source.File.Name</a>
 							</td>
 							<td>@source.File.Length</td>
-							<td>@source.Image.Exif.Width x @source.Image.Exif.Height</td>
+							<td>@source.Image.Exif.PixelsX x @source.Image.Exif.PixelsY</td>
 							<td class="small">@(source.Image.Exif.Latitude?.ToString("#.#####")) x @(source.Image.Exif.Longitude?.ToString("#.#####")) @@ @(source.Image.Exif.Altitude?.ToString("#.#####")) </td>
-							<td class="text-center">@source.Image.Exif.DateTaken.ToString("yyyy-MM-dd")</td>
-							<td class="text-center">@source.Image.Exif.DateTaken.ToShortTimeString()</td>
+							<td class="text-center">@(source.Image.Exif.DateTaken?.ToString("yyyy-MM-dd"))</td>
+							<td class="text-center">@(source.Image.Exif.DateTaken?.ToShortTimeString())</td>
 							<td>@(source.Country?.Name)</td>
 							<td>@(source.Region?.RegionName)</td>
 							<td>@(source.Image.Exif.CameraMake) @(source.Image.Exif.CameraModel)</td>

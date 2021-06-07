@@ -27,7 +27,7 @@ namespace MetaGraffiti.Web.Admin.Models
 		// Navigation
 		public static string GetFotoUrl() { return "/foto/"; }
 
-		public static string GetPreviewUrl(string uri) { return $"/foto/preview/?uri={uri}"; }
-		public static string GetThumbUrl(string uri, int size = 1080) { return $"/foto/thumb/?size={size}&uri={uri}"; }
+		public static string GetPreviewUrl(string uri) { return $"/foto/preview/?uri={HttpUtility.UrlEncode(uri)}"; }
+		public static string GetThumbUrl(string uri, int size = 1080) { return $"/foto/thumb/?size={size}&uri={HttpUtility.UrlEncode(uri)}"; }
 	}
 }

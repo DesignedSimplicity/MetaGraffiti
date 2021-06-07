@@ -44,9 +44,13 @@ namespace MetaGraffiti.Base.Modules.Ortho
 
 	public interface IImgMetaData
 	{
+		int Width { get; }
+		int Height { get; }
+
 		int PixelsX { get; }
 		int PixelsY { get; }
 
+		DateTime? DateTimeOriginal { get; }
 		DateTime? DateTaken { get; }
 
 		string Title { get; }

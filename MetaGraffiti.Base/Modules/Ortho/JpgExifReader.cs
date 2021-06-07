@@ -83,25 +83,25 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				exif.CameraModel = TypeConvert.ToString(tag).Trim();
 
 				reader.GetTagValue(ExifTags.ApertureValue, out tag);
-				exif.Aperture = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.Aperture = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.FNumber, out tag);
-				exif.FNumber = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.FNumber = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.FocalLength, out tag);
-				exif.FocalLength = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.FocalLength = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.FocalLengthIn35mmFilm, out tag);
-				exif.FocalEquivalence = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.FocalEquivalence = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.ExposureTime, out tag);
-				exif.ExposureTime = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.ExposureTime = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.ShutterSpeedValue, out tag);
-				exif.ShutterSpeed = TypeConvert.ToDecimal(tag);
+				if (tag != null) exif.ShutterSpeed = TypeConvert.ToDecimal(tag);
 
 				reader.GetTagValue(ExifTags.PhotographicSensitivity, out tag);
-				exif.ISO = Convert.ToInt64(tag);
+				if (tag != null) exif.ISO = Convert.ToInt64(tag);
 
 				reader.GetTagValue(ExifTags.PixelXDimension, out tag);
 				exif.PixelsX = TypeConvert.ToInt(tag);
@@ -109,17 +109,20 @@ namespace MetaGraffiti.Base.Modules.Ortho
 				reader.GetTagValue(ExifTags.PixelYDimension, out tag);
 				exif.PixelsY = TypeConvert.ToInt(tag);
 
+				reader.GetTagValue(ExifTags.ImageWidth, out tag);
+				exif.Width = TypeConvert.ToInt(tag);
+
+				reader.GetTagValue(ExifTags.ImageLength, out tag);
+				exif.Height = TypeConvert.ToInt(tag);
+
 				reader.GetTagValue(ExifTags.Orientation, out tag);
-				exif.Orientation = TypeConvert.ToInt(tag);
+				if (tag != null) exif.Orientation = TypeConvert.ToInt(tag);
 
 				reader.GetTagValue(ExifTags.DateTimeOriginal, out tag);
-				if (tag != null)
-					exif.DateTaken = ParseDateTime(tag);
-				else
-				{
-					reader.GetTagValue(ExifTags.DateTime, out tag);
-					if (tag != null) exif.DateTaken = ParseDateTime(tag);
-				}
+				if (tag != null) exif.DateTimeOriginal = ParseDateTime(tag);
+				
+				reader.GetTagValue(ExifTags.DateTime, out tag);
+				if (tag != null) exif.DateTaken = ParseDateTime(tag);
 
 				reader.GetTagValue(ExifTags.GPSLatitude, out tag);
 				if (tag != null)
