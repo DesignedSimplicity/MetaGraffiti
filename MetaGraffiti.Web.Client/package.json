@@ -6,7 +6,7 @@
         "del": "5.1.0",
         "gulp": "4.0.2",
         "live-server": "^1.2.1",
-        "source-map-loader": "^0.2.4"
+        "source-map-loader": "^4.0.1"
     },
     "dependencies": {
         "@types/d3": "^5.7.2",
